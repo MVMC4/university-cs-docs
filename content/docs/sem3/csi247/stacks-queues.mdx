@@ -1,0 +1,100 @@
+---
+title: Stacks and Queues
+description: Linear data structures with restricted access.
+---
+
+# Stacks and Queues
+
+Linear data structures where insertion and deletion follow specific rules.
+
+## Stacks (LIFO - Last In, First Out)
+
+```ts
+interface Stack<T> {
+  push(item: T): void;      // O(1)
+  pop(): T | undefined;     // O(1)
+  peek(): T | undefined;    // O(1)
+  isEmpty(): boolean;       // O(1)
+}
+```
+
+**Operations:**
+- `push`: Add element to top
+- `pop`: Remove and return top element
+- `peek`: View top element without removing
+
+<SafeImage
+  src="/images/csi247/stack-operations.png"
+  alt="Stack push/pop visualization"
+  caption="Figure: Stack operations follow Last-In-First-Out order"
+  className="max-w-full h-auto"
+/>
+
+**Applications:**
+- Function call stack (recursion)
+- Undo/Redo functionality
+- Expression evaluation (postfix notation)
+- Depth-First Search traversal
+
+## Queues (FIFO - First In, First Out)
+
+```ts
+interface Queue<T> {
+  enqueue(item: T): void;   // O(1)
+  dequeue(): T | undefined; // O(1)
+  front(): T | undefined;   // O(1)
+  isEmpty(): boolean;       // O(1)
+}
+```
+
+**Operations:**
+- `enqueue`: Add element to rear
+- `dequeue`: Remove and return front element
+- `front`: View front element without removing
+
+<SafeImage
+  src="/images/csi247/queue-operations.png"
+  alt="Queue enqueue/dequeue visualization"
+  caption="Figure: Queue operations follow First-In-First-Out order"
+  className="max-w-full h-auto"
+/>
+
+**Applications:**
+- Task scheduling (CPU, print jobs)
+- Breadth-First Search traversal
+- Buffer management (keyboard, network packets)
+
+## Complexity Comparison
+
+| Operation | Stack (Array) | Queue (Linked) | Circular Queue |
+|-----------|--------------|----------------|----------------|
+| Push/Enqueue | O(1)* | O(1) | O(1) |
+| Pop/Dequeue | O(1) | O(1) | O(1) |
+| Peek/Front | O(1) | O(1) | O(1) |
+| Space | O(n) | O(n) | O(n) |
+
+*\*Amortized with dynamic resizing*
+
+<Quiz
+title="Stacks & Queues Check"
+questions={[
+  {
+    question: "Which data structure follows Last-In-First-Out (LIFO)?",
+    options: ["Queue", "Stack", "Array", "Linked List"],
+    correctIndex: 1,
+    explanation: "Stacks follow LIFO: the last element pushed is the first one popped."
+  },
+  {
+    question: "What is the time complexity of enqueue in a linked-list-based queue?",
+    options: ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+    correctIndex: 0,
+    explanation: "With a tail pointer, enqueue is O(1) as we just append to the end."
+  },
+  {
+    question: "Which application best uses a queue?",
+    options: ["Undo feature", "Print job scheduling", "Browser back button", "Function call management"],
+    correctIndex: 1,
+    explanation: "Print jobs are processed in the order they arrive (FIFO), making queues ideal."
+  }
+]}
+/>

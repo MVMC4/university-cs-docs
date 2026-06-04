@@ -1,0 +1,94 @@
+---
+title: Priority Queues
+description: Elements dequeued by priority.
+---
+
+# Priority Queues
+
+Elements are removed based on priority, not insertion order.
+
+## Core Operations
+
+| Operation | Description | Typical Complexity |
+|-----------|-------------|-------------------|
+| `insert(item, priority)` | Add element with priority | $O(\log n)$ |
+| `extractMax()` / `extractMin()` | Remove highest/lowest priority | $O(\log n)$ |
+| `peek()` | View highest priority without removing | $O(1)$ |
+| `changePriority(item, newPriority)` | Update an element's priority | $O(\log n)$ |
+
+## Implementation Comparison
+
+| Data Structure | Insert | Extract-Max | Peek | Space | Best For |
+|---------------|--------|-------------|------|-------|----------|
+| Unsorted Array | $O(1)$ | $O(n)$ | $O(n)$ | $O(n)$ | Few extracts |
+| Sorted Array | $O(n)$ | $O(1)$ | $O(1)$ | $O(n)$ | Few inserts |
+| **Binary Heap** | **$O(\log n)$** | **$O(\log n)$** | **$O(1)$** | **$O(n)$** | **Balanced ops** |
+| Fibonacci Heap | $O(1)^*$ | $O(\log n)^*$ | $O(1)$ | $O(n)$ | Many decrease-key |
+
+*\*Amortized complexity*
+
+## Binary Heap Properties
+
+<SafeImage
+  src="/images/csi247/binary-heap.png"
+  alt="Binary Heap structure"
+  caption="Figure: Complete binary tree with heap property (parent ≥ children for max-heap)"
+  className="max-w-full h-auto"
+/>
+
+A binary heap is a complete binary tree satisfying the **heap property**:
+
+1. **Shape Property**: All levels filled except possibly the last, which is filled left-to-right
+2. **Heap Property**: 
+   - Max-Heap: Parent ≥ children
+   - Min-Heap: Parent ≤ children
+
+### Array Representation
+
+For a node at index $i$ (0-based):
+- Parent: $\lfloor (i-1)/2 \rfloor$
+- Left child: $2i + 1$
+- Right child: $2i + 2$
+
+```
+Max-Heap Example:
+        90
+       /  \
+     75    80
+    / \    /
+  50  60  70
+
+Array: [90, 75, 80, 50, 60, 70]
+```
+
+## Applications
+
+- **Dijkstra's Shortest Path Algorithm**: Process vertices by minimum distance
+- **Huffman Coding**: Build optimal prefix codes for compression
+- **Event-Driven Simulation**: Process events in chronological order
+- **Job Scheduling**: Execute tasks by urgency/deadline
+- **A* Search Algorithm**: Expand nodes by estimated total cost
+
+<Quiz
+title="Priority Queue Concepts"
+questions={[
+  {
+    question: "Which data structure is most commonly used to implement a priority queue?",
+    options: ["Array", "Linked List", "Binary Heap", "Hash Table"],
+    correctIndex: 2,
+    explanation: "Binary heaps provide O(log n) insert and extract operations with O(1) peek, making them ideal for priority queues."
+  },
+  {
+    question: "In a max-heap, where is the maximum element always located?",
+    options: ["Last position", "Root", "Middle", "Random"],
+    correctIndex: 1,
+    explanation: "The heap property ensures the maximum element is always at the root in a max-heap."
+  },
+  {
+    question: "What is the time complexity of inserting into a binary heap?",
+    options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+    correctIndex: 1,
+    explanation: "Insertion requires bubbling up from leaf to root, which takes O(log n) time in a complete binary tree."
+  }
+]}
+/>

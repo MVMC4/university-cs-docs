@@ -1,0 +1,61 @@
+---
+title: Arrays vs Linked Lists
+description: Comparing linear data structures.
+---
+
+# Arrays vs Linked Lists
+
+Both are linear data structures, but they store data in memory very differently, leading to different performance trade-offs.
+
+## Memory Layout Comparison
+
+<SafeImage
+  src="/images/csi247/array-vs-linkedlist.png"
+  alt="Array vs Linked List memory layout"
+  caption="Figure: Arrays use contiguous memory; Linked Lists use scattered nodes with pointers"
+  className="max-w-full h-auto"
+/>
+
+## Arrays
+- **Memory**: Contiguous block of memory.
+- **Access**: $O(1)$ random access via index.
+- **Insertion/Deletion**: $O(n)$ in the worst case (requires shifting elements).
+- **Cache Locality**: Excellent, due to contiguous memory.
+
+## Linked Lists
+- **Memory**: Non-contiguous; nodes are scattered and linked via pointers.
+- **Access**: $O(n)$ sequential access (must traverse from the head).
+- **Insertion/Deletion**: $O(1)$ if you already have a reference to the node.
+- **Cache Locality**: Poor, due to scattered memory allocation.
+
+## Complexity Comparison
+
+| Operation | Array | Singly Linked List | Doubly Linked List |
+|-----------|-------|-------------------|-------------------|
+| Access by index | $O(1)$ | $O(n)$ | $O(n)$ |
+| Search | $O(n)$ | $O(n)$ | $O(n)$ |
+| Insert at head | $O(1)$* | $O(1)$ | $O(1)$ |
+| Insert at tail | $O(1)$* | $O(n)$ | $O(1)$† |
+| Delete by value | $O(n)$ | $O(n)$ | $O(n)$ |
+| Space overhead | None | 1 pointer/node | 2 pointers/node |
+
+*\*Amortized with dynamic resizing*  
+*†With tail pointer*
+
+<Quiz
+title="Arrays vs Linked Lists"
+questions={[
+  {
+    question: "Which data structure provides O(1) random access?",
+    options: ["Array", "Singly Linked List", "Doubly Linked List", "All of the above"],
+    correctIndex: 0,
+    explanation: "Arrays store elements in contiguous memory, allowing direct index calculation."
+  },
+  {
+    question: "When is a Linked List preferable over an Array?",
+    options: ["Frequent random access", "Frequent insertions/deletions in the middle", "Better cache performance", "Smaller memory footprint"],
+    correctIndex: 1,
+    explanation: "Linked Lists excel at insertions/deletions when you have a reference to the node, as no shifting is required."
+  }
+]}
+/>

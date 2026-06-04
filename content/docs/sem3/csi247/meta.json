@@ -1,0 +1,15 @@
+{
+  "title": "CSI247: Data Structures",
+  "pages": [
+    "index",
+    "big-o",
+    "arrays-linked-lists",
+    "stacks-queues",
+    "trees-graphs",
+    "hashing",
+    "priority-queues",
+    "applications",
+    "question-bank",
+    "resources"
+  ]
+}

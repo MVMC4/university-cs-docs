@@ -1,0 +1,93 @@
+---
+title: Big O Notation
+description: Understanding algorithmic complexity.
+---
+
+# Big O Notation
+
+Big O notation is used to classify algorithms according to how their running time or space requirements grow as the input size ($n$) grows. It provides an upper bound on the growth rate of an algorithm, allowing us to evaluate efficiency independently of hardware or programming language.
+
+## Time vs. Space Complexity
+
+When we talk about Big O, we are usually referring to **Time Complexity** (how long an algorithm takes to run). However, **Space Complexity** is equally important—it measures how much additional memory an algorithm requires as the input size grows.
+
+- **Time Complexity**: $O(n)$ means the time taken grows linearly with the input.
+- **Space Complexity**: $O(1)$ means the algorithm uses a constant amount of extra memory, regardless of input size.
+
+## Best, Average, and Worst Case
+
+An algorithm's performance can vary based on the initial arrangement of the input data.
+
+- **Best Case**: The absolute minimum number of operations (e.g., finding the target at the very first index).
+- **Average Case**: The expected number of operations over all possible inputs.
+- **Worst Case**: The maximum number of operations (this is what Big O usually describes).
+
+## Common Complexities
+
+| Notation | Name | Example |
+| :--- | :--- | :--- |
+| $O(1)$ | Constant | Array lookup by index, pushing to a stack |
+| $O(\log n)$ | Logarithmic | Binary Search, balanced BST operations |
+| $O(n)$ | Linear | Simple loop through an array, finding a max value |
+| $O(n \log n)$ | Linearithmic | Merge Sort, Quick Sort (average), Heap Sort |
+| $O(n^2)$ | Quadratic | Nested loops (e.g., Bubble Sort, Selection Sort) |
+| $O(2^n)$ | Exponential | Recursive Fibonacci without memoization |
+
+## Example: Linear Search
+
+Let's look at a simple algorithm to find a target number in an array.
+
+<SafeImage
+  src="/images/csi247/linear-search.png"
+  alt="Linear Search Visualization"
+  caption="Figure: Linear Search iterates through each element until the target is found."
+  className="max-w-full h-auto"
+/>
+
+*Time Complexity: $O(n)$ because in the worst case, we check every element.*  
+*Space Complexity: $O(1)$ because we only use a few variables for indexing, regardless of the array size.*
+
+```ts
+function linearSearch(arr: number[], target: number): number {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) return i;
+  }
+  return -1;
+}
+```
+
+<Quiz
+title="Big O & Data Structures Mastery"
+questions={[
+  {
+    question: "What is the worst-case time complexity of Linear Search?",
+    options: ["O(1)", "O(log n)", "O(n)", "O(n^2)"],
+    correctIndex: 2,
+    explanation: "In the worst case, the target is at the very end of the array or not present at all, requiring us to check all 'n' elements."
+  },
+  {
+    question: "Which of the following represents constant time complexity?",
+    options: ["O(n)", "O(1)", "O(log n)", "O(n log n)"],
+    correctIndex: 1,
+    explanation: "O(1) means the execution time does not grow regardless of the input size, such as accessing an array by its index."
+  },
+  {
+    question: "What is the space complexity of a standard recursive Fibonacci function without memoization?",
+    options: ["O(1)", "O(n)", "O(n^2)", "O(2^n)"],
+    correctIndex: 1,
+    explanation: "The maximum depth of the recursion tree is 'n', so the call stack will grow linearly, resulting in O(n) space complexity."
+  },
+  {
+    question: "Which sorting algorithm has an average time complexity of O(n log n)?",
+    options: ["Bubble Sort", "Merge Sort", "Selection Sort", "Insertion Sort"],
+    correctIndex: 1,
+    explanation: "Merge Sort consistently divides the array in half and merges them, guaranteeing O(n log n) time in all cases."
+  },
+  {
+    question: "If an algorithm's runtime doubles every time the input size increases by 1, what is its time complexity?",
+    options: ["O(n)", "O(n^2)", "O(log n)", "O(2^n)"],
+    correctIndex: 3,
+    explanation: "This describes exponential growth. For every increment of 'n', the operations multiply by a constant factor (2), leading to O(2^n)."
+  }
+]}
+/>

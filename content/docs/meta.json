@@ -1,0 +1,11 @@
+{
+  "title": "University Docs",
+  "root": true,
+  "pages": [
+    "index",
+    "---Semesters---",
+    "sem1/index",
+    "sem2/index",
+    "sem3"
+  ]
+}

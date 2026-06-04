@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Production logs
+*.log
+
+# Environment files
+.env*.local
+.env
+
+# Vercel
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE and editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Fumadocs generated
+.source/
+.fumadocs/
+
+# Testing
+coverage/
+*.lcov
+
+# Package manager caches
+.npm/
+.yarn/
+.pnpm-store/
+
+# Bun
+bun.lockb
+
+# Misc
+*.pem
+ehthumbs.db
+project-context.txt
