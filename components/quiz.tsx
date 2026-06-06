@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Check, X, RotateCcw } from 'lucide-react';
+import { Check, X, RotateCcw, AlertCircle } from 'lucide-react';
 
 type Question = {
   question: string;
@@ -9,7 +9,27 @@ type Question = {
   explanation?: string;
 };
 
-export function Quiz({ title = "Knowledge Check", questions }: { title?: string; questions: Question[] }) {
+type QuizProps = {
+  title?: string;
+  questions?: Question[];
+};
+
+export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
+  // Empty state handling
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="my-8 rounded-xl border border-fd-border bg-fd-muted/30 p-6 shadow-sm">
+        <div className="flex items-center gap-3 text-fd-muted-foreground">
+          <AlertCircle className="h-5 w-5" />
+          <div>
+            <h3 className="text-lg font-semibold text-fd-foreground">{title}</h3>
+            <p className="text-sm mt-1">No questions available for this section yet.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -31,8 +51,8 @@ export function Quiz({ title = "Knowledge Check", questions }: { title?: string;
     setIsSubmitted(false);
   };
 
-  const score = isSubmitted 
-    ? questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0) 
+  const score = isSubmitted
+    ? questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0)
     : 0;
 
   const ScoreDisplay = () => (
@@ -59,7 +79,7 @@ export function Quiz({ title = "Knowledge Check", questions }: { title?: string;
             <div className="space-y-2 pl-2">
               {q.options.map((option, optIndex) => {
                 let btnClass = 'w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between text-sm ';
-                
+
                 if (!isSubmitted) {
                   if (answers[qIndex] === optIndex) {
                     btnClass += 'border-fd-primary bg-fd-primary/10 text-fd-primary font-medium';
@@ -85,7 +105,7 @@ export function Quiz({ title = "Knowledge Check", questions }: { title?: string;
                 );
               })}
             </div>
-            
+
             {isSubmitted && q.explanation && (
               <div className="mt-3 p-4 rounded-lg bg-fd-muted border border-fd-border text-sm text-fd-muted-foreground">
                 <span className="font-semibold text-fd-foreground">Explanation:</span> {q.explanation}
@@ -99,8 +119,8 @@ export function Quiz({ title = "Knowledge Check", questions }: { title?: string;
         {isSubmitted ? (
           <>
             <ScoreDisplay />
-            <button 
-              onClick={handleReset} 
+            <button
+              onClick={handleReset}
               className="px-6 py-2 rounded-lg bg-fd-muted border border-fd-border text-fd-foreground font-medium hover:bg-fd-background transition-colors flex items-center gap-2"
             >
               <RotateCcw className="h-4 w-4" />
@@ -109,8 +129,8 @@ export function Quiz({ title = "Knowledge Check", questions }: { title?: string;
           </>
         ) : (
           <div className="w-full flex justify-end">
-            <button 
-              onClick={handleSubmit} 
+            <button
+              onClick={handleSubmit}
               className="px-6 py-2 rounded-lg bg-fd-primary text-fd-primary-foreground font-medium hover:bg-fd-primary/90 transition-colors shadow-sm"
             >
               Submit Answers
