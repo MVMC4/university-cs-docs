@@ -1,4 +1,16 @@
 {
   "title": "CSI243: Functional Programming",
-  "pages": ["index", "pure-functions", "recursion", "question-bank", "resources"]
+  "pages": [
+    "index",
+    "01-paradigm-shift",
+    "02-haskell-basics",
+    "03-lists-patterns",
+    "04-recursion-hofs",
+    "05-type-system",
+    "06-adts-modules",
+    "07-abstractions-io",
+    "08-math-reasoning",
+    "09-complexity-testing",
+    "10-labs-projects"
+  ]
 }

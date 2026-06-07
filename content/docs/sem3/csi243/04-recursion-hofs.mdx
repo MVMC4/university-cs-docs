@@ -1,0 +1,97 @@
+---
+title: "04. Recursion & HOFs"
+description: "Tail recursion, Map, Filter, Fold, and Function Composition."
+---
+import { Quiz } from '@/components/quiz';
+import { quizData } from '@/content/quiz-data/sem3/csi243/04-recursion-quiz';
+
+# Recursion & Higher-Order Functions
+
+In functional programming, we replace traditional iterative loops (`for`, `while`) with **recursion** and **Higher-Order Functions (HOFs)**. This chapter explores how to write efficient recursive functions and how to leverage Haskell's powerful built-in HOFs to write concise, declarative code.
+
+## Tail Recursion & Accumulators
+
+Standard recursion builds up a call stack. For a list of length $n$, a naive recursive function requires $O(n)$ space, which can lead to a stack overflow for large inputs.
+
+**Tail Recursion** solves this by passing an **accumulator** argument that carries the intermediate result. Because the recursive call is the *very last operation* performed (a tail call), the Haskell compiler (GHC) can apply **Tail Call Optimization (TCO)**. It reuses the current stack frame, reducing the space complexity to $O(1)$—effectively turning the recursion into a loop at the machine level.
+
+```haskell
+-- Naive recursion: O(n) space
+sumNaive :: [Int] -> Int
+sumNaive [] = 0
+sumNaive (x:xs) = x + sumNaive xs
+
+-- Tail recursion with accumulator: O(1) space
+sumTail :: [Int] -> Int
+sumTail xs = go xs 0
+  where
+    go [] acc = acc
+    go (y:ys) acc = go ys (acc + y)
+```
+
+## The Holy Trinity of HOFs
+
+Higher-Order Functions are functions that take other functions as arguments or return them as results. Three fundamental HOFs form the backbone of list processing:
+
+### 1. Map (Transform)
+Applies a function to every element in a list, returning a new list of the same length.
+```haskell
+map :: (a -> b) -> [a] -> [b]
+-- Example: Double every element
+map (*2) [1, 2, 3] -- Result: [2, 4, 6]
+```
+
+### 2. Filter (Select)
+Keeps only the elements that satisfy a given predicate (a function returning `Bool`).
+```haskell
+filter :: (a -> Bool) -> [a] -> [a]
+-- Example: Keep only even numbers
+filter even [1, 2, 3, 4, 5] -- Result: [2, 4]
+```
+
+### 3. Fold (Reduce)
+Accumulates a list into a single summary value by repeatedly applying a binary function.
+
+- **`foldr` (Fold Right)**: Processes the list from right to left. It is **lazy**, meaning it can operate on infinite lists and short-circuit if the combining function ignores its second argument (e.g., `foldr (&&) True`).
+- **`foldl'` (Strict Fold Left)**: Processes the list from left to right. The prime (`'`) denotes **strict evaluation**. It forces the evaluation of the accumulator at each step, preventing the buildup of unevaluated expressions (thunks) and avoiding $O(n)$ memory space leaks. 
+
+> **Rule of Thumb**: Use `foldr` for building new data structures (like lists) or working with infinite lists. Use `foldl'` for reducing a list to a strict, single value (like a sum or product).
+
+```haskell
+import Data.Foldable (foldl')
+
+-- Strict left fold prevents space leaks
+sumStrict :: [Int] -> Int
+sumStrict = foldl' (+) 0
+```
+
+## Function Composition & Application
+
+Haskell encourages a "point-free" style, where we chain functions together without explicitly naming their arguments. This is achieved using the composition operator `(.)` and the application operator `($)`. 
+
+- `(.)` **Composes** two functions: `(f . g) x` is equivalent to `f (g x)`.
+- `($)` **Applies** a function with the lowest precedence, acting as an open parenthesis that eliminates the need for nested brackets.
+
+```haskell
+-- Pointful style (nested parentheses)
+processList :: [Int] -> Int
+processList xs = sum (map (*2) (filter even xs))
+
+-- Point-free style (clean pipeline)
+processListPF :: [Int] -> Int
+processListPF = sum . map (*2) . filter even
+
+-- Applying to a specific list
+result = processListPF $ [1, 2, 3, 4, 5]
+```
+
+```mermaid
+graph LR
+    A["[1, 2, 3, 4, 5]"] -->|filter even| B["[2, 4]"]
+    B -->|map (*2)| C["[4, 8]"]
+    C -->|sum| D["12"]
+    style A fill:#f9d0c4,stroke:#333,stroke-width:2px
+    style D fill:#d4f1f4,stroke:#333,stroke-width:2px
+```
+
+<Quiz title="Chapter 4 Knowledge Check" questions={quizData} />

@@ -1,0 +1,38 @@
+---
+title: "07. Mathematical Reasoning: Equational"
+description: "Equational reasoning, substitution, and Free Theorems."
+---
+import { Quiz } from '@/components/quiz';
+import { quizData } from '@/content/quiz-data/sem3/csi243/07-math-quiz';
+
+# Equational Reasoning
+
+Because Haskell functions are pure and referentially transparent, we can reason about our programs using the same rigorous mathematical techniques used in algebra. This is known as **Equational Reasoning**.
+
+## The Power of Substitution
+Equational reasoning allows us to substitute a function call with its result (or vice versa) without changing the program's behavior. This is the direct consequence of **Referential Transparency**.
+
+```haskell
+-- Given:
+double x = x + x
+square x = x * x
+
+-- We can reason step-by-step:
+square (double 3) 
+= square (3 + 3)         -- Substitute `double 3`
+= square 6               -- Evaluate addition
+= 6 * 6                  -- Substitute `square 6`
+= 36                     -- Final result
+```
+
+## Free Theorems
+Parametric polymorphism yields "Free Theorems". Because a function knows nothing about the specific type `a`, its behavior is severely restricted, allowing us to deduce properties without even seeing the implementation.
+
+For example, a function with the type `f :: [a] -> [a]` can only:
+1. Return the list unchanged.
+2. Return an empty list.
+3. Rearrange, duplicate, or drop elements.
+
+It **cannot** inspect the elements, modify their values, or create new elements of type `a` out of thin air.
+
+<Quiz title="Chapter 7 Math Check" questions={quizData} />

@@ -1,0 +1,36 @@
+---
+title: "09. Labs & Assignments"
+description: "AST Evaluator and Tail-Recursive Parser implementations."
+---
+import { Quiz } from '@/components/quiz';
+import { quizData } from '@/content/quiz-data/sem3/csi243/09-labs-quiz';
+
+# Weekly Labs and Assignments
+
+This chapter outlines the core practical assignments designed to solidify your understanding of ADTs, recursion, and functional architecture.
+
+## Lab 1: Custom AST Evaluator
+You will model arithmetic expressions as an Algebraic Data Type and build a mini-interpreter.
+1. **Define the ADT**: `data Expr = Val Int | Add Expr Expr | Mul Expr Expr`
+2. **Implement Evaluation**: Write `eval :: Expr -> Int` using structural recursion to traverse the tree and compute the result.
+3. **Implement Simplification**: Write `simplify :: Expr -> Expr` to apply algebraic identities (e.g., `x + 0` becomes `x`, `x * 1` becomes `x`) to reduce the tree size before evaluation.
+
+## Lab 2: Tail-Recursive Parser
+You will implement a function `isBalanced :: String -> Bool` that checks if a string of parentheses (e.g., `"(()())"`) is correctly balanced.
+- **Requirement**: You **must** use an integer accumulator to track the current nesting depth.
+- **Goal**: Achieve strict $O(1)$ space complexity via Tail Call Optimization. A naive recursive approach will cause a stack overflow on deeply nested strings (e.g., 10,000+ parentheses).
+
+```haskell
+-- Skeleton for Lab 2
+isBalanced :: String -> Bool
+isBalanced str = go str 0
+  where
+    go [] depth = depth == 0
+    go ('(':xs) depth = go xs (depth + 1)
+    go (')':xs) depth 
+      | depth < 0 = False
+      | otherwise = go xs (depth - 1)
+    go (_:xs) depth = go xs depth
+```
+
+<Quiz title="Chapter 9 Labs Check" questions={quizData} />

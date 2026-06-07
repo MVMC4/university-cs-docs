@@ -1,0 +1,42 @@
+---
+title: "08. Mathematical Reasoning: Induction"
+description: "Structural Induction proofs for recursive data types."
+---
+import { Quiz } from '@/components/quiz';
+import { quizData } from '@/content/quiz-data/sem3/csi243/08-math-quiz';
+
+# Proving by Structural Induction
+
+To prove that a property holds for **all** lists (or trees), we mirror the recursive definition of the data type itself. This technique is called **Structural Induction**.
+
+## The 3 Steps of Structural Induction
+1. **Base Case**: Prove the property holds for the simplest structure (e.g., the empty list `[]`).
+2. **Inductive Hypothesis (IH)**: Assume the property holds for an arbitrary, smaller structure `xs`.
+3. **Inductive Step**: Prove that if the property holds for `xs`, it must also hold for the larger structure `x:xs` (a list with one more element).
+
+## Rigorous Proof Example
+**Theorem**: `length (xs ++ ys) = length xs + length ys`
+
+**Proof**: By structural induction on `xs`.
+
+**Base Case**: `xs = []`
+```haskell
+length ([] ++ ys) 
+= length ys                  -- Definition of (++)
+= 0 + length ys              -- Arithmetic identity
+= length [] + length ys      -- Definition of length
+```
+*The base case holds.*
+
+**Inductive Step**: Assume the IH: `length (xs ++ ys) = length xs + length ys`. We must prove it for `x:xs`.
+```haskell
+length ((x:xs) ++ ys) 
+= length (x : (xs ++ ys))    -- Definition of (++)
+= 1 + length (xs ++ ys)      -- Definition of length
+= 1 + (length xs + length ys)-- Apply Inductive Hypothesis (IH)
+= (1 + length xs) + length ys-- Associativity of (+)
+= length (x:xs) + length ys  -- Definition of length
+```
+*The inductive step holds. Therefore, by structural induction, the theorem is true for all finite lists `xs`.*
+
+<Quiz title="Chapter 8 Induction Check" questions={quizData} />
