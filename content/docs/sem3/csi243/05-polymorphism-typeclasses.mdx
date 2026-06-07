@@ -1,0 +1,237 @@
+---
+title: "05. Polymorphism, Overloading & Typeclasses"
+description: "Parametric Polymorphism, Ad-Hoc Polymorphism, Defining Typeclasses, Standard Typeclasses, and Advanced Type Theory."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
+
+# Chapter 5: Polymorphism, Overloading & Typeclasses
+
+## Learning Objectives
+1. Write and trace parametrically polymorphic functions using type variables (`a`, `b`).
+2. Differentiate between parametric polymorphism and ad-hoc polymorphism (overloading).
+3. Define custom typeclasses and create instances for user-defined data types.
+4. Identify the core methods and hierarchies of standard Haskell typeclasses (`Eq`, `Ord`, `Num`, `Integral`, `Fractional`, `Show`, `Read`).
+5. (Advanced) Trace Hindley-Milner unification, derive Free Theorems, and explain dictionary passing.
+
+---
+
+## 5.1 Parametric Polymorphism
+
+**Parametric polymorphism** allows a function to operate uniformly on values of *any* type. We denote unknown types with lowercase type variables (e.g., `a`, `b`). The function's behaviour cannot depend on the specific type; it can only manipulate the structure of the data.
+
+### Lab 6 Practical Implementations (5-Part Framework)
+
+**1. `lastElement`**
+*   **Signature:** `lastElement :: [a] -> a`
+*   **Mathematical Specification:**
+    ```text
+    lastElement(xs) = {
+      error           if xs = []
+      x               if xs = [x]
+      lastElement(ys) if xs = y:ys
+    }
+    ```
+*   **Dry Run:** `lastElement [1, 2]`
+    ```text
+      lastElement (1 : [2])
+    => lastElement [2]
+    => 2
+    ```
+*   **Polymorphism Check:** The type variable `a` means this works for any list. It only inspects the list structure (`[]` and `:`), never the elements themselves. Thus, it exhibits parametric polymorphism.
+*   **Implementation:**
+    ```haskell
+    lastElement :: [a] -> a
+    lastElement [x]    = x
+    lastElement (_:xs) = lastElement xs
+    lastElement []     = error "Empty list"
+    ```
+
+**2. `revList`**
+*   **Signature:** `revList :: [a] -> [a]`
+*   **Mathematical Specification:**
+    ```text
+    revList(xs) = {
+      []                 if xs = []
+      revList(ys) ++ [x] if xs = x:ys
+    }
+    ```
+*   **Dry Run:** `revList [1, 2]`
+    ```text
+      revList (1 : [2])
+    => revList [2] ++ [1]
+    => (revList [] ++ [2]) ++ [1]
+    => ([] ++ [2]) ++ [1]
+    => [2] ++ [1]
+    => [2, 1]
+    ```
+*   **⏱️ Time Complexity Note:** The recursive step `revList xs ++ [x]` uses the `++` operator. Because `++` must traverse its entire left operand to append, this results in **$O(n^2)$ time complexity** for a list of length $n$. This is a critical syllabus requirement: naive reversal in Haskell is quadratic. (An $O(n)$ version uses an accumulator with `reverse'`).
+*   **Polymorphism Check:** Uses type variable `a`. Only manipulates list constructors `[]` and `:`, and the append operator `++` (which is also polymorphic). It never inspects the values of type `a`.
+*   **Implementation:**
+    ```haskell
+    revList :: [a] -> [a]
+    revList []     = []
+    revList (x:xs) = revList xs ++ [x]
+    ```
+
+**3. `twoLists`**
+*   **Signature:** `twoLists :: [a] -> [b] -> [(a, b)]`
+*   **Mathematical Specification:**
+    ```text
+    twoLists(xs, ys) = {
+      []                             if xs = [] or ys = []
+      (x, y) : twoLists(xs', ys')    if xs = x:xs' and ys = y:ys'
+    }
+    ```
+*   **Dry Run:** `twoLists [1, 2] [3, 4]`
+    ```text
+      twoLists (1:[2]) (3:[4])
+    => (1, 3) : twoLists [2] [4]
+    => (1, 3) : ((2, 4) : twoLists [] [])
+    => (1, 3) : ((2, 4) : [])
+    => [(1, 3), (2, 4)]
+    ```
+*   **Polymorphism Check:** Uses type variables `a` and `b`. Pairs elements without inspecting their values, allowing it to zip lists of entirely different types (e.g., `[Int]` and `[Char]`).
+*   **Implementation:**
+    ```haskell
+    twoLists :: [a] -> [b] -> [(a, b)]
+    twoLists (x:xs) (y:ys) = (x, y) : twoLists xs ys
+    twoLists _      _      = []
+    ```
+
+**4. `swapElements`**
+*   **Signature:** `swapElements :: (a, b) -> (b, a)`
+*   **Mathematical Specification:**
+    ```text
+    swapElements(pair) = (y, x) if pair = (x, y)
+    ```
+*   **Dry Run:** `swapElements (5, "hello")`
+    ```text
+      swapElements (5, "hello")
+    => ("hello", 5)
+    ```
+*   **Implementation:**
+    ```haskell
+    swapElements :: (a, b) -> (b, a)
+    swapElements (x, y) = (y, x)
+    ```
+*   **🔍 Polymorphism Check (vs Lab 4):** 
+    Compare `swapElements :: (a, b) -> (b, a)` with Lab 4's `swapIntegers :: (Int, Int) -> (Int, Int)`.
+    - `swapIntegers` is **monomorphic**: it only works for `Int`. The compiler generates machine code specifically for integer registers.
+    - `swapElements` is **parametrically polymorphic**: it works for *any* combination of types `a` and `b` (e.g., `(Int, String)`, `(Char, Double)`, `(Int, Int)`). 
+    - Because it is parametric, the function *cannot* inspect, create, or depend on the values of `a` or `b`. It can *only* deconstruct the tuple and reorder the components. This uniform behavior across all types is the defining characteristic of parametric polymorphism.
+
+> ⚠️ **Common Misconception:** "Polymorphic means the function can do different things for different types."
+> **Correction:** That is *ad-hoc* polymorphism (overloading). *Parametric* polymorphism means the function does the **exact same structural thing** regardless of the type. It cannot inspect or create values of type `a`.
+
+---
+
+## 5.2 Ad-Hoc Polymorphism (Overloading)
+
+**Ad-hoc polymorphism** (overloading) allows the same function name or operator to have *different implementations* depending on the type of its arguments. 
+
+For example, the `+` operator adds integers differently than it adds floating-point numbers, and it concatenates strings differently than it adds numbers. The compiler resolves which implementation to use based on the types involved at the call site.
+
+In Haskell, ad-hoc polymorphism is strictly governed by **Typeclasses**.
+
+---
+
+## 5.3 Defining Typeclasses & Instances
+
+A typeclass defines a set of functions (methods) that a type must implement to be considered a member of that class.
+
+### Defining a Custom Typeclass
+
+The syntax uses the `class` keyword, followed by the class name and a type variable.
+
+```haskell
+class MyEq a where
+    (===) :: a -> a -> Bool
+    (/==) :: a -> a -> Bool
+    
+    -- Default implementation (optional)
+    x /== y = not (x === y)
+```
+
+### Creating Instances
+
+To make a custom data type a member of a typeclass, we write an `instance` declaration.
+
+```haskell
+data TrafficLight = Red | Yellow | Green
+
+-- We must implement the required methods
+instance MyEq TrafficLight where
+    Red    === Red    = True
+    Yellow === Yellow = True
+    Green  === Green  = True
+    _      === _      = False
+
+-- GHCi session
+ghci> Red === Red
+True
+ghci> Red /== Green
+True
+```
+
+---
+
+## 5.4 Standard Typeclasses
+
+Haskell provides a rich hierarchy of standard typeclasses. You must know what methods they provide and their relationships.
+
+- **`Eq`**: Types that can be tested for equality. Methods: `(==)`, `(/=)`.
+- **`Ord`**: Types that can be ordered. Methods: `(<)`, `(<=)`, `(>)`, `(>=)`, `compare`, `max`, `min`. *(Requires `Eq`)*.
+- **`Show`**: Types that can be converted to a `String` representation. Method: `show`.
+- **`Read`**: Types that can be parsed from a `String`. Method: `read`. *(Use with caution; prefer safe parsers in production)*.
+- **`Num`**: Numeric types. Methods: `+`, `-`, `*`, `abs`, `signum`, `fromInteger`.
+- **`Integral`**: Whole numbers. Methods: `div`, `mod`, `quot`, `rem`, `toInteger`. *(Subclass of `Num`)*.
+- **`Fractional`**: Types that support true division. Methods: `/`, `recip`, `fromRational`. *(Subclass of `Num`)*.
+
+```haskell
+-- GHCi session showing typeclass resolution
+ghci> :t (==)
+(==) :: Eq a => a -> a -> Bool
+
+ghci> :t div
+div :: Integral a => a -> a -> a
+
+ghci> :t (/)
+(/) :: Fractional a => a -> a -> a
+```
+
+---
+
+## 5.5 Advanced Theory: Unification, Free Theorems & Dictionary Passing
+
+### Hindley-Milner Unification
+GHC infers types using the Hindley-Milner algorithm. The core operation is **unification**: finding a substitution for type variables that makes two types identical.
+
+**Trace: `f x = x + True`**
+1. Assign fresh variable: `x :: a`
+2. `(+)` has type `Num n => n -> n -> n`. Constraint: `a ~ n` (and `Num n`).
+3. `True :: Bool`. Constraint: `n ~ Bool`.
+4. Compose: `a ~ n ~ Bool`. Check: Is `Bool` an instance of `Num`? **NO**.
+5. **Type Error:** `No instance for (Num Bool)`.
+
+### Free Theorems (Parametricity)
+Philip Wadler's "Theorems for Free" (1989) states that parametric polymorphism restricts what a function can do. 
+For `id :: a -> a`, the function knows *nothing* about `a`. It cannot inspect it, create it, or destroy it. The *only* terminating implementation is `id x = x`.
+For `map :: (a -> b) -> [a] -> [b]`, the free theorem is map fusion: `map f (map g xs) = map (f . g) xs`.
+
+### Dictionary Passing
+Typeclass constraints are compiled into explicit function arguments called **dictionaries**.
+
+```haskell
+-- What you write:
+sortBy :: Ord a => [a] -> [a]
+
+-- What GHC compiles it to (conceptually):
+data OrdDict a = OrdDict { dictCompare :: a -> a -> Ordering }
+
+sortBy_compiled :: OrdDict a -> [a] -> [a]
+```
+When you call `sortBy [3,1,2]`, GHC automatically selects and passes the `OrdDict Int` record. The constraint `Ord a =>` is not a runtime type check; it is an **implicit function argument** resolved at compile time, guaranteeing zero abstraction overhead.
+
+<Quiz title="Chapter 5 Knowledge Check" questions={quizData} />

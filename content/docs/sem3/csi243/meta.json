@@ -3,14 +3,13 @@
   "pages": [
     "index",
     "01-paradigm-shift",
-    "02-haskell-basics",
-    "03-lists-patterns",
-    "04-recursion-hofs",
-    "05-type-system",
-    "06-adts-modules",
-    "07-abstractions-io",
-    "08-math-reasoning",
-    "09-complexity-testing",
-    "10-labs-projects"
+    "02-haskell-basics-ghci-io",
+    "03-syntax-pattern-matching",
+    "04-adts-modules",
+    "05-polymorphism-typeclasses",
+    "06-recursion-lists-induction",
+    "07-hofs-list-processing",
+    "08-abstractions",
+    "09-io-monad"
   ]
 }

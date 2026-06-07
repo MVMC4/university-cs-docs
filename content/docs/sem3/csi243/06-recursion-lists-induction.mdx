@@ -1,0 +1,390 @@
+---
+title: "06. Recursion, Lists & Structural Induction"
+description: "Anatomy of Recursion, Dry-Running Mechanics, List Recursion, Structural Induction, and Advanced Runtime Evaluation."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/05-lists-recursion-quiz';
+
+# Chapter 6: Recursion, Lists & Structural Induction
+
+## Learning Objectives
+1. Define recursive functions by identifying the base case, recursive step, and mathematical specifications.
+2. Perform step-by-step dry-runs (substitution traces) of recursive functions like `fac`, `sumNumbers`, `rangeSum`, and `fib`.
+3. Implement standard list functions (`listLength`, `concatLists`, `elementOccurs`, `isElementIn`, `sumList`) using pattern matching on `[]` and `(x:xs)`.
+4. Map mathematical summation ($\sum$) notation to recursive list processing.
+5. Construct formal proofs using Structural Induction (Basis step, Inductive Hypothesis, Inductive Step).
+6. Analyze and compare the Time and Space complexity of fundamental recursive algorithms.
+7. (Appendix) Understand Graph Reduction, Weak Head Normal Form (WHNF), Thunks, and Space Leaks.
+
+---
+
+## 6.1 The Anatomy of Recursion
+
+A recursive function consists of two fundamental components:
+1. **Base Case**: The condition under which the recursion stops. It provides a direct answer without making further recursive calls.
+2. **Recursive Step**: The part where the function calls itself with a modified (usually smaller) argument, moving closer to the base case.
+
+### Mathematical Specifications
+In computer science, we often define recursive functions mathematically using piecewise notation before writing code. For example, the factorial function:
+
+```text
+fac(n) = {
+  1                    if n = 0
+  n × fac(n-1)         if n > 0
+}
+```
+
+### Haskell Implementation & Error Handling
+When translating mathematical specifications to Haskell, we must also handle invalid inputs that fall outside the mathematical domain (e.g., negative numbers for factorial). We use the `error` function to halt execution with a descriptive message.
+
+```haskell
+fac :: Integer -> Integer
+fac n
+    | n < 0     = error "fac only defined for non-negative integers" -- Error Handling
+    | n == 0    = 1                  -- Base case
+    | otherwise = n * fac (n - 1)    -- Recursive step
+```
+
+---
+
+## 6.2 Dry-Running Mechanics
+
+To understand recursion and predict a function's behaviour, we perform a **dry-run**: a step-by-step substitution trace exactly as the Haskell evaluator would execute it.
+
+### Trace 1: `fac 3`
+```text
+  fac 3
+=> 3 * fac 2                 -- apply recursive step
+=> 3 * (2 * fac 1)           -- apply recursive step
+=> 3 * (2 * (1 * fac 0))     -- apply recursive step
+=> 3 * (2 * (1 * 1))         -- apply base case
+=> 3 * (2 * 1)               -- evaluate arithmetic
+=> 3 * 2
+=> 6
+```
+
+### Trace 2: `sumNumbers 4`
+Assume `sumNumbers n` sums all integers from 0 up to, but not including, `n`.
+```haskell
+sumNumbers :: Integer -> Integer
+sumNumbers n
+    | n <= 0    = 0
+    | otherwise = (n - 1) + sumNumbers (n - 1)
+```
+```text
+  sumNumbers 4
+=> (4 - 1) + sumNumbers 3
+=> 3 + sumNumbers 3
+=> 3 + ((3 - 1) + sumNumbers 2)
+=> 3 + (2 + sumNumbers 2)
+=> 3 + (2 + ((2 - 1) + sumNumbers 1))
+=> 3 + (2 + (1 + sumNumbers 1))
+=> 3 + (2 + (1 + ((1 - 1) + sumNumbers 0)))
+=> 3 + (2 + (1 + (0 + 0)))    -- base case (0 <= 0)
+=> 3 + (2 + 1)
+=> 6
+```
+
+### Trace 3: `fib` Call Tree
+```haskell
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+```
+*Note: A full trace of `fib 5` creates a binary tree of 15 calls. In exams, you are typically asked to draw the call tree. Here is the call tree for `fib 4`:*
+
+```text
+           fib 4
+         /       \
+    fib 3         fib 2
+   /     \       /     \
+fib 2   fib 1  fib 1  fib 0
+ /   \
+fib 1 fib 0
+```
+*Notice the massive redundancy: `fib 2` is computed twice, and `fib 1` is computed three times. This demonstrates why naive Fibonacci recursion is $O(2^n)$ and highly inefficient.*
+
+---
+
+## 6.3 List Recursion & Core Functions (Lab 2 & Lecture Framework)
+
+Lists in Haskell are defined recursively: a list is either empty (`[]`) or an element prepended to another list (`x:xs`). Therefore, list functions naturally follow a recursive structure pattern matching on these two constructors.
+
+### 1. `listLength` (Lab 2 Task 3a)
+*   **Signature:** `listLength :: [a] -> Integer`
+*   **Mathematical Specification:**
+    ```text
+    listLength(xs) = {
+      0                     if xs = []
+      1 + listLength(ys)    if xs = y:ys
+    }
+    ```
+*   **Dry Run:** `listLength [1, 2]`
+    ```text
+      listLength (1 : [2])
+    => 1 + listLength [2]
+    => 1 + listLength (2 : [])
+    => 1 + (1 + listLength [])
+    => 1 + (1 + 0)
+    => 2
+    ```
+*   **Implementation:**
+    ```haskell
+    listLength :: [a] -> Integer
+    listLength []     = 0                 -- Base case
+    listLength (_:xs) = 1 + listLength xs -- Recursive step
+    ```
+
+### 2. `concatLists` (Lab 2 Task 3b)
+*   **Signature:** `concatLists :: [a] -> [a] -> [a]`
+*   **Mathematical Specification:**
+    ```text
+    concatLists(xs, ys) = {
+      ys                         if xs = []
+      x : concatLists(xs', ys)   if xs = x:xs'
+    }
+    ```
+*   **Dry Run:** `concatLists [1, 2] [3, 4]`
+    ```text
+      concatLists (1:[2]) [3,4]
+    => 1 : concatLists [2] [3,4]
+    => 1 : (2 : concatLists [] [3,4])
+    => 1 : (2 : [3,4])
+    => [1,2,3,4]
+    ```
+*   **Implementation:**
+    ```haskell
+    concatLists :: [a] -> [a] -> [a]
+    concatLists []     ys = ys              -- Base case: appending to empty list
+    concatLists (x:xs) ys = x : concatLists xs ys -- Recursive step
+    ```
+
+### 3. `elementOccurs`
+*   **Signature:** `elementOccurs :: Eq a => a -> [a] -> Int`
+*   **Mathematical Specification:**
+    ```text
+    elementOccurs(e, xs) = {
+      0                         if xs = []
+      1 + elementOccurs(e, ys)  if xs = y:ys and e = y
+      elementOccurs(e, ys)      if xs = y:ys and e != y
+    }
+    ```
+*   **Dry Run:** `elementOccurs 2 [1, 2, 2, 3]`
+    ```text
+      elementOccurs 2 (1:[2,2,3])
+    => elementOccurs 2 [2,2,3]             -- 2 /= 1, skip head
+    => 1 + elementOccurs 2 [2,3]           -- 2 == 2, count it
+    => 1 + (1 + elementOccurs 2 [3])       -- 2 == 2, count it
+    => 1 + (1 + 0)                         -- 2 /= 3, base case met
+    => 2
+    ```
+*   **Implementation:**
+    ```haskell
+    elementOccurs :: Eq a => a -> [a] -> Int
+    elementOccurs _ [] = 0
+    elementOccurs target (x:xs)
+        | target == x = 1 + elementOccurs target xs
+        | otherwise   = elementOccurs target xs
+    ```
+
+### 4. `isElementIn`
+*   **Signature:** `isElementIn :: Eq a => a -> [a] -> Bool`
+*   **Mathematical Specification:**
+    ```text
+    isElementIn(e, xs) = {
+      False                   if xs = []
+      True                    if xs = y:ys and e = y
+      isElementIn(e, ys)      if xs = y:ys and e != y
+    }
+    ```
+*   **Dry Run:** `isElementIn 2 [1, 2, 3]`
+    ```text
+      isElementIn 2 (1:[2,3])
+    => isElementIn 2 [2,3]                 -- 2 /= 1, skip head
+    => True                                -- 2 == 2, base case met
+    ```
+*   **Implementation:**
+    ```haskell
+    isElementIn :: Eq a => a -> [a] -> Bool
+    isElementIn _ [] = False
+    isElementIn target (x:xs)
+        | target == x = True
+        | otherwise   = isElementIn target xs
+    ```
+
+### 5. `powerNum`
+*   **Signature:** `powerNum :: Integer -> Int -> Integer`
+*   **Mathematical Specification:**
+    ```text
+    powerNum(n, y) = {
+      error                   if y < 0
+      1                       if y = 0
+      n × powerNum(n, y-1)    if y > 0
+    }
+    ```
+*   **Dry Run:** `powerNum 2 3`
+    ```text
+      powerNum 2 3
+    => 2 * powerNum 2 2
+    => 2 * (2 * powerNum 2 1)
+    => 2 * (2 * (2 * powerNum 2 0))
+    => 2 * (2 * (2 * 1))          -- base case (y = 0)
+    => 8
+    ```
+*   **Implementation:**
+    ```haskell
+    powerNum :: Integer -> Int -> Integer
+    powerNum n y
+        | y < 0     = error "powerNum: negative exponent not supported"
+        | y == 0    = 1
+        | otherwise = n * powerNum n (y - 1)
+    ```
+
+### 6. `rangeSum` (Recursion Lecture Exercise)
+*   **Signature:** `rangeSum :: Integer -> Integer -> Integer`
+*   **Mathematical Specification:**
+    ```text
+    rangeSum(a, b) = {
+      0                       if a > b
+      a                       if a == b
+      a + rangeSum(a+1, b)    if a < b
+    }
+    ```
+*   **Dry Run:** `rangeSum 3 5`
+    ```text
+      rangeSum 3 5
+    => 3 + rangeSum 4 5
+    => 3 + (4 + rangeSum 5 5)
+    => 3 + (4 + 5)
+    => 12
+    ```
+*   **Implementation:**
+    ```haskell
+    rangeSum :: Integer -> Integer -> Integer
+    rangeSum a b
+        | a > b     = 0
+        | a == b    = a
+        | otherwise = a + rangeSum (a + 1) b
+    ```
+
+### 7. `sumNumbers` (Sum up to n)
+*   **Signature:** `sumNumbers :: Integer -> Integer`
+*   **Specification:** Sums all integers from 0 up to, but not including, `n`.
+*   **Implementation:**
+    ```haskell
+    sumNumbers :: Integer -> Integer
+    sumNumbers n
+        | n <= 0    = 0
+        | otherwise = (n - 1) + sumNumbers (n - 1)
+    ```
+
+### 8. `sumList` & Sequences/Summation
+In mathematics, the summation of a sequence is denoted by the Sigma ($\sum$) notation:
+$$ \sum_{i=0}^{n-1} x_i = x_0 + x_1 + \dots + x_{n-1} $$
+In Haskell, this maps directly to the recursive structure of `sumList`. The base case (`[]`) corresponds to the empty sum (0), and the recursive step (`x:xs`) corresponds to adding the current term $x_i$ to the summation of the remaining terms.
+
+*   **Signature:** `sumList :: Num a => [a] -> a`
+*   **Implementation:**
+    ```haskell
+    sumList :: Num a => [a] -> a
+    sumList []     = 0                  -- Base case: empty sum is 0
+    sumList (x:xs) = x + sumList xs     -- Recursive step: x_i + sum of rest
+    ```
+
+---
+
+## 6.4 Time & Space Complexity Analysis
+
+Understanding the performance of recursive functions is critical. Below is a comparison of fundamental recursive algorithms:
+
+| Function | Time Complexity | Space Complexity | Notes |
+| :--- | :--- | :--- | :--- |
+| `fac n` | $O(n)$ | $O(n)$ | Linear recursion builds a call stack of depth $n$. |
+| `sumNumbers n` | $O(n)$ | $O(n)$ | Linear recursion, similar call stack depth to `fac`. |
+| `fib n` | $O(2^n)$ | $O(n)$ | Exponential time due to redundant branching; max stack depth is $n$. |
+| `revList xs`| $O(n^2)$ | $O(n)$ | The `++` operator traverses the left list, making each of the $n$ steps take $O(k)$ time. |
+
+---
+
+## 6.5 Structural Induction
+
+Structural induction is the primary method for proving properties of recursively defined data structures (like lists or natural numbers). It mirrors mathematical induction but follows the exact structure of the data type's constructors.
+
+**The Framework:**
+1. **Basis Step**: Prove the property holds for the base constructor (e.g., `[]` for lists, `0` for naturals).
+2. **Inductive Hypothesis (IH)**: Assume the property holds for an arbitrary structure `xs`.
+3. **Inductive Step**: Prove the property holds for the recursive constructor (e.g., `x:xs`), utilizing the IH.
+
+### Example Proof
+**Theorem:** Prove `listLength (concatLists xs ys) = listLength xs + listLength ys` for all lists `xs` and `ys`.
+*Proof by structural induction on `xs`.*
+
+**Basis Step (`xs = []`):**
+```text
+LHS: listLength (concatLists [] ys)
+   = listLength ys                -- Definition of concatLists
+
+RHS: listLength [] + listLength ys
+   = 0 + listLength ys            -- Definition of listLength
+   = listLength ys                -- Arithmetic
+
+LHS = RHS. Basis step holds.
+```
+
+**Inductive Step (`xs = x:xs'`):**
+Assume IH: `listLength (concatLists xs' ys) = listLength xs' + listLength ys`.
+```text
+LHS: listLength (concatLists (x:xs') ys)
+   = listLength (x : concatLists xs' ys)  -- Definition of concatLists
+   = 1 + listLength (concatLists xs' ys)  -- Definition of listLength
+   = 1 + (listLength xs' + listLength ys) -- By Inductive Hypothesis
+
+RHS: listLength (x:xs') + listLength ys
+   = (1 + listLength xs') + listLength ys -- Definition of listLength
+   = 1 + (listLength xs' + listLength ys) -- Associativity of addition
+
+LHS = RHS. Inductive step holds. QED.
+```
+
+---
+
+## 6.6 Exam-Style Practice Questions
+
+1. **Math & Dry Run:** Write a recursive function `productList :: Num a => [a] -> a` that multiplies all elements in a list. Provide the piecewise mathematical specification and a dry run for `productList [2,3,4]`.
+2. **Implementation:** Implement `countEvens :: [Int] -> Int` that counts how many even numbers are in a list. Ensure you handle the empty list base case correctly.
+3. **Complexity:** Explain why `revList` has $O(n^2)$ time complexity, and propose a conceptual fix to make it $O(n)$.
+
+---
+
+## Appendix: Advanced Runtime Evaluation
+*(Note: This section covers Graph Reduction, Thunks, and Space Leaks. It is conceptually separate from the core recursion curriculum but included here for completeness.)*
+
+### Graph Reduction & The Laziness Trap
+In strict languages (C, Java), evaluating `1 + 2` immediately yields `3`. In Haskell, evaluating `1 + 2` yields a *recipe* to add 1 and 2. This recipe is called a **Thunk**.
+
+- **Weak Head Normal Form (WHNF):** An expression reduced to its outermost data constructor or lambda abstraction. Internal fields may still be thunks. (e.g., `(1 + 2, 3)` is in WHNF because the tuple constructor `(,)` is exposed).
+- **Normal Form (NF):** Fully evaluated — no thunks anywhere in the entire expression tree.
+
+### The Space Leak: Accumulator Thunks
+Consider a naive tail-recursive sum:
+```haskell
+sumNaive :: [Int] -> Int -> Int
+sumNaive [] acc     = acc
+sumNaive (x:xs) acc = sumNaive xs (acc + x)
+```
+Because Haskell is lazy, `(acc + x)` is not evaluated immediately. It builds an $O(n)$ chain of thunks on the heap before a single addition is performed, eventually causing a stack overflow.
+
+### `seq` and BangPatterns
+To fix the space leak, force the accumulator to WHNF before the recursive call.
+```haskell
+{-# LANGUAGE BangPatterns #-}
+
+sumStrict :: [Int] -> Int -> Int
+sumStrict [] !acc     = acc           -- force acc when pattern matches
+sumStrict (x:xs) !acc = sumStrict xs (acc + x)
+```
+`seq :: a -> b -> b` evaluates its first argument to WHNF, then returns its second argument unchanged. BangPatterns (`!`) provide syntactic sugar for `seq`.
+
+<Quiz title="Chapter 6 Knowledge Check" questions={quizData} />

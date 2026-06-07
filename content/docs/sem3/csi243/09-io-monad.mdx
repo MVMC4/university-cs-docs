@@ -1,0 +1,185 @@
+---
+title: "09. The IO Monad"
+description: "The Recipe pattern, RealWorld token, and the purity boundary."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/08-io-monad-quiz';
+
+# Chapter 9: The IO Monad & The Purity Boundary
+
+> ⚠️ **ADVANCED/BONUS: Not explicitly tested in CSI243 Labs.**
+> This chapter covers advanced concepts like the `RealWorld` token, `IORef`, and the internal AST representation of IO. While crucial for a deep understanding of Haskell's purity guarantees, these specific mechanics are considered bonus material and are **not explicitly tested** in standard CSI243 lab assessments. For practical IO, focus primarily on the "Recipe Pattern" intuition and basic `do`-notation composition (covered in Chapter 2).
+
+## Learning Objectives
+1. Model `IO` actions as first-class AST recipes and compose them using higher-order functions.
+2. Trace the `State# RealWorld` token through a sequence of IO actions to explain how purity enforces sequential execution.
+3. Implement controlled mutable state using `IORef` within the `IO` monad.
+4. Handle asynchronous exceptions and synchronous errors using `try` and `SomeException`.
+
+---
+
+## 9.1 The Recipe Pattern (AST Analogy)
+
+### Intuition: Descriptions, Not Executions
+In imperative languages, calling `print("hello")` immediately causes ink to hit the paper (or pixels to light up). In Haskell, `putStrLn "hello"` does **nothing** when evaluated. Instead, it yields a pure, immutable data structure that *describes* an effect. Think of it as an Abstract Syntax Tree (AST) or a "recipe".
+
+### Formal Definition
+```haskell
+-- Conceptually, IO is an AST of instructions
+data IO a = PutStrLn String (IO a) | GetLine (String -> IO a) | ...
+```
+Because `IO` actions are just values, we can pass them to higher-order functions, store them in lists, and compose them without executing them.
+
+### Worked Code
+```haskell
+myAction :: IO ()
+myAction = putStrLn "hello"
+
+repeatTwice :: IO () -> IO ()
+repeatTwice action = action >> action
+
+-- GHCi session
+ghci> :t repeatTwice myAction
+repeatTwice myAction :: IO ()
+```
+Notice that `repeatTwice myAction` does not print anything yet! It merely constructs a larger AST recipe. The Haskell Runtime System (RTS) is the only thing that actually "executes" the recipe returned by `main`.
+
+> ⚠️ **Common Misconception:** "IO actions execute as soon as they are bound to a variable."
+> **Correction:** `IO` actions are first-class values. They only execute when the RTS evaluates the `main` AST.
+
+---
+
+## 9.2 The `RealWorld` Token
+
+### Intuition: The Relay Baton
+If `IO` actions are just pure data structures, how does GHC prevent the lazy compiler from reordering them, caching them, or evaluating them out of order? It uses a phantom "State Token".
+
+### Formal Definition
+```haskell
+newtype IO a = IO (State# RealWorld -> (# State# RealWorld, a #))
+```
+- `State# RealWorld` is a phantom token representing the state of the entire universe.
+- `(# #)` is an unboxed tuple (a GHC optimization to avoid heap allocation).
+- The token forces sequencing through strict data dependency.
+
+### Token Trace
+```haskell
+do
+ name <- getLine    -- Takes World_0, returns (World_1, name)
+ putStrLn name      -- Takes World_1, returns (World_2, ())
+```
+The compiler *cannot* reorder these because `putStrLn` physically requires the `World_1` token produced by `getLine`.
+
+```mermaid
+graph LR
+ W0[World 0] -->|getLine| W1[World 1]
+ W1 -->|putStrLn| W2[World 2]
+```
+*Figure 9.1: The RealWorld token passed as a relay baton, enforcing strict sequential execution.*
+
+---
+
+## 9.3 `IORef` — Mutable State Within IO
+
+### Intuition: Explicit Mutable Boxes
+Haskell supports mutation, but it is explicitly typed and confined strictly to `IO`. You cannot accidentally mutate a variable from pure code.
+
+### Worked Code
+```haskell
+import Data.IORef
+
+counter :: IO ()
+counter = do
+    ref <- newIORef (0 :: Int)
+    modifyIORef ref (+1)
+    modifyIORef ref (+1)
+    val <- readIORef ref
+    print val  
+
+-- GHCi session
+ghci> counter
+2
+```
+`IORef` is a mutable box. You cannot read it from pure code, guaranteeing referential transparency remains intact globally.
+
+---
+
+## 9.4 The Extraction Myth & `unsafePerformIO`
+
+### Intuition: The Purity Boundary
+Students frequently ask: "How do I extract a `String` from `IO String` to use it in a pure function?" The answer is: **You don't.** You must lift the pure function into the `IO` context using `fmap` or `>>=`.
+
+> ⚠️ **Common Misconception:** "I can use `unsafePerformIO` to escape IO and extract values."
+> **Correction:** `unsafePerformIO` breaks referential transparency. It exists strictly for C FFI bindings and top-level CAFs (Constant Applicative Forms). Using it to "extract" values will cause the compiler to unpredictably duplicate or eliminate the IO call, leading to undefined behavior.
+
+---
+
+## 9.5 Exception Handling in IO
+
+### Intuition: Synchronous Errors
+Because `IO` interacts with the chaotic real world, exceptions occur. Haskell handles these using the `Control.Exception` module.
+
+### Worked Code
+```haskell
+import Control.Exception
+
+safeDiv :: Int -> Int -> IO Int
+safeDiv _ 0 = throwIO (userError "Division by zero")
+safeDiv x y = return (x `div` y)
+
+main :: IO ()
+main = do
+    result <- try (safeDiv 10 0) :: IO (Either SomeException Int)
+    case result of
+        Left err  -> putStrLn $ "Error: " ++ show err
+        Right val -> print val
+
+-- GHCi session
+ghci> main
+Error: user error (Division by zero)
+```
+
+---
+
+## 9.6 Compiler Error Examples
+
+❌ **WRONG CODE (Extracting from IO)**
+```haskell
+pureLength :: Int
+pureLength = length getLine
+```
+**GHC Error:**
+```text
+Couldn't match expected type ‘[a0]’ with actual type ‘IO String’
+In the first argument of ‘length’, namely ‘getLine’
+```
+✅ **CORRECTED CODE**
+```haskell
+ioLength :: IO Int
+ioLength = do
+    s <- getLine
+    return (length s)
+```
+*Explanation:* You cannot pass an `IO String` to `length`, which expects a pure `[Char]`. You must bind the result inside `IO`.
+
+❌ **WRONG CODE (IORef in pure code)**
+```haskell
+increment :: IORef Int -> Int
+increment ref = readIORef ref + 1
+```
+**GHC Error:**
+```text
+Couldn't match expected type ‘Int’ with actual type ‘IO Int’
+In the first argument of ‘(+)’, namely ‘readIORef ref’
+```
+✅ **CORRECTED CODE**
+```haskell
+increment :: IORef Int -> IO Int
+increment ref = do
+    val <- readIORef ref
+    return (val + 1)
+```
+*Explanation:* `readIORef` returns an `IO Int` because reading from memory is a side effect dependent on the `RealWorld` token.
+
+<Quiz title="Chapter 9 Knowledge Check" questions={quizData} />

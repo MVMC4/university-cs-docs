@@ -1,7 +1,0 @@
-export const quizData = [
-  { question: 'What is the result of the beta-reduction of (\x. \y. x y) (\z. z + 1) 5?', options: ['6', '\y. (\z. z + 1) y 5', '5 + 1', 'Type Error'], correctIndex: 0, explanation: 'Applying (\z. z + 1) to x yields \y. (\z. z + 1) y. Applying 5 yields 6.' },
-  { question: 'What is the kind of the `Maybe` type constructor?', options: ['*', '* -> *', '* -> * -> *', '**'], correctIndex: 1, explanation: 'Maybe takes one concrete type (kind *) and returns a concrete type.' },
-  { question: 'According to the Free Theorem of parametric polymorphism, what can `[a] -> Int` do?', options: ['Inspect the elements', 'Sort the elements', 'Only count the elements or return a constant', 'Modify the elements'], correctIndex: 2, explanation: 'It knows nothing about type `a`, so it cannot inspect or modify them.' },
-  { question: 'What does the strictness annotation `!` do in `data Pair a b = Pair !a !b`?', options: ['Makes the type immutable', 'Forces evaluation of fields to WHNF when constructor is applied', 'Hides fields', 'Makes fields optional'], correctIndex: 1, explanation: 'Prevents thunk buildup inside the data structure.' },
-  { question: 'Why can `foldr` work on infinite lists while `foldl` cannot?', options: ['foldr is tail-recursive', 'foldr processes lazily from the right, allowing short-circuiting', 'foldl has a type error', 'foldr uses constant space'], correctIndex: 1, explanation: 'foldr applies the function to the head and the thunk of the rest.' }
-];

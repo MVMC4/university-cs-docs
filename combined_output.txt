@@ -1,0 +1,2273 @@
+========== content/docs/sem3/csi243/01-paradigm-shift.mdx ==========
+---
+title: "01. The Paradigm Shift & FP Principles"
+description: "The 4 Paradigms, FP Core Principles, Pure vs. Impure, Von Neumann bottleneck, Lambda Calculus, and Referential Transparency."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/01-paradigm-shift-quiz';
+
+# Chapter 1: The Paradigm Shift & FP Principles
+
+## Learning Objectives
+1. Distinguish between the 4 major programming paradigms (Imperative, Object-Oriented, Logic, Functional).
+2. Define core FP principles: Modularity, Maintainability, Immutability, Side Effects, First-Class/Higher-Order Functions, and Function Composition.
+3. Differentiate between pure and impure functions using standard imperative vs. functional examples.
+4. Annotate imperative code with Von Neumann hardware operations and contrast with the declarative evaluation model.
+5. Encode logic using Church Booleans and trace step-by-step β-reduction of a non-trivial lambda expression.
+6. Prove Referential Transparency formally and explain compiler optimisation consequences.
+
+---
+
+## 1.1 The 4 Programming Paradigms
+
+Programming paradigms are fundamental styles of computer programming. Understanding them is crucial for multiple-choice questions on language classification.
+
+1. **Imperative**: Focuses on *how* to achieve a goal by describing a sequence of commands that change the program's state. Key concepts: state changes, loops, and explicit control flow (e.g., C, Java, Python).
+2. **Object-Oriented (OOP)**: Organises software design around data, or objects, rather than functions and logic. Key concepts: 
+   - *Abstraction*: Hiding complex reality while exposing only necessary parts.
+   - *Encapsulation*: Bundling data and methods that operate on that data, restricting direct access.
+   - *Inheritance*: Mechanism where a new class derives properties and characteristics from an existing class.
+   - *Polymorphism*: Ability of different objects to respond to the same method call in their own way.
+3. **Logic**: Based on formal logic. Programs are expressed as a set of facts and rules. Computation is a process of logical deduction (e.g., Prolog).
+4. **Functional**: Treats computation as the evaluation of mathematical functions and avoids changing state and mutable data. It is a *declarative* paradigm (focuses on *what* to compute, not *how*).
+
+---
+
+## 1.2 FP Core Principles
+
+Functional Programming relies on several foundational principles that distinguish it from imperative paradigms:
+
+- **Modularity**: Breaking down a program into smaller, independent, and interchangeable components (functions) that can be developed, tested, and reasoned about in isolation.
+- **Maintainability**: The ease with which a software system can be modified to correct faults, improve performance, or adapt to a changed environment. FP enhances this through predictable, side-effect-free code.
+- **Immutability**: Once a data structure is created, it cannot be changed. Instead of modifying existing data, operations produce new data structures. This eliminates entire classes of bugs related to shared mutable state.
+- **Side Effects**: Any observable interaction with the outside world (e.g., modifying a global variable, writing to a file, printing to the console, or making a network request). FP strives to isolate and minimise side effects.
+- **First-Class and Higher-Order Functions**: 
+  - *First-Class*: Functions are treated as "first-class citizens", meaning they can be assigned to variables, passed as arguments, and returned from other functions.
+  - *Higher-Order*: Functions that take other functions as arguments or return functions as results (e.g., `map`, `filter`, `reduce`).
+- **Function Composition**: The mathematical concept of combining two or more functions to produce a new function, where the output of one function becomes the input of the next (e.g., `f(g(x))` or `f . g` in Haskell).
+
+---
+
+## 1.3 Pure vs. Impure Functions
+
+A function is **pure** if, for the same inputs, it always produces the same output and performs no observable side effects. Otherwise, it is **impure**.
+
+### Example 1: `squaredSum` (Imperative vs. Functional)
+
+**Imperative (Impure-leaning style due to mutation):**
+```c
+int squaredSum(int* arr, int n) {
+    int sum = 0;                       // Mutable state
+    for (int i = 0; i < n; i++) {      // Explicit loop control
+        sum += arr[i] * arr[i];        // State mutation
+    }
+    return sum;
+}
+```
+
+**Functional (Pure):**
+```haskell
+squaredSum :: [Int] -> Int
+squaredSum = sum . map (\x -> x * x)
+
+-- GHCi session
+ghci> squaredSum [1, 2, 3]
+14
+```
+*No mutable state, no explicit loops. The function is purely a composition of transformations.*
+
+### Example 2: The `notPure` Global Variable
+
+```c
+int global_counter = 0;
+
+int next_id() {
+    return ++global_counter;  // Reads and mutates hidden external state
+}
+
+/* 
+   This breaks Referential Transparency:
+   next_id() + next_id()  evaluates to 1 + 2 = 3
+   If we replaced next_id() with its "value" 1:
+   1 + 1 = 2   — a different result! 
+*/
+```
+In Haskell, the type system prevents this. A function `Int -> Int` has *no mechanism* to touch global state, guaranteeing purity.
+
+---
+
+## 1.4 The Von Neumann Bottleneck
+
+Imperative programming (C, Java, Python) is a direct reflection of the Von Neumann architecture. In that model, the CPU and memory are separated by a shared bus, and computation is the act of repeatedly shuttling data across that bus: fetch a value, compute something, write it back. Imperative programs *mirror* this hardware ceremony at the source level, which is precisely what John Backus called the "Von Neumann bottleneck" in his 1977 Turing Award lecture.
+
+Consider computing the sum of squares of even numbers in C:
+
+```c
+int sum_sq_even(int* arr, int n) {
+    int sum = 0;                       /* STORE: initialise accumulator */
+    for (int i = 0; i < n; i++) {      /* FETCH i, ALU compare, ALU increment */
+        if (arr[i] % 2 == 0) {         /* FETCH arr[i], ALU modulo */
+            sum += arr[i] * arr[i];    /* FETCH arr[i], ALU multiply, STORE */
+        }
+    }
+    return sum;
+}
+```
+
+Every line is occupied with *how* data moves: which register holds what, when the write happens, where the loop counter lives. The algorithm is buried in memory-management noise.
+
+Now the exact same computation in Haskell:
+
+```haskell
+sumSqEven :: [Int] -> Int
+sumSqEven = sum . map (\x -> x * x) . filter even
+
+-- GHCi session
+ghci> sumSqEven [1, 2, 3, 4, 5]
+20
+ghci> sumSqEven [1..10]
+220
+```
+
+There is no FETCH, no STORE, no loop counter. We compose three mathematical transformations and state *what* the result is. The compiler decides how to allocate registers, fuse the traversals, and exploit the CPU cache.
+
+```mermaid
+graph TD
+    subgraph "Imperative Model (Von Neumann)"
+        A[CPU] <-->|Shared Bus| B[Memory]
+        B --> C[FETCH]
+        C --> D[ALU]
+        D --> E[STORE]
+        E --> B
+    end
+    subgraph "Functional Model (Graph Reduction)"
+        F[Expression: filter . map . sum] -->|β-reduce| G[Value: 220]
+    end
+```
+*Figure 1.1: The Von Neumann fetch-execute cycle vs graph reduction. Functional programs describe transformations; the runtime engine decides the hardware mechanics.*
+
+The arrow of dependency in Haskell flows from expression to value, not from memory address to memory address. This is the paradigm shift.
+
+---
+
+## 1.5 Advanced Theory: Lambda Calculus & β-Reduction
+
+Functional programming is rooted in Alonzo Church's λ-calculus, a formal system for expressing computation using nothing but function abstraction and application. It is not a programming trick; it is a proof that computation itself can be captured without any notion of mutation, state, or hardware.
+
+### Church Encoding: Booleans From Nothing
+
+How do you encode `TRUE` and `FALSE` if you have no primitive booleans — only functions? By behaviour. A boolean is a *choice*: given two alternatives, it picks one.
+
+```haskell
+-- TRUE picks the first alternative
+true :: a -> a -> a
+true x y = x
+
+-- FALSE picks the second alternative
+false :: a -> a -> a
+false x y = y
+
+-- AND: if p, evaluate q; otherwise, the answer is already false (p)
+and' :: (a -> a -> a) -> (a -> a -> a) -> (a -> a -> a)
+and' p q = p q p
+
+-- GHCi session
+ghci> true 'Y' 'N'
+'Y'
+ghci> false 'Y' 'N'
+'N'
+ghci> and' true false 'Y' 'N'
+'N'
+ghci> and' true true 'Y' 'N'
+'Y'
+```
+
+This is not a curiosity — it is the proof that lambda calculus is Turing-complete without any primitives whatsoever. Numbers, booleans, data structures, even recursion (via the Y combinator) all emerge from function abstraction alone.
+
+> ⚠️ **Common Misconception:** "Lambda calculus is just Haskell's syntax for anonymous functions."
+> **Correction:** Lambda calculus is the universal model of computation on which Haskell is *built*. Every Haskell expression is ultimately a lambda term. The GHC runtime is an optimised β-reduction machine. Anonymous functions are merely the surface syntax.
+
+### β-Reduction: A Full Step-by-Step Trace
+
+β-reduction is the mechanical substitution rule: applying a function to an argument replaces the parameter with the argument in the function body. We must show *every intermediate term*, not just the start and end.
+
+**Expression:** `(λf. λx. f (f x)) (λy. y + 1) 0`
+
+Read this as: "Apply the function 'apply f twice' to the successor function, then to 0."
+
+```
+Step 1 — Apply outermost λf to (λy. y + 1):
+  Substitute f := (λy. y + 1) throughout the body λx. f (f x)
+  Result: λx. (λy. y + 1) ((λy. y + 1) x)
+
+Step 2 — Apply λx to 0:
+  Substitute x := 0 throughout the body (λy. y + 1) ((λy. y + 1) x)
+  Result: (λy. y + 1) ((λy. y + 1) 0)
+
+Step 3 — Reduce the inner application (λy. y + 1) 0:
+  Substitute y := 0 in body (y + 1)
+  Result: (λy. y + 1) (0 + 1)
+
+Step 4 — Reduce arithmetic 0 + 1:
+  Result: (λy. y + 1) 1
+
+Step 5 — Reduce the outer application (λy. y + 1) 1:
+  Substitute y := 1 in body (y + 1)
+  Result: 1 + 1
+
+Step 6 — Reduce arithmetic 1 + 1:
+  Result: 2
+```
+
+The Haskell equivalent, to confirm intuition:
+
+```haskell
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+
+successor :: Int -> Int
+successor y = y + 1
+
+-- GHCi session
+ghci> applyTwice successor 0
+2
+ghci> applyTwice (+3) 10
+16
+```
+
+Every step above corresponds to a GHC Core reduction. Understanding this trace is what separates students who can *use* Haskell from students who understand *why* it behaves the way it does.
+
+---
+
+## 1.6 Referential Transparency & Compiler Optimisations
+
+A function is **pure** if, for the same inputs, it always produces the same output and performs no observable side effects. This guarantees **Referential Transparency (RT)**: any expression can be replaced by its value without changing the program's behaviour.
+
+### The Compiler Optimisation Payoff
+
+Purity is not merely a philosophical ideal — it is what makes advanced compilation strategies *safe*:
+
+**Common Subexpression Elimination (CSE):** If `f x` appears twice in an expression and `f` is pure, GHC can evaluate it once and share the result. In C, a call to `f(x)` might have side effects, so the compiler cannot safely eliminate the second call.
+
+```haskell
+-- GHC can rewrite this:
+expensive x + expensive x
+-- Into this (safe because expensive is pure):
+let v = expensive x in v + v
+```
+
+**Inlining:** GHC aggressively inlines small pure functions because it knows inlining cannot change observable behaviour. This is the foundation of Haskell's "abstraction without overhead" guarantee.
+
+**Memoisation:** Lazy evaluation combined with purity means any thunk can be computed at most once and the result shared. The runtime *automatically* memoises pure computations via graph sharing.
+
+> ⚠️ **Common Misconception:** "Pure functions can't do anything useful — you can't even print to the screen."
+> **Correction:** Pure functions *describe* I/O as data structures — recipes that the Haskell Runtime System (RTS) interprets and executes. A value of type `IO ()` is a pure description of an effect, not the effect itself. The boundary between description and execution is the `main` function, which the RTS runs. Purity is preserved; usefulness is not sacrificed.
+
+```haskell
+-- These are pure VALUES — descriptions of effects
+greet :: String -> IO ()
+greet name = putStrLn ("Hello, " ++ name)
+
+-- The RTS executes them, not the Haskell evaluator
+main :: IO ()
+main = greet "Alice" >> greet "Bob"
+```
+
+<Quiz title="Chapter 1 Knowledge Check" questions={quizData} />
+========== content/docs/sem3/csi243/02-haskell-basics-ghci-io.mdx ==========
+---
+title: "02. Haskell Basics, GHCi & Basic IO"
+description: "GHCi commands, Layout rule, Case Sensitivity, if-then-else, read/show, and Basic IO (do blocks, getLine, putStrLn, print)."
+---
+
+# Chapter 2: Haskell Basics, GHCi & Basic IO
+
+## Learning Objectives
+1. Navigate GHCi using essential commands (`:load`, `:type`, `:quit`, `:{ ... :}`).
+2. Apply Haskell's layout rule (indentation) and understand case sensitivity.
+3. Use `if-then-else` expressions, emphasizing the mandatory `else` branch.
+4. Convert between strings and values using `read` and `show` with type annotations.
+5. Construct basic `do` blocks for IO using `getLine`, `<-`, `putStrLn`, and `print`.
+
+---
+
+## 2.1 Case Sensitivity & The Layout Rule
+
+Haskell is strictly case-sensitive and uses whitespace to define scope (the **Layout Rule**).
+- **Case Sensitivity**: Variables and functions **must** start with a lowercase letter (e.g., `myFunc`, `x`). Types and Data Constructors **must** start with an uppercase letter (e.g., `Int`, `Just`, `True`).
+- **Layout Rule**: Code blocks introduced by keywords like `where`, `let`, `do`, or `case` must be indented *further* than the keyword itself. Mixing tabs and spaces is discouraged; stick to spaces (typically 2 or 4).
+
+## 2.2 Essential GHCi Commands
+
+GHCi is Haskell's interactive REPL (Read-Eval-Print Loop).
+- `:load` (or `:l`) `filename.hs` — Loads a Haskell source file.
+- `:type` (or `:t`) `expression` — Shows the type of an expression.
+- `:quit` (or `:q`) — Exits GHCi.
+- `:{` and `:}` — Allows multi-line input directly in the GHCi prompt.
+
+```haskell
+ghci> :{
+ghci| add :: Int -> Int -> Int
+ghci| add x y = x + y
+ghci| :}
+ghci> :t add
+add :: Int -> Int -> Int
+```
+
+## 2.3 `if-then-else` Expressions
+
+In Haskell, `if` is an **expression**, not a statement. This means it must evaluate to a value in all possible execution paths. Therefore, the `else` branch is **mandatory**.
+
+```haskell
+-- CORRECT: 'else' is mandatory
+absoluteValue :: Int -> Int
+absoluteValue x = if x < 0 then -x else x
+
+-- WRONG: Missing 'else' branch (Compiler Error!)
+-- badAbsoluteValue x = if x < 0 then -x
+```
+
+## 2.4 `read` and `show` with Type Annotations
+
+- `show` converts a value into its `String` representation.
+- `read` parses a `String` into a value. Because `read` is polymorphic, you often must provide a **type annotation** so the compiler knows what type to parse it as.
+
+```haskell
+ghci> show 42
+"42"
+ghci> read "5" :: Int
+5
+ghci> read "3.14" :: Double
+3.14
+-- Without the type annotation, GHCi may throw an "Ambiguous type variable" error.
+```
+
+## 2.5 Basic IO: `do` blocks, `getLine`, `<-`, `putStrLn`, `print`
+
+IO actions in Haskell are sequenced using `do` blocks. The `<-` operator is used to extract the pure value from an IO action.
+- `putStrLn :: String -> IO ()` prints a string followed by a newline.
+- `print :: Show a => a -> IO ()` prints any value that is an instance of the `Show` typeclass.
+- `getLine :: IO String` reads a line of input from the user.
+
+### Hello World Script
+```haskell
+main :: IO ()
+main = do
+    putStrLn "Hello, World!"
+```
+
+### Triangle Area Script (Lecture 3)
+```haskell
+main :: IO ()
+main = do
+    putStrLn "Enter the base of the triangle:"
+    baseStr <- getLine
+    putStrLn "Enter the height of the triangle:"
+    heightStr <- getLine
+    
+    -- Use 'let' to bind pure values inside a 'do' block
+    let base = read baseStr :: Double
+        height = read heightStr :: Double
+        area = 0.5 * base * height
+        
+    putStrLn "The area of the triangle is:"
+    print area
+```
+
+========== content/docs/sem3/csi243/03-syntax-pattern-matching.mdx ==========
+---
+title: "03. Syntax, Pattern Matching & Choices"
+description: "Tuples, Pattern Matching, Guards, case expressions, Local bindings, Currying, Closures, Point-free style, and Equational Reasoning."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/02-basics-reasoning-quiz';
+
+# Chapter 3: Syntax, Pattern Matching & Choices
+
+## Learning Objectives
+1. Use tuples to return multiple values and implement basic tuple manipulation functions (`fst`, `snd`, `addSub`, `swapIntegers`).
+2. Mechanically apply pattern matching on literals, tuples, lists (`x:xs`), wildcards (`_`), and as-patterns (`@`).
+3. Implement conditional logic using Guards and `case ... of` expressions.
+4. Distinguish `let...in` from `where` and diagnose scope errors in practical contexts.
+5. Mechanically trace partial application and closure formation in curried functions.
+6. Derive point-free style using eta-reduction and construct formal inductive proofs of function equivalence.
+
+---
+
+## 3.1 Tuples in Practice
+
+Tuples allow you to group a fixed number of values, potentially of different types, into a single compound value. They are the standard way to return multiple values from a function in Haskell.
+
+### Standard Tuple Functions
+
+```haskell
+-- Extracts the first element of a 2-tuple
+fst :: (a, b) -> a
+fst (x, _) = x
+
+-- Extracts the second element of a 2-tuple
+snd :: (a, b) -> b
+snd (_, y) = y
+
+-- GHCi session
+ghci> fst (42, "hello")
+42
+ghci> snd (42, "hello")
+"hello"
+```
+
+### Lab 4 Practical Implementations (5-Part Framework)
+
+**1. `addSub`**
+*   **Signature:** `addSub :: (Int, Int) -> (Int, Int)`
+*   **Specification:** Returns a tuple where the first element is the sum, and the second is the absolute difference.
+*   **Dry Run:** `addSub (5, 7)`
+    ```text
+      addSub (5, 7)
+    = (5 + 7, abs (5 - 7))
+    = (12, abs (-2))
+    = (12, 2)
+    ```
+*   **Implementation:**
+    ```haskell
+    addSub :: (Int, Int) -> (Int, Int)
+    addSub (x, y) = (x + y, abs (x - y))
+    ```
+*   **Test:**
+    ```haskell
+    ghci> addSub (5, 7)
+    (12, 2)
+    ```
+
+**2. `swapIntegers`**
+*   **Signature:** `swapIntegers :: (Int, Int) -> (Int, Int)`
+*   **Specification:** Swaps the elements of a 2-tuple.
+*   **Dry Run:** `swapIntegers (5, 7)`
+    ```text
+      swapIntegers (5, 7)
+    = (7, 5)
+    ```
+*   **Implementation:**
+    ```haskell
+    swapIntegers :: (Int, Int) -> (Int, Int)
+    swapIntegers (x, y) = (y, x)
+    ```
+*   **Test:**
+    ```haskell
+    ghci> swapIntegers (5, 7)
+    (7, 5)
+    ```
+
+---
+
+## 3.2 Pattern Matching Mechanics
+
+Pattern matching is Haskell's primary mechanism for deconstructing data and making choices. It is cleaner and more expressive than nested `if` statements.
+
+### Matching on Literals and Wildcards
+
+```haskell
+isZero :: Int -> Bool
+isZero 0 = True       -- Matches the literal 0
+isZero _ = False      -- '_' is a wildcard: matches anything else
+```
+
+### Matching on Tuples
+
+```haskell
+addPair :: (Int, Int) -> Int
+addPair (x, y) = x + y  -- Deconstructs the tuple into x and y
+```
+
+### Matching on Lists (`x:xs`)
+
+The `:` (cons) operator is used to match the head and tail of a list.
+
+```haskell
+head' :: [a] -> a
+head' (x:_) = x         -- Binds 'x' to the first element, ignores the rest
+
+-- Note: This is partial! It will crash on []. A safe version uses multiple patterns:
+safeHead :: [a] -> Maybe a
+safeHead []    = Nothing
+safeHead (x:_) = Just x
+```
+
+### As-Patterns (`@`)
+
+An as-pattern allows you to bind a name to the *entire* matched value while still deconstructing it.
+
+```haskell
+-- Binds 'all' to the whole list, and 'x' and 'y' to the first two elements
+firstTwo :: [a] -> (a, a)
+firstTwo all@(x:y:_) = (x, y)  
+-- If called with [1,2,3], all=[1,2,3], x=1, y=2
+```
+
+---
+
+## 3.3 Guards in Action
+
+Guards provide a clean way to express conditional logic based on boolean expressions. They are evaluated top-to-bottom.
+
+### Lab 4 Grading System (University of Gaborone)
+
+**1. `gps` (Grade Point from Score)**
+*   **Signature:** `gps :: Int -> Float`
+*   **Dry Run:** `gps 52` falls into the `score >= 50` guard, returning `2.0`.
+*   **Implementation:**
+    ```haskell
+    gps :: Int -> Float
+    gps score
+      | score >= 80 = 5.0
+      | score >= 75 = 4.5
+      | score >= 70 = 4.0
+      | score >= 65 = 3.5
+      | score >= 60 = 3.0
+      | score >= 55 = 2.5
+      | score >= 50 = 2.0
+      | score >= 45 = 1.5
+      | score >= 40 = 1.0
+      | otherwise   = 0.0
+    ```
+
+**2. `lgs` (Letter Grade from Score)**
+*   **Signature:** `lgs :: Int -> String`
+*   **Implementation:**
+    ```haskell
+    lgs :: Int -> String
+    lgs score
+      | score >= 80 = "A"
+      | score >= 75 = "B+"
+      | score >= 70 = "B"
+      | score >= 65 = "C+"
+      | score >= 60 = "C"
+      | score >= 55 = "D+"
+      | score >= 50 = "D"
+      | score >= 45 = "E+"
+      | score >= 40 = "E"
+      | otherwise   = "F"
+    ```
+
+**3. `lgg` (Letter Grade from Grade Point)**
+*   **Signature:** `lgg :: Float -> String`
+*   **Implementation:**
+    ```haskell
+    lgg :: Float -> String
+    lgg gp
+      | gp == 5.0 = "A"
+      | gp == 4.5 = "B+"
+      | gp == 4.0 = "B"
+      | gp == 3.5 = "C+"
+      | gp == 3.0 = "C"
+      | gp == 2.5 = "D+"
+      | gp == 2.0 = "D"
+      | gp == 1.5 = "E+"
+      | gp == 1.0 = "E"
+      | otherwise = "F"
+    ```
+
+**4. `recc` (Recommendation from Score)**
+*   **Signature:** `recc :: Int -> String`
+*   **Implementation:**
+    ```haskell
+    recc :: Int -> String
+    recc score
+      | score >= 80 = "First Class"
+      | score >= 70 = "Upper Second Class"
+      | score >= 60 = "Lower Second Class"
+      | score >= 50 = "Pass"
+      | score >= 40 = "Supplement"
+      | otherwise   = "Fail"
+    ```
+
+> ⚠️ **Note:** `otherwise` is not a keyword; it is simply a predefined constant in the Prelude equal to `True`. It acts as a catch-all and **must** be the last guard.
+
+---
+
+## 3.4 The `case ... of` Expression
+
+While guards are attached to function definitions, `case ... of` is an *expression* that can be used anywhere a value is expected. It is the underlying mechanism for all pattern matching in Haskell.
+
+### Rewriting Guards/If into `case`
+
+Instead of using `if/then/else` or top-level guards, you can match directly on the result of an expression:
+
+```haskell
+describeList :: [a] -> String
+describeList xs = case xs of
+    []      -> "Empty list"
+    [x]     -> "Singleton list with " ++ show x
+    x:y:_   -> "List starts with " ++ show x ++ " and " ++ show y
+    _       -> "Longer list"
+```
+
+This is especially powerful when you need to pattern match on the result of a function call without defining a separate helper function.
+
+---
+
+## 3.5 Local Bindings: `let...in` vs `where`
+
+Haskell provides two scoping constructs for intermediate bindings. They are not interchangeable.
+
+### `where` Clauses
+
+`where` bindings are scoped to the entire function definition, including all guards. They are ideal for factoring out common calculations in guard branches.
+
+```haskell
+bmi :: Double -> Double -> String
+bmi weight height
+  | val <= 18.5 = "Underweight"
+  | val <= 25.0 = "Normal"
+  | otherwise   = "Overweight"
+  where
+    val = weight / height ^ 2  -- Visible to all guards above
+```
+
+### `let...in` Expressions
+
+`let...in` is an *expression* that produces a value. It is valid anywhere an expression is valid, including inside `case` expressions and list comprehensions.
+
+```haskell
+-- Valid: let inside a list comprehension (where could not go here)
+pythTriples :: Int -> [(Int, Int, Int)]
+pythTriples n =
+  [ (a, b, c)
+  | c <- [1..n]
+  , b <- [1..c]
+  , let a_sq = c*c - b*b   -- let binds here, a_sq visible in filter
+  , a_sq > 0
+  , let a = floor (sqrt (fromIntegral a_sq :: Double))
+  , a*a == a_sq
+  ]
+```
+
+### Compiler Error: Mixing Them Up
+
+❌ **WRONG CODE** (using guards after `let...in`)
+```haskell
+classify :: Int -> String
+classify n = let label = n * 2
+  | label > 10 = "Big"     -- ERROR: parse error on input '|'
+  | otherwise  = "Small"
+```
+`let...in` expects an `in expr` after the binding. Guards cannot follow it directly.
+
+✅ **CORRECTED CODE**
+```haskell
+classify :: Int -> String
+classify n
+  | label > 10 = "Big"
+  | otherwise  = "Small"
+  where
+    label = n * 2
+```
+
+---
+
+## 3.6 Advanced Theory: Currying and Closures
+
+In Haskell, *every* function takes exactly **one** argument. The appearance of multi-argument functions is produced by currying.
+
+### The Mechanical Trace of `add 3 4`
+
+```haskell
+add :: Int -> Int -> Int
+add x y = x + y
+```
+The type `Int -> Int -> Int` is right-associative: `Int -> (Int -> Int)`.
+
+```text
+Step 1: add
+  Type: Int -> (Int -> Int)
+  A function waiting for its first argument.
+
+Step 2: add 3
+  Type: Int -> Int
+  A CLOSURE is formed. The runtime allocates a heap object containing:
+    - A pointer to the code for (x + y)
+    - A binding: x = 3
+  This is a first-class value.
+
+Step 3: add 3 4
+  Type: Int
+  The closure is applied to 4. The runtime substitutes y = 4, evaluating 3 + 4 to yield 7.
+```
+
+### What Exactly Does a Closure Capture?
+
+When `add 3` is evaluated, the closure captures the *value* `3`, not a reference to a mutable memory location. Because Haskell values are immutable, there is no aliasing hazard. This differs from Python/JS, where closures capture references and observe subsequent mutations.
+
+```haskell
+make_adder :: Int -> (Int -> Int)
+make_adder n = \x -> n + x    -- closure captures n
+
+add5 :: Int -> Int
+add5 = make_adder 5            -- distinct closure for n=5
+
+add10 :: Int -> Int
+add10 = make_adder 10          -- distinct closure for n=10
+```
+
+---
+
+## 3.7 Advanced Theory: Point-Free Style & Equational Reasoning
+
+### Point-Free Style via Eta-Reduction
+
+Point-free style means writing a function without mentioning its arguments, derived mechanically via **eta-reduction**: if `f x = g x` for all `x`, then `f = g`.
+
+**Goal:** Show that `\x -> filter (> 5) (map (* 2) x)` equals `filter (> 5) . map (* 2)`.
+
+```text
+Starting expression: \x -> filter (> 5) (map (* 2) x)
+
+Step 1 — Recognise the innermost application:
+  (map (* 2) x) is (map (* 2)) applied to x.
+  Rewrite: \x -> filter (> 5) ((map (* 2)) x)
+
+Step 2 — Apply the definition of function composition (.):
+  Recall: (f . g) x = f (g x)
+  Here: f = filter (> 5), g = map (* 2)
+  Rewrite: \x -> (filter (> 5) . map (* 2)) x
+
+Step 3 — Eta-reduce:
+  Remove the \x -> and the trailing x from both sides.
+  Result: filter (> 5) . map (* 2)
+```
+
+### Equational Reasoning Proof
+
+Because Haskell functions are pure, we can prove equivalences algebraically. Every step must cite the definition or law being applied.
+
+**Theorem:** `length . map f = length` for all `f`.
+
+**Proof by structural induction on the list.**
+
+*Base Case (empty list):*
+```text
+(length . map f) []
+= length (map f [])        {- Definition of (.) -}
+= length []                {- Definition of map: map f [] = [] -}
+= 0                        {- Definition of length: length [] = 0 -}
+```
+
+*Inductive Step (list x:xs, assuming the theorem holds for xs):*
+```text
+(length . map f) (x:xs)
+= length (map f (x:xs))        {- Definition of (.) -}
+= length (f x : map f xs)      {- Definition of map: map f (y:ys) = f y : map f ys -}
+= 1 + length (map f xs)        {- Definition of length: length (y:ys) = 1 + length ys -}
+= 1 + (length . map f) xs      {- Definition of (.) -}
+= 1 + length xs                {- Induction Hypothesis -}
+= length (x:xs)                {- Definition of length -}
+```
+By induction, the theorem holds for all finite lists. QED.
+
+---
+
+## 📝 Exam-Style Practice Questions
+
+1. **Pattern Matching:** Write a function `safeTail :: [a] -> [a]` using pattern matching that returns the tail of a list, but returns `[]` if the list is empty.
+2. **Guards vs Case:** Rewrite the `gps` function using a `case ... of` expression instead of guards.
+3. **Tuples:** Write a function `distance :: (Double, Double) -> (Double, Double) -> Double` that calculates the Euclidean distance between two 2D points.
+
+<Quiz title="Chapter 3 Knowledge Check" questions={quizData} />
+
+========== content/docs/sem3/csi243/04-adts-modules.mdx ==========
+---
+title: "03. ADTs & The Module System"
+description: "Basic ADTs, Pattern Matching, The Module System (Imports/Exports), Recursive ADTs, and Advanced Type Algebra."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/03-adts-modules-quiz';
+
+# Chapter 3: Algebraic Data Types & The Module System
+
+## Learning Objectives
+1. Define basic Algebraic Data Types (ADTs) and write functions that pattern match on their constructors.
+2. Structure Haskell programs using the Module System, including selective exports and qualified imports.
+3. Implement recursive ADTs following a standard framework, such as a Binary Search Tree.
+4. Calculate the cardinality of Sum, Product, and Exponential types to reason about program correctness.
+5. Utilise `newtype` for zero-overhead domain modelling and enforce invariants via Smart Constructors.
+
+---
+
+## 3.1 Basic ADTs & Pattern Matching
+
+Algebraic Data Types (ADTs) allow you to define custom data structures by combining types using **Sum** (OR) and **Product** (AND) logic. 
+
+Consider a geometric shape. A shape can be a Circle **OR** a Rectangle (Sum). A Rectangle has a width **AND** a height (Product).
+
+```haskell
+data Shape = Circle Float | Rect Float Float
+```
+
+To use this data, we **pattern match** on its constructors. Pattern matching deconstructs the data, binding the internal values to variables so we can compute with them.
+
+```haskell
+area :: Shape -> Float
+area (Circle r) = pi * r * r          -- Matches Circle, binds radius to 'r'
+area (Rect w h) = w * h               -- Matches Rect, binds width to 'w', height to 'h'
+
+-- GHCi session
+ghci> area (Circle 5.0)
+78.539816
+ghci> area (Rect 3.0 4.0)
+12.0
+```
+
+> ⚠️ **Common Misconception:** "Pattern matching is just like a `switch` statement in C/Java."
+> **Correction:** Unlike a `switch`, Haskell pattern matching is **exhaustive**. If you forget a case (e.g., omit `Rect`), GHC will emit a compile-time warning (`-Wincomplete-patterns`), preventing runtime crashes.
+
+---
+
+## 3.2 The Module System (CRITICAL)
+
+Haskell programs are organised into modules. A module controls **encapsulation**: what is visible to the outside world and what remains hidden.
+
+### Defining and Exporting a Module
+
+At the very top of a `.hs` file, you declare the module name and explicitly list what to export.
+
+```haskell
+-- File: Geometry.hs
+module Geometry 
+  ( Shape(..)   -- Exports the type 'Shape' AND all its constructors (Circle, Rect)
+  , area        -- Exports the 'area' function
+  ) where
+
+data Shape = Circle Float | Rect Float Float
+
+area :: Shape -> Float
+area (Circle r) = pi * r * r
+area (Rect w h) = w * h
+```
+
+**Selective Exporting:**
+- `Shape` (without `..`) exports the type name, but **hides** the constructors. External code cannot pattern match or construct `Shape` values directly. This is the foundation of **Smart Constructors** (see Section 3.5).
+- `Shape(..)` exports the type and all constructors.
+- `Shape(Circle)` exports the type and only the `Circle` constructor.
+
+### Importing Modules
+
+When using other modules, you can control how their names enter your namespace to avoid clashes.
+
+```haskell
+-- File: Main.hs
+module Main where
+
+-- 1. Selective Import: Brings only 'nub' and 'sort' into scope
+import Data.List (nub, sort)
+
+-- 2. Qualified Import: Brings everything in, but requires a prefix.
+-- Prevents name clashes (e.g., if you have your own 'map' function).
+import qualified Data.Map as Map
+
+main :: IO ()
+main = do
+    let nums = [3, 1, 2, 1]
+    print (sort (nub nums))               -- Uses imported 'sort' and 'nub'
+    
+    -- Uses the qualified prefix 'Map.'
+    let myMap = Map.fromList [("Alice", 25), ("Bob", 30)]
+    print (Map.lookup "Alice" myMap)      -- Output: Just 25
+```
+
+--- a
+
+## 3.3 Recursive ADTs: The 5-Part Framework
+
+ADTs can refer to themselves, enabling recursive structures like linked lists and trees. When defining a recursive ADT, follow this standard 5-part framework:
+
+1. **Type Definition**: Declare the type and its constructors.
+2. **Base Case**: The terminating condition (e.g., an empty list or leaf).
+3. **Recursive Case**: The constructor that contains the type itself.
+4. **Core Operation**: A function that manipulates the structure (e.g., insertion).
+5. **Traversal/Utility**: A function that extracts or transforms the data (e.g., to a list).
+
+### Example: Binary Search Tree (BST)
+
+```haskell
+-- 1. Type Definition
+data Tree a = 
+    -- 2. Base Case
+    Leaf 
+    -- 3. Recursive Case
+  | Node (Tree a) a (Tree a)
+  deriving (Show, Eq)
+
+-- 4. Core Operation: Insertion
+insert :: Ord a => a -> Tree a -> Tree a
+insert x Leaf = Node Leaf x Leaf
+insert x (Node left val right)
+    | x == val    = Node left val right       -- Already present
+    | x <  val    = Node (insert x left) val right
+    | otherwise   = Node left val (insert x right)
+
+-- 5. Traversal: In-order traversal yields a sorted list
+toList :: Tree a -> [a]
+toList Leaf             = []
+toList (Node left v right) = toList left ++ [v] ++ toList right
+
+-- GHCi session
+ghci> let t = foldr insert Leaf [5, 3, 8, 1, 4]
+ghci> toList t
+[1,3,4,5,8]
+```
+
+```mermaid
+graph TD
+    N5((5)) --> N3((3))
+    N5 --> N8((8))
+    N3 --> N1((1))
+    N3 --> N4((4))
+    N8 --> L1[Leaf]
+    N8 --> L2[Leaf]
+```
+*Figure 3.1: BST after inserting [5,3,8,1,4]. In-order traversal yields [1,3,4,5,8].*
+
+---
+
+## 3.4 Advanced Theory: The Algebra of Types
+
+Types are sets of values. We can count those values — the *cardinality* of a type — and this number has a direct consequence for how many possible states your program can be in.
+
+- **Unit:** `data Unit = Unit` — exactly 1 state. Represents "no information".
+- **Bool:** `data Bool = False | True` — exactly 2 states.
+- **Product (AND):** `data Pair = P Bool Bool` — $2 \times 2 = 4$ states. Both fields exist simultaneously.
+- **Sum (OR):** `data Choice = A Bool | B Bool` — $2 + 2 = 4$ states. Exactly one constructor is active.
+- **Exponential (Functions):** `Bool -> Bool` — $2^2 = 4$ possible mappings.
+
+```haskell
+-- The four possible values of Bool -> Bool:
+alwaysTrue  :: Bool -> Bool
+alwaysTrue  _ = True
+
+alwaysFalse :: Bool -> Bool
+alwaysFalse _ = False
+
+identity    :: Bool -> Bool
+identity    x = x
+
+negate'     :: Bool -> Bool
+negate'     True  = False
+negate'     False = True
+```
+
+Function cardinality $|b|^{|a|}$ means: for each possible input, you independently choose one of $|b|$ outputs.
+
+---
+
+## 3.5 Advanced Theory: `newtype` vs `data` & Smart Constructors
+
+Haskell provides three ways to introduce a named type:
+
+```haskell
+-- (1) type alias — no new type, just a synonym
+type Name = String
+
+-- (2) data — allocates a constructor tag at runtime
+data Age = Age Int
+
+-- (3) newtype — exactly ONE constructor, ONE field; erased at compile time
+newtype Age' = Age' Int
+```
+
+The critical difference between `data Age = Age Int` and `newtype Age' = Age' Int` is **runtime representation**:
+- A `data` constructor carries a **tag byte** (or word) at runtime so the GC and pattern-matcher can identify which constructor is present. Even `data Wrapper = Wrap Int` allocates a small header.
+- A `newtype` constructor is **erased entirely at compile time**. At runtime, `Age' 42` is indistinguishable from the bare `Int` value `42`. There is zero overhead.
+
+### Smart Constructors via Module Encapsulation
+
+We combine `newtype` with the Module System to enforce domain invariants.
+
+```haskell
+-- File: Age.hs
+module Age 
+  ( Age        -- Export the type, but NOT the constructor!
+  , mkAge      -- Export the smart constructor
+  , getAge     -- Export the accessor
+  ) where
+
+newtype Age = Age Int   -- Constructor is HIDDEN from external modules
+
+mkAge :: Int -> Either String Age
+mkAge i
+    | i >= 0    = Right (Age i)
+    | otherwise = Left "Age cannot be negative"
+
+getAge :: Age -> Int
+getAge (Age i) = i
+```
+
+External code cannot write `Age (-5)` — the constructor is not exported. They *must* use `mkAge`, which enforces the invariant. Because `newtype` is erased, they pay no runtime penalty for this safety.
+
+---
+
+## 3.6 Compiler Error Examples
+
+❌ **WRONG CODE (Constructing a Smart-Constructor type directly)**
+
+```haskell
+-- (pretend Age constructor is not exported)
+makeUser :: Int -> String -> String
+makeUser rawAge name = name ++ " age: " ++ show (getAge (Age rawAge))
+```
+**GHC Error:**
+```text
+Not in scope: data constructor 'Age'
+```
+
+✅ **CORRECTED CODE**
+
+```haskell
+makeUser :: Int -> String -> IO String
+makeUser rawAge name = case mkAge rawAge of
+    Left err  -> fail err
+    Right age -> return (name ++ " age: " ++ show (getAge age))
+```
+
+❌ **WRONG CODE (Deriving `Ord` on a type without `Eq`)**
+
+```haskell
+data Priority = Low | Medium | High deriving (Ord)
+```
+**GHC Error:**
+```text
+No instance for (Eq Priority)
+  arising from the superclass constraint of 'Ord'
+Derive 'Eq' first.
+```
+
+✅ **CORRECTED CODE**
+
+```haskell
+data Priority = Low | Medium | High deriving (Eq, Ord, Show)
+```
+`Ord` has `Eq` as a superclass — you cannot be ordered without being comparable for equality.
+
+<Quiz title="Chapter 3 Knowledge Check" questions={quizData} />
+========== content/docs/sem3/csi243/05-polymorphism-typeclasses.mdx ==========
+---
+title: "05. Polymorphism, Overloading & Typeclasses"
+description: "Parametric Polymorphism, Ad-Hoc Polymorphism, Defining Typeclasses, Standard Typeclasses, and Advanced Type Theory."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
+
+# Chapter 5: Polymorphism, Overloading & Typeclasses
+
+## Learning Objectives
+1. Write and trace parametrically polymorphic functions using type variables (`a`, `b`).
+2. Differentiate between parametric polymorphism and ad-hoc polymorphism (overloading).
+3. Define custom typeclasses and create instances for user-defined data types.
+4. Identify the core methods and hierarchies of standard Haskell typeclasses (`Eq`, `Ord`, `Num`, `Integral`, `Fractional`, `Show`, `Read`).
+5. (Advanced) Trace Hindley-Milner unification, derive Free Theorems, and explain dictionary passing.
+
+---
+
+## 5.1 Parametric Polymorphism
+
+**Parametric polymorphism** allows a function to operate uniformly on values of *any* type. We denote unknown types with lowercase type variables (e.g., `a`, `b`). The function's behaviour cannot depend on the specific type; it can only manipulate the structure of the data.
+
+### Lab 6 Practical Implementations (5-Part Framework)
+
+**1. `lastElement`**
+*   **Signature:** `lastElement :: [a] -> a`
+*   **Mathematical Specification:**
+    ```text
+    lastElement(xs) = {
+      error           if xs = []
+      x               if xs = [x]
+      lastElement(ys) if xs = y:ys
+    }
+    ```
+*   **Dry Run:** `lastElement [1, 2]`
+    ```text
+      lastElement (1 : [2])
+    = lastElement [2]
+    = 2
+    ```
+*   **Polymorphism Check:** The type variable `a` means this works for any list. It only inspects the list structure (`[]` and `:`), never the elements themselves. Thus, it exhibits parametric polymorphism.
+*   **Implementation:**
+    ```haskell
+    lastElement :: [a] -> a
+    lastElement [x]    = x
+    lastElement (_:xs) = lastElement xs
+    lastElement []     = error "Empty list"
+    ```
+
+**2. `revList`**
+*   **Signature:** `revList :: [a] -> [a]`
+*   **Mathematical Specification:**
+    ```text
+    revList(xs) = {
+      []                 if xs = []
+      revList(ys) ++ [x] if xs = x:ys
+    }
+    ```
+*   **Dry Run:** `revList [1, 2]`
+    ```text
+      revList (1 : [2])
+    = revList [2] ++ [1]
+    = (revList [] ++ [2]) ++ [1]
+    = ([] ++ [2]) ++ [1]
+    = [2] ++ [1]
+    = [2, 1]
+    ```
+*   **⏱️ Time Complexity Note:** The recursive step `revList xs ++ [x]` uses the `++` operator. Because `++` must traverse its entire left operand to append, this results in **$O(n^2)$ time complexity** for a list of length $n$. This is a critical syllabus requirement: naive reversal in Haskell is quadratic. (An $O(n)$ version uses an accumulator with `reverse'`).
+*   **Polymorphism Check:** Uses type variable `a`. Only manipulates list constructors `[]` and `:`, and the append operator `++` (which is also polymorphic). It never inspects the values of type `a`.
+*   **Implementation:**
+    ```haskell
+    revList :: [a] -> [a]
+    revList []     = []
+    revList (x:xs) = revList xs ++ [x]
+    ```
+
+**3. `twoLists`**
+*   **Signature:** `twoLists :: [a] -> [b] -> [(a, b)]`
+*   **Mathematical Specification:**
+    ```text
+    twoLists(xs, ys) = {
+      []                             if xs = [] or ys = []
+      (x, y) : twoLists(xs', ys')    if xs = x:xs' and ys = y:ys'
+    }
+    ```
+*   **Dry Run:** `twoLists [1, 2] [3, 4]`
+    ```text
+      twoLists (1:[2]) (3:[4])
+    = (1, 3) : twoLists [2] [4]
+    = (1, 3) : ((2, 4) : twoLists [] [])
+    = (1, 3) : ((2, 4) : [])
+    = [(1, 3), (2, 4)]
+    ```
+*   **Polymorphism Check:** Uses type variables `a` and `b`. Pairs elements without inspecting their values, allowing it to zip lists of entirely different types (e.g., `[Int]` and `[Char]`).
+*   **Implementation:**
+    ```haskell
+    twoLists :: [a] -> [b] -> [(a, b)]
+    twoLists (x:xs) (y:ys) = (x, y) : twoLists xs ys
+    twoLists _      _      = []
+    ```
+
+**4. `swapElements`**
+*   **Signature:** `swapElements :: (a, b) -> (b, a)`
+*   **Mathematical Specification:**
+    ```text
+    swapElements(pair) = (y, x) if pair = (x, y)
+    ```
+*   **Dry Run:** `swapElements (5, "hello")`
+    ```text
+      swapElements (5, "hello")
+    = ("hello", 5)
+    ```
+*   **Implementation:**
+    ```haskell
+    swapElements :: (a, b) -> (b, a)
+    swapElements (x, y) = (y, x)
+    ```
+*   **🔍 Polymorphism Check (vs Lab 4):** 
+    Compare `swapElements :: (a, b) -> (b, a)` with Lab 4's `swapIntegers :: (Int, Int) -> (Int, Int)`.
+    - `swapIntegers` is **monomorphic**: it only works for `Int`. The compiler generates machine code specifically for integer registers.
+    - `swapElements` is **parametrically polymorphic**: it works for *any* combination of types `a` and `b` (e.g., `(Int, String)`, `(Char, Double)`, `(Int, Int)`). 
+    - Because it is parametric, the function *cannot* inspect, create, or depend on the values of `a` or `b`. It can *only* deconstruct the tuple and reorder the components. This uniform behavior across all types is the defining characteristic of parametric polymorphism.
+
+> ⚠️ **Common Misconception:** "Polymorphic means the function can do different things for different types."
+> **Correction:** That is *ad-hoc* polymorphism (overloading). *Parametric* polymorphism means the function does the **exact same structural thing** regardless of the type. It cannot inspect or create values of type `a`.
+
+---
+
+## 5.2 Ad-Hoc Polymorphism (Overloading)
+
+**Ad-hoc polymorphism** (overloading) allows the same function name or operator to have *different implementations* depending on the type of its arguments. 
+
+For example, the `+` operator adds integers differently than it adds floating-point numbers, and it concatenates strings differently than it adds numbers. The compiler resolves which implementation to use based on the types involved at the call site.
+
+In Haskell, ad-hoc polymorphism is strictly governed by **Typeclasses**.
+
+---
+
+## 5.3 Defining Typeclasses & Instances
+
+A typeclass defines a set of functions (methods) that a type must implement to be considered a member of that class.
+
+### Defining a Custom Typeclass
+
+The syntax uses the `class` keyword, followed by the class name and a type variable.
+
+```haskell
+class MyEq a where
+    (===) :: a -> a -> Bool
+    (/==) :: a -> a -> Bool
+    
+    -- Default implementation (optional)
+    x /== y = not (x === y)
+```
+
+### Creating Instances
+
+To make a custom data type a member of a typeclass, we write an `instance` declaration.
+
+```haskell
+data TrafficLight = Red | Yellow | Green
+
+-- We must implement the required methods
+instance MyEq TrafficLight where
+    Red    === Red    = True
+    Yellow === Yellow = True
+    Green  === Green  = True
+    _      === _      = False
+
+-- GHCi session
+ghci> Red === Red
+True
+ghci> Red /== Green
+True
+```
+
+---
+
+## 5.4 Standard Typeclasses
+
+Haskell provides a rich hierarchy of standard typeclasses. You must know what methods they provide and their relationships.
+
+- **`Eq`**: Types that can be tested for equality. Methods: `(==)`, `(/=)`.
+- **`Ord`**: Types that can be ordered. Methods: `(<)`, `(<=)`, `(>)`, `(>=)`, `compare`, `max`, `min`. *(Requires `Eq`)*.
+- **`Show`**: Types that can be converted to a `String` representation. Method: `show`.
+- **`Read`**: Types that can be parsed from a `String`. Method: `read`. *(Use with caution; prefer safe parsers in production)*.
+- **`Num`**: Numeric types. Methods: `+`, `-`, `*`, `abs`, `signum`, `fromInteger`.
+- **`Integral`**: Whole numbers. Methods: `div`, `mod`, `quot`, `rem`, `toInteger`. *(Subclass of `Num`)*.
+- **`Fractional`**: Types that support true division. Methods: `/`, `recip`, `fromRational`. *(Subclass of `Num`)*.
+
+```haskell
+-- GHCi session showing typeclass resolution
+ghci> :t (==)
+(==) :: Eq a => a -> a -> Bool
+
+ghci> :t div
+div :: Integral a => a -> a -> a
+
+ghci> :t (/)
+(/) :: Fractional a => a -> a -> a
+```
+
+---
+
+## 5.5 Advanced Theory: Unification, Free Theorems & Dictionary Passing
+
+### Hindley-Milner Unification
+GHC infers types using the Hindley-Milner algorithm. The core operation is **unification**: finding a substitution for type variables that makes two types identical.
+
+**Trace: `f x = x + True`**
+1. Assign fresh variable: `x :: a`
+2. `(+)` has type `Num n => n -> n -> n`. Constraint: `a ~ n` (and `Num n`).
+3. `True :: Bool`. Constraint: `n ~ Bool`.
+4. Compose: `a ~ n ~ Bool`. Check: Is `Bool` an instance of `Num`? **NO**.
+5. **Type Error:** `No instance for (Num Bool)`.
+
+### Free Theorems (Parametricity)
+Philip Wadler's "Theorems for Free" (1989) states that parametric polymorphism restricts what a function can do. 
+For `id :: a -> a`, the function knows *nothing* about `a`. It cannot inspect it, create it, or destroy it. The *only* terminating implementation is `id x = x`.
+For `map :: (a -> b) -> [a] -> [b]`, the free theorem is map fusion: `map f (map g xs) = map (f . g) xs`.
+
+### Dictionary Passing
+Typeclass constraints are compiled into explicit function arguments called **dictionaries**.
+
+```haskell
+-- What you write:
+sortBy :: Ord a => [a] -> [a]
+
+-- What GHC compiles it to (conceptually):
+data OrdDict a = OrdDict { dictCompare :: a -> a -> Ordering }
+
+sortBy_compiled :: OrdDict a -> [a] -> [a]
+```
+When you call `sortBy [3,1,2]`, GHC automatically selects and passes the `OrdDict Int` record. The constraint `Ord a =>` is not a runtime type check; it is an **implicit function argument** resolved at compile time, guaranteeing zero abstraction overhead.
+
+<Quiz title="Chapter 5 Knowledge Check" questions={quizData} />
+
+========== content/docs/sem3/csi243/06-recursion-lists-induction.mdx ==========
+---
+title: "06. Recursion, Lists & Structural Induction"
+description: "Anatomy of Recursion, Dry-Running Mechanics, List Recursion, Structural Induction, and Advanced Runtime Evaluation."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/05-lists-recursion-quiz';
+
+# Chapter 6: Recursion, Lists & Structural Induction
+
+## Learning Objectives
+1. Define recursive functions by identifying the base case, recursive step, and mathematical specifications.
+2. Perform step-by-step dry-runs (substitution traces) of recursive functions like `fac`, `sumNumbers`, and `fib`.
+3. Implement standard list functions (`elementOccurs`, `isElementIn`, `powerNum`, `sumList`) using pattern matching on `[]` and `(x:xs)`.
+4. Map mathematical summation ($\sum$) notation to recursive list processing.
+5. Construct formal proofs using Structural Induction (Basis step, Inductive Hypothesis, Inductive Step).
+6. Analyze and compare the Time and Space complexity of fundamental recursive algorithms.
+7. (Appendix) Understand Graph Reduction, Weak Head Normal Form (WHNF), Thunks, and Space Leaks.
+
+---
+
+## 6.1 The Anatomy of Recursion
+
+A recursive function consists of two fundamental components:
+1. **Base Case**: The condition under which the recursion stops. It provides a direct answer without making further recursive calls.
+2. **Recursive Step**: The part where the function calls itself with a modified (usually smaller) argument, moving closer to the base case.
+
+### Mathematical Specifications
+In computer science, we often define recursive functions mathematically using piecewise notation before writing code. For example, the factorial function:
+
+```text
+fac(n) = {
+  1                    if n = 0
+  n × fac(n-1)         if n > 0
+}
+```
+
+### Haskell Implementation & Error Handling
+When translating mathematical specifications to Haskell, we must also handle invalid inputs that fall outside the mathematical domain (e.g., negative numbers for factorial). We use the `error` function to halt execution with a descriptive message.
+
+```haskell
+fac :: Integer -> Integer
+fac n
+    | n < 0     = error "fac only defined for non-negative integers" -- Error Handling
+    | n == 0    = 1                  -- Base case
+    | otherwise = n * fac (n - 1)    -- Recursive step
+```
+
+---
+
+## 6.2 Dry-Running Mechanics
+
+To understand recursion and predict a function's behaviour, we perform a **dry-run**: a step-by-step substitution trace exactly as the Haskell evaluator would execute it.
+
+### Trace 1: `fac 3`
+```text
+  fac 3
+= 3 * fac 2                 -- apply recursive step
+= 3 * (2 * fac 1)           -- apply recursive step
+= 3 * (2 * (1 * fac 0))     -- apply recursive step
+= 3 * (2 * (1 * 1))         -- apply base case
+= 3 * (2 * 1)               -- evaluate arithmetic
+= 3 * 2
+= 6
+```
+
+### Trace 2: `sumNumbers 4`
+Assume `sumNumbers n` sums all integers from 0 up to, but not including, `n`.
+```haskell
+sumNumbers :: Integer -> Integer
+sumNumbers n
+    | n <= 0    = 0
+    | otherwise = (n - 1) + sumNumbers (n - 1)
+```
+```text
+  sumNumbers 4
+= (4 - 1) + sumNumbers 3
+= 3 + sumNumbers 3
+= 3 + ((3 - 1) + sumNumbers 2)
+= 3 + (2 + sumNumbers 2)
+= 3 + (2 + ((2 - 1) + sumNumbers 1))
+= 3 + (2 + (1 + sumNumbers 1))
+= 3 + (2 + (1 + ((1 - 1) + sumNumbers 0)))
+= 3 + (2 + (1 + (0 + 0)))    -- base case (0 <= 0)
+= 3 + (2 + 1)
+= 6
+```
+
+### Trace 3: `fib` Call Tree
+```haskell
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+```
+*Note: A full trace of `fib 5` creates a binary tree of 15 calls. In exams, you are typically asked to draw the call tree. Here is the call tree for `fib 4`:*
+
+```text
+           fib 4
+         /       \
+    fib 3         fib 2
+   /     \       /     \
+fib 2   fib 1  fib 1  fib 0
+ /   \
+fib 1 fib 0
+```
+*Notice the massive redundancy: `fib 2` is computed twice, and `fib 1` is computed three times. This demonstrates why naive Fibonacci recursion is $O(2^n)$ and highly inefficient.*
+
+---
+
+## 6.3 List Recursion & Core Functions (5-Part Framework)
+
+Lists in Haskell are defined recursively: a list is either empty (`[]`) or an element prepended to another list (`x:xs`). Therefore, list functions naturally follow a recursive structure pattern matching on these two constructors.
+
+### 1. `elementOccurs` (Count Occurrences)
+*   **Signature:** `elementOccurs :: Eq a => a -> [a] -> Int`
+*   **Mathematical Specification:**
+    ```text
+    elementOccurs(e, xs) = {
+      0                         if xs = []
+      1 + elementOccurs(e, ys)  if xs = y:ys and e = y
+      elementOccurs(e, ys)      if xs = y:ys and e != y
+    }
+    ```
+*   **Dry Run:** `elementOccurs 2 [1,2,2,3]`
+    ```text
+      elementOccurs 2 (1:[2,2,3])
+    = elementOccurs 2 [2,2,3]             -- 2 /= 1, skip head
+    = 1 + elementOccurs 2 [2,3]           -- 2 == 2, count it
+    = 1 + (1 + elementOccurs 2 [3])       -- 2 == 2, count it
+    = 1 + (1 + 0)                         -- 2 /= 3, base case met
+    = 2
+    ```
+*   **Implementation:**
+    ```haskell
+    elementOccurs :: Eq a => a -> [a] -> Int
+    elementOccurs _ [] = 0
+    elementOccurs target (x:xs)
+        | target == x = 1 + elementOccurs target xs
+        | otherwise   = elementOccurs target xs
+    ```
+
+### 2. `isElementIn` (Membership Check)
+*   **Signature:** `isElementIn :: Eq a => a -> [a] -> Bool`
+*   **Mathematical Specification:**
+    ```text
+    isElementIn(e, xs) = {
+      False            if xs = []
+      True             if xs = y:ys and e = y
+      isElementIn(e, ys) if xs = y:ys and e != y
+    }
+    ```
+*   **Dry Run:** `isElementIn 2 [1,2,3]`
+    ```text
+      isElementIn 2 (1:[2,3])
+    = isElementIn 2 [2,3]                 -- 2 /= 1, skip head
+    = True                                -- 2 == 2, base case met
+    ```
+*   **Implementation:**
+    ```haskell
+    isElementIn :: Eq a => a -> [a] -> Bool
+    isElementIn _ [] = False
+    isElementIn target (x:xs)
+        | target == x = True
+        | otherwise   = isElementIn target xs
+    ```
+
+### 3. `powerNum` (Exponentiation)
+*   **Signature:** `powerNum :: Integer -> Int -> Integer`
+*   **Mathematical Specification:**
+    ```text
+    powerNum(n, y) = {
+      error               if y < 0
+      1                   if y = 0
+      n × powerNum(n, y-1) if y > 0
+    }
+    ```
+*   **Dry Run:** `powerNum 2 3`
+    ```text
+      powerNum 2 3
+    = 2 * powerNum 2 2
+    = 2 * (2 * powerNum 2 1)
+    = 2 * (2 * (2 * powerNum 2 0))
+    = 2 * (2 * (2 * 1))          -- base case (y = 0)
+    = 8
+    ```
+*   **Implementation:**
+    ```haskell
+    powerNum :: Integer -> Int -> Integer
+    powerNum n y
+        | y < 0     = error "powerNum: negative exponent not supported"
+        | y == 0    = 1
+        | otherwise = n * powerNum n (y - 1)
+    ```
+
+### 4. `sumNumbers` (Sum up to n)
+*   **Signature:** `sumNumbers :: Integer -> Integer`
+*   **Specification:** Sums all integers from 0 up to, but not including, `n`.
+*   **Implementation:**
+    ```haskell
+    sumNumbers :: Integer -> Integer
+    sumNumbers n
+        | n <= 0    = 0
+        | otherwise = (n - 1) + sumNumbers (n - 1)
+    ```
+
+### 5. `sumList` & Sequences/Summation
+In mathematics, the summation of a sequence is denoted by the Sigma ($\sum$) notation:
+$$ \sum_{i=0}^{n-1} x_i = x_0 + x_1 + \dots + x_{n-1} $$
+In Haskell, this maps directly to the recursive structure of `sumList`. The base case (`[]`) corresponds to the empty sum (0), and the recursive step (`x:xs`) corresponds to adding the current term $x_i$ to the summation of the remaining terms.
+
+*   **Signature:** `sumList :: Num a => [a] -> a`
+*   **Implementation:**
+    ```haskell
+    sumList :: Num a => [a] -> a
+    sumList []     = 0                  -- Base case: empty sum is 0
+    sumList (x:xs) = x + sumList xs     -- Recursive step: x_i + sum of rest
+    ```
+
+---
+
+## 6.4 Time & Space Complexity Analysis
+
+Understanding the performance of recursive functions is critical. Below is a comparison of fundamental recursive algorithms:
+
+| Function | Time Complexity | Space Complexity | Notes |
+| :--- | :--- | :--- | :--- |
+| `fac n` | $O(n)$ | $O(n)$ | Linear recursion builds a call stack of depth $n$. |
+| `sumNumbers n` | $O(n)$ | $O(n)$ | Linear recursion, similar call stack depth to `fac`. |
+| `fib n` | $O(2^n)$ | $O(n)$ | Exponential time due to redundant branching; max stack depth is $n$. |
+| `revList xs`| $O(n^2)$ | $O(n)$ | The `++` operator traverses the left list, making each of the $n$ steps take $O(k)$ time. |
+
+---
+
+## 6.5 Structural Induction
+
+Structural induction is the primary method for proving properties of recursively defined data structures (like lists or natural numbers). It mirrors mathematical induction but follows the exact structure of the data type's constructors.
+
+**The Framework:**
+1. **Basis Step**: Prove the property holds for the base constructor (e.g., `[]` for lists, `0` for naturals).
+2. **Inductive Hypothesis (IH)**: Assume the property holds for an arbitrary structure `xs`.
+3. **Inductive Step**: Prove the property holds for the recursive constructor (e.g., `x:xs`), utilizing the IH.
+
+### Example Proof
+**Theorem:** Prove `length (xs ++ ys) = length xs + length ys` for all lists `xs` and `ys`.
+*Proof by structural induction on `xs`.*
+
+**Basis Step (`xs = []`):**
+```text
+LHS: length ([] ++ ys)
+   = length ys                -- Definition of (++)
+
+RHS: length [] + length ys
+   = 0 + length ys            -- Definition of length
+   = length ys                -- Arithmetic
+
+LHS = RHS. Basis step holds.
+```
+
+**Inductive Step (`xs = x:xs'`):**
+Assume IH: `length (xs' ++ ys) = length xs' + length ys`.
+```text
+LHS: length ((x:xs') ++ ys)
+   = length (x : (xs' ++ ys))         -- Definition of (++)
+   = 1 + length (xs' ++ ys)           -- Definition of length
+   = 1 + (length xs' + length ys)     -- By Inductive Hypothesis
+
+RHS: length (x:xs') + length ys
+   = (1 + length xs') + length ys     -- Definition of length
+   = 1 + (length xs' + length ys)     -- Associativity of addition
+
+LHS = RHS. Inductive step holds. QED.
+```
+
+---
+
+## 6.6 Exam-Style Practice Questions
+
+1. **Math & Dry Run:** Write a recursive function `productList :: Num a => [a] -> a` that multiplies all elements in a list. Provide the piecewise mathematical specification and a dry run for `productList [2,3,4]`.
+2. **Implementation:** Implement `countEvens :: [Int] -> Int` that counts how many even numbers are in a list. Ensure you handle the empty list base case correctly.
+3. **Complexity:** Explain why `revList` has $O(n^2)$ time complexity, and propose a conceptual fix to make it $O(n)$.
+
+---
+
+## Appendix: Advanced Runtime Evaluation
+*(Note: This section covers Graph Reduction, Thunks, and Space Leaks. It is conceptually separate from the core recursion curriculum but included here for completeness.)*
+
+### Graph Reduction & The Laziness Trap
+In strict languages (C, Java), evaluating `1 + 2` immediately yields `3`. In Haskell, evaluating `1 + 2` yields a *recipe* to add 1 and 2. This recipe is called a **Thunk**.
+
+- **Weak Head Normal Form (WHNF):** An expression reduced to its outermost data constructor or lambda abstraction. Internal fields may still be thunks. (e.g., `(1 + 2, 3)` is in WHNF because the tuple constructor `(,)` is exposed).
+- **Normal Form (NF):** Fully evaluated — no thunks anywhere in the entire expression tree.
+
+### The Space Leak: Accumulator Thunks
+Consider a naive tail-recursive sum:
+```haskell
+sumNaive :: [Int] -> Int -> Int
+sumNaive [] acc     = acc
+sumNaive (x:xs) acc = sumNaive xs (acc + x)
+```
+Because Haskell is lazy, `(acc + x)` is not evaluated immediately. It builds an $O(n)$ chain of thunks on the heap before a single addition is performed, eventually causing a stack overflow.
+
+### `seq` and BangPatterns
+To fix the space leak, force the accumulator to WHNF before the recursive call.
+```haskell
+{-# LANGUAGE BangPatterns #-}
+
+sumStrict :: [Int] -> Int -> Int
+sumStrict [] !acc     = acc           -- force acc when pattern matches
+sumStrict (x:xs) !acc = sumStrict xs (acc + x)
+```
+`seq :: a -> b -> b` evaluates its first argument to WHNF, then returns its second argument unchanged. BangPatterns (`!`) provide syntactic sugar for `seq`.
+
+<Quiz title="Chapter 6 Knowledge Check" questions={quizData} />
+
+========== content/docs/sem3/csi243/07-hofs-list-processing.mdx ==========
+---
+title: "07. Higher-Order Functions & List Processing"
+description: "map, filter, foldr, List Comprehensions, Standard Library Functions, and Advanced Fusion Theory."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/06-hofs-fusion-quiz';
+
+# Chapter 7: Higher-Order Functions & List Processing
+
+## Learning Objectives
+1. Apply standard Higher-Order Functions (`map`, `filter`, `foldr`, `foldl'`) to process lists idiomatically.
+2. Translate list comprehensions into HOF pipelines and vice versa.
+3. Utilise standard library functions (`zip`, `unzip`, `take`, `drop`, `span`, `iterate`) for common list transformations.
+4. Contrast `foldr` and `foldl'` through evaluation traces, understanding their associativity and strictness properties.
+5. (Advanced) Decode GHC Rewrite Rules and explain how stream fusion eliminates intermediate lists.
+
+---
+
+## 7.1 Core Higher-Order Functions: The Holy Trinity
+
+> 🌟 **CORE FOCUS:** `map`, `filter`, and `foldr` are the absolute foundation of declarative list processing in Haskell. They are heavily emphasized in the second half of the semester and will be central to lab assessments and exams. Master their signatures, behaviour, and evaluation traces.
+
+Higher-Order Functions (HOFs) take functions as arguments or return them. They allow you to express *what* to compute rather than *how* to iterate.
+
+### `map :: (a -> b) -> [a] -> [b]`
+Applies a transformation function to every element in the list, preserving the list's structure.
+```haskell
+ghci> map (*2) [1,2,3]
+[2,4,6]
+ghci> map show [1,2,3]
+["1","2","3"]
+```
+
+### `filter :: (a -> Bool) -> [a] -> [a]`
+Keeps only the elements that satisfy a given predicate (boolean function), discarding the rest.
+```haskell
+ghci> filter even [1..10]
+[2,4,6,8,10]
+ghci> filter (>5) [1..10]
+[6,7,8,9,10]
+```
+
+### `foldr` vs `foldl'`: Associativity & Strictness
+Both reduce a list to a single value, but they differ fundamentally in evaluation order and strictness.
+
+- **`foldr f z [x1, x2, x3]`** → `f x1 (f x2 (f x3 z))`  
+  *Right-associative.* Lazy in its second argument, allowing it to work on **infinite lists** if the combining function short-circuits (like `||` or `:`).
+- **`foldl' f z [x1, x2, x3]`** → `f (f (f z x1) x2) x3`  
+  *Left-associative & strict.* Forces the accumulator at every step. Ideal for computing a single scalar (like a sum or product) over **finite lists** to guarantee O(1) space.
+
+#### `foldr` Dry Run Trace
+To understand how `foldr` builds right-associative expression trees, trace `foldr (+) 0 [1,2,3]`:
+```text
+  foldr (+) 0 [1,2,3]
+= 1 + (foldr (+) 0 [2,3])
+= 1 + (2 + (foldr (+) 0 [3]))
+= 1 + (2 + (3 + (foldr (+) 0 [])))
+= 1 + (2 + (3 + 0))       -- Base case reached
+= 1 + (2 + 3)
+= 1 + 5
+= 6
+```
+
+```haskell
+import Data.List (foldl')
+
+ghci> foldr (+) 0 [1,2,3]
+6
+ghci> foldl' (+) 0 [1,2,3]
+6
+```
+
+> ⚠️ **Lab Tip:** For sums, products, or counters over finite lists, **always prefer `foldl'`** (or the built-in `sum`/`product`). Using lazy `foldr` or `foldl` for strict scalar accumulation will cause space leaks.
+
+---
+
+## 7.2 List Comprehensions
+
+List comprehensions provide a declarative, set-builder-like syntax for generating and filtering lists. Under the hood, GHC compiles them directly into efficient `map`/`filter`/`concatMap` pipelines.
+
+**Syntax:** `[expression | generator(s), predicate(s)]`
+
+```haskell
+-- Basic transformation (equivalent to map)
+ghci> [x * 2 | x <- [1..5]]
+[2,4,6,8,10]
+
+-- With guards/filters (equivalent to filter)
+ghci> [x * 2 | x <- [1..10], even x]
+[4,8,12,16,20]
+
+-- Multiple generators (Cartesian product)
+ghci> [(x, y) | x <- [1,2], y <- ['a','b']]
+[(1,'a'),(1,'b'),(2,'a'),(2,'b')]
+
+-- Dependent generators (later generators can use earlier ones)
+ghci> [(x,y) | x <- [1..3], y <- [x..3]]
+[(1,1),(1,2),(1,3),(2,2),(2,3),(3,3)]
+```
+
+**Equivalence to HOFs:**  
+`[x*2 | x <- [1..10], even x]` is functionally identical to `map (*2) (filter even [1..10])`.
+
+---
+
+## 7.3 Standard Library Functions & Lab Applications
+
+Haskell's `Prelude` and `Data.List` provide battle-tested functions for common patterns. Memorise their signatures and behaviour.
+
+```haskell
+-- zip: Pairs elements from two lists. Stops at the shortest list.
+ghci> zip [1,2,3] ["a","b","c"]
+[(1,"a"),(2,"b"),(3,"c")]
+
+-- unzip: Reverses zip into a tuple of lists.
+ghci> unzip [(1,"a"),(2,"b")]
+([1,2],["a","b"])
+
+-- take / drop: Extract or remove n elements from the start.
+ghci> take 3 [1..10]
+[1,2,3]
+ghci> drop 2 [1..10]
+[3,4,5,6,7,8,9,10]
+
+-- span: Splits a list at the first predicate failure.
+-- span p xs == (takeWhile p xs, dropWhile p xs)
+ghci> span (< 5) [1,2,3,5,6,7]
+([1,2,3],[5,6,7])
+
+-- iterate: Infinite list of repeated function applications.
+ghci> take 5 (iterate (*2) 1)
+[1,2,4,8,16]
+```
+
+### Lab Application: `twoLists` (Standard vs Recursive)
+In earlier labs, you may have implemented element-wise pairing manually. Haskell's `zip` is the idiomatic, production-ready alternative.
+
+**Manual Recursive Implementation:**
+```haskell
+twoListsRecursive :: [a] -> [b] -> [(a, b)]
+twoListsRecursive (x:xs) (y:ys) = (x, y) : twoListsRecursive xs ys
+twoListsRecursive _ _ = []
+```
+
+**Standard Library Implementation:**
+```haskell
+-- Simply use the built-in zip!
+twoListsStandard :: [a] -> [b] -> [(a, b)]
+twoListsStandard = zip
+
+gchi> twoListsStandard [1,2,3] [10,20,30]
+[(1,10),(2,20),(3,30)]
+```
+Always prefer `zip` in practice: it is rigorously tested, handles edge cases cleanly, and is heavily optimised by GHC.
+
+---
+
+## 7.4 Advanced Theory: Fold as Catamorphism & Fusion
+
+*(This section covers advanced compiler concepts and structural recursion theory. Focus on Sections 7.1–7.3 for core lab/exam preparation.)*
+
+### `foldr` as Structural Replacement (Catamorphism)
+A `fold` is not merely a loop — it is a structural replacement. `foldr f z` replaces every cons cell `(:)` in the list with the combining function `f`, and every empty list `[]` with the base value `z`.
+
+```haskell
+foldr f z [1, 2, 3]
+= f 1 (f 2 (f 3 z))       -- (:) replaced by f, [] replaced by z
+```
+This structural view explains why `foldr (:) []` is the identity function: it replaces each constructor with itself.
+
+### GHC Rewrite Rules & Stream Fusion
+GHC allows library authors to embed equational laws directly into compiled code via the `{-# RULES #-}` pragma. The compiler applies these as source-to-source transformations during optimisation.
+
+```haskell
+{-# RULES
+  "map/map"  [~1]  forall f g xs.
+    map f (map g xs) = map (f . g) xs
+  #-}
+```
+**Why it matters:** Without fusion, `map f (map g xs)` allocates an intermediate list of size $n$, then traverses it again. The fusion rule rewrites it to `map (f . g) xs` — a single O(n) pass with zero intermediate allocations. Stream fusion extends this to eliminate memory allocation across entire producer-consumer pipelines (`map . filter . sum`), yielding performance comparable to hand-written C loops.
+
+---
+
+## 7.5 Compiler Error Examples
+
+❌ **WRONG CODE (Fold base value type mismatch)**
+```haskell
+sumAndCount :: [Int] -> (Int, Int)
+sumAndCount = foldr (\x (s, c) -> (s + x, c + 1)) 0
+```
+**GHC Error:**
+```text
+Couldn't match expected type '(Int, Int)' with actual type 'Integer'
+In the second argument of 'foldr', namely '0'
+```
+✅ **CORRECTED CODE**
+```haskell
+sumAndCount :: [Int] -> (Int, Int)
+sumAndCount = foldr (\x (s, c) -> (s + x, c + 1)) (0, 0)
+
+gchi> sumAndCount [10, 20, 30]
+(60,3)
+```
+
+❌ **WRONG CODE (Pipeline element type mismatch)**
+```haskell
+processBad :: [Int] -> [String]
+processBad = map show . filter (> 0) . map (\x -> x ++ "!")
+```
+**GHC Error:**
+```text
+Couldn't match type 'Int' with '[Char]'
+In the expression: x ++ "!"
+Expected type: Int -> Int, Actual type: Int -> [Char]
+```
+✅ **CORRECTED CODE**
+```haskell
+processGood :: [Int] -> [String]
+processGood = map show . filter (> 0) . map (+ 1)
+
+gchi> processGood [-1, 0, 2, 4]
+["3","5"]
+```
+
+---
+
+## 7.6 Exam-Style Practice Questions
+
+1. **Translation:** Translate the list comprehension `[x^2 | x <- [1..20], odd x]` into a point-free pipeline using only `map` and `filter`.
+2. **Implementation:** Use `foldr` to implement the standard `and :: [Bool] -> Bool` function, which returns `True` if all elements in the list are `True`.
+3. **Theory:** What is the exact result of evaluating `foldr (:) [] [1,2,3]`? Explain why this happens using the concept of catamorphisms (structural replacement).
+4. **Standard Library:** Use `span` to split the list `[2,4,6,7,8,9]` into a tuple of even numbers at the start and the remainder of the list.
+
+<Quiz title="Chapter 7 Knowledge Check" questions={quizData} />
+
+========== content/docs/sem3/csi243/08-abstractions.mdx ==========
+---
+title: "08. Abstractions"
+description: "Functors, Applicatives, and Monads."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/07-abstractions-quiz';
+
+# Chapter 8: Abstractions: Functors, Applicatives, Monads
+
+## Learning Objectives
+1. Prove Functor laws (Identity and Composition) for the List type using structural induction.
+2. Design validated data constructors using Applicative error accumulation.
+3. Verify the three Monad laws for `Maybe` and translate them to Kleisli category laws.
+4. Mechanically desugar complex `do`-notation blocks into nested `>>=` binds.
+
+---
+
+## 8.1 Functor & Law Verification
+
+### Intuition: Contexts, Not Just Containers
+Before writing code, discard the idea that a Functor is merely a "box" holding a value. A Functor represents a **computational context**. A list is a context of non-determinism (zero, one, or many values). `Maybe` is a context of possible failure. The function type `(r ->)` is a context of a read-only environment. 
+
+### Formal Definition
+```haskell
+class Functor f where
+    fmap :: (a -> b) -> f a -> f b
+```
+`fmap` applies a pure function to the value(s) inside the context, preserving the structure of the context itself.
+
+### Worked Code
+```haskell
+-- GHCi session
+ghci> fmap (+1) [1, 2, 3]
+[2,3,4]
+ghci> fmap (+1) (Just 5)
+Just 6
+ghci> fmap (+1) (*2) 3  -- Function context!
+9
+```
+
+### Law Verification: List `[]`
+A lawful Functor must satisfy two laws. We prove them for `[]` using structural induction.
+
+**1. Identity Law:** `fmap id = id`
+*Base Case:* `fmap id [] = [] = id []`
+*Inductive Step:* Assume `fmap id xs = xs`.
+`fmap id (x:xs) = id x : fmap id xs = x : xs = id (x:xs)`.
+
+**2. Composition Law:** `fmap (f . g) = fmap f . fmap g`
+*Base Case:* 
+`fmap (f . g) [] = []`
+`(fmap f . fmap g) [] = fmap f (fmap g []) = fmap f [] = []`.
+*Inductive Step:* Assume `fmap (f . g) xs = fmap f (fmap g xs)`.
+`fmap (f . g) (x:xs)`
+`= (f . g) x : fmap (f . g) xs`
+`= f (g x) : fmap f (fmap g xs)`  *(by Induction Hypothesis)*
+`= fmap f (g x : fmap g xs)`
+`= fmap f (fmap g (x:xs))`
+`= (fmap f . fmap g) (x:xs)`.
+
+> ⚠️ **Common Misconception:** "Functor means container."
+> **Correction:** Functor means *mappable computational context*. The function type `(r ->)` is a Functor! `fmap f g = f . g`. It maps over the *output* of the function.
+
+---
+
+## 8.2 Applicative & Independent Effects
+
+### Intuition: Applying Functions in a Context
+While `fmap` applies a pure function to a wrapped value, what if the *function itself* is wrapped in a context? Applicative solves this. It is perfectly suited for **independent effects**, like validating multiple fields of a record where you want to accumulate all errors rather than failing on the first one.
+
+### Formal Definition
+```haskell
+class Functor f => Applicative f where
+    pure  :: a -> f a
+    (<*>) :: f (a -> b) -> f a -> f b
+```
+
+### Worked Code: Error Accumulation
+```haskell
+-- Assuming a custom Validation Applicative that collects errors via Semigroup
+data User = User { name :: String, age :: Int }
+
+validateName :: String -> Validation [String] String
+validateAge  :: Int -> Validation [String] Int
+
+mkUser :: String -> Int -> Validation [String] User
+mkUser n a = User <$> validateName n <*> validateAge a
+
+-- GHCi session
+ghci> mkUser "" (-5)
+Failure ["Name cannot be empty", "Age must be positive"]
+```
+If we used a Monad (like standard `Either`), it would short-circuit and only report the first error. Applicative allows independent branches to execute and combine their contexts.
+
+**Law Verification for Maybe:**
+`pure f <*> x = fmap f x`
+`Just f <*> x = fmap f x`. Holds perfectly by definition of `<*>` for `Maybe`.
+
+---
+
+## 8.3 Monad Laws & Kleisli Composition
+
+### Intuition: Dependent Sequencing
+Applicatives handle independent effects. Monads handle **dependent** computations—where the output of one step determines the structure of the next step. 
+
+### Formal Definition
+```haskell
+class Applicative m => Monad m where
+    return :: a -> m a
+    (>>=)  :: m a -> (a -> m b) -> m b
+```
+
+### The Three Monad Laws
+1. **Left Identity:** `return a >>= f ≡ f a`
+2. **Right Identity:** `m >>= return ≡ m`
+3. **Associativity:** `(m >>= f) >>= g ≡ m >>= (\x -> f x >>= g)`
+
+### Verification for `Maybe`
+**Left Identity:** `return a >>= f` → `Just a >>= f` → `f a`.
+**Right Identity:** 
+- `Nothing >>= return` → `Nothing`
+- `Just x >>= return` → `return x` → `Just x`
+**Associativity:** Holds because `>>=` simply unwraps the `Just` and passes it along; if it hits `Nothing`, both sides short-circuit to `Nothing`.
+
+### Kleisli Composition `(>=>)`
+Monads form a category where morphisms are functions `a -> m b`. The composition operator is `(>=>)`.
+```haskell
+(>=>) :: Monad m => (a -> m b) -> (b -> m c) -> (a -> m c)
+(f >=> g) x = f x >>= g
+```
+The Monad laws are exactly the category laws (identity and associativity) for Kleisli arrows!
+
+---
+
+## 8.4 Concrete Monad Worked Examples
+
+Students often fail exams because they only know Monads abstractly. Let's trace three concrete instances.
+
+### 1. Maybe (Safe Division Pipeline)
+```haskell
+safeDiv :: Int -> Int -> Maybe Int
+safeDiv _ 0 = Nothing
+safeDiv x y = Just (x `div` y)
+
+pipeline :: Maybe Int
+pipeline = Just 10 >>= safeDiv 2 >>= safeDiv 5
+
+-- GHCi session
+ghci> pipeline
+Just 1
+```
+`Nothing` propagates through the chain of `>>=` without any explicit `case` checks or nested `if` statements.
+
+### 2. List (Non-determinism)
+```haskell
+-- GHCi session
+ghci> do { x <- [1,2]; y <- [10,20]; return (x+y) }
+[11,21,12,22]
+```
+The List monad computes all possible combinations. The `do` notation desugars into nested `concatMap` operations.
+
+### 3. Either String (Error Propagation)
+```haskell
+parseHex :: String -> Either String Int
+parseHex s = maybe (Left "Bad hex") Right (readMaybe s)
+
+pipeline :: Either String Int
+pipeline = do
+    a <- parseHex "A"
+    b <- parseHex "2"
+    return (a + b)
+
+-- GHCi session
+ghci> pipeline
+Right 12
+```
+Failure at any step carries an explicit error message, unlike `Maybe`.
+
+---
+
+## 8.5 `do`-Notation Desugaring
+
+A 4-action `do` block desugars mechanically. You must be able to do this by hand in an exam.
+
+```haskell
+do
+ a <- act1
+ b <- act2 a
+ c <- act3 b
+ return (a + b + c)
+```
+**Step 1:** `act1 >>= \a -> do { b <- act2 a; ... }`
+**Step 2:** `act1 >>= \a -> act2 a >>= \b -> do { c <- act3 b; ... }`
+**Step 3:** `act1 >>= \a -> act2 a >>= \b -> act3 b >>= \c -> return (a + b + c)`
+
+Notice how every `<-` becomes a lambda argument for the next `>>=`.
+
+---
+
+## 8.6 Compiler Error Examples
+
+❌ **WRONG CODE (Missing Monad Instance)**
+```haskell
+process :: [Int] -> [Int]
+process xs = xs >>= \x -> Just (x + 1)
+```
+**GHC Error:**
+```text
+Couldn't match type ‘Maybe’ with ‘[]’
+Expected type: [Int]
+  Actual type: Maybe Int
+```
+✅ **CORRECTED CODE**
+```haskell
+process :: [Int] -> [Maybe Int]
+process xs = xs >>= \x -> [Just (x + 1)]
+```
+*Explanation:* The left side of `>>=` is a List, so the right side *must* return a List.
+
+❌ **WRONG CODE (`<-` outside `do`)**
+```haskell
+main = 
+ name <- getLine
+ putStrLn name
+```
+**GHC Error:**
+```text
+parse error on input ‘<-’
+```
+✅ **CORRECTED CODE**
+```haskell
+main = do
+ name <- getLine
+ putStrLn name
+```
+*Explanation:* `<-` is not a standalone binding operator; it is syntactic sugar exclusively valid inside a `do` block (or list comprehension).
+
+<Quiz title="Chapter 8 Knowledge Check" questions={quizData} />
+
+========== content/docs/sem3/csi243/09-io-monad.mdx ==========
+---
+title: "09. The IO Monad"
+description: "The Recipe pattern, RealWorld token, and the purity boundary."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/08-io-monad-quiz';
+
+# Chapter 9: The IO Monad & The Purity Boundary
+
+> ⚠️ **ADVANCED/BONUS: Not explicitly tested in CSI243 Labs.**
+> This chapter covers advanced concepts like the `RealWorld` token, `IORef`, and the internal AST representation of IO. While crucial for a deep understanding of Haskell's purity guarantees, these specific mechanics are considered bonus material and are **not explicitly tested** in standard CSI243 lab assessments. For practical IO, focus primarily on the "Recipe Pattern" intuition and basic `do`-notation composition (covered in Chapter 2).
+
+## Learning Objectives
+1. Model `IO` actions as first-class AST recipes and compose them using higher-order functions.
+2. Trace the `State# RealWorld` token through a sequence of IO actions to explain how purity enforces sequential execution.
+3. Implement controlled mutable state using `IORef` within the `IO` monad.
+4. Handle asynchronous exceptions and synchronous errors using `try` and `SomeException`.
+
+---
+
+## 9.1 The Recipe Pattern (AST Analogy)
+
+### Intuition: Descriptions, Not Executions
+In imperative languages, calling `print("hello")` immediately causes ink to hit the paper (or pixels to light up). In Haskell, `putStrLn "hello"` does **nothing** when evaluated. Instead, it yields a pure, immutable data structure that *describes* an effect. Think of it as an Abstract Syntax Tree (AST) or a "recipe".
+
+### Formal Definition
+```haskell
+-- Conceptually, IO is an AST of instructions
+data IO a = PutStrLn String (IO a) | GetLine (String -> IO a) | ...
+```
+Because `IO` actions are just values, we can pass them to higher-order functions, store them in lists, and compose them without executing them.
+
+### Worked Code
+```haskell
+myAction :: IO ()
+myAction = putStrLn "hello"
+
+repeatTwice :: IO () -> IO ()
+repeatTwice action = action >> action
+
+-- GHCi session
+ghci> :t repeatTwice myAction
+repeatTwice myAction :: IO ()
+```
+Notice that `repeatTwice myAction` does not print anything yet! It merely constructs a larger AST recipe. The Haskell Runtime System (RTS) is the only thing that actually "executes" the recipe returned by `main`.
+
+> ⚠️ **Common Misconception:** "IO actions execute as soon as they are bound to a variable."
+> **Correction:** `IO` actions are first-class values. They only execute when the RTS evaluates the `main` AST.
+
+---
+
+## 9.2 The `RealWorld` Token
+
+### Intuition: The Relay Baton
+If `IO` actions are just pure data structures, how does GHC prevent the lazy compiler from reordering them, caching them, or evaluating them out of order? It uses a phantom "State Token".
+
+### Formal Definition
+```haskell
+newtype IO a = IO (State# RealWorld -> (# State# RealWorld, a #))
+```
+- `State# RealWorld` is a phantom token representing the state of the entire universe.
+- `(# #)` is an unboxed tuple (a GHC optimization to avoid heap allocation).
+- The token forces sequencing through strict data dependency.
+
+### Token Trace
+```haskell
+do
+ name <- getLine    -- Takes World_0, returns (World_1, name)
+ putStrLn name      -- Takes World_1, returns (World_2, ())
+```
+The compiler *cannot* reorder these because `putStrLn` physically requires the `World_1` token produced by `getLine`.
+
+```mermaid
+graph LR
+ W0[World 0] -->|getLine| W1[World 1]
+ W1 -->|putStrLn| W2[World 2]
+```
+*Figure 9.1: The RealWorld token passed as a relay baton, enforcing strict sequential execution.*
+
+---
+
+## 9.3 `IORef` — Mutable State Within IO
+
+### Intuition: Explicit Mutable Boxes
+Haskell supports mutation, but it is explicitly typed and confined strictly to `IO`. You cannot accidentally mutate a variable from pure code.
+
+### Worked Code
+```haskell
+import Data.IORef
+
+counter :: IO ()
+counter = do
+    ref <- newIORef (0 :: Int)
+    modifyIORef ref (+1)
+    modifyIORef ref (+1)
+    val <- readIORef ref
+    print val  
+
+-- GHCi session
+ghci> counter
+2
+```
+`IORef` is a mutable box. You cannot read it from pure code, guaranteeing referential transparency remains intact globally.
+
+---
+
+## 9.4 The Extraction Myth & `unsafePerformIO`
+
+### Intuition: The Purity Boundary
+Students frequently ask: "How do I extract a `String` from `IO String` to use it in a pure function?" The answer is: **You don't.** You must lift the pure function into the `IO` context using `fmap` or `>>=`.
+
+> ⚠️ **Common Misconception:** "I can use `unsafePerformIO` to escape IO and extract values."
+> **Correction:** `unsafePerformIO` breaks referential transparency. It exists strictly for C FFI bindings and top-level CAFs (Constant Applicative Forms). Using it to "extract" values will cause the compiler to unpredictably duplicate or eliminate the IO call, leading to undefined behavior.
+
+---
+
+## 9.5 Exception Handling in IO
+
+### Intuition: Synchronous Errors
+Because `IO` interacts with the chaotic real world, exceptions occur. Haskell handles these using the `Control.Exception` module.
+
+### Worked Code
+```haskell
+import Control.Exception
+
+safeDiv :: Int -> Int -> IO Int
+safeDiv _ 0 = throwIO (userError "Division by zero")
+safeDiv x y = return (x `div` y)
+
+main :: IO ()
+main = do
+    result <- try (safeDiv 10 0) :: IO (Either SomeException Int)
+    case result of
+        Left err  -> putStrLn $ "Error: " ++ show err
+        Right val -> print val
+
+-- GHCi session
+ghci> main
+Error: user error (Division by zero)
+```
+
+---
+
+## 9.6 Compiler Error Examples
+
+❌ **WRONG CODE (Extracting from IO)**
+```haskell
+pureLength :: Int
+pureLength = length getLine
+```
+**GHC Error:**
+```text
+Couldn't match expected type ‘[a0]’ with actual type ‘IO String’
+In the first argument of ‘length’, namely ‘getLine’
+```
+✅ **CORRECTED CODE**
+```haskell
+ioLength :: IO Int
+ioLength = do
+    s <- getLine
+    return (length s)
+```
+*Explanation:* You cannot pass an `IO String` to `length`, which expects a pure `[Char]`. You must bind the result inside `IO`.
+
+❌ **WRONG CODE (IORef in pure code)**
+```haskell
+increment :: IORef Int -> Int
+increment ref = readIORef ref + 1
+```
+**GHC Error:**
+```text
+Couldn't match expected type ‘Int’ with actual type ‘IO Int’
+In the first argument of ‘(+)’, namely ‘readIORef ref’
+```
+✅ **CORRECTED CODE**
+```haskell
+increment :: IORef Int -> IO Int
+increment ref = do
+    val <- readIORef ref
+    return (val + 1)
+```
+*Explanation:* `readIORef` returns an `IO Int` because reading from memory is a side effect dependent on the `RealWorld` token.
+
+<Quiz title="Chapter 9 Knowledge Check" questions={quizData} />
+

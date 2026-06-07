@@ -1,0 +1,415 @@
+---
+title: "03. Syntax, Pattern Matching & Choices"
+description: "Tuples, Pattern Matching, Guards, case expressions, Local bindings, Currying, Closures, Point-free style, and Equational Reasoning."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi243/02-basics-reasoning-quiz';
+
+# Chapter 3: Syntax, Pattern Matching & Choices
+
+## Learning Objectives
+1. Use tuples to return multiple values and implement basic tuple manipulation functions (`fst`, `snd`, `addSub`, `swapIntegers`).
+2. Mechanically apply pattern matching on literals, tuples, lists (`x:xs`), wildcards (`_`), and as-patterns (`@`).
+3. Implement conditional logic using Guards and `case ... of` expressions.
+4. Distinguish `let...in` from `where` and diagnose scope errors in practical contexts.
+5. Mechanically trace partial application and closure formation in curried functions.
+6. Derive point-free style using eta-reduction and construct formal inductive proofs of function equivalence.
+
+---
+
+## 3.1 Tuples in Practice
+
+Tuples allow you to group a fixed number of values, potentially of different types, into a single compound value. They are the standard way to return multiple values from a function in Haskell.
+
+### Standard Tuple Functions
+
+```haskell
+-- Extracts the first element of a 2-tuple
+fst :: (a, b) -> a
+fst (x, _) = x
+
+-- Extracts the second element of a 2-tuple
+snd :: (a, b) -> b
+snd (_, y) = y
+
+-- GHCi session
+ghci> fst (42, "hello")
+42
+ghci> snd (42, "hello")
+"hello"
+```
+
+### Lab 4 Practical Implementations (5-Part Framework)
+
+**1. `addSub`**
+*   **Signature:** `addSub :: (Int, Int) -> (Int, Int)`
+*   **Specification:** Returns a tuple where the first element is the sum, and the second is the absolute difference.
+*   **Dry Run:** `addSub (5, 7)`
+    ```text
+      addSub (5, 7)
+    = (5 + 7, abs (5 - 7))
+    = (12, abs (-2))
+    = (12, 2)
+    ```
+*   **Implementation:**
+    ```haskell
+    addSub :: (Int, Int) -> (Int, Int)
+    addSub (x, y) = (x + y, abs (x - y))
+    ```
+*   **Test:**
+    ```haskell
+    ghci> addSub (5, 7)
+    (12, 2)
+    ```
+
+**2. `swapIntegers`**
+*   **Signature:** `swapIntegers :: (Int, Int) -> (Int, Int)`
+*   **Specification:** Swaps the elements of a 2-tuple.
+*   **Dry Run:** `swapIntegers (5, 7)`
+    ```text
+      swapIntegers (5, 7)
+    = (7, 5)
+    ```
+*   **Implementation:**
+    ```haskell
+    swapIntegers :: (Int, Int) -> (Int, Int)
+    swapIntegers (x, y) = (y, x)
+    ```
+*   **Test:**
+    ```haskell
+    ghci> swapIntegers (5, 7)
+    (7, 5)
+    ```
+
+---
+
+## 3.2 Pattern Matching Mechanics
+
+Pattern matching is Haskell's primary mechanism for deconstructing data and making choices. It is cleaner and more expressive than nested `if` statements.
+
+### Matching on Literals and Wildcards
+
+```haskell
+isZero :: Int -> Bool
+isZero 0 = True       -- Matches the literal 0
+isZero _ = False      -- '_' is a wildcard: matches anything else
+```
+
+### Matching on Tuples
+
+```haskell
+addPair :: (Int, Int) -> Int
+addPair (x, y) = x + y  -- Deconstructs the tuple into x and y
+```
+
+### Matching on Lists (`x:xs`)
+
+The `:` (cons) operator is used to match the head and tail of a list.
+
+```haskell
+head' :: [a] -> a
+head' (x:_) = x         -- Binds 'x' to the first element, ignores the rest
+
+-- Note: This is partial! It will crash on []. A safe version uses multiple patterns:
+safeHead :: [a] -> Maybe a
+safeHead []    = Nothing
+safeHead (x:_) = Just x
+```
+
+### As-Patterns (`@`)
+
+An as-pattern allows you to bind a name to the *entire* matched value while still deconstructing it.
+
+```haskell
+-- Binds 'all' to the whole list, and 'x' and 'y' to the first two elements
+firstTwo :: [a] -> (a, a)
+firstTwo all@(x:y:_) = (x, y)  
+-- If called with [1,2,3], all=[1,2,3], x=1, y=2
+```
+
+---
+
+## 3.3 Guards in Action
+
+Guards provide a clean way to express conditional logic based on boolean expressions. They are evaluated top-to-bottom.
+
+### Lab 4 Grading System (University of Gaborone)
+
+**1. `gps` (Grade Point from Score)**
+*   **Signature:** `gps :: Int -> Float`
+*   **Dry Run:** `gps 52` falls into the `score >= 50` guard, returning `2.0`.
+*   **Implementation:**
+    ```haskell
+    gps :: Int -> Float
+    gps score
+      | score >= 80 = 5.0
+      | score >= 75 = 4.5
+      | score >= 70 = 4.0
+      | score >= 65 = 3.5
+      | score >= 60 = 3.0
+      | score >= 55 = 2.5
+      | score >= 50 = 2.0
+      | score >= 45 = 1.5
+      | score >= 40 = 1.0
+      | otherwise   = 0.0
+    ```
+
+**2. `lgs` (Letter Grade from Score)**
+*   **Signature:** `lgs :: Int -> String`
+*   **Implementation:**
+    ```haskell
+    lgs :: Int -> String
+    lgs score
+      | score >= 80 = "A"
+      | score >= 75 = "B+"
+      | score >= 70 = "B"
+      | score >= 65 = "C+"
+      | score >= 60 = "C"
+      | score >= 55 = "D+"
+      | score >= 50 = "D"
+      | score >= 45 = "E+"
+      | score >= 40 = "E"
+      | otherwise   = "F"
+    ```
+
+**3. `lgg` (Letter Grade from Grade Point)**
+*   **Signature:** `lgg :: Float -> String`
+*   **Implementation:**
+    ```haskell
+    lgg :: Float -> String
+    lgg gp
+      | gp == 5.0 = "A"
+      | gp == 4.5 = "B+"
+      | gp == 4.0 = "B"
+      | gp == 3.5 = "C+"
+      | gp == 3.0 = "C"
+      | gp == 2.5 = "D+"
+      | gp == 2.0 = "D"
+      | gp == 1.5 = "E+"
+      | gp == 1.0 = "E"
+      | otherwise = "F"
+    ```
+
+**4. `recc` (Recommendation from Score)**
+*   **Signature:** `recc :: Int -> String`
+*   **Implementation:**
+    ```haskell
+    recc :: Int -> String
+    recc score
+      | score >= 80 = "First Class"
+      | score >= 70 = "Upper Second Class"
+      | score >= 60 = "Lower Second Class"
+      | score >= 50 = "Pass"
+      | score >= 40 = "Supplement"
+      | otherwise   = "Fail"
+    ```
+
+> ⚠️ **Note:** `otherwise` is not a keyword; it is simply a predefined constant in the Prelude equal to `True`. It acts as a catch-all and **must** be the last guard.
+
+---
+
+## 3.4 The `case ... of` Expression
+
+While guards are attached to function definitions, `case ... of` is an *expression* that can be used anywhere a value is expected. It is the underlying mechanism for all pattern matching in Haskell.
+
+### Rewriting Guards/If into `case`
+
+Instead of using `if/then/else` or top-level guards, you can match directly on the result of an expression:
+
+```haskell
+describeList :: [a] -> String
+describeList xs = case xs of
+    []      -> "Empty list"
+    [x]     -> "Singleton list with " ++ show x
+    x:y:_   -> "List starts with " ++ show x ++ " and " ++ show y
+    _       -> "Longer list"
+```
+
+This is especially powerful when you need to pattern match on the result of a function call without defining a separate helper function.
+
+### Lab 4 Application: Grading with `case`
+While guards are excellent for ranges, `case` is ideal for discrete value matching. We can rewrite the Lab 4 `recc` (Recommendation) function by using `div score 10` to collapse the percentage into discrete tens, allowing us to use `case` instead of guards.
+
+```haskell
+reccCase :: Int -> String
+reccCase score = case div score 10 of
+    10 -> "First Class"
+    9  -> "First Class"
+    8  -> "First Class"
+    7  -> "Upper Second Class"
+    6  -> "Lower Second Class"
+    5  -> "Pass"
+    4  -> "Supplement"
+    _  -> "Fail"  -- Wildcard catches 0-39 and invalid inputs
+```
+
+---
+
+## 3.5 Local Bindings: `let...in` vs `where`
+
+Haskell provides two scoping constructs for intermediate bindings. They are not interchangeable.
+
+### `where` Clauses
+
+`where` bindings are scoped to the entire function definition, including all guards. They are ideal for factoring out common calculations in guard branches.
+
+```haskell
+bmi :: Double -> Double -> String
+bmi weight height
+  | val <= 18.5 = "Underweight"
+  | val <= 25.0 = "Normal"
+  | otherwise   = "Overweight"
+  where
+    val = weight / height ^ 2  -- Visible to all guards above
+```
+
+### `let...in` Expressions
+
+`let...in` is an *expression* that produces a value. It is valid anywhere an expression is valid, including inside `case` expressions and list comprehensions.
+
+```haskell
+-- Valid: let inside a list comprehension (where could not go here)
+pythTriples :: Int -> [(Int, Int, Int)]
+pythTriples n =
+  [ (a, b, c)
+  | c <- [1..n]
+  , b <- [1..c]
+  , let a_sq = c*c - b*b   -- let binds here, a_sq visible in filter
+  , a_sq > 0
+  , let a = floor (sqrt (fromIntegral a_sq :: Double))
+  , a*a == a_sq
+  ]
+```
+
+### Compiler Error: Mixing Them Up
+
+❌ **WRONG CODE** (using guards after `let...in`)
+```haskell
+classify :: Int -> String
+classify n = let label = n * 2
+  | label > 10 = "Big"     -- ERROR: parse error on input '|'
+  | otherwise  = "Small"
+```
+`let...in` expects an `in expr` after the binding. Guards cannot follow it directly.
+
+✅ **CORRECTED CODE**
+```haskell
+classify :: Int -> String
+classify n
+  | label > 10 = "Big"
+  | otherwise  = "Small"
+  where
+    label = n * 2
+```
+
+---
+
+## 3.6 Advanced Theory: Currying and Closures
+
+In Haskell, *every* function takes exactly **one** argument. The appearance of multi-argument functions is produced by currying.
+
+### The Mechanical Trace of `add 3 4`
+
+```haskell
+add :: Int -> Int -> Int
+add x y = x + y
+```
+The type `Int -> Int -> Int` is right-associative: `Int -> (Int -> Int)`.
+
+```text
+Step 1: add
+  Type: Int -> (Int -> Int)
+  A function waiting for its first argument.
+
+Step 2: add 3
+  Type: Int -> Int
+  A CLOSURE is formed. The runtime allocates a heap object containing:
+    - A pointer to the code for (x + y)
+    - A binding: x = 3
+  This is a first-class value.
+
+Step 3: add 3 4
+  Type: Int
+  The closure is applied to 4. The runtime substitutes y = 4, evaluating 3 + 4 to yield 7.
+```
+
+### What Exactly Does a Closure Capture?
+
+When `add 3` is evaluated, the closure captures the *value* `3`, not a reference to a mutable memory location. Because Haskell values are immutable, there is no aliasing hazard. This differs from Python/JS, where closures capture references and observe subsequent mutations.
+
+```haskell
+make_adder :: Int -> (Int -> Int)
+make_adder n = \x -> n + x    -- closure captures n
+
+add5 :: Int -> Int
+add5 = make_adder 5            -- distinct closure for n=5
+
+add10 :: Int -> Int
+add10 = make_adder 10          -- distinct closure for n=10
+```
+
+---
+
+## 3.7 Advanced Theory: Point-Free Style & Equational Reasoning
+
+### Point-Free Style via Eta-Reduction
+
+Point-free style means writing a function without mentioning its arguments, derived mechanically via **eta-reduction**: if `f x = g x` for all `x`, then `f = g`.
+
+**Goal:** Show that `\x -> filter (> 5) (map (* 2) x)` equals `filter (> 5) . map (* 2)`.
+
+```text
+Starting expression: \x -> filter (> 5) (map (* 2) x)
+
+Step 1 — Recognise the innermost application:
+  (map (* 2) x) is (map (* 2)) applied to x.
+  Rewrite: \x -> filter (> 5) ((map (* 2)) x)
+
+Step 2 — Apply the definition of function composition (.):
+  Recall: (f . g) x = f (g x)
+  Here: f = filter (> 5), g = map (* 2)
+  Rewrite: \x -> (filter (> 5) . map (* 2)) x
+
+Step 3 — Eta-reduce:
+  Remove the \x -> and the trailing x from both sides.
+  Result: filter (> 5) . map (* 2)
+```
+
+### Equational Reasoning Proof
+
+Because Haskell functions are pure, we can prove equivalences algebraically. Every step must cite the definition or law being applied.
+
+**Theorem:** `length . map f = length` for all `f`.
+
+**Proof by structural induction on the list.**
+
+*Base Case (empty list):*
+```text
+(length . map f) []
+= length (map f [])        {- Definition of (.) -}
+= length []                {- Definition of map: map f [] = [] -}
+= 0                        {- Definition of length: length [] = 0 -}
+```
+
+*Inductive Step (list x:xs, assuming the theorem holds for xs):*
+```text
+(length . map f) (x:xs)
+= length (map f (x:xs))        {- Definition of (.) -}
+= length (f x : map f xs)      {- Definition of map: map f (y:ys) = f y : map f ys -}
+= 1 + length (map f xs)        {- Definition of length: length (y:ys) = 1 + length ys -}
+= 1 + (length . map f) xs      {- Definition of (.) -}
+= 1 + length xs                {- Induction Hypothesis -}
+= length (x:xs)                {- Definition of length -}
+```
+By induction, the theorem holds for all finite lists. QED.
+
+---
+
+## 📝 Exam-Style Practice Questions
+
+1. **Pattern Matching:** Write a function `safeTail :: [a] -> [a]` using pattern matching that returns the tail of a list, but returns `[]` if the list is empty.
+2. **Guards vs Case:** Rewrite the `gps` function using a `case ... of` expression instead of guards.
+3. **Tuples:** Write a function `distance :: (Double, Double) -> (Double, Double) -> Double` that calculates the Euclidean distance between two 2D points.
+
+<Quiz title="Chapter 3 Knowledge Check" questions={quizData} />
