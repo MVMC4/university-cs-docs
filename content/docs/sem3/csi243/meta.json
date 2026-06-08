@@ -10,6 +10,8 @@
     "06-recursion-lists-induction",
     "07-hofs-list-processing",
     "08-abstractions",
-    "09-io-monad"
+    "09-io-monad",
+    "resources"
+
   ]
 }

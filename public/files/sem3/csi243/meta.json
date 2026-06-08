@@ -88,27 +88,56 @@
     ]
   },
   {
-    "id": "tools-haskell",
-    "title": "Recommended Tools",
-    "category": "Tools",
+    "id": "textbooks",
+    "title": "Recommended Textbooks",
+    "category": "Books",
     "type": "folder",
-    "description": "Essential software for Haskell development.",
+    "description": "Core textbooks and reference books for Functional Programming and Haskell.",
     "children": [
-      { "id": "ghc", "title": "GHC & Cabal (Haskell Platform)", "category": "Tools", "type": "link", "url": "https://www.haskell.org/downloads/", "description": "The official Glasgow Haskell Compiler and package manager." },
-      { "id": "vscode", "title": "VS Code + Haskell Extension", "category": "Tools", "type": "link", "url": "https://marketplace.visualstudio.com/items?itemName=haskell.haskell", "description": "Recommended IDE setup with syntax highlighting and LSP." },
-      { "id": "hlint", "title": "HLint", "category": "Tools", "type": "link", "url": "https://github.com/ndmitchell/hlint", "description": "A tool for suggesting improvements in your Haskell code." }
+      { "id": "book-thompson", "title": "Haskell: The Craft of Functional Programming", "category": "Books", "type": "link", "url": "https://www.amazon.com/Haskell-Functional-Programming-International-Computer/dp/0201342758", "description": "Simon Thompson - The official course textbook (3rd Ed)." },
+      { "id": "book-lyah", "title": "Learn You a Haskell for Great Good!", "category": "Books", "type": "link", "url": "http://learnyouahaskell.com/", "description": "Miran Lipovaca - A fun, illustrated beginner's guide (Free online)." },
+      { "id": "book-rwh", "title": "Real World Haskell", "category": "Books", "type": "link", "url": "http://book.realworldhaskell.org/", "description": "O'Sullivan, Stewart, Goerzen - For building real applications (Free online)." },
+      { "id": "book-fernandez", "title": "Models of Computation", "category": "Books", "type": "link", "url": "https://www.amazon.com/Models-Computation-Introduction-Computability/dp/1848824343", "description": "Fernandez M - Introduction to computability theory." },
+      { "id": "book-enderton", "title": "A Mathematical Introduction to Logic", "category": "Books", "type": "link", "url": "https://www.amazon.com/Mathematical-Introduction-Logic-Second-Edition/dp/0122384520", "description": "Enderton H B - For the mathematical reasoning and proofs aspect." }
     ]
   },
   {
     "id": "videos-haskell",
-    "title": "Recommended Video Lectures",
+    "title": "Video Lectures & Playlists",
     "category": "Videos",
     "type": "folder",
-    "description": "Supplementary video content for complex topics.",
+    "description": "Curated YouTube playlists and video courses for Haskell.",
     "children": [
       { "id": "vid-lyah", "title": "Learn You a Haskell (Audio/Video)", "category": "Videos", "type": "link", "url": "http://learnyouahaskell.com/", "description": "Companion site to the famous beginner's book." },
       { "id": "vid-monads", "title": "Monads in 10 Minutes", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=t1e8CqSI53w", "description": "A quick, visual intuition for the IO Monad." },
-      { "id": "vid-fold", "title": "foldr and foldl Explained", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=e21IbFVBmoI", "description": "Deep dive into right and left folds with visual traces." }
+      { "id": "vid-fold", "title": "foldr and foldl Explained", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=e21IbFVBmoI", "description": "Deep dive into right and left folds with visual traces." },
+      { "id": "vid-tsoding", "title": "Tsoding - Haskell Fridays", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DmoS2X4SV22S8", "description": "Excellent live-coding and deep dives into Haskell concepts." }
+    ]
+  },
+  {
+    "id": "practice-haskell",
+    "title": "Practice Platforms",
+    "category": "Practice",
+    "type": "folder",
+    "description": "Online platforms to practice Haskell syntax and FP concepts.",
+    "children": [
+      { "id": "pr-hr-haskell", "title": "HackerRank - Haskell Track", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/haskell", "description": "Practice basic syntax, functional structures, and recursion." },
+      { "id": "pr-exercism", "title": "Exercism - Haskell Track", "category": "Practice", "type": "link", "url": "https://exercism.org/tracks/haskell", "description": "Mentored practice with community code reviews." },
+      { "id": "pr-codewars", "title": "Codewars - Haskell", "category": "Practice", "type": "link", "url": "https://www.codewars.com/kata/search/haskell", "description": "Gamified coding challenges to test your FP skills." },
+      { "id": "pr-tryhaskell", "title": "Try Haskell (Online REPL)", "category": "Practice", "type": "link", "url": "https://tryhaskell.org/", "description": "Interactive in-browser tutorial and REPL." }
+    ]
+  },
+  {
+    "id": "tools-haskell",
+    "title": "Development Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Software and extensions for Haskell development.",
+    "children": [
+      { "id": "tool-ghcup", "title": "GHCup", "category": "Tools", "type": "link", "url": "https://www.haskell.org/ghcup/", "description": "The official installer for GHC, Cabal, Stack, and HLS." },
+      { "id": "tool-vscode", "title": "VS Code Haskell Extension", "category": "Tools", "type": "link", "url": "https://marketplace.visualstudio.com/items?itemName=haskell.haskell", "description": "LSP support, type info on hover, and formatting." },
+      { "id": "tool-hlint", "title": "HLint", "category": "Tools", "type": "link", "url": "https://github.com/ndmitchell/hlint", "description": "The standard linter for suggesting Haskell code improvements." },
+      { "id": "tool-hoogle", "title": "Hoogle", "category": "Tools", "type": "link", "url": "https://hoogle.haskell.org/", "description": "Haskell API search engine. Search by type signature!" }
     ]
   }
 ]
