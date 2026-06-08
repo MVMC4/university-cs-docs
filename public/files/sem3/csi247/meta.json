@@ -1,0 +1,144 @@
+[
+  {
+    "id": "lec-outline", "title": "Course Outline", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/CSI213-CourseOutline_7b7464f661ae676125c623d4a69753f2.pdf", "description": "Official syllabus and assessment structure.", "isNew": true
+  },
+  {
+    "id": "lec-basics", "title": "Java Basics & OOP Lectures", "category": "Lectures", "type": "folder", "description": "Foundational Java concepts, methods, and OOP.",
+    "children": [
+      { "id": "lec01", "title": "Lec 01: Intro to CSI247", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec01- CSI247 Intro.pdf", "description": "Module introduction." },
+      { "id": "lec02", "title": "Lec 02: Java Basics Review", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec02 - A review of Java Basics.pdf", "description": "Variables, loops, control flow." },
+      { "id": "lec03", "title": "Lec 03: Java Methods", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec03 - Java Methods.pdf", "description": "Defining and calling methods." },
+      { "id": "lec11", "title": "Lec 11: OOP Concepts 2", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec11 - OOP-2.pdf", "description": "Inheritance, polymorphism." },
+      { "id": "lec12", "title": "Lec 12: Generics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec12 - Generics-1.pdf", "description": "Type parameters." }
+    ]
+  },
+  {
+    "id": "lec-algo", "title": "Algorithms & Analysis Lectures", "category": "Lectures", "type": "folder", "description": "Recursion, Big-O, and searching.",
+    "children": [
+      { "id": "lec06", "title": "Lec 06: Recursion", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec06 - Recursion-1.pdf", "description": "Recursive thinking." },
+      { "id": "lec07", "title": "Lec 07: Algorithm Analysis", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec07 - Algorithm analysis-1.pdf", "description": "Big-O notation." },
+      { "id": "lec09", "title": "Lec 09: Searching Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec09 - Searching Arrays.pdf", "description": "Linear and binary search." }
+    ]
+  },
+  {
+    "id": "lec-ds", "title": "Data Structures Lectures", "category": "Lectures", "type": "folder", "description": "Lists, Stacks, Queues, and Collections.",
+    "children": [
+      { "id": "lec13", "title": "Lec 13: Java Collections", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec13 - Java Collection Framework.pdf", "description": "List, Set, Map interfaces." },
+      { "id": "lec14", "title": "Lec 14: LinkedList Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec14 - LinkedList Implementation-2.pdf", "description": "Custom linked list." },
+      { "id": "lec15", "title": "Lec 15: Queue Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec15 - Queue Implementation-2.pdf", "description": "FIFO structures." },
+      { "id": "lec16", "title": "Lec 16: Stack Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/Lec16 - Stack Implementation-1.pdf", "description": "LIFO structures." }
+    ]
+  },
+  {
+    "id": "labs-247", "title": "Lab Manuals", "category": "Labs", "type": "folder", "description": "Weekly practical lab exercises.",
+    "children": [
+      { "id": "lab1", "title": "Lab 1: Introduction", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/lab1 (1).pdf", "description": "Setup and Java review." },
+      { "id": "lab2", "title": "Lab 2: Objects & Comparisons", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab2 - Objects and Comparisons (1).pdf", "description": "Comparable and Comparator." },
+      { "id": "lab3", "title": "Lab 3: Objects & Arrays", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab3 - Objects and Arrays.pdf", "description": "Array manipulation." },
+      { "id": "lab4", "title": "Lab 4: Sorting", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab4 - Sorting.pdf", "description": "Sorting algorithms." },
+      { "id": "lab5", "title": "Lab 5: List Comprehensions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 5 List Comprehensions.pdf", "description": "Advanced list processing." },
+      { "id": "lab6", "title": "Lab 6: Polymorphism", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 6 Polymorphism and Overloading.pdf", "description": "OOP polymorphism." }
+    ]
+  },
+  {
+    "id": "textbooks", "title": "Recommended Textbooks", "category": "Books", "type": "folder", "description": "Core textbooks and reference books for Java and Algorithms.",
+    "children": [
+      { "id": "book-schildt", "title": "Java: A Beginner's Guide", "category": "Books", "type": "link", "url": "https://www.amazon.com/Java-Beginners-Guide-Herbert-Schildt/dp/1260463559", "description": "Herbert Schildt - Comprehensive Java fundamentals." },
+      { "id": "book-bloch", "title": "Effective Java (3rd Ed)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997", "description": "Joshua Bloch - Best practices for robust Java." },
+      { "id": "book-clrs", "title": "Introduction to Algorithms (CLRS)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Introduction-Algorithms-3rd-MIT-Press/dp/0262033844", "description": "The definitive reference for algorithm analysis." },
+      { "id": "book-grokking", "title": "Grokking Algorithms", "category": "Books", "type": "link", "url": "https://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230", "description": "Aditya Bhargava - Visual, intuitive explanations." },
+      { "id": "book-sedgewick", "title": "Algorithms (4th Ed) - Sedgewick", "category": "Books", "type": "link", "url": "https://www.amazon.com/Algorithms-4th-Robert-Sedgewick/dp/032157351X", "description": "Java implementations with excellent visualizations." },
+      { "id": "book-lafore", "title": "Data Structures and Algorithms in Java", "category": "Books", "type": "link", "url": "https://www.amazon.com/Data-Structures-Algorithms-Java-2nd/dp/0672324539", "description": "Robert Lafore - Step-by-step implementations." },
+      { "id": "book-ctci", "title": "Cracking the Coding Interview", "category": "Books", "type": "link", "url": "https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850", "description": "Gayle Laakmann McDowell - Interview-style problems." },
+      { "id": "book-cp4", "title": "Competitive Programming 4", "category": "Books", "type": "link", "url": "https://www.amazon.com/Competitive-Programming-4th-Steven-Halim/dp/B08FG63M4L", "description": "Steven Halim - Advanced competitive programming." }
+    ]
+  },
+  {
+    "id": "videos", "title": "Video Lectures & Playlists", "category": "Videos", "type": "folder", "description": "Curated YouTube playlists and video courses.",
+    "children": [
+      { "id": "vid-kunal-oop", "title": "Kunal Kushwaha - Java OOP", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PL9gnSGHBqcZrB94fCKt4LIDz2o7Y5Y9gR", "description": "Complete Java OOP playlist with Generics." },
+      { "id": "vid-telusko", "title": "Telusko - Java Tutorial", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLsyeobzWxl7oZ-fxDYkOToURHhZWD13HY", "description": "Beginner-friendly Java fundamentals." },
+      { "id": "vid-abdul-algo", "title": "Abdul Bari - Algorithm Analysis", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O", "description": "Best explanations of Big-O, recursion, Master Theorem." },
+      { "id": "vid-mit", "title": "MIT 6.006 - Intro to Algorithms", "category": "Videos", "type": "video", "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/pages/lecture-notes/", "description": "Complete semester course from MIT." },
+      { "id": "vid-reducible-master", "title": "Reducible - The Master Theorem", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=1K9ebQJosvo", "description": "Beautiful visual explanation." },
+      { "id": "vid-william-sort", "title": "William Fiset - Sorting Algorithms", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDV1Zr2gOxokRQh9-8Z6P1vY6r5X5r5X5", "description": "Professional animations and implementations." },
+      { "id": "vid-kunal-coll", "title": "Kunal Kushwaha - Java Collections", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=5dJj6x0r5kY", "description": "Complete Java Collections Framework tutorial." },
+      { "id": "vid-jb-coll", "title": "Java Brains - Collections Framework", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLqq-6Pq4lTTanEhK2Yw7696wK2sFPhZKv", "description": "In-depth explanation of each collection type." },
+      { "id": "vid-abdul-ll", "title": "Abdul Bari - Linked Lists", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=Hj_rA0dhr2I", "description": "Complete linked list operations explained." },
+      { "id": "vid-william-ll", "title": "William Fiset - Linked Lists", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=-Yn5DU04Ba0", "description": "Implementation with animations." },
+      { "id": "vid-mycode-sq", "title": "MyCodeSchool - Stacks and Queues", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PL2_aWCzGMAwI3W_JlcBftYTtSsFfGw3yC", "description": "Clear explanations with examples." },
+      { "id": "vid-b2b-sq", "title": "Back To Back SWE - Stacks/Queues", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=wjI1WNcIntg", "description": "Interview-focused explanations." },
+      { "id": "vid-reducible-hash", "title": "Reducible - Hash Functions", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=kyFrRZg-1gE", "description": "Beautiful explanation of how hashing works." },
+      { "id": "vid-william-hash", "title": "William Fiset - Hash Tables", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=MfhjkfocRR0", "description": "Implementation details and collision resolution." },
+      { "id": "vid-abdul-tree", "title": "Abdul Bari - Trees & BST", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDN4rrl48XKq6srFvq7mVbOQXN7JvYzYz", "description": "Complete tree operations and traversals." },
+      { "id": "vid-william-tree", "title": "William Fiset - Binary Trees", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDV1Zr2gOxjvNxj0o5TlRNO8lW6G5hZ5l", "description": "Professional animations." },
+      { "id": "vid-reducible-bst", "title": "Reducible - Binary Search Trees", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=pYT9F8_LFTM", "description": "Visual intuition for BSTs." },
+      { "id": "vid-abdul-graph", "title": "Abdul Bari - Graph Algorithms", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O", "description": "BFS, DFS, Dijkstra, and more." },
+      { "id": "vid-william-graph", "title": "William Fiset - Graph Theory", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDV1Zr2gOxjvNxj0o5TlRNO8lW6G5hZ5l", "description": "Comprehensive graph algorithms." },
+      { "id": "vid-reducible-dijk", "title": "Reducible - Dijkstra's Algorithm", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=pS9BfjX6w5Y", "description": "Stunning visualization." },
+      { "id": "vid-princeton", "title": "Princeton - Algorithms Part I & II", "category": "Videos", "type": "video", "url": "https://www.coursera.org/learn/algorithms-part1", "description": "Java-based course by Robert Sedgewick." },
+      { "id": "vid-neetcode", "title": "NeetCode", "category": "Videos", "type": "video", "url": "https://www.youtube.com/@NeetCode", "description": "Video solutions and patterns." },
+      { "id": "vid-b2b", "title": "Back To Back SWE", "category": "Videos", "type": "video", "url": "https://www.youtube.com/c/BackToBackSWE", "description": "Deep dives into algorithmic patterns." }
+    ]
+  },
+  {
+    "id": "practice", "title": "Practice Platforms & Problems", "category": "Practice", "type": "folder", "description": "LeetCode, HackerRank, and GeeksforGeeks problem sets.",
+    "children": [
+      { "id": "pr-hr-java", "title": "HackerRank Java Track", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/java", "description": "Practice Java syntax and OOP." },
+      { "id": "pr-gfg-java", "title": "GeeksforGeeks Java", "category": "Practice", "type": "link", "url": "https://www.geeksforgeeks.org/java/", "description": "Java reference guide." },
+      { "id": "pr-lc-rec", "title": "LeetCode - Recursion", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/recursion/", "description": "Easy recursion problems." },
+      { "id": "pr-gfg-rec", "title": "GeeksforGeeks - Recursion", "category": "Practice", "type": "link", "url": "https://www.geeksforgeeks.org/recursion/", "description": "Recursion articles and problems." },
+      { "id": "pr-lc-sort", "title": "LeetCode - Sorting", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/sorting/", "description": "Sorting problems." },
+      { "id": "pr-hr-sort", "title": "HackerRank - Sorting", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/algorithms?filters%5Bsubdomains%5D%5B%5D=sorting", "description": "Sorting challenges." },
+      { "id": "pr-gfg-sort", "title": "GeeksforGeeks - Sorting", "category": "Practice", "type": "link", "url": "https://www.geeksforgeeks.org/sorting-algorithms/", "description": "Sorting algorithms reference." },
+      { "id": "pr-hr-coll", "title": "HackerRank - Java Collections", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/java?filters%5Bsubdomains%5D%5B%5D=collections", "description": "Collections challenges." },
+      { "id": "pr-gfg-coll", "title": "GeeksforGeeks - Java Collections", "category": "Practice", "type": "link", "url": "https://www.geeksforgeeks.org/java-util-class-in-java/", "description": "Collections reference." },
+      { "id": "pr-lc-ll", "title": "LeetCode - Linked List", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/linked-list/", "description": "Linked list problems." },
+      { "id": "pr-hr-ll", "title": "HackerRank - Linked Lists", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/data-structures?filters%5Bsubdomains%5D%5B%5D=linked-lists", "description": "Linked list challenges." },
+      { "id": "pr-lc-sq", "title": "LeetCode - Stack & Queue", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/stack/", "description": "Stack and Queue problems." },
+      { "id": "pr-lc-hash", "title": "LeetCode - Hash Table", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/hash-table/", "description": "Hash table problems." },
+      { "id": "pr-hr-hash", "title": "HackerRank - Hash Tables", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/data-structures?filters%5Bsubdomains%5D%5B%5D=hash-tables", "description": "Hash table challenges." },
+      { "id": "pr-lc-tree", "title": "LeetCode - Trees", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/tree/", "description": "Tree problems." },
+      { "id": "pr-hr-tree", "title": "HackerRank - Trees", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/data-structures?filters%5Bsubdomains%5D%5D=trees", "description": "Tree challenges." },
+      { "id": "pr-lc-graph", "title": "LeetCode - Graphs", "category": "Practice", "type": "link", "url": "https://leetcode.com/tag/graph/", "description": "Graph problems." },
+      { "id": "pr-hr-graph", "title": "HackerRank - Graphs", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/data-structures?filters%5Bsubdomains%5D%5D=graphs", "description": "Graph challenges." },
+      { "id": "pr-lc", "title": "LeetCode (General)", "category": "Practice", "type": "link", "url": "https://leetcode.com/", "description": "Industry standard for interview prep." },
+      { "id": "pr-neetcode", "title": "NeetCode 150", "category": "Practice", "type": "link", "url": "https://neetcode.io/", "description": "Curated list of essential problems." },
+      { "id": "pr-gfg", "title": "GeeksforGeeks (General)", "category": "Practice", "type": "link", "url": "https://www.geeksforgeeks.org/data-structures/", "description": "Comprehensive reference." },
+      { "id": "pr-cf", "title": "Codeforces", "category": "Practice", "type": "link", "url": "https://codeforces.com/", "description": "Regular contests and challenging problems." }
+    ]
+  },
+  {
+    "id": "interactive", "title": "Interactive Visualizations", "category": "Tools", "type": "folder", "description": "Visualize algorithms and data structures in action.",
+    "children": [
+      { "id": "tool-rec-vis", "title": "Recursion Visualizer", "category": "Tools", "type": "link", "url": "https://recursion.vercel.app/", "description": "Visualize recursive calls." },
+      { "id": "tool-bigo", "title": "Big-O Cheat Sheet", "category": "Tools", "type": "link", "url": "https://www.bigocheatsheet.com/", "description": "Quick reference for complexities." },
+      { "id": "tool-visualgo", "title": "VisuAlgo", "category": "Tools", "type": "link", "url": "https://visualgo.net/en/sorting", "description": "Interactive animations for sorting, searching, trees, graphs." },
+      { "id": "tool-usfca", "title": "USFCA Visualization Gallery", "category": "Tools", "type": "link", "url": "https://www.cs.usfca.edu/~galles/visualization/Algorithms.html", "description": "Academic-quality visualizations." },
+      { "id": "tool-algo-vis", "title": "Algorithm Visualizer", "category": "Tools", "type": "link", "url": "https://algorithm-visualizer.org/", "description": "Code alongside visualizations." }
+    ]
+  },
+  {
+    "id": "dev-tools", "title": "Development Tools & IDEs", "category": "Tools", "type": "folder", "description": "Software and extensions for Java development.",
+    "children": [
+      { "id": "tool-intellij", "title": "IntelliJ IDEA", "category": "Tools", "type": "link", "url": "https://www.jetbrains.com/idea/", "description": "Best Java IDE (Community is free)." },
+      { "id": "tool-vscode", "title": "Visual Studio Code", "category": "Tools", "type": "link", "url": "https://code.visualstudio.com/", "description": "Lightweight alternative." },
+      { "id": "tool-pytutor", "title": "Python Tutor", "category": "Tools", "type": "link", "url": "http://pythontutor.com/", "description": "Visualize code execution step-by-step (supports Java)." },
+      { "id": "tool-jvisualvm", "title": "JVisualVM", "category": "Tools", "type": "link", "url": "https://visualvm.github.io/", "description": "Profile Java applications." },
+      { "id": "tool-git", "title": "Git & GitHub", "category": "Tools", "type": "link", "url": "https://git-scm.com/downloads", "description": "Essential for collaboration." }
+    ]
+  },
+  {
+    "id": "community", "title": "Community & Study Strategy", "category": "Tools", "type": "folder", "description": "Forums, study routines, and cheat sheets.",
+    "children": [
+      { "id": "com-so-algo", "title": "Stack Overflow - Algorithm Tag", "category": "Tools", "type": "link", "url": "https://stackoverflow.com/questions/tagged/algorithm", "description": "Q&A for algorithms." },
+      { "id": "com-so-ds", "title": "Stack Overflow - Data Structures", "category": "Tools", "type": "link", "url": "https://stackoverflow.com/questions/tagged/data-structures", "description": "Q&A for data structures." },
+      { "id": "com-reddit-algo", "title": "Reddit r/algorithms", "category": "Tools", "type": "link", "url": "https://www.reddit.com/r/algorithms/", "description": "Algorithm discussion forum." },
+      { "id": "com-reddit-cs", "title": "Reddit r/cscareerquestions", "category": "Tools", "type": "link", "url": "https://www.reddit.com/r/cscareerquestions/", "description": "Career and interview prep." },
+      { "id": "com-patterns", "title": "15 LeetCode Patterns", "category": "Tools", "type": "link", "url": "https://seanprashad.com/leetcode-patterns/", "description": "Common patterns to recognize." },
+      { "id": "com-templates", "title": "Algorithm Templates", "category": "Tools", "type": "link", "url": "https://github.com/graykode/algorithm-template", "description": "Reusable code templates." },
+      { "id": "com-cheat", "title": "Java Collections Cheatsheet", "category": "Tools", "type": "link", "url": "https://www.geeksforgeeks.org/java-util-class-in-java/", "description": "Quick reference for Collections." },
+      { "id": "com-comp", "title": "Comparator vs Comparable", "category": "Tools", "type": "link", "url": "https://www.geeksforgeeks.org/comparable-vs-comparator-in-java/", "description": "Sorting guide." }
+    ]
+  }
+]

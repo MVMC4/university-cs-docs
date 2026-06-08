@@ -1,0 +1,114 @@
+[
+  {
+    "id": "lec-intro",
+    "title": "Lecture 1: Intro to Functional Programming",
+    "category": "Lectures",
+    "type": "pdf",
+    "url": "/files/sem3/csi243/Lecture 1 Intro to FP (1).pdf",
+    "description": "Introduction to the FP paradigm, immutability, and pure functions.",
+    "isNew": true
+  },
+  {
+    "id": "lec-notes",
+    "title": "Core Lecture Notes",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Detailed notes covering functions, Haskell programs, and recursion.",
+    "children": [
+      { "id": "course-content", "title": "Course Content & Syllabus", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Course Content.pdf", "description": "Official module outline and assessment details." },
+      { "id": "lec2", "title": "Lecture 2: Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Lecture 2 Functions  (1).pdf", "description": "Defining functions, basic syntax, and evaluation." },
+      { "id": "lec3", "title": "Lecture 3: A Haskell Program", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Lecture 3  A Haskell Program (1).pdf", "description": "Structuring a complete Haskell script and basic IO." },
+      { "id": "lec-rec", "title": "Recursion Concepts", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Recursion.pdf", "description": "Theoretical foundation of recursive definitions." }
+    ]
+  },
+  {
+    "id": "lab-manuals",
+    "title": "Lab Manuals (PDF/DOCX)",
+    "category": "Labs",
+    "type": "folder",
+    "description": "Official lab instruction sheets.",
+    "children": [
+      { "id": "lab1-pdf", "title": "Lab 1: Introduction", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/labs/Lab 1 .pdf", "description": "Getting started with GHCi and basic syntax." },
+      { "id": "lab2-pdf", "title": "Lab 2: Recursion", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/labs/Lab 2 Recursion.pdf", "description": "Implementing recursive functions." },
+      { "id": "lab3-pdf", "title": "Lab 3: Recursion Continued", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/labs/Lab 3 Recursion Continued.pdf", "description": "Advanced recursion and list processing." },
+      { "id": "lab4-docx", "title": "Lab 4: Pattern Matching", "category": "Labs", "type": "docx", "url": "/files/sem3/csi243/labs/Lab 4 Pattern Matching.docx", "description": "Guards, case expressions, and pattern matching." }
+    ]
+  },
+  {
+    "id": "haskell-code",
+    "title": "Haskell Code & Solutions",
+    "category": "Labs",
+    "type": "folder",
+    "description": "Starter code (.hs) and lab instructions for Labs 1 through 6.",
+    "children": [
+      {
+        "id": "lab1-code", "title": "Lab 1: Recursion", "category": "Labs", "type": "folder", "description": "Lab 1 materials.",
+        "children": [
+          { "id": "lab1-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab 1/Recursion.pdf", "description": "Lab 1 PDF instructions." }
+        ]
+      },
+      {
+        "id": "lab2-code", "title": "Lab 2: Functions", "category": "Labs", "type": "folder", "description": "Lab 2 materials.",
+        "children": [
+          { "id": "lab2-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab2/Lab 2 Recursion.pdf", "description": "Lab 2 PDF instructions." },
+          { "id": "lab2-hs1", "title": "Functions.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab2/Functions.hs", "description": "Starter code for functions." },
+          { "id": "lab2-hs2", "title": "ListFunctions.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab2/ListFunctions (1).hs", "description": "List processing starter code." }
+        ]
+      },
+      {
+        "id": "lab3-code", "title": "Lab 3: Recursion Continued", "category": "Labs", "type": "folder", "description": "Lab 3 materials.",
+        "children": [
+          { "id": "lab3-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab3/Lab 3 Recursion Continued.pdf", "description": "Lab 3 PDF instructions." },
+          { "id": "lab3-hs", "title": "lab3.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab3/lab3 (1).hs", "description": "Starter code for Lab 3." }
+        ]
+      },
+      {
+        "id": "lab4-code", "title": "Lab 4: Pattern Matching", "category": "Labs", "type": "folder", "description": "Lab 4 materials.",
+        "children": [
+          { "id": "lab4-docx2", "title": "Instructions", "category": "Labs", "type": "docx", "url": "/files/sem3/csi243/Haskell/Lab4/Lab 4 Pattern Matching.docx", "description": "Lab 4 instructions." },
+          { "id": "lab4-hs1", "title": "lab4.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab4/lab4 (1).hs", "description": "Starter code." },
+          { "id": "lab4-hs2", "title": "Lab44.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab4/Lab44.hs", "description": "Additional code file." }
+        ]
+      },
+      {
+        "id": "lab5-code", "title": "Lab 5: List Comprehensions", "category": "Labs", "type": "folder", "description": "Lab 5 materials.",
+        "children": [
+          { "id": "lab5-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab5/Lab 5 List Comprehensions.pdf", "description": "Lab 5 PDF instructions." },
+          { "id": "lab5-hs1", "title": "Lab5.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab5/Lab5.hs", "description": "Starter code." },
+          { "id": "lab5-hs2", "title": "ListComprehension.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab5/ListComprehension.hs", "description": "Additional code file." }
+        ]
+      },
+      {
+        "id": "lab6-code", "title": "Lab 6: Polymorphism", "category": "Labs", "type": "folder", "description": "Lab 6 materials.",
+        "children": [
+          { "id": "lab6-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab6/Lab 6 Polymorphism and Overloading.pdf", "description": "Lab 6 PDF instructions." },
+          { "id": "lab6-hs", "title": "Lab6.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab6/Lab6.hs", "description": "Starter code." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tools-haskell",
+    "title": "Recommended Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Essential software for Haskell development.",
+    "children": [
+      { "id": "ghc", "title": "GHC & Cabal (Haskell Platform)", "category": "Tools", "type": "link", "url": "https://www.haskell.org/downloads/", "description": "The official Glasgow Haskell Compiler and package manager." },
+      { "id": "vscode", "title": "VS Code + Haskell Extension", "category": "Tools", "type": "link", "url": "https://marketplace.visualstudio.com/items?itemName=haskell.haskell", "description": "Recommended IDE setup with syntax highlighting and LSP." },
+      { "id": "hlint", "title": "HLint", "category": "Tools", "type": "link", "url": "https://github.com/ndmitchell/hlint", "description": "A tool for suggesting improvements in your Haskell code." }
+    ]
+  },
+  {
+    "id": "videos-haskell",
+    "title": "Recommended Video Lectures",
+    "category": "Videos",
+    "type": "folder",
+    "description": "Supplementary video content for complex topics.",
+    "children": [
+      { "id": "vid-lyah", "title": "Learn You a Haskell (Audio/Video)", "category": "Videos", "type": "link", "url": "http://learnyouahaskell.com/", "description": "Companion site to the famous beginner's book." },
+      { "id": "vid-monads", "title": "Monads in 10 Minutes", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=t1e8CqSI53w", "description": "A quick, visual intuition for the IO Monad." },
+      { "id": "vid-fold", "title": "foldr and foldl Explained", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=e21IbFVBmoI", "description": "Deep dive into right and left folds with visual traces." }
+    ]
+  }
+]
