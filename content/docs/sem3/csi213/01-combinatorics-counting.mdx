@@ -1,0 +1,131 @@
+---
+title: "01. Combinatorics and Counting Principles"
+description: "Formal treatment of permutations, combinations, base systems, the pigeonhole principle, and algorithmic complexity."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi213/01-combinatorics-quiz';
+
+# Chapter 1: Combinatorics and Counting Principles
+
+## Learning Outcomes
+Upon completion of this chapter, students will be able to:
+1. Apply the Rule of Sum and Rule of Product to calculate the size of finite sample spaces.
+2. Distinguish between permutations (ordered arrangements) and combinations (unordered selections) and apply their respective formulas.
+3. Calculate permutations of multisets (identical elements) using the multiset permutation formula.
+4. Apply the Pigeonhole Principle to prove the existence of collisions in computer science applications.
+5. Utilize the Inclusion-Exclusion Principle to calculate the cardinality of overlapping sets.
+6. Solve complex combinatorial problems involving restrictions, such as adjacency constraints (Block Method) and base-$b$ numeral systems (Base-2, Base-5, Base-16).
+7. Relate combinatorial explosion to algorithmic time complexity (Big-O notation) and understand the intractability of $O(n!)$ algorithms.
+
+## 1.1 Fundamental Counting Principles
+
+Combinatorics provides the mathematical foundation for calculating the size of finite sample spaces. The discipline relies on two primary axioms:
+
+*   **The Rule of Sum:** If a task can be partitioned into mutually exclusive subtasks, the total number of ways to perform the task is the sum of the ways to perform each subtask.
+*   **The Rule of Product:** If a procedure consists of a sequence of dependent stages, where stage $i$ can be executed in $n_i$ ways, the total number of ways to complete the procedure is the product $\prod n_i$.
+
+## 1.2 The Pigeonhole Principle
+
+The Pigeonhole Principle is a fundamental counting theorem used to prove the existence of specific outcomes without explicitly constructing them.
+
+**Theorem 1.1 (Basic Pigeonhole Principle):** If $k+1$ or more objects are placed into $k$ boxes, then there is at least one box containing two or more objects.
+
+**Theorem 1.2 (Generalized Pigeonhole Principle):** If $N$ objects are placed into $k$ boxes, then there is at least one box containing at least $\lceil N/k \rceil$ objects.
+
+### Computer Science Application: Hash Table Collisions
+In computer science, a hash table maps keys to an array of $m$ buckets. If we insert $N$ distinct keys into a hash table where $N > m$, the Pigeonhole Principle guarantees that at least one bucket will contain multiple keys. This is known as a **collision**. Furthermore, if we insert $N$ keys, the most populated bucket will contain at least $\lceil N/m \rceil$ keys, establishing a theoretical lower bound for the worst-case time complexity of a hash table lookup.
+
+## 1.3 Permutations and Combinations
+
+A rigorous distinction must be maintained between ordered arrangements and unordered selections.
+
+### Permutations (Ordered Arrangements)
+The number of ways to arrange $r$ distinct objects selected from a set of $n$ distinct objects is given by:
+$$ P(n, r) = \frac{n!}{(n-r)!} $$
+
+**Permutations with Identical Elements (Multisets):**
+If a set of $n$ objects contains indistinguishable subsets of sizes $n_1, n_2, \dots, n_k$ (where $\sum n_i = n$), the number of distinct permutations is:
+$$ \frac{n!}{n_1! n_2! \dots n_k!} $$
+
+### Combinations (Unordered Selections)
+The number of ways to select a subset of $r$ objects from a set of $n$ distinct objects, where order is irrelevant, is defined by the binomial coefficient:
+$$ C(n, r) = \binom{n}{r} = \frac{n!}{r!(n-r)!} $$
+
+## 1.4 The Inclusion-Exclusion Principle
+
+When counting the number of elements in the union of overlapping sets, simply summing their individual sizes results in double-counting the intersections. The Inclusion-Exclusion Principle corrects for this.
+
+**Two-Set Case:**
+$$ |A \cup B| = |A| + |B| - |A \cap B| $$
+
+**Three-Set Case:**
+$$ |A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C| $$
+
+This principle is heavily utilized in probability theory to find the likelihood of the union of non-mutually exclusive events, and in derangement problems.
+
+## 1.5 Combinatorics in Base-$b$ Numeral Systems
+
+Counting principles extend directly to the representation of data in computer memory. In a base-$b$ system, the available digits are $\{0, 1, \dots, b-1\}$. 
+
+**Theorem 1.3:** The maximum number of distinct values representable by a $d$-digit sequence in base-$b$ (including leading zeros) is $b^d$.
+
+### Base-5 Enumeration (Exam Standard)
+**Proposition:** Determine the maximum number of 7-digit sequences in base-5. Furthermore, calculate the exact number of such sequences containing precisely four '3's.
+**Proof:**
+1.  **Maximum Sequences:** For a 7-digit sequence where each position can independently take one of 5 values $\{0, 1, 2, 3, 4\}$, the total number of sequences is $5^7 = 78,125$.
+2.  **Restricted Sequences:** 
+    *   Select 4 positions out of 7 to strictly contain the digit '3': $\binom{7}{4} = 35$ ways.
+    *   The remaining 3 positions must contain any digit *except* '3' (4 options per position): $4^3 = 64$ ways.
+    *   By the Rule of Product: $35 \times 64 = 2,240$. $\blacksquare$
+
+### Base-16 (Hexadecimal) and Base-2 (Binary) Applications
+In computer science, data is fundamentally stored in Base-2 (bits) and often represented in Base-16 (hexadecimal) for human readability.
+*   **Base-2 (IPv4 Addresses):** An IPv4 address consists of 32 bits. The total address space is $2^{32} = 4,294,967,296$ unique addresses.
+*   **Base-16 (MAC Addresses):** A MAC address is a 48-bit identifier, typically written as 12 hexadecimal digits (e.g., `00:1A:2B:3C:4D:5E`). Since each hex digit represents 4 bits ($16^1 = 2^4$), the total number of unique MAC addresses is $16^{12} = (2^4)^{12} = 2^{48} \approx 2.81 \times 10^{14}$.
+
+## 1.6 Algorithmic Connection: Combinatorial Explosion
+
+In algorithm design, the size of the combinatorial search space directly dictates the time complexity of brute-force algorithms. 
+
+Consider the **Traveling Salesperson Problem (TSP)**, which requires finding the shortest possible route visiting $n$ cities exactly once and returning to the origin. The number of possible routes is $(n-1)! / 2$. 
+*   For $n=10$ cities, there are $181,440$ routes.
+*   For $n=20$ cities, there are $\approx 6 \times 10^{16}$ routes.
+
+Algorithms with a time complexity of $O(n!)$ or $O(2^n)$ are classified as **intractable** for large inputs. They exhibit *combinatorial explosion*, meaning that adding just a few more elements to the input increases the execution time from seconds to millennia. This reality necessitates the use of heuristics, dynamic programming, or approximation algorithms in practical software engineering.
+
+## 1.7 Worked Examples
+
+### Example 1: Basic Permutations and Combinations
+**Question:** A computer science department has 15 faculty members. How many ways can we select a committee of 4 members? Once selected, how many ways can we assign the distinct roles of Chair, Vice-Chair, Secretary, and Treasurer to these 4 members?
+**Solution:**
+1.  **Selecting the committee (Order does not matter):** 
+    $$ \binom{15}{4} = \frac{15!}{4!(15-4)!} = \frac{15 \times 14 \times 13 \times 12}{4 \times 3 \times 2 \times 1} = 1,365 $$
+2.  **Assigning roles (Order matters):** 
+    $$ P(4, 4) = 4! = 24 $$
+
+### Example 2: Multiset Permutations
+**Question:** How many distinct permutations can be formed from the letters of the word 'MISSISSIPPI'?
+**Solution:**
+1.  **Identify Total Elements ($n$):** 11 letters.
+2.  **Identify Identical Subsets ($n_i$):** M: 1, I: 4, S: 4, P: 2.
+3.  **Apply the Formula:** 
+    $$ \frac{11!}{1! \times 4! \times 4! \times 2!} = \frac{39,916,800}{1 \times 24 \times 24 \times 2} = \frac{39,916,800}{1,152} = 34,650 $$
+
+### Example 3: Restricted Adjacency (The Block Method)
+**Question:** Calculate the number of ways to arrange 5 boys and 4 girls on a bench such that (i) all boys are seated adjacently, and (ii) a specific boy and a specific girl must be seated adjacently.
+**Solution:**
+1.  **Condition (i) - Block Method:** Treat the 5 boys as a single indivisible entity (a "block"). We now have 5 entities to arrange (1 block + 4 girls), yielding $5!$ arrangements. Internally, the 5 boys can be arranged within their block in $5!$ ways. Total: $5! \times 5! = 120 \times 120 = 14,400$.
+2.  **Condition (ii) - Specific Pair:** Treat the specific boy and girl as a single block. We now have 8 entities (1 block + 7 other individuals), yielding $8!$ arrangements. The specific pair can be ordered internally in $2!$ ways. Total: $8! \times 2 = 40,320 \times 2 = 80,640$. $\blacksquare$
+
+<SafeImage 
+  src="/images/csi213/combinatorics-decision-tree.png" 
+  alt="Combinatorics Decision Tree" 
+  caption="Figure 1.1: Methodological framework for selecting the appropriate counting principle."
+/>
+
+## Chapter Summary
+
+Combinatorics forms the bedrock of discrete mathematics and probability theory by providing the tools to quantify finite sample spaces. The fundamental distinction lies in whether order matters (permutations) or not (combinations). Advanced techniques such as the Pigeonhole Principle, Inclusion-Exclusion, and the Block Method allow us to navigate complex constraints and overlapping sets. Furthermore, recognizing the implications of combinatorial explosion is critical for computer scientists, as it defines the boundary between tractable algorithmic solutions and computationally infeasible problems.
+
+<Quiz title="Chapter 1 Assessment" questions={quizData} />

@@ -1,0 +1,111 @@
+---
+title: "06. Regression Analysis"
+description: "Simple linear regression, the Method of Least Squares, correlation, and the Coefficient of Determination."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi213/06-regression-quiz';
+
+# Chapter 6: Regression Analysis
+
+## Learning Outcomes
+Upon completion of this chapter, students will be able to:
+1. Apply the Method of Least Squares to calculate the slope and intercept of a simple linear regression model.
+2. Construct and utilize summation tables to systematically process raw bivariate data.
+3. Calculate and interpret the Pearson Correlation Coefficient ($r$).
+4. Calculate and articulate the practical meaning of the Coefficient of Determination ($R^2$) in real-world contexts.
+
+## 6.1 Simple Linear Regression & The Method of Least Squares
+
+Regression analysis models the linear relationship between an independent (predictor) variable $X$ and a dependent (response) variable $Y$. The goal is to find the "line of best fit", defined by the equation:
+$$ \hat{y} = \beta_0 + \beta_1 x $$
+
+The **Method of Least Squares** determines the optimal values for the slope ($\beta_1$) and intercept ($\beta_0$) by minimizing the sum of the squared vertical residuals (errors) between the observed data points and the predicted line.
+
+**Slope Estimator ($\beta_1$):**
+$$ \beta_1 = \frac{n(\sum xy) - (\sum x)(\sum y)}{n(\sum x^2) - (\sum x)^2} $$
+
+**Intercept Estimator ($\beta_0$):**
+$$ \beta_0 = \bar{y} - \beta_1\bar{x} $$
+*(Where $\bar{x}$ and $\bar{y}$ are the sample means of $X$ and $Y$, respectively).*
+
+## 6.2 Correlation and the Coefficient of Determination
+
+### Pearson Correlation Coefficient ($r$)
+The correlation coefficient $r$ quantifies the strength and direction of the linear association between $X$ and $Y$. It is strictly bounded by $-1 \le r \le 1$.
+$$ r = \frac{n(\sum xy) - (\sum x)(\sum y)}{\sqrt{[n\sum x^2 - (\sum x)^2][n\sum y^2 - (\sum y)^2]}} $$
+
+### The Coefficient of Determination ($R^2$)
+While $r$ measures linear correlation, **$R^2$** (calculated simply as $r^2$) provides a much more intuitive metric for model evaluation. 
+
+**Plain English Definition:** $R^2$ represents the **proportion of the variance in the dependent variable ($Y$) that is predictable (or explained) by the independent variable ($X$)**. 
+*   An $R^2$ of 0.95 means that 95% of the fluctuations in $Y$ can be mathematically explained by changes in $X$. The remaining 5% is due to unmeasured variables or random noise.
+
+## 6.3 Worked Example: Server CPU Load vs. Response Time
+
+**Scenario:** A systems administrator records the Server CPU Load ($X$, in %) and the corresponding API Response Time ($Y$, in milliseconds) across 8 sampling intervals. 
+
+| Interval | CPU Load ($x$) | Response Time ($y$) |
+| :--- | :--- | :--- |
+| 1 | 10 | 12 |
+| 2 | 20 | 15 |
+| 3 | 30 | 22 |
+| 4 | 40 | 28 |
+| 5 | 50 | 35 |
+| 6 | 60 | 45 |
+| 7 | 70 | 58 |
+| 8 | 80 | 70 |
+
+**Step-by-Step Walkthrough:**
+
+1. **Construct the Summation Table ($n=8$):**
+
+| $x$ | $y$ | $x^2$ | $y^2$ | $xy$ |
+| :--- | :--- | :--- | :--- | :--- |
+| 10 | 12 | 100 | 144 | 120 |
+| 20 | 15 | 400 | 225 | 300 |
+| 30 | 22 | 900 | 484 | 660 |
+| 40 | 28 | 1600 | 784 | 1120 |
+| 50 | 35 | 2500 | 1225 | 1750 |
+| 60 | 45 | 3600 | 2025 | 2700 |
+| 70 | 58 | 4900 | 3364 | 4060 |
+| 80 | 70 | 6400 | 4900 | 5600 |
+| **$\sum x = 360$** | **$\sum y = 285$** | **$\sum x^2 = 20400$** | **$\sum y^2 = 13151$** | **$\sum xy = 16310$** |
+
+2. **Calculate the Means:**
+   $$ \bar{x} = \frac{360}{8} = 45, \quad \bar{y} = \frac{285}{8} = 35.625 $$
+
+3. **Calculate the Slope ($\beta_1$):**
+   * Numerator: $n(\sum xy) - (\sum x)(\sum y) = 8(16310) - (360)(285) = 130480 - 102600 = 27880$
+   * Denominator: $n(\sum x^2) - (\sum x)^2 = 8(20400) - (360)^2 = 163200 - 129600 = 33600$
+   $$ \beta_1 = \frac{27880}{33600} \approx 0.8298 $$
+
+4. **Calculate the Intercept ($\beta_0$):**
+   $$ \beta_0 = 35.625 - (0.8298)(45) = 35.625 - 37.341 = -1.716 $$
+
+**Regression Equation:** $\hat{y} = -1.716 + 0.830x$
+
+5. **Calculate Correlation ($r$) and Determination ($R^2$):**
+   * $Y$ Denominator part: $n(\sum y^2) - (\sum y)^2 = 8(13151) - (285)^2 = 105208 - 81225 = 23983$
+   $$ r = \frac{27880}{\sqrt{33600 \times 23983}} = \frac{27880}{\sqrt{805828800}} \approx \frac{27880}{28387.12} \approx 0.9821 $$
+   $$ R^2 = (0.9821)^2 \approx 0.9645 $$
+
+## 6.4 Interpreting Regression Output in Context
+
+Calculating the numbers is only half the task; interpreting them for stakeholders is the core skill of a data scientist.
+
+1.  **The Slope ($0.830$):** "For every **1% increase** in Server CPU Load, the API Response Time increases by an average of **0.830 milliseconds**." This quantifies the exact performance penalty of increased server load.
+2.  **The Intercept ($-1.716$):** Mathematically, this is the predicted response time when CPU load is 0%. Practically, a negative response time is impossible. This indicates that the linear model is an approximation that is only valid within the observed domain ($10\% \le X \le 80\%$), and extrapolating to $X=0$ is physically meaningless.
+3.  **The Coefficient of Determination ($R^2 = 0.9645$):** "**96.45%** of the variation in API Response Times can be directly explained by fluctuations in CPU Load." This indicates an exceptionally strong, highly predictive model. The remaining 3.55% of variance is due to other factors (e.g., network latency, database locks).
+
+<SafeImage 
+  src="/images/csi213/linear-regression-scatter.png" 
+  alt="Linear Regression Scatter Plot" 
+  caption="Figure 6.1: The Method of Least Squares minimizes the vertical distances (residuals) between the observed data points and the regression line."
+/>
+
+## Chapter Summary
+
+Regression analysis provides the mathematical apparatus to model, predict, and quantify linear relationships between variables. The Method of Least Squares ensures that the fitted line minimizes prediction errors, while the Pearson correlation coefficient validates the strength of the association. Crucially, the Coefficient of Determination ($R^2$) bridges the gap between abstract mathematics and practical business intelligence by explaining exactly how much variance in a target metric is driven by a specific predictor.
+
+<Quiz title="Chapter 6 Assessment" questions={quizData} />

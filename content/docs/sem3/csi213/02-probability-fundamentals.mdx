@@ -1,0 +1,146 @@
+---
+title: "02. Probability Fundamentals, Random Variables, and Bayesian Inference"
+description: "Axiomatic probability, random variables, expected value, conditional inference, and Bayes' Theorem."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi213/02-probability-quiz';
+
+# Chapter 2: Probability Fundamentals, Random Variables, and Bayesian Inference
+
+## Learning Outcomes
+Upon completion of this chapter, students will be able to:
+1. State and apply the Kolmogorov axioms of probability to validate probability models.
+2. Formally define Random Variables and distinguish between discrete and continuous types using PMFs and CDFs.
+3. Conceptually apply Expected Value and Variance to quantify the center and spread of a probability distribution.
+4. Calculate conditional probabilities and rigorously distinguish between statistical independence and mutually exclusive events.
+5. Apply the Law of Total Probability and Bayes' Theorem to solve computer science problems, such as spam filtering and false positive analysis.
+
+## 2.1 Axiomatic Foundations of Probability
+
+Modern probability theory is grounded in the Kolmogorov axioms. Let $S$ denote the sample space and $E$ denote an event.
+1.  **Non-negativity:** $P(E) \ge 0$ for all $E$.
+2.  **Normalization:** $P(S) = 1$.
+3.  **Additivity:** For any countable sequence of mutually exclusive events $E_1, E_2, \dots$, the probability of their union is the sum of their individual probabilities: $P(\bigcup E_i) = \sum P(E_i)$.
+
+## 2.2 Random Variables, PMFs, and CDFs
+
+To bridge counting principles and probability distributions, we must map outcomes from a sample space to real numbers. 
+
+**Definition:** A **Random Variable (RV)** $X$ is a function that assigns a real number to each outcome in the sample space $S$.
+
+### Discrete vs. Continuous Random Variables
+*   **Discrete Random Variable:** Takes on a countable number of distinct values (e.g., the number of defective sectors on a hard drive, the number of packets dropped in a network).
+*   **Continuous Random Variable:** Takes on an uncountable continuum of values within an interval (e.g., the exact time a server takes to respond to a request, the physical length of a fiber optic cable).
+
+### Probability Mass Function (PMF)
+For a discrete random variable $X$, the PMF $p(x)$ defines the probability that $X$ takes on a specific value $x$:
+$$ p(x) = P(X = x) $$
+A valid PMF must satisfy: $p(x) \ge 0$ for all $x$, and $\sum_{x} p(x) = 1$.
+
+### Cumulative Distribution Function (CDF)
+The CDF $F(x)$ is defined for both discrete and continuous random variables and represents the probability that $X$ will take a value less than or equal to $x$:
+$$ F(x) = P(X \le x) $$
+For a discrete RV, $F(x) = \sum_{t \le x} p(t)$. The CDF is monotonically non-decreasing and bounded between 0 and 1.
+
+## 2.3 Expected Value and Variance
+
+Before exploring specific distributions, we must understand how to quantify their central tendency and dispersion.
+
+**Expected Value (Mean):**
+The Expected Value $E[X]$ is the long-run average value of repetitions of the experiment it represents. It is the probability-weighted average of all possible values.
+*   For discrete $X$: $E[X] = \sum_{x} x \cdot p(x)$
+*   *Concept:* If a server crashes on average every 100 hours, $E[X] = 100$.
+
+**Variance and Standard Deviation:**
+Variance $Var(X)$ measures the spread or dispersion of the random variable around its mean $\mu = E[X]$.
+$$ Var(X) = E[(X - \mu)^2] = E[X^2] - (E[X])^2 $$
+The **Standard Deviation** $\sigma$ is simply the square root of the variance: $\sigma = \sqrt{Var(X)}$.
+*   *Concept:* A network latency with $E[X] = 50$ms and $Var(X) = 2$ is highly reliable. A latency with $E[X] = 50$ms and $Var(X) = 500$ is highly unpredictable, making it poor for real-time applications.
+
+## 2.4 Conditional Probability
+
+The probability of an event $A$ occurring, given that event $B$ has already occurred, is formally defined as:
+$$ P(A|B) = \frac{P(A \cap B)}{P(B)}, \quad \text{provided } P(B) > 0 $$
+
+## 2.5 Independence vs. Mutually Exclusive Events
+
+A critical point of failure in probability examinations is confusing statistical independence with mutually exclusive events. They are fundamentally different concepts.
+
+### Mutually Exclusive (Disjoint) Events
+Events $A$ and $B$ are mutually exclusive if they **cannot occur at the same time**. 
+*   **Mathematical Definition:** $P(A \cap B) = 0$.
+*   **Venn Diagram Description:** The circles representing $A$ and $B$ do not overlap at all.
+
+### Statistically Independent Events
+Events $A$ and $B$ are independent if the occurrence of one **provides no information** about the occurrence of the other.
+*   **Mathematical Definition:** $P(A \cap B) = P(A) \cdot P(B)$.
+
+### The Rigorous Proof: Why Mutually Exclusive Events (with $P>0$) Cannot Be Independent
+**Theorem:** If $A$ and $B$ are mutually exclusive events, and $P(A) > 0$ and $P(B) > 0$, then $A$ and $B$ are **dependent** (not independent).
+
+**Proof:**
+1. Assume $A$ and $B$ are mutually exclusive. By definition, $P(A \cap B) = 0$.
+2. Assume for the sake of contradiction that $A$ and $B$ are also independent. By definition, $P(A \cap B) = P(A) \cdot P(B)$.
+3. Therefore, $P(A) \cdot P(B) = 0$.
+4. For the product of two numbers to be zero, at least one of them must be zero. Thus, either $P(A) = 0$ or $P(B) = 0$.
+5. This contradicts our premise that $P(A) > 0$ and $P(B) > 0$. 
+6. **Conclusion:** Knowing that $A$ occurred guarantees that $B$ did *not* occur (since $P(B|A) = 0 \neq P(B)$). Thus, they are highly dependent. $\blacksquare$
+
+## 2.6 The Law of Total Probability and Bayes' Theorem
+
+When a sample space is partitioned into mutually exclusive and exhaustive events $B_1, B_2, \dots, B_n$, the probability of any event $A$ can be calculated via the Law of Total Probability:
+$$ P(A) = \sum_{i=1}^{n} P(A|B_i)P(B_i) $$
+
+**Bayes' Theorem** provides the mechanism for updating prior probabilities $P(B_k)$ into posterior probabilities $P(B_k|A)$ upon observing evidence $A$:
+$$ P(B_k|A) = \frac{P(A|B_k)P(B_k)}{\sum_{i=1}^{n} P(A|B_i)P(B_i)} $$
+
+## 2.7 CS Application: Bayesian Spam Filtering and False Positives
+
+### Problem 2.1: Software Defect Detection (False Positives)
+**Scenario:** A CI/CD pipeline uses an automated static analysis tool to detect memory leaks in C++ code. 
+*   Historically, 2% of all commits contain a memory leak ($P(Leak) = 0.02$).
+*   If a commit has a leak, the tool correctly flags it 95% of the time ($P(Flag|Leak) = 0.95$).
+*   If a commit is clean, the tool incorrectly raises a "false positive" flag 5% of the time ($P(Flag|Clean) = 0.05$).
+
+**Question:** If the tool flags a commit, what is the probability that the commit *actually* contains a memory leak? $P(Leak|Flag)$
+
+**Step-by-Step Walkthrough:**
+1.  **Identify the Priors and Conditionals:**
+    *   $P(Leak) = 0.02 \implies P(Clean) = 0.98$
+    *   $P(Flag|Leak) = 0.95$
+    *   $P(Flag|Clean) = 0.05$
+2.  **Apply the Law of Total Probability to find $P(Flag)$:**
+    $$ P(Flag) = P(Flag|Leak)P(Leak) + P(Flag|Clean)P(Clean) $$
+    $$ P(Flag) = (0.95 \times 0.02) + (0.05 \times 0.98) = 0.019 + 0.049 = 0.068 $$
+3.  **Apply Bayes' Theorem:**
+    $$ P(Leak|Flag) = \frac{P(Flag|Leak)P(Leak)}{P(Flag)} = \frac{0.019}{0.068} \approx 0.2794 $$
+**Conclusion:** Even though the tool is 95% accurate at finding leaks, a flagged commit only has a ~28% chance of actually having a leak! This is the **False Positive Paradox**, heavily tested in CS examinations.
+
+## 2.8 Worked Example: The Addition Rule and Intersections
+
+**Question:** A single card is drawn from a standard deck of 52 cards. What is the probability of drawing a King or a Heart?
+
+**Step-by-Step Walkthrough:**
+1.  **Define Events:** Let $A$ be the event of drawing a King, and $B$ be the event of drawing a Heart.
+2.  **Identify Marginal Probabilities:** 
+    *   $P(A) = 4/52$ (There are 4 Kings)
+    *   $P(B) = 13/52$ (There are 13 Hearts)
+3.  **Identify the Intersection:** The event $A \cap B$ is drawing the King of Hearts. There is exactly 1 such card.
+    *   $P(A \cap B) = 1/52$
+4.  **Apply the General Addition Rule:** Because the events are not mutually exclusive, we must subtract the intersection to avoid double-counting.
+    $$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$
+    $$ P(A \cup B) = \frac{4}{52} + \frac{13}{52} - \frac{1}{52} = \frac{16}{52} = \frac{4}{13} \approx 0.3077 $$
+**Conclusion:** The probability of drawing a King or a Heart is $4/13$.
+
+<SafeImage 
+  src="/images/csi213/bayes-theorem-tree.png" 
+  alt="Probability Tree Diagram" 
+  caption="Figure 2.1: Tree diagram illustrating prior and posterior probabilities in Bayesian inference."
+/>
+
+## Chapter Summary
+
+Probability theory provides the mathematical language for quantifying uncertainty. The Kolmogorov axioms establish a rigorous foundation, while Random Variables map abstract outcomes to quantifiable PMFs and CDFs. Expected Value and Variance allow us to summarize these distributions. Conditional probability and Bayes' Theorem are the cornerstones of statistical inference and machine learning, enabling the reversal of conditional probabilities to deduce causes from observed effects (such as in spam filters). Finally, understanding the strict mathematical distinction between independent and mutually exclusive events is critical for correctly applying the addition and multiplication rules.
+
+<Quiz title="Chapter 2 Assessment" questions={quizData} />

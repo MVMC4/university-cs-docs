@@ -1,4 +1,13 @@
 {
   "title": "CSI213: Discrete Structures III",
-  "pages": ["index", "logic-proofs", "graph-theory", "question-bank", "resources"]
+  "pages": [
+    "index",
+    "01-combinatorics-counting",
+    "02-probability-fundamentals",
+    "03-discrete-distributions",
+    "04-continuous-distributions",
+    "05-reliability-engineering",
+    "06-regression-analysis",
+    "resources"
+  ]
 }

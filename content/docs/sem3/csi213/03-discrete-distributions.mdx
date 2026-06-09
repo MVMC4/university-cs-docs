@@ -1,0 +1,168 @@
+---
+title: "03. Discrete Probability Distributions"
+description: "Mathematical formulation of Binomial, Poisson, Geometric, Negative Binomial, and Hypergeometric distributions."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi213/03-discrete-quiz';
+
+# Chapter 3: Discrete Probability Distributions
+
+## Learning Outcomes
+Upon completion of this chapter, students will be able to:
+1. Identify the appropriate discrete probability distribution based on the physical characteristics of a sampling process.
+2. Calculate probabilities, expected values, and variances for standard discrete models.
+3. Apply the Poisson approximation to the Binomial distribution and understand the convergence of the Hypergeometric distribution.
+4. Formulate and prove properties of discrete distributions, such as the Geometric survival function.
+
+> **Canonical Formula Reference**
+> For rigorous statistical modeling, the following canonical formulas must be applied:
+> *   **Geometric Variance:** $V(X) = \frac{q}{p^2}$ (where $q = 1-p$).
+> *   **Hypergeometric Variance:** $V(X) = n \frac{M}{N} \left(1 - \frac{M}{N}\right) \left(\frac{N-n}{N-1}\right)$, incorporating the Finite Population Correction (FPC) factor.
+> *   **Geometric Survival Function:** $P(X \ge x) = q^{x-1}$ for $x \in \{1, 2, 3, \dots\}$.
+
+## 3.1 The Binomial Distribution
+
+The Binomial distribution models the number of successes $X$ in $n$ independent Bernoulli trials, each with a constant success probability $p$. This applies to sampling *with* replacement or from an infinite population.
+
+*   **PMF:** $P(X=x) = \binom{n}{x} p^x (1-p)^{n-x}$
+*   **Expectation:** $E[X] = np$
+*   **Variance:** $V(X) = np(1-p)$
+
+### Worked Example 1: Coin Tossing
+**Question:** A fair coin is tossed 10 times. What is the probability of getting exactly 3 heads?
+**Solution:**
+1. **Parameters:** $n = 10$, $x = 3$, $p = 0.5$.
+2. **Substitution:** 
+   $$ P(X=3) = \binom{10}{3} (0.5)^3 (0.5)^7 $$
+3. **Calculation:**
+   $$ P(X=3) = 120 \times 0.125 \times 0.0078125 = 0.1172 $$
+
+### Worked Example 2: Manufacturing Defects
+**Question:** A manufacturing process produces 5% defective items. If a sample of 20 items is drawn with replacement, what is the probability of finding exactly 2 defective items?
+**Solution:**
+1. **Parameters:** $n = 20$, $x = 2$, $p = 0.05$.
+2. **Substitution:** 
+   $$ P(X=2) = \binom{20}{2} (0.05)^2 (0.95)^{18} $$
+3. **Calculation:**
+   $$ P(X=2) = 190 \times 0.0025 \times 0.3972 \approx 0.1887 $$
+
+## 3.2 The Poisson Distribution
+
+The Poisson distribution models the number of rare, independent events occurring in a fixed interval of time or space, given an average rate $\mu$ (or $\lambda$).
+
+*   **PMF:** $P(X=x) = \frac{\mu^x e^{-\mu}}{x!}$
+*   **Expectation & Variance:** $E[X] = V(X) = \mu$
+
+### Worked Example 1: IT Helpdesk Tickets
+**Question:** A university IT helpdesk receives an average of 4 support tickets per hour. What is the probability that the helpdesk receives exactly 6 tickets in a randomly selected hour?
+**Solution:**
+1. **Parameters:** $\mu = 4$, $x = 6$.
+2. **Substitution:** 
+   $$ P(X=6) = \frac{4^6 e^{-4}}{6!} $$
+3. **Calculation:**
+   $$ P(X=6) = \frac{4096 \times 0.0183156}{720} \approx 0.1042 $$
+
+### Worked Example 2: Typographical Errors
+**Question:** A textbook has an average of 1.5 typographical errors per page. What is the probability that a randomly selected page has zero errors?
+**Solution:**
+1. **Parameters:** $\mu = 1.5$, $x = 0$.
+2. **Substitution:** 
+   $$ P(X=0) = \frac{1.5^0 e^{-1.5}}{0!} $$
+3. **Calculation:**
+   $$ P(X=0) = e^{-1.5} \approx 0.2231 $$
+
+## 3.3 The Geometric Distribution
+
+The Geometric distribution models the number of trials $X$ required to achieve the *first* success in a sequence of independent Bernoulli trials.
+
+*   **PMF:** $P(X=x) = (1-p)^{x-1}p = q^{x-1}p$
+*   **Expectation:** $E[X] = \frac{1}{p}$
+*   **Variance:** $V(X) = \frac{1-p}{p^2} = \frac{q}{p^2}$
+
+### Formal Proof: Geometric Survival Function
+**Theorem:** For a geometrically distributed random variable $X$, the survival function is $P(X \ge x) = q^{x-1}$.
+**Proof:**
+$$ P(X \ge x) = \sum_{k=x}^{\infty} P(X=k) = \sum_{k=x}^{\infty} q^{k-1}p $$
+Factor out the leading term ($k=x$):
+$$ = p \left( q^{x-1} + q^x + q^{x+1} + \dots \right) $$
+This constitutes an infinite geometric series with first term $a = q^{x-1}$ and common ratio $r = q$. Since $0 < q < 1$, the series converges to $\frac{a}{1-r}$:
+$$ P(X \ge x) = p \left( \frac{q^{x-1}}{1-q} \right) $$
+Substituting $1-q = p$:
+$$ P(X \ge x) = p \left( \frac{q^{x-1}}{p} \right) = q^{x-1} \quad \blacksquare $$
+
+### Worked Example 1: Rolling a Die
+**Question:** A fair six-sided die is rolled repeatedly until a '6' appears. What is the probability that the first '6' occurs on exactly the 4th roll?
+**Solution:**
+1. **Parameters:** $p = 1/6$, $q = 5/6$, $x = 4$.
+2. **Substitution:** 
+   $$ P(X=4) = (5/6)^3 (1/6) $$
+3. **Calculation:**
+   $$ P(X=4) = \frac{125}{216} \times \frac{1}{6} = \frac{125}{1296} \approx 0.0965 $$
+
+### Worked Example 2: Survival Function Application
+**Question:** Using the same die-rolling scenario, what is the probability that it takes *at least* 3 rolls to get the first '6'?
+**Solution:**
+1. **Parameters:** $q = 5/6$, $x = 3$.
+2. **Substitution (using the canonical survival function):** 
+   $$ P(X \ge 3) = q^{3-1} = q^2 $$
+3. **Calculation:**
+   $$ P(X \ge 3) = (5/6)^2 = \frac{25}{36} \approx 0.6944 $$
+
+## 3.4 The Negative Binomial Distribution
+
+The Negative Binomial distribution generalizes the Geometric distribution by modeling the number of trials $X$ required to achieve the $r$-th success.
+
+*   **PMF:** $P(X=x) = \binom{x-1}{r-1} p^r q^{x-r}$ for $x = r, r+1, \dots$
+*   **Expectation:** $E[X] = \frac{r}{p}$
+*   **Variance:** $V(X) = \frac{rq}{p^2}$
+
+## 3.5 The Hypergeometric Distribution
+
+The Hypergeometric distribution models sampling *without* replacement from a finite population $N$ containing exactly $M$ successes, where a sample of size $n$ is drawn.
+
+*   **PMF:** $P(X=x) = \frac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}$
+*   **Expectation:** $E[X] = n\frac{M}{N}$
+*   **Variance:** $V(X) = n \frac{M}{N} \left(1 - \frac{M}{N}\right) \left(\frac{N-n}{N-1}\right)$
+
+### Worked Example 1: Drawing Balls from an Urn
+**Question:** An urn contains 10 balls: 4 red and 6 blue. If 3 balls are drawn randomly without replacement, what is the probability that exactly 2 are red?
+**Solution:**
+1. **Parameters:** $N = 10$, $M = 4$, $n = 3$, $x = 2$.
+2. **Substitution:** 
+   $$ P(X=2) = \frac{\binom{4}{2}\binom{6}{1}}{\binom{10}{3}} $$
+3. **Calculation:**
+   $$ P(X=2) = \frac{6 \times 6}{120} = \frac{36}{120} = 0.30 $$
+
+### Worked Example 2: Quality Control Sampling
+**Question:** A batch of 50 microchips contains 5 defective chips. An inspector randomly selects 10 chips without replacement. What is the probability that exactly 1 defective chip is in the sample?
+**Solution:**
+1. **Parameters:** $N = 50$, $M = 5$, $n = 10$, $x = 1$.
+2. **Substitution:** 
+   $$ P(X=1) = \frac{\binom{5}{1}\binom{45}{9}}{\binom{50}{10}} $$
+3. **Calculation:**
+   $$ P(X=1) = \frac{5 \times 886,163,135}{10,272,278,170} \approx 0.4313 $$
+
+## 3.6 Distribution Relationships and Limits
+
+Understanding how distributions converge under specific limiting conditions is vital for applied statistics.
+
+### Poisson Limit of the Binomial Distribution
+When the number of trials $n$ is very large and the probability of success $p$ is very small, such that the product $\mu = np$ remains constant, the Binomial distribution converges to the Poisson distribution. 
+$$ \lim_{n \to \infty, p \to 0} \binom{n}{x} p^x (1-p)^{n-x} = \frac{e^{-\mu}\mu^x}{x!} $$
+This justifies using the Poisson distribution to model rare events (e.g., system failures, insurance claims) over a large number of opportunities.
+
+### Hypergeometric Convergence to Binomial
+When the population size $N$ and the number of successes $M$ both approach infinity, such that the ratio $M/N = p$ remains constant, the Finite Population Correction (FPC) factor approaches 1. Consequently, sampling without replacement becomes mathematically indistinguishable from sampling with replacement, and the Hypergeometric PMF converges to the Binomial PMF.
+
+<SafeImage 
+  src="/images/csi213/discrete-distributions-flowchart.png" 
+  alt="Discrete Distribution Selection Matrix" 
+  caption="Figure 3.1: Methodological framework for selecting the appropriate discrete distribution based on sampling conditions."
+/>
+
+## Chapter Summary
+
+Discrete probability distributions map physical sampling processes to rigorous mathematical models. The Binomial distribution governs fixed trials with replacement, while the Hypergeometric handles sampling without replacement from finite populations. The Poisson distribution models rare events over continuous intervals, and the Geometric and Negative Binomial distributions model waiting times for the first or $r$-th success. Recognizing the underlying physical constraints and limiting behaviors is the most critical step in applied probability.
+
+<Quiz title="Chapter 3 Assessment" questions={quizData} />

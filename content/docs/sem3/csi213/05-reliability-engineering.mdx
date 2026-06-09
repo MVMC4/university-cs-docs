@@ -1,0 +1,92 @@
+---
+title: "05. Reliability Engineering"
+description: "System reliability modeling, k-out-of-n systems, and hazard rates."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi213/05-reliability-quiz';
+
+# Chapter 5: Reliability Engineering
+
+## Learning Outcomes
+Upon completion of this chapter, students will be able to:
+1. Model the operational integrity of series, parallel, and mixed multi-component systems.
+2. Calculate the reliability of $k$-out-of-$n$ systems using the Binomial distribution.
+3. Define the Hazard Rate (Failure Rate) function and explain its relationship to the Exponential distribution.
+4. Evaluate system robustness and identify single points of failure in engineering architectures.
+
+## 5.1 System Reliability Fundamentals
+
+Reliability engineering utilizes probability theory to model the operational integrity of multi-component systems. We assume components fail independently.
+
+### Series Systems
+A series system functions if and only if *all* constituent components function. It represents a single point of failure architecture.
+$$ R_{series} = \prod_{i=1}^{n} R_i $$
+
+### Parallel Systems
+A parallel system functions if *at least one* constituent component functions. It represents redundant architecture. The system fails only if all components fail simultaneously:
+$$ R_{parallel} = 1 - \prod_{i=1}^{n} (1 - R_i) $$
+
+## 5.2 Advanced Reliability Models: $k$-out-of-$n$ Systems
+
+Many real-world systems require a minimum threshold of working components to function, rather than all or just one. A **$k$-out-of-$n$ system** functions if and only if at least $k$ of its $n$ components function.
+
+Assuming all $n$ components are independent and identical, each with reliability $R$, the number of functioning components $X$ follows a **Binomial distribution** with parameters $n$ and $R$.
+
+The system reliability is the probability that $X \ge k$:
+$$ R_{k/n} = P(X \ge k) = \sum_{i=k}^{n} \binom{n}{i} R^i (1-R)^{n-i} $$
+
+*Note: A 1-out-of-$n$ system is equivalent to a parallel system, and an $n$-out-of-$n$ system is equivalent to a series system.*
+
+## 5.3 The Hazard Rate (Failure Rate) Function
+
+The **Hazard Rate function**, denoted as $h(t)$ or $\lambda(t)$, describes the instantaneous rate of failure at time $t$, given that the component has survived up to time $t$.
+
+$$ h(t) = \frac{f(t)}{1 - F(t)} = \frac{f(t)}{R(t)} $$
+Where $f(t)$ is the Probability Density Function (PDF), $F(t)$ is the Cumulative Distribution Function (CDF), and $R(t)$ is the Survival/Reliability Function.
+
+### Relationship to the Exponential Distribution
+For the Exponential distribution, the PDF is $f(t) = \lambda e^{-\lambda t}$ and the reliability function is $R(t) = e^{-\lambda t}$. Substituting these into the hazard rate formula:
+$$ h(t) = \frac{\lambda e^{-\lambda t}}{e^{-\lambda t}} = \lambda $$
+**Conclusion:** The Exponential distribution is uniquely characterized by a **constant hazard rate**. This mathematically formalizes its "memoryless" property: a component's risk of failing in the next instant does not increase as it ages (i.e., it does not experience "wear and tear").
+
+## 5.4 Worked Examples
+
+### Example 1: Mixed Series-Parallel System
+**Scenario:** A data center cooling system consists of Subsystem A (2 identical pumps in parallel, each with $R=0.90$) connected in series with Subsystem B (3 identical sensors in series, each with $R=0.80$). Calculate the overall system reliability.
+
+**Step-by-Step Walkthrough:**
+1. **Calculate Subsystem A (Parallel):**
+   $$ R_A = 1 - (1 - 0.90)^2 = 1 - (0.10)^2 = 1 - 0.01 = 0.99 $$
+2. **Calculate Subsystem B (Series):**
+   $$ R_B = (0.80)^3 = 0.512 $$
+3. **Calculate Overall System (Series combination of A and B):**
+   $$ R_{sys} = R_A \times R_B = 0.99 \times 0.512 = 0.50688 $$
+**Conclusion:** The overall system reliability is approximately 50.69%.
+
+### Example 2: $k$-out-of-$n$ System
+**Scenario:** A distributed computing cluster requires at least 3 out of 5 identical servers to be operational to process a critical workload. Each server has a reliability of $R=0.80$. Calculate the system reliability.
+
+**Step-by-Step Walkthrough:**
+1. **Identify Parameters:** $n = 5$, $k = 3$, $R = 0.80$, $1-R = 0.20$.
+2. **Apply the Binomial Summation:**
+   $$ R_{3/5} = P(X=3) + P(X=4) + P(X=5) $$
+3. **Calculate Individual Probabilities:**
+   * $P(X=3) = \binom{5}{3} (0.80)^3 (0.20)^2 = 10 \times 0.512 \times 0.04 = 0.2048$
+   * $P(X=4) = \binom{5}{4} (0.80)^4 (0.20)^1 = 5 \times 0.4096 \times 0.20 = 0.4096$
+   * $P(X=5) = \binom{5}{5} (0.80)^5 (0.20)^0 = 1 \times 0.32768 \times 1 = 0.32768$
+4. **Sum the Probabilities:**
+   $$ R_{3/5} = 0.2048 + 0.4096 + 0.32768 = 0.94208 $$
+**Conclusion:** The cluster has a 94.21% probability of successfully processing the workload.
+
+<SafeImage 
+  src="/images/csi213/series-parallel-reliability.png" 
+  alt="Reliability Block Diagrams" 
+  caption="Figure 5.1: Topological differences between series, parallel, and k-out-of-n reliability configurations."
+/>
+
+## Chapter Summary
+
+Reliability engineering applies the multiplication and addition rules of probability to assess system robustness. Series architectures are vulnerable to single points of failure, while parallel and $k$-out-of-$n$ architectures provide vital redundancy. Furthermore, the Hazard Rate function bridges continuous probability distributions with physical failure mechanics, highlighting the Exponential distribution's unique constant-risk profile.
+
+<Quiz title="Chapter 5 Assessment" questions={quizData} />

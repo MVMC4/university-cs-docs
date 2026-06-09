@@ -1,0 +1,131 @@
+---
+title: "04. Continuous Probability Distributions"
+description: "Uniform, Exponential, and Normal distributions, standardization, and the memoryless property."
+---
+import { Quiz } from '@/components/quiz';
+import { SafeImage } from '@/components/safe-image';
+import { quizData } from '@/content/quiz-data/sem3/csi213/04-continuous-quiz';
+
+# Chapter 4: Continuous Probability Distributions
+
+## Learning Outcomes
+Upon completion of this chapter, students will be able to:
+1. Differentiate between Probability Mass Functions (PMF) and Probability Density Functions (PDF).
+2. Understand the Continuous Uniform distribution as the baseline model for continuous variables.
+3. Apply the Exponential distribution to model time-to-failure and rigorously prove its unique memoryless property.
+4. Standardize Normal random variables to the Standard Normal Distribution ($Z$) and navigate the Z-table using the symmetry axiom.
+5. Perform both forward (probability given $X$) and inverse (percentile given probability) standardization calculations.
+
+## 4.1 Probability Density Functions (PDF) & The Uniform Baseline
+
+Unlike discrete variables, the probability of a continuous random variable $X$ assuming an exact, singular value is mathematically zero ($P(X=x) = 0$). Probabilities are instead calculated as the area under the Probability Density Function $f(x)$ over an interval $[a, b]$:
+$$ P(a \le X \le b) = \int_{a}^{b} f(x) dx $$
+
+### The Continuous Uniform Distribution
+Before examining complex curves, we must establish the baseline continuous distribution: the **Continuous Uniform Distribution**. If a random variable $X$ is equally likely to fall anywhere within an interval $[a, b]$, its PDF is a simple rectangle:
+$$ f(x) = \frac{1}{b - a} \quad \text{for } a \le x \le b $$
+The probability of falling within a sub-interval $[x_1, x_2]$ is simply the width of that sub-interval divided by the total width: $P(x_1 \le X \le x_2) = \frac{x_2 - x_1}{b - a}$. This "flat" distribution serves as the foundation for understanding more complex density curves.
+
+## 4.2 The Exponential Distribution and Memorylessness
+
+The Exponential distribution models the time elapsed between events in a Poisson process (e.g., time until a server crashes, or time until a mechanical component fails). Let $\lambda$ denote the rate parameter (where the mean lifespan is $\mu = 1/\lambda$).
+
+*   **PDF:** $f(x) = \lambda e^{-\lambda x}, \quad x \ge 0$
+*   **CDF:** $P(X \le x) = 1 - e^{-\lambda x}$
+*   **Survival Function:** $P(X > x) = e^{-\lambda x}$
+
+### Formal Proof: The Memoryless Property
+The Exponential distribution is the *unique* continuous distribution possessing the memoryless property. This property dictates that the remaining lifetime of a component is entirely independent of its current age. 
+
+**Theorem:** For an exponentially distributed random variable $X$, $P(X > s + t \mid X > s) = P(X > t)$ for all $s, t \ge 0$.
+
+**Proof:**
+By the definition of conditional probability:
+$$ P(X > s + t \mid X > s) = \frac{P((X > s + t) \cap (X > s))}{P(X > s)} $$
+Since $s$ and $t$ are non-negative, the event $X > s + t$ is a strict subset of the event $X > s$. Therefore, their intersection is simply $X > s + t$:
+$$ P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} $$
+Substitute the Survival Function $P(X > x) = e^{-\lambda x}$ into the numerator and denominator:
+$$ P(X > s + t \mid X > s) = \frac{e^{-\lambda(s + t)}}{e^{-\lambda s}} $$
+Using the laws of exponents ($e^{a+b} = e^a \cdot e^b$):
+$$ P(X > s + t \mid X > s) = \frac{e^{-\lambda s} \cdot e^{-\lambda t}}{e^{-\lambda s}} = e^{-\lambda t} $$
+By definition, $e^{-\lambda t} = P(X > t)$. Thus:
+$$ P(X > s + t \mid X > s) = P(X > t) \quad \blacksquare $$
+
+## 4.3 The Normal Distribution and Standardization
+
+The Normal (Gaussian) distribution is parameterized by the mean $\mu$ and variance $\sigma^2$. Because integrating the Normal PDF analytically is impossible, we rely on standardizing variables to the **Standard Normal Distribution** $Z \sim N(0,1)$ using the transformation:
+$$ Z = \frac{X - \mu}{\sigma} $$
+
+### Tutorial: How to Read the Standard Normal (Z) Table
+The Z-table provides the cumulative probability $P(Z < z)$, which represents the area under the curve to the *left* of the Z-score.
+
+**Step 1: Locate Positive Z-scores**
+To find $P(Z < 1.25)$:
+1. Look down the left column for the first decimal place: `1.2`.
+2. Look across the top row for the second decimal place: `0.05`.
+3. The intersection yields the probability: `0.8944`.
+
+**Step 2: Handle Negative Z-scores via the Symmetry Axiom**
+Most standard Z-tables only print positive Z-scores. To find the probability for a negative Z-score, we exploit the perfect symmetry of the Normal curve around zero. 
+**The Symmetry Axiom:** The area to the left of $-z$ is exactly equal to the area to the right of $+z$. Since the total area is 1:
+$$ P(Z < -z) = 1 - P(Z < z) $$
+
+*Example:* Find $P(Z < -1.64)$.
+1. Look up the positive equivalent: $P(Z < 1.64) = 0.9495$.
+2. Apply the axiom: $P(Z < -1.64) = 1 - 0.9495 = 0.0505$.
+
+## 4.4 Examination Applications: Forward and Inverse Problems
+
+### Type A: Forward Problem (Probability given $X$)
+**Question:** The heights of adult males in a specific region are normally distributed with a mean $\mu = 175$ cm and a standard deviation $\sigma = 8$ cm. Find the probability that a randomly selected male is between 170 cm and 185 cm tall.
+
+**Step-by-Step Walkthrough:**
+1.  **Define the Interval:** We seek $P(170 < X < 185)$.
+2.  **Standardize the Lower Bound ($X_1 = 170$):**
+    $$ Z_1 = \frac{170 - 175}{8} = \frac{-5}{8} = -0.625 \approx -0.63 $$
+3.  **Standardize the Upper Bound ($X_2 = 185$):**
+    $$ Z_2 = \frac{185 - 175}{8} = \frac{10}{8} = 1.25 $$
+4.  **Formulate the Z-Probability:**
+    $$ P(-0.63 < Z < 1.25) = P(Z < 1.25) - P(Z < -0.63) $$
+5.  **Consult the Z-Table (applying Symmetry Axiom for $Z_1$):**
+    *   $P(Z < 1.25) = 0.8944$
+    *   $P(Z < -0.63) = 1 - P(Z < 0.63) = 1 - 0.7357 = 0.2643$
+6.  **Calculate Final Probability:**
+    $$ 0.8944 - 0.2643 = 0.6301 $$
+**Conclusion:** There is a 63.01% probability that a randomly selected male falls within this height range.
+
+### Type B: Inverse Problem (Percentile given Probability)
+**Question:** Carrot lengths entering a processing factory are normally distributed with $\mu = 15.3$ cm and $\sigma = 5.4$ cm. Determine the maximum length constituting the lowest 5% of the load (i.e., find the 5th percentile).
+
+**Step-by-Step Walkthrough:**
+1.  **Identify the Target Probability:** We seek the value $x_{0.05}$ such that $P(X < x_{0.05}) = 0.05$.
+2.  **Find the Critical Z-score:** We need the Z-score where the left-tail area is 0.05. Looking at the interior of the Z-table, the closest value to 0.0500 is 0.0505, which corresponds to $Z = -1.64$ (or exactly $-1.645$ via interpolation).
+3.  **Apply Inverse Standardization:** Rearrange the Z-formula to solve for $X$:
+    $$ X = \mu + Z\sigma $$
+4.  **Substitute and Calculate:**
+    $$ X = 15.3 + (-1.645)(5.4) $$
+    $$ X = 15.3 - 8.883 = 6.417 \text{ cm} $$
+**Conclusion:** Any carrot shorter than 6.417 cm falls into the lowest 5% of the load.
+
+### Type C: Exponential Lifespan Analysis
+**Scenario:** The lifespan of an import car is exponentially distributed with a mean of 4 years ($\lambda = 1/4 = 0.25$). 
+1. Calculate the probability the car operates for more than 4 years.
+2. Given the car has survived 4 years, calculate the probability it survives to 6 years.
+
+**Solution:**
+1.  **Forward Survival:** $P(X > 4) = e^{-\lambda x} = e^{-(0.25)(4)} = e^{-1} \approx 0.3679$.
+2.  **Conditional Survival (Memoryless Property):** Let $s=4$ (current age) and $t=2$ (additional years to reach 6).
+    $$ P(X > 6 \mid X > 4) = P(X > 4 + 2 \mid X > 4) = P(X > 2) $$
+    $$ P(X > 2) = e^{-(0.25)(2)} = e^{-0.5} \approx 0.6065 $$
+
+<SafeImage 
+  src="/images/csi213/normal-curve-z-scores.png" 
+  alt="Standard Normal Distribution" 
+  caption="Figure 4.1: Standardization of the Normal distribution for percentile extraction."
+/>
+
+## Chapter Summary
+
+Continuous distributions model phenomena that can assume any value within an interval, beginning with the baseline Uniform distribution. The Exponential distribution is vital for reliability engineering and queuing theory, uniquely characterized by its mathematically provable memoryless property. The Normal distribution remains the most pervasive model in statistics. Mastery of both forward standardization (calculating probabilities via the Z-table and symmetry axiom) and inverse standardization (extracting percentiles) are mandatory, highly-tested skills in applied statistics.
+
+<Quiz title="Chapter 4 Assessment" questions={quizData} />
