@@ -1,0 +1,34 @@
+[
+  {
+    "id": "mgt202-examples",
+    "title": "Business Plan Examples",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Sample business plans and case studies.",
+    "children": [
+      { "id": "mgt202-bp1", "title": "BT's Mountain Bike Adventure Tours", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/Business Plan Example BTs Mountain Bike Adventure Tours.doc - 09 August 2021.pdf", "description": "Example business plan for a mountain bike tour company." },
+      { "id": "mgt202-bp2", "title": "Custom Jewelry B Plan", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/Business Plan Example - Custom Jewelry B Plan.doc - 09 August 2021.pdf", "description": "Example business plan for a custom jewelry startup." }
+    ]
+  },
+  {
+    "id": "mgt202-lectures",
+    "title": "Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Weekly topic slides and presentations.",
+    "children": [
+      { "id": "mgt202-topic1", "title": "Topic 1: Intro & Ch 1/2", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 1 SBM17eCh01.pptx & Hatten Chp02 - 02 AUGUST 2022.pdf", "description": "Introduction to Entrepreneurship and Small Business Management." },
+      { "id": "mgt202-topic2", "title": "Topic 2: Ch 3", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 2 SBM17eCh03.pptx - 02 AUGUST 2022.pdf", "description": "Topic 2 slides." },
+      { "id": "mgt202-topic3", "title": "Topic 3: Ch 4", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 3 SBM17eCh04.pptx - 02 AUGUST 2022.pdf", "description": "Topic 3 slides." },
+      { "id": "mgt202-topic4", "title": "Topic 4: Ch 5", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 4 SBM17eCh05.pptx - 02 AUGUST 2022.pdf", "description": "Topic 4 slides." },
+      { "id": "mgt202-topic5", "title": "Topic 5: Ch 3", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 5 (Megginson  Byrd Chap003) - 02 AUGUST 2022.pdf", "description": "Topic 5 slides." },
+      { "id": "mgt202-topic6", "title": "Topic 6: Ch 2", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 6 SBM17eCh02.pptx - 02 AUGUST 2022.pdf", "description": "Topic 6 slides." },
+      { "id": "mgt202-topic7b", "title": "Topic 7B: Ch 3", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 7B SBM17eCh03.pptx - 02 AUGUST 2022.pdf", "description": "Topic 7B slides." },
+      { "id": "mgt202-topic8", "title": "Topic 8: Ch 2", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 8 Mariotti Chp02  - 02 AUGUST 2022.pdf", "description": "Topic 8 slides." },
+      { "id": "mgt202-topic9", "title": "Topic 9: Startup Capital & Costs", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 9 (ALLEN CHP9  MARIOTTI CHP7) STARTUP CAPITAL REQUIREMENTS  MANAGING COSTS - 02 AUGUST 2022.pdf", "description": "Startup capital requirements and managing costs." },
+      { "id": "mgt202-topic11", "title": "Topic 11: Ch 11", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 11 SBM17eCh11.pptx - 02 AUGUST 2022.pdf", "description": "Topic 11 slides." },
+      { "id": "mgt202-topic12", "title": "Topic 12: Ch 12", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 12 SBM17eCh12.pptx - 02 AUGUST 2022.pdf", "description": "Topic 12 slides." },
+      { "id": "mgt202-topic13", "title": "Topic 13: Ch 17", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/lectures/MGT 202 TOPIC 13 Byrd  Meggison Ch17.pptx - 02 AUGUST 2022.pptx", "description": "Topic 13 slides." }
+    ]
+  }
+]

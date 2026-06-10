@@ -1,0 +1,37 @@
+[
+  {
+    "id": "mat221-lectures",
+    "title": "Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Complete set of lecture slides for MAT221.",
+    "children": [
+      { "id": "lec1", "title": "Lesson 1", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 1.pdf", "description": "Lesson 1 slides." },
+      { "id": "lec2", "title": "Lesson 2", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 2.pdf", "description": "Lesson 2 slides." },
+      { "id": "lec3", "title": "Lesson 3", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 3.pdf", "description": "Lesson 3 slides." },
+      { "id": "lec4", "title": "Lesson 4", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 4.pdf", "description": "Lesson 4 slides." },
+      { "id": "lec5", "title": "Lesson 5", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson 5.pdf", "description": "Lesson 5 slides." },
+      { "id": "lec6", "title": "Lesson 6", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson 6.pdf", "description": "Lesson 6 slides." },
+      { "id": "lec9", "title": "Lesson 9", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 9.pdf", "description": "Lesson 9 slides." },
+      { "id": "lec10", "title": "Lesson 10", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 10.pdf", "description": "Lesson 10 slides." },
+      { "id": "lec11", "title": "Lesson 11", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 11.pdf", "description": "Lesson 11 slides." },
+      { "id": "lec13", "title": "Lesson 13", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 13.pdf", "description": "Lesson 13 slides." },
+      { "id": "lec14", "title": "Lesson 14", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 14.pdf", "description": "Lesson 14 slides." },
+      { "id": "lec15", "title": "Lesson 15", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 15.pdf", "description": "Lesson 15 slides." },
+      { "id": "lec16", "title": "Lesson 16", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 16.pdf", "description": "Lesson 16 slides." },
+      { "id": "lec17", "title": "Lesson 17", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 17.pdf", "description": "Lesson 17 slides." },
+      { "id": "lec19", "title": "Lesson 19", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 19.pdf", "description": "Lesson 19 slides." },
+      { "id": "lec20", "title": "Lesson 20", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 20.pdf", "description": "Lesson 20 slides." },
+      { "id": "lec21", "title": "Lesson 21", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/Lesson 21.pdf", "description": "Lesson 21 slides." },
+      { "id": "lec22", "title": "Lesson 22", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson22.pdf", "description": "Lesson 22 slides." },
+      { "id": "lec23", "title": "Lesson 23", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson23.pdf", "description": "Lesson 23 slides." },
+      { "id": "lec25", "title": "Lesson 25", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson25.pdf", "description": "Lesson 25 slides." },
+      { "id": "lec26", "title": "Lesson 26", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson26.pdf", "description": "Lesson 26 slides." },
+      { "id": "lec27", "title": "Lesson 27", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson27.pdf", "description": "Lesson 27 slides." },
+      { "id": "lec28", "title": "Lesson 28", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson28.pdf", "description": "Lesson 28 slides." },
+      { "id": "lec29", "title": "Lesson 29", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson29.pdf", "description": "Lesson 29 slides." },
+      { "id": "lec30", "title": "Lesson 30", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson30.pdf", "description": "Lesson 30 slides." },
+      { "id": "lec31", "title": "Lesson 31", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mat221/lectures/lesson31.pdf", "description": "Lesson 31 slides." }
+    ]
+  }
+]
