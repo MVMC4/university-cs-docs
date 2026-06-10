@@ -1,4 +1,4 @@
-import type { Question } from '@/components/quiz';
+import type { Question } from '@/components/interactive/quiz';
 
 const learningObjectives = [
   "Prove Functor laws (Identity and Composition) for the List type using structural induction.",

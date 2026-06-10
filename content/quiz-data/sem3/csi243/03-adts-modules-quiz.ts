@@ -1,4 +1,4 @@
-import type { Question } from '@/components/quiz';
+import type { Question } from '@/components/interactive/quiz';
 
 const learningObjectives = [
   "Define basic Algebraic Data Types (ADTs) and write functions that pattern match on their constructors.",
