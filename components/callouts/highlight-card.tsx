@@ -51,8 +51,8 @@ export function HighlightCard({
   const styles = variantStyles[variant];
 
   return (
-    <div className={`my-6 w-full overflow-hidden rounded-xl border-2 ${styles.outer} p-6`}>
-      <div className="space-y-4">
+    <div className={`my-6 w-full overflow-hidden rounded-xl border-2 ${styles.outer} px-6 py-2`}>
+      <div className="space-y-2">
         {title && <h3 className={`text-lg font-bold ${styles.title}`}>{title}</h3>}
         {description && <p className="text-sm leading-relaxed text-fd-foreground/90">{description}</p>}
         

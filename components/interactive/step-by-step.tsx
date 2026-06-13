@@ -4,7 +4,7 @@ import React from 'react';
 
 interface StepProps {
   number: number;
-  title: string;
+  title?: React.ReactNode; // Changed to ReactNode and made optional
   children: React.ReactNode;
 }
 
@@ -16,7 +16,8 @@ export function Step({ number, title, children }: StepProps) {
         {number}
       </div>
       <div className="min-w-0">
-        <h4 className="font-semibold text-fd-foreground mb-1 break-words">{title}</h4>
+        {/* If a standard text title prop is passed, it renders here */}
+        {title && <h4 className="font-semibold text-fd-foreground mb-1 break-words">{title}</h4>}
         <div className="text-sm text-fd-muted-foreground leading-relaxed break-words overflow-x-auto">
           {children}
         </div>
@@ -25,15 +26,36 @@ export function Step({ number, title, children }: StepProps) {
   );
 }
 
-export function StepByStep({ title, children }: { title: string; children: React.ReactNode }) {
+interface StepByStepProps {
+  title?: React.ReactNode; // Made optional
+  children: React.ReactNode;
+}
+
+export function StepByStep({ title, children }: StepByStepProps) {
   return (
     <div className="my-6 w-full overflow-hidden rounded-lg border border-fd-border bg-fd-background p-6 shadow-sm">
-      <h3 className="text-lg font-bold text-fd-foreground mb-4 flex items-center gap-2">
-        <span className="text-fd-primary">⚙️</span> <span className="break-words">{title}</span>
-      </h3>
+      {title && (
+        <h3 className="text-lg font-bold text-fd-foreground mb-4 flex items-center gap-2">
+          <span className="text-fd-primary">⚙️</span> <span className="break-words">{title}</span>
+        </h3>
+      )}
       <div className="ml-2 min-w-0">
         {children}
       </div>
     </div>
   );
+}
+
+// --- NEW: Sub-components to allow MDX LaTeX parsing ---
+
+export function StepByStepTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="text-lg font-bold text-fd-foreground mb-4 flex items-center gap-2">
+      <span className="text-fd-primary">⚙️</span> <span className="break-words">{children}</span>
+    </h3>
+  );
+}
+
+export function StepTitle({ children }: { children: React.ReactNode }) {
+  return <h4 className="font-semibold text-fd-foreground mb-1 break-words">{children}</h4>;
 }

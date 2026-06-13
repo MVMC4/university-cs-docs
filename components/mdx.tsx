@@ -13,10 +13,18 @@ import { MathEnv } from './math/math-env';
 import { EquationBreakdown, Equation, Term, TermGrid } from './math/equation-breakdown';
 import { FormulaBlock } from './math/formula-block';
 import { CaseAnalysis, Case } from './math/case-analysis';
-import { StepByStep, Step } from './interactive/step-by-step';
+import { Step, StepByStep, StepByStepTitle, StepTitle } from './interactive/step-by-step';
 import { InteractiveStepper, StepperStep } from './interactive/interactive-stepper';
 import { Flashcard } from './interactive/flashcard';
 import { GraphViewer } from './visuals/graph-viewer';
+import { Card } from './callouts/card';
+
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Steps as FumaSteps, Step as FumaStep } from 'fumadocs-ui/components/steps';
+
 
 export function getMDXComponents(components?: MDXComponents) {
   return {
@@ -41,10 +49,20 @@ export function getMDXComponents(components?: MDXComponents) {
     Case,
     StepByStep,
     Step,
+    StepByStepTitle,
+    StepTitle,
     InteractiveStepper,
     StepperStep,
     Flashcard,
     GraphViewer,
+    Callout,
+    Tabs,
+    Tab,
+    Accordion,
+    Accordions,
+    FumaSteps,
+    FumaStep,
+    Card,
     
     // Allow any other passed components to override
     ...components,

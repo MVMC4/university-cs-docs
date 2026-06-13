@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Check, X, RotateCcw, AlertCircle } from 'lucide-react';
+import katex from 'katex';
 
 type Question = {
   question: string;
@@ -12,6 +13,39 @@ type Question = {
 type QuizProps = {
   title?: string;
   questions?: Question[];
+};
+
+// 🧮 Helper component to parse and render inline LaTeX math
+const MathText = ({ text }: { text: string }) => {
+  if (!text) return null;
+  
+  // Regex to split text by $$...$$ (display) or $...$ (inline)
+  const parts = text.split(/(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g);
+  
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (part.startsWith('$$') && part.endsWith('$$')) {
+          const math = part.slice(2, -2);
+          try {
+            const html = katex.renderToString(math, { displayMode: true, throwOnError: false });
+            return <span key={index} dangerouslySetInnerHTML={{ __html: html }} />;
+          } catch {
+            return <span key={index}>{part}</span>;
+          }
+        } else if (part.startsWith('$') && part.endsWith('$')) {
+          const math = part.slice(1, -1);
+          try {
+            const html = katex.renderToString(math, { displayMode: false, throwOnError: false });
+            return <span key={index} dangerouslySetInnerHTML={{ __html: html }} />;
+          } catch {
+            return <span key={index}>{part}</span>;
+          }
+        }
+        return <span key={index}>{part}</span>;
+      })}
+    </>
+  );
 };
 
 export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
@@ -74,7 +108,7 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
         {questions.map((q, qIndex) => (
           <div key={qIndex} className="space-y-3">
             <p className="text-lg font-semibold text-fd-foreground">
-              {qIndex + 1}. {q.question}
+              {qIndex + 1}. <MathText text={q.question} />
             </p>
             <div className="space-y-2 pl-2">
               {q.options.map((option, optIndex) => {
@@ -98,9 +132,9 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
 
                 return (
                   <button key={optIndex} onClick={() => handleSelect(qIndex, optIndex)} className={btnClass} disabled={isSubmitted}>
-                    <span>{option}</span>
-                    {isSubmitted && optIndex === q.correctIndex && <Check className="h-4 w-4" />}
-                    {isSubmitted && answers[qIndex] === optIndex && optIndex !== q.correctIndex && <X className="h-4 w-4" />}
+                    <span><MathText text={option} /></span>
+                    {isSubmitted && optIndex === q.correctIndex && <Check className="h-4 w-4 shrink-0 ml-2" />}
+                    {isSubmitted && answers[qIndex] === optIndex && optIndex !== q.correctIndex && <X className="h-4 w-4 shrink-0 ml-2" />}
                   </button>
                 );
               })}
@@ -108,7 +142,7 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
 
             {isSubmitted && q.explanation && (
               <div className="mt-3 p-4 rounded-lg bg-fd-muted border border-fd-border text-sm text-fd-muted-foreground">
-                <span className="font-semibold text-fd-foreground">Explanation:</span> {q.explanation}
+                <span className="font-semibold text-fd-foreground">Explanation:</span> <MathText text={q.explanation} />
               </div>
             )}
           </div>
