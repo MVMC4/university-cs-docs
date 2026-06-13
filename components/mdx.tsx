@@ -18,6 +18,7 @@ import { InteractiveStepper, StepperStep } from './interactive/interactive-stepp
 import { Flashcard } from './interactive/flashcard';
 import { GraphViewer } from './visuals/graph-viewer';
 import { Card } from './callouts/card';
+import { ResourceHub } from './interactive/resource-hub';
 
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -63,6 +64,7 @@ export function getMDXComponents(components?: MDXComponents) {
     FumaSteps,
     FumaStep,
     Card,
+    ResourceHub,
     
     // Allow any other passed components to override
     ...components,

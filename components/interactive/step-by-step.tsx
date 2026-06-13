@@ -4,7 +4,7 @@ import React from 'react';
 
 interface StepProps {
   number: number;
-  title?: React.ReactNode; // Changed to ReactNode and made optional
+  title?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -16,8 +16,8 @@ export function Step({ number, title, children }: StepProps) {
         {number}
       </div>
       <div className="min-w-0">
-        {/* If a standard text title prop is passed, it renders here */}
-        {title && <h4 className="font-semibold text-fd-foreground mb-1 break-words">{title}</h4>}
+        {/* Changed from <h4> to <div> for consistency */}
+        {title && <div className="font-semibold text-fd-foreground mb-1 break-words">{title}</div>}
         <div className="text-sm text-fd-muted-foreground leading-relaxed break-words overflow-x-auto">
           {children}
         </div>
@@ -27,7 +27,7 @@ export function Step({ number, title, children }: StepProps) {
 }
 
 interface StepByStepProps {
-  title?: React.ReactNode; // Made optional
+  title?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -46,16 +46,24 @@ export function StepByStep({ title, children }: StepByStepProps) {
   );
 }
 
-// --- NEW: Sub-components to allow MDX LaTeX parsing ---
+// --- FIX FOR MDX HYDRATION ERROR ---
+// MDX sometimes wraps child components in <p> tags when they are mixed with text.
+// Since <h4> and <h3> cannot be descendants of <p>, it causes a hydration error.
+// By using <span> with Tailwind's `block` and `flex` utilities, we maintain the 
+// exact same visual styling while remaining valid HTML even if wrapped in <p>.
 
 export function StepByStepTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-lg font-bold text-fd-foreground mb-4 flex items-center gap-2">
+    <span className="flex text-lg font-bold text-fd-foreground mb-4 items-center gap-2">
       <span className="text-fd-primary">⚙️</span> <span className="break-words">{children}</span>
-    </h3>
+    </span>
   );
 }
 
 export function StepTitle({ children }: { children: React.ReactNode }) {
-  return <h4 className="font-semibold text-fd-foreground mb-1 break-words">{children}</h4>;
+  return (
+    <span className="block font-semibold text-fd-foreground mb-1 break-words">
+      {children}
+    </span>
+  );
 }
