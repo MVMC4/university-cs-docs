@@ -3,8 +3,7 @@
 title: "01. The Paradigm Shift & FP Principles"
 description: "The 4 Paradigms, FP Core Principles, Pure vs. Impure, Von Neumann bottleneck, Lambda Calculus, and Referential Transparency."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/01-paradigm-shift-quiz';
 
 # Chapter 1: The Paradigm Shift & FP Principles
@@ -289,6 +288,7 @@ description: "GHCi commands, Layout rule, Case Sensitivity, if-then-else, read/s
 3. Use `if-then-else` expressions, emphasizing the mandatory `else` branch.
 4. Convert between strings and values using `read` and `show` with type annotations.
 5. Construct basic `do` blocks for IO using `getLine`, `<-`, `putStrLn`, and `print`.
+6. Differentiate between `putStr`, `putStrLn`, `putChar`, and `print`, and understand how to compile Haskell scripts.
 
 ---
 
@@ -375,13 +375,46 @@ main = do
     print area
 ```
 
+---
+
+## 2.6 Comments, Output Functions & Compilation
+
+### Comments
+Haskell supports single-line and nested multi-line comments.
+```haskell
+-- This is a single-line comment
+
+{- This is a multi-line comment.
+   It can span several lines and even {- nest -} other comments. -}
+```
+
+### The Output Family (`putStr` vs `putStrLn` vs `putChar` vs `print`)
+Lecture 3 explicitly tests your knowledge of how these differ:
+- `putChar :: Char -> IO ()` prints a single character.
+- `putStr :: String -> IO ()` prints a string **without** a newline.
+- `putStrLn :: String -> IO ()` prints a string **with** a trailing newline.
+- `print :: Show a => a -> IO ()` converts any showable type to a string (using `show`) and prints it with a newline. Strings printed via `print` will include the quotation marks (e.g., `print "Hello"` outputs `"Hello"`).
+
+### Compilation vs Interpretation
+While GHCi interprets code interactively, you can compile scripts to standalone executables using the terminal:
+
+```bash
+# Compile to an executable named 'hello'
+ghc -o hello hello.hs
+
+# Run the executable
+./hello
+
+# Or interpret a script directly without compiling to an object file
+runhaskell custom.hs
+```
+
 ========== content/docs/sem3/csi243/03-syntax-pattern-matching.mdx ==========
 ---
 title: "03. Syntax, Pattern Matching & Choices"
 description: "Tuples, Pattern Matching, Guards, case expressions, Local bindings, Currying, Closures, Point-free style, and Equational Reasoning."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/02-basics-reasoning-quiz';
 
 # Chapter 3: Syntax, Pattern Matching & Choices
@@ -606,6 +639,22 @@ describeList xs = case xs of
 
 This is especially powerful when you need to pattern match on the result of a function call without defining a separate helper function.
 
+### Lab 4 Application: Grading with `case`
+While guards are excellent for ranges, `case` is ideal for discrete value matching. We can rewrite the Lab 4 `recc` (Recommendation) function by using `div score 10` to collapse the percentage into discrete tens, allowing us to use `case` instead of guards.
+
+```haskell
+reccCase :: Int -> String
+reccCase score = case div score 10 of
+    10 -> "First Class"
+    9  -> "First Class"
+    8  -> "First Class"
+    7  -> "Upper Second Class"
+    6  -> "Lower Second Class"
+    5  -> "Pass"
+    4  -> "Supplement"
+    _  -> "Fail"  -- Wildcard catches 0-39 and invalid inputs
+```
+
 ---
 
 ## 3.5 Local Bindings: `let...in` vs `where`
@@ -781,8 +830,7 @@ By induction, the theorem holds for all finite lists. QED.
 title: "03. ADTs & The Module System"
 description: "Basic ADTs, Pattern Matching, The Module System (Imports/Exports), Recursive ADTs, and Advanced Type Algebra."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/03-adts-modules-quiz';
 
 # Chapter 3: Algebraic Data Types & The Module System
@@ -1056,8 +1104,7 @@ data Priority = Low | Medium | High deriving (Eq, Ord, Show)
 title: "05. Polymorphism, Overloading & Typeclasses"
 description: "Parametric Polymorphism, Ad-Hoc Polymorphism, Defining Typeclasses, Standard Typeclasses, and Advanced Type Theory."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
 
 # Chapter 5: Polymorphism, Overloading & Typeclasses
@@ -1090,8 +1137,8 @@ import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
 *   **Dry Run:** `lastElement [1, 2]`
     ```text
       lastElement (1 : [2])
-    = lastElement [2]
-    = 2
+    => lastElement [2]
+    => 2
     ```
 *   **Polymorphism Check:** The type variable `a` means this works for any list. It only inspects the list structure (`[]` and `:`), never the elements themselves. Thus, it exhibits parametric polymorphism.
 *   **Implementation:**
@@ -1114,11 +1161,11 @@ import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
 *   **Dry Run:** `revList [1, 2]`
     ```text
       revList (1 : [2])
-    = revList [2] ++ [1]
-    = (revList [] ++ [2]) ++ [1]
-    = ([] ++ [2]) ++ [1]
-    = [2] ++ [1]
-    = [2, 1]
+    => revList [2] ++ [1]
+    => (revList [] ++ [2]) ++ [1]
+    => ([] ++ [2]) ++ [1]
+    => [2] ++ [1]
+    => [2, 1]
     ```
 *   **⏱️ Time Complexity Note:** The recursive step `revList xs ++ [x]` uses the `++` operator. Because `++` must traverse its entire left operand to append, this results in **$O(n^2)$ time complexity** for a list of length $n$. This is a critical syllabus requirement: naive reversal in Haskell is quadratic. (An $O(n)$ version uses an accumulator with `reverse'`).
 *   **Polymorphism Check:** Uses type variable `a`. Only manipulates list constructors `[]` and `:`, and the append operator `++` (which is also polymorphic). It never inspects the values of type `a`.
@@ -1141,10 +1188,10 @@ import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
 *   **Dry Run:** `twoLists [1, 2] [3, 4]`
     ```text
       twoLists (1:[2]) (3:[4])
-    = (1, 3) : twoLists [2] [4]
-    = (1, 3) : ((2, 4) : twoLists [] [])
-    = (1, 3) : ((2, 4) : [])
-    = [(1, 3), (2, 4)]
+    => (1, 3) : twoLists [2] [4]
+    => (1, 3) : ((2, 4) : twoLists [] [])
+    => (1, 3) : ((2, 4) : [])
+    => [(1, 3), (2, 4)]
     ```
 *   **Polymorphism Check:** Uses type variables `a` and `b`. Pairs elements without inspecting their values, allowing it to zip lists of entirely different types (e.g., `[Int]` and `[Char]`).
 *   **Implementation:**
@@ -1163,7 +1210,7 @@ import { quizData } from '@/content/quiz-data/sem3/csi243/04-type-system-quiz';
 *   **Dry Run:** `swapElements (5, "hello")`
     ```text
       swapElements (5, "hello")
-    = ("hello", 5)
+    => ("hello", 5)
     ```
 *   **Implementation:**
     ```haskell
@@ -1295,16 +1342,15 @@ When you call `sortBy [3,1,2]`, GHC automatically selects and passes the `OrdDic
 title: "06. Recursion, Lists & Structural Induction"
 description: "Anatomy of Recursion, Dry-Running Mechanics, List Recursion, Structural Induction, and Advanced Runtime Evaluation."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/05-lists-recursion-quiz';
 
 # Chapter 6: Recursion, Lists & Structural Induction
 
 ## Learning Objectives
 1. Define recursive functions by identifying the base case, recursive step, and mathematical specifications.
-2. Perform step-by-step dry-runs (substitution traces) of recursive functions like `fac`, `sumNumbers`, and `fib`.
-3. Implement standard list functions (`elementOccurs`, `isElementIn`, `powerNum`, `sumList`) using pattern matching on `[]` and `(x:xs)`.
+2. Perform step-by-step dry-runs (substitution traces) of recursive functions like `fac`, `sumNumbers`, `rangeSum`, and `fib`.
+3. Implement standard list functions (`listLength`, `concatLists`, `elementOccurs`, `isElementIn`, `sumList`) using pattern matching on `[]` and `(x:xs)`.
 4. Map mathematical summation ($\sum$) notation to recursive list processing.
 5. Construct formal proofs using Structural Induction (Basis step, Inductive Hypothesis, Inductive Step).
 6. Analyze and compare the Time and Space complexity of fundamental recursive algorithms.
@@ -1348,13 +1394,13 @@ To understand recursion and predict a function's behaviour, we perform a **dry-r
 ### Trace 1: `fac 3`
 ```text
   fac 3
-= 3 * fac 2                 -- apply recursive step
-= 3 * (2 * fac 1)           -- apply recursive step
-= 3 * (2 * (1 * fac 0))     -- apply recursive step
-= 3 * (2 * (1 * 1))         -- apply base case
-= 3 * (2 * 1)               -- evaluate arithmetic
-= 3 * 2
-= 6
+=> 3 * fac 2                 -- apply recursive step
+=> 3 * (2 * fac 1)           -- apply recursive step
+=> 3 * (2 * (1 * fac 0))     -- apply recursive step
+=> 3 * (2 * (1 * 1))         -- apply base case
+=> 3 * (2 * 1)               -- evaluate arithmetic
+=> 3 * 2
+=> 6
 ```
 
 ### Trace 2: `sumNumbers 4`
@@ -1367,16 +1413,16 @@ sumNumbers n
 ```
 ```text
   sumNumbers 4
-= (4 - 1) + sumNumbers 3
-= 3 + sumNumbers 3
-= 3 + ((3 - 1) + sumNumbers 2)
-= 3 + (2 + sumNumbers 2)
-= 3 + (2 + ((2 - 1) + sumNumbers 1))
-= 3 + (2 + (1 + sumNumbers 1))
-= 3 + (2 + (1 + ((1 - 1) + sumNumbers 0)))
-= 3 + (2 + (1 + (0 + 0)))    -- base case (0 <= 0)
-= 3 + (2 + 1)
-= 6
+=> (4 - 1) + sumNumbers 3
+=> 3 + sumNumbers 3
+=> 3 + ((3 - 1) + sumNumbers 2)
+=> 3 + (2 + sumNumbers 2)
+=> 3 + (2 + ((2 - 1) + sumNumbers 1))
+=> 3 + (2 + (1 + sumNumbers 1))
+=> 3 + (2 + (1 + ((1 - 1) + sumNumbers 0)))
+=> 3 + (2 + (1 + (0 + 0)))    -- base case (0 <= 0)
+=> 3 + (2 + 1)
+=> 6
 ```
 
 ### Trace 3: `fib` Call Tree
@@ -1401,11 +1447,60 @@ fib 1 fib 0
 
 ---
 
-## 6.3 List Recursion & Core Functions (5-Part Framework)
+## 6.3 List Recursion & Core Functions (Lab 2 & Lecture Framework)
 
 Lists in Haskell are defined recursively: a list is either empty (`[]`) or an element prepended to another list (`x:xs`). Therefore, list functions naturally follow a recursive structure pattern matching on these two constructors.
 
-### 1. `elementOccurs` (Count Occurrences)
+### 1. `listLength` (Lab 2 Task 3a)
+*   **Signature:** `listLength :: [a] -> Integer`
+*   **Mathematical Specification:**
+    ```text
+    listLength(xs) = {
+      0                     if xs = []
+      1 + listLength(ys)    if xs = y:ys
+    }
+    ```
+*   **Dry Run:** `listLength [1, 2]`
+    ```text
+      listLength (1 : [2])
+    => 1 + listLength [2]
+    => 1 + listLength (2 : [])
+    => 1 + (1 + listLength [])
+    => 1 + (1 + 0)
+    => 2
+    ```
+*   **Implementation:**
+    ```haskell
+    listLength :: [a] -> Integer
+    listLength []     = 0                 -- Base case
+    listLength (_:xs) = 1 + listLength xs -- Recursive step
+    ```
+
+### 2. `concatLists` (Lab 2 Task 3b)
+*   **Signature:** `concatLists :: [a] -> [a] -> [a]`
+*   **Mathematical Specification:**
+    ```text
+    concatLists(xs, ys) = {
+      ys                         if xs = []
+      x : concatLists(xs', ys)   if xs = x:xs'
+    }
+    ```
+*   **Dry Run:** `concatLists [1, 2] [3, 4]`
+    ```text
+      concatLists (1:[2]) [3,4]
+    => 1 : concatLists [2] [3,4]
+    => 1 : (2 : concatLists [] [3,4])
+    => 1 : (2 : [3,4])
+    => [1,2,3,4]
+    ```
+*   **Implementation:**
+    ```haskell
+    concatLists :: [a] -> [a] -> [a]
+    concatLists []     ys = ys              -- Base case: appending to empty list
+    concatLists (x:xs) ys = x : concatLists xs ys -- Recursive step
+    ```
+
+### 3. `elementOccurs`
 *   **Signature:** `elementOccurs :: Eq a => a -> [a] -> Int`
 *   **Mathematical Specification:**
     ```text
@@ -1415,14 +1510,14 @@ Lists in Haskell are defined recursively: a list is either empty (`[]`) or an el
       elementOccurs(e, ys)      if xs = y:ys and e != y
     }
     ```
-*   **Dry Run:** `elementOccurs 2 [1,2,2,3]`
+*   **Dry Run:** `elementOccurs 2 [1, 2, 2, 3]`
     ```text
       elementOccurs 2 (1:[2,2,3])
-    = elementOccurs 2 [2,2,3]             -- 2 /= 1, skip head
-    = 1 + elementOccurs 2 [2,3]           -- 2 == 2, count it
-    = 1 + (1 + elementOccurs 2 [3])       -- 2 == 2, count it
-    = 1 + (1 + 0)                         -- 2 /= 3, base case met
-    = 2
+    => elementOccurs 2 [2,2,3]             -- 2 /= 1, skip head
+    => 1 + elementOccurs 2 [2,3]           -- 2 == 2, count it
+    => 1 + (1 + elementOccurs 2 [3])       -- 2 == 2, count it
+    => 1 + (1 + 0)                         -- 2 /= 3, base case met
+    => 2
     ```
 *   **Implementation:**
     ```haskell
@@ -1433,21 +1528,21 @@ Lists in Haskell are defined recursively: a list is either empty (`[]`) or an el
         | otherwise   = elementOccurs target xs
     ```
 
-### 2. `isElementIn` (Membership Check)
+### 4. `isElementIn`
 *   **Signature:** `isElementIn :: Eq a => a -> [a] -> Bool`
 *   **Mathematical Specification:**
     ```text
     isElementIn(e, xs) = {
-      False            if xs = []
-      True             if xs = y:ys and e = y
-      isElementIn(e, ys) if xs = y:ys and e != y
+      False                   if xs = []
+      True                    if xs = y:ys and e = y
+      isElementIn(e, ys)      if xs = y:ys and e != y
     }
     ```
-*   **Dry Run:** `isElementIn 2 [1,2,3]`
+*   **Dry Run:** `isElementIn 2 [1, 2, 3]`
     ```text
       isElementIn 2 (1:[2,3])
-    = isElementIn 2 [2,3]                 -- 2 /= 1, skip head
-    = True                                -- 2 == 2, base case met
+    => isElementIn 2 [2,3]                 -- 2 /= 1, skip head
+    => True                                -- 2 == 2, base case met
     ```
 *   **Implementation:**
     ```haskell
@@ -1458,24 +1553,24 @@ Lists in Haskell are defined recursively: a list is either empty (`[]`) or an el
         | otherwise   = isElementIn target xs
     ```
 
-### 3. `powerNum` (Exponentiation)
+### 5. `powerNum`
 *   **Signature:** `powerNum :: Integer -> Int -> Integer`
 *   **Mathematical Specification:**
     ```text
     powerNum(n, y) = {
-      error               if y < 0
-      1                   if y = 0
-      n × powerNum(n, y-1) if y > 0
+      error                   if y < 0
+      1                       if y = 0
+      n × powerNum(n, y-1)    if y > 0
     }
     ```
 *   **Dry Run:** `powerNum 2 3`
     ```text
       powerNum 2 3
-    = 2 * powerNum 2 2
-    = 2 * (2 * powerNum 2 1)
-    = 2 * (2 * (2 * powerNum 2 0))
-    = 2 * (2 * (2 * 1))          -- base case (y = 0)
-    = 8
+    => 2 * powerNum 2 2
+    => 2 * (2 * powerNum 2 1)
+    => 2 * (2 * (2 * powerNum 2 0))
+    => 2 * (2 * (2 * 1))          -- base case (y = 0)
+    => 8
     ```
 *   **Implementation:**
     ```haskell
@@ -1486,7 +1581,34 @@ Lists in Haskell are defined recursively: a list is either empty (`[]`) or an el
         | otherwise = n * powerNum n (y - 1)
     ```
 
-### 4. `sumNumbers` (Sum up to n)
+### 6. `rangeSum` (Recursion Lecture Exercise)
+*   **Signature:** `rangeSum :: Integer -> Integer -> Integer`
+*   **Mathematical Specification:**
+    ```text
+    rangeSum(a, b) = {
+      0                       if a > b
+      a                       if a == b
+      a + rangeSum(a+1, b)    if a < b
+    }
+    ```
+*   **Dry Run:** `rangeSum 3 5`
+    ```text
+      rangeSum 3 5
+    => 3 + rangeSum 4 5
+    => 3 + (4 + rangeSum 5 5)
+    => 3 + (4 + 5)
+    => 12
+    ```
+*   **Implementation:**
+    ```haskell
+    rangeSum :: Integer -> Integer -> Integer
+    rangeSum a b
+        | a > b     = 0
+        | a == b    = a
+        | otherwise = a + rangeSum (a + 1) b
+    ```
+
+### 7. `sumNumbers` (Sum up to n)
 *   **Signature:** `sumNumbers :: Integer -> Integer`
 *   **Specification:** Sums all integers from 0 up to, but not including, `n`.
 *   **Implementation:**
@@ -1497,7 +1619,7 @@ Lists in Haskell are defined recursively: a list is either empty (`[]`) or an el
         | otherwise = (n - 1) + sumNumbers (n - 1)
     ```
 
-### 5. `sumList` & Sequences/Summation
+### 8. `sumList` & Sequences/Summation
 In mathematics, the summation of a sequence is denoted by the Sigma ($\sum$) notation:
 $$ \sum_{i=0}^{n-1} x_i = x_0 + x_1 + \dots + x_{n-1} $$
 In Haskell, this maps directly to the recursive structure of `sumList`. The base case (`[]`) corresponds to the empty sum (0), and the recursive step (`x:xs`) corresponds to adding the current term $x_i$ to the summation of the remaining terms.
@@ -1535,32 +1657,32 @@ Structural induction is the primary method for proving properties of recursively
 3. **Inductive Step**: Prove the property holds for the recursive constructor (e.g., `x:xs`), utilizing the IH.
 
 ### Example Proof
-**Theorem:** Prove `length (xs ++ ys) = length xs + length ys` for all lists `xs` and `ys`.
+**Theorem:** Prove `listLength (concatLists xs ys) = listLength xs + listLength ys` for all lists `xs` and `ys`.
 *Proof by structural induction on `xs`.*
 
 **Basis Step (`xs = []`):**
 ```text
-LHS: length ([] ++ ys)
-   = length ys                -- Definition of (++)
+LHS: listLength (concatLists [] ys)
+   = listLength ys                -- Definition of concatLists
 
-RHS: length [] + length ys
-   = 0 + length ys            -- Definition of length
-   = length ys                -- Arithmetic
+RHS: listLength [] + listLength ys
+   = 0 + listLength ys            -- Definition of listLength
+   = listLength ys                -- Arithmetic
 
 LHS = RHS. Basis step holds.
 ```
 
 **Inductive Step (`xs = x:xs'`):**
-Assume IH: `length (xs' ++ ys) = length xs' + length ys`.
+Assume IH: `listLength (concatLists xs' ys) = listLength xs' + listLength ys`.
 ```text
-LHS: length ((x:xs') ++ ys)
-   = length (x : (xs' ++ ys))         -- Definition of (++)
-   = 1 + length (xs' ++ ys)           -- Definition of length
-   = 1 + (length xs' + length ys)     -- By Inductive Hypothesis
+LHS: listLength (concatLists (x:xs') ys)
+   = listLength (x : concatLists xs' ys)  -- Definition of concatLists
+   = 1 + listLength (concatLists xs' ys)  -- Definition of listLength
+   = 1 + (listLength xs' + listLength ys) -- By Inductive Hypothesis
 
-RHS: length (x:xs') + length ys
-   = (1 + length xs') + length ys     -- Definition of length
-   = 1 + (length xs' + length ys)     -- Associativity of addition
+RHS: listLength (x:xs') + listLength ys
+   = (1 + listLength xs') + listLength ys -- Definition of listLength
+   = 1 + (listLength xs' + listLength ys) -- Associativity of addition
 
 LHS = RHS. Inductive step holds. QED.
 ```
@@ -1611,8 +1733,7 @@ sumStrict (x:xs) !acc = sumStrict xs (acc + x)
 title: "07. Higher-Order Functions & List Processing"
 description: "map, filter, foldr, List Comprehensions, Standard Library Functions, and Advanced Fusion Theory."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/06-hofs-fusion-quiz';
 
 # Chapter 7: Higher-Order Functions & List Processing
@@ -1662,13 +1783,13 @@ Both reduce a list to a single value, but they differ fundamentally in evaluatio
 To understand how `foldr` builds right-associative expression trees, trace `foldr (+) 0 [1,2,3]`:
 ```text
   foldr (+) 0 [1,2,3]
-= 1 + (foldr (+) 0 [2,3])
-= 1 + (2 + (foldr (+) 0 [3]))
-= 1 + (2 + (3 + (foldr (+) 0 [])))
-= 1 + (2 + (3 + 0))       -- Base case reached
-= 1 + (2 + 3)
-= 1 + 5
-= 6
+=> 1 + (foldr (+) 0 [2,3])
+=> 1 + (2 + (foldr (+) 0 [3]))
+=> 1 + (2 + (3 + (foldr (+) 0 [])))
+=> 1 + (2 + (3 + 0))       -- Base case reached
+=> 1 + (2 + 3)
+=> 1 + 5
+=> 6
 ```
 
 ```haskell
@@ -1710,6 +1831,42 @@ ghci> [(x,y) | x <- [1..3], y <- [x..3]]
 
 **Equivalence to HOFs:**  
 `[x*2 | x <- [1..10], even x]` is functionally identical to `map (*2) (filter even [1..10])`.
+
+### 7.2.1 Lab 5 Practical Implementations
+Lab 5 tests your ability to use complex generators, predicates, and pattern matching *inside* the comprehension brackets.
+
+**1. Odd Squares**
+*   **Task:** Return the square of an integer between 1 and 79, only if it is odd.
+```haskell
+oddSquares :: [Int]
+oddSquares = [x^2 | x <- [1..79], odd x]
+```
+
+**2. Upper Case Consonants**
+*   **Task:** Given `isVowel` and `toUpperCase`, produce a list of upper case consonants.
+```haskell
+consonants :: [Char]
+consonants = [toUpperCase c | c <- ['a'..'z'], not (isVowel c)]
+```
+
+**3. Pythagorean Triples (Dependent Generators)**
+*   **Task:** Return tuples `(a, b, c)` where $a^2 + b^2 = c^2$ below 100. The lab explicitly notes that `(3,4,5)` and `(4,3,5)` are the same. We solve this by making the generator for `b` dependent on `a` (`b <- [a..c]`), ensuring $a \le b$.
+```haskell
+pythTriples :: [(Int, Int, Int)]
+pythTriples = [ (a, b, c) | c <- [1..100], a <- [1..c], b <- [a..c], a^2 + b^2 == c^2 ]
+```
+
+**4. Student Marks Averaging (Pattern Matching in Comprehensions)**
+*   **Task:** Extract test and assignment averages from a list of lists formatted as `[T1, T2, A1, A2, A3]`.
+```haskell
+marks :: [[Int]]
+marks = [[20,35,67,89,11],[45,78,90,12,34],[90,67,89,56,78]]
+
+averages :: [(Double, Double)]
+averages = [ ( (fromIntegral (t1+t2))/2.0, (fromIntegral (a1+a2+a3))/3.0 ) 
+           | [t1, t2, a1, a2, a3] <- marks ]
+```
+Notice how we pattern match the exact 5-element list structure `[t1, t2, a1, a2, a3]` directly inside the generator!
 
 ---
 
@@ -1758,7 +1915,7 @@ twoListsRecursive _ _ = []
 twoListsStandard :: [a] -> [b] -> [(a, b)]
 twoListsStandard = zip
 
-gchi> twoListsStandard [1,2,3] [10,20,30]
+ghci> twoListsStandard [1,2,3] [10,20,30]
 [(1,10),(2,20),(3,30)]
 ```
 Always prefer `zip` in practice: it is rigorously tested, handles edge cases cleanly, and is heavily optimised by GHC.
@@ -1774,7 +1931,7 @@ A `fold` is not merely a loop — it is a structural replacement. `foldr f z` re
 
 ```haskell
 foldr f z [1, 2, 3]
-= f 1 (f 2 (f 3 z))       -- (:) replaced by f, [] replaced by z
+=> f 1 (f 2 (f 3 z))       -- (:) replaced by f, [] replaced by z
 ```
 This structural view explains why `foldr (:) []` is the identity function: it replaces each constructor with itself.
 
@@ -1808,7 +1965,7 @@ In the second argument of 'foldr', namely '0'
 sumAndCount :: [Int] -> (Int, Int)
 sumAndCount = foldr (\x (s, c) -> (s + x, c + 1)) (0, 0)
 
-gchi> sumAndCount [10, 20, 30]
+ghci> sumAndCount [10, 20, 30]
 (60,3)
 ```
 
@@ -1828,7 +1985,7 @@ Expected type: Int -> Int, Actual type: Int -> [Char]
 processGood :: [Int] -> [String]
 processGood = map show . filter (> 0) . map (+ 1)
 
-gchi> processGood [-1, 0, 2, 4]
+ghci> processGood [-1, 0, 2, 4]
 ["3","5"]
 ```
 
@@ -1848,11 +2005,13 @@ gchi> processGood [-1, 0, 2, 4]
 title: "08. Abstractions"
 description: "Functors, Applicatives, and Monads."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/07-abstractions-quiz';
 
 # Chapter 8: Abstractions: Functors, Applicatives, Monads
+
+> ⚠️ **ADVANCED/BONUS: Not explicitly tested in CSI243 Labs.**
+> This chapter covers advanced Category Theory and Monad laws. While crucial for a deep understanding of Haskell, these specific mechanics are considered bonus material and are **not explicitly tested** in standard CSI243 lab assessments.
 
 ## Learning Objectives
 1. Prove Functor laws (Identity and Composition) for the List type using structural induction.
@@ -2089,8 +2248,7 @@ main = do
 title: "09. The IO Monad"
 description: "The Recipe pattern, RealWorld token, and the purity boundary."
 ---
-import { Quiz } from '@/components/quiz';
-import { SafeImage } from '@/components/safe-image';
+
 import { quizData } from '@/content/quiz-data/sem3/csi243/08-io-monad-quiz';
 
 # Chapter 9: The IO Monad & The Purity Boundary
@@ -2270,4 +2428,95 @@ increment ref = do
 *Explanation:* `readIORef` returns an `IO Int` because reading from memory is a side effect dependent on the `RealWorld` token.
 
 <Quiz title="Chapter 9 Knowledge Check" questions={quizData} />
+
+========== content/docs/sem3/csi243/index.mdx ==========
+---
+title: "Course Overview & Roadmap"
+description: "Comprehensive overview of CSI243 Functional Programming topics, syllabus, and documentation structure."
+---
+
+# CSI243: Functional Programming - Course Index & Roadmap
+
+## Course Information
+- **Credits:** 3
+- **Pre-requisites:** CSI142
+- **Co-requisites:** None
+
+## Aims and Learning Objectives
+The course aims to introduce Functional Programming as one of the models in Computer Science. It introduces the main concepts behind the functional programming paradigm and problem solving using functional languages. It emphasizes important concepts such as recursive definitions, higher-order functions, and type inference. Programming exercises illustrate the utility of list-processing, pattern matching, abstraction of data/control, strong typing, and parameterized modules (functors). This course also emphasizes mathematical reasoning involved in the design of functional programs and techniques for proving properties about functions so defined.
+
+## Learning Outcomes
+Upon successful completion of the course, students should be able to:
+1. Explain the principles and techniques of programming with functions.
+2. Explain the main features of a modern functional language.
+3. Write non-trivial functional programs.
+4. Develop applications using functional programming languages.
+
+## Documentation Index & Syllabus Mapping
+This index maps the official course topics to the specific chapters in the documentation.
+
+### 01. Paradigm Shift
+- **Syllabus Topic:** Define functional programming, and compare to imperative programming languages.
+- **Documentation Focus:** Introduction to the FP mindset, immutability, pure functions, and the shift from imperative to declarative programming.
+
+### 02. Haskell Basics, GHCi & Basic IO
+- **Syllabus Topic:** Design, implement, and test applications using Haskell.
+- **Documentation Focus:** Navigating GHCi, the Layout Rule, case sensitivity, if-then-else expressions, read/show with type annotations, and basic do-block IO.
+
+### 03. Syntax, Pattern Matching & Choices
+- **Syllabus Topic:** List-processing, pattern matching, definitions of functions, abstraction of data/control.
+- **Documentation Focus:** Tuples, mechanical pattern matching, Guards, case expressions, local bindings (let...in vs where), currying, closures, and point-free style.
+
+### 04. ADTs & Modules
+- **Syllabus Topic:** Abstract data types, strong typing, and parameterized modules.
+- **Documentation Focus:** Defining custom data types, type synonyms, recursive data types, and organizing code using Haskell's module system.
+
+### 05. Polymorphism & Typeclasses
+- **Syllabus Topic:** Define polymorphism, abstract data types, type checking, and type inference.
+- **Documentation Focus:** Parametric polymorphism, ad-hoc polymorphism (overloading), defining custom Typeclasses, standard hierarchies (Eq, Ord, Num, Show, Read), and Hindley-Milner unification.
+
+### 06. Recursion, Lists & Induction
+- **Syllabus Topic:** Recursive definitions, mathematical reasoning in the design of functional programs, overview of complexity of functions.
+- **Documentation Focus:** Anatomy of recursion, dry-running mechanics, structural induction proofs, and time/space complexity analysis of recursive functions.
+
+### 07. Higher-Order Functions & List Processing
+- **Syllabus Topic:** Higher-order functions, list-processing.
+- **Documentation Focus:** map, filter, foldr, foldl', list comprehensions, standard library functions, and GHC rewrite rules.
+
+### 08. Abstractions (Advanced/Bonus)
+- **Syllabus Topic:** Abstraction of data/control, parameterized modules (functors).
+- **Documentation Focus:** Functor laws, Applicative error accumulation, Monad laws, Kleisli composition, and do-notation desugaring. (Note: Considered bonus material not explicitly tested in standard labs).
+
+### 09. IO & The Monad (Advanced/Bonus)
+- **Syllabus Topic:** Develop applications using functional programming languages.
+- **Documentation Focus:** The Recipe pattern (IO as an AST), the State# RealWorld token, IORef for controlled mutable state, and exception handling. (Note: Considered bonus material not explicitly tested in standard labs).
+
+## Modes of Assessment
+1. **Continuous Assessment (50%):** Made up of 2 Tests and Weekly Lab work.
+   - Test 1: Thursday 15th September, 11:00 hours
+   - Test 2: Thursday 3rd November, 11:00 hours
+2. **Examination (50%):** Date and time based on the UB timetable.
+
+## Reading and Resources List
+1. Simon Thompson, *Haskell: The Craft of Functional Programming*, Pearson, 3rd ed, 2011.
+2. Haskell support: https://www.haskell.org
+3. Miran Lipovaca, *Learn You a Haskell for Great Good!: A Beginner's Guide*, 1st Edition. Online at learnyouahaskell.com
+4. Fernandez M, *Models of computation: An introduction to computability theory*, Springer, 2009.
+5. Ederton H B, *A mathematical introduction to logic*, Harcourt/Academic Press, 2nd ed, 2001.
+6. Other relevant reading material.
+
+========== content/docs/sem3/csi243/resources.mdx ==========
+---
+title: Resources
+description: Curated resources, textbooks, and supplementary materials for CSI243 Functional Programming.
+---
+
+
+# CSI243 Resources & Supplementary Materials
+
+A comprehensive collection of textbooks, video lectures, practice platforms, and tools organized by course topics to help you master Functional Programming and Haskell.
+
+<ResourceHub modulePath="/files/sem3/csi243" />
+
+---
 

@@ -1,11 +1,11 @@
 ---
 title: "Overview"
-description: "The measure-theoretic foundation of probability"
+description: "The measure-theoretic foundation of probability, defining sample spaces, events, and the Kolmogorov axioms."
 ---
 
-# Chapter 2: Axiomatic Probability 
+# Chapter 2: Axiomatic Probability
 
-The measure-theoretic foundation of probability, formal definitions of random variables, and rigorous computational proofs for variance.
+The measure-theoretic foundation of probability. This chapter establishes the rigorous mathematical framework for defining sample spaces, events, and the unbreakable axioms that govern all probabilistic calculations.
 
 ---
 
@@ -13,12 +13,33 @@ The measure-theoretic foundation of probability, formal definitions of random va
 
 <Card>
 
-### [2.1 Axiomatic Probability Theory](/docs/probability/axioms)
-The foundational rules governing any probability space and their direct mathematical consequences.
+### [2.1 Sample Spaces & Events](/docs/sem3/csi213/02-probability/sample-space-events)
+The foundational structures of probability theory, mapping real-world experiments to abstract mathematical spaces.
 
-* **The Kolmogorov Axioms:** Explicitly stating Axiom I (Non-negativity), Axiom II (Normalization), and Axiom III (Countable Additivity).
-* **Theorem 2.1.3 (Addition Rule):** Proving $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ by partitioning $A \cup B = (A \cap B^c) \cup B$ and applying Axiom III.
-* **Theorem 2.1.4 (Monotonicity):** Proving that if $A \subset B$, then $P(A) \le P(B)$ using the partition $B = A \cup (B \cap A^c)$.
+* **Sample Spaces ($S$):** Defining the universal set of all possible outcomes for discrete and continuous experiments.
+* **Events as Subsets:** Rigorously defining events as subsets of $S$ ($A \subseteq S$) and applying set theory operations.
+* **Mutually Exclusive & Exhaustive Events:** Defining disjoint events and partitions of the sample space.
 
 </Card>
 
+<Card>
+
+### [2.2 Outcomes & Classical Probability](/docs/sem3/csi213/02-probability/outcomes)
+Bridging abstract sets with concrete outcomes and the historical definition of probability.
+
+* **Elementary Outcomes:** Analyzing individual outcomes and their role in finite sample spaces.
+* **Classical Probability:** Calculating probabilities using equally likely outcomes ($P(A) = |A| / |S|$).
+* **Partitions:** Breaking down complex events into simpler, non-overlapping outcome sets to simplify calculations.
+
+</Card>
+
+<Card>
+
+### [2.3 The Kolmogorov Axioms](/docs/sem3/csi213/02-probability/axioms)
+The absolute source of truth for modern probability, grounded in measure theory.
+
+* **The Three Axioms:** Explicitly stating Axiom I (Non-negativity), Axiom II (Normalization), and Axiom III (Countable Additivity).
+* **Theorem (Addition Rule):** Proving $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ by partitioning $A \cup B = (A \cap B^c) \cup B$ and applying Axiom III.
+* **Theorem (Monotonicity):** Proving that if $A \subset B$, then $P(A) \le P(B)$ using the partition $B = A \cup (B \cap A^c)$.
+
+</Card>
