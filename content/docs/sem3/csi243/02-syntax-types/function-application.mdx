@@ -1,0 +1,67 @@
+---
+title: "2.2 Function Application & Operators"
+description: "Prefix vs. Infix, precedence of space, the $ operator, and mandatory else branches."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/02-syntax-types/function-application-quiz';
+
+## 2.2 Function Application & Operators
+
+Haskell's syntax for applying functions and evaluating expressions is governed by strict, non-negotiable precedence rules.
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 2.2.1: Prefix vs. Infix Application"
+  description="Haskell defaults to prefix notation (space-separated), but allows infix notation for specific operators."
+>
+
+- **Prefix:** Functions are applied by separating the function and its arguments with spaces. `f x y` means "apply `f` to `x`, then apply the result to `y`".
+- **Infix:** Operators (like `+`, `*`, `==`) are placed between their arguments. Any function can be used infix by wrapping it in backticks: `` x `mod` y ``.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 2.2.2: The Supreme Precedence of Function Application"
+  description="The space character (function application) has the highest precedence of all operators in Haskell."
+>
+
+Because space has the highest precedence, it binds tighter than any mathematical operator.
+- `f x + y` is parsed as `(f x) + y`, **not** `f (x + y)`.
+- To apply `f` to the result of `x + y`, you must use parentheses: `f (x + y)`.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 2.2.3: The `$` Operator"
+  description="Right-associative application with the lowest possible precedence, used to eliminate nested parentheses."
+>
+
+The `$` operator is defined as `f $ x = f x`. Because it has the lowest precedence, everything to its right is evaluated first.
+- `f (g (x + y))` can be rewritten cleanly as `f $ g $ x + y`.
+
+</HighlightCard>
+
+<Card>
+
+### Definition 2.2.1 (The Mandatory `else` Branch)
+
+In Haskell, `if-then-else` is an **expression**, not a statement. This means it must evaluate to a value in all possible execution paths. Consequently, the `else` branch is **strictly mandatory**.
+
+```haskell
+-- CORRECT: Evaluates to an Int in all paths
+absoluteValue :: Int -> Int
+absoluteValue x = if x < 0 then -x else x
+
+-- WRONG: Missing 'else' branch (Compiler Error!)
+-- badAbsoluteValue x = if x < 0 then -x
+```
+
+</Card>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Function Application Assessment" questions={quizData} />

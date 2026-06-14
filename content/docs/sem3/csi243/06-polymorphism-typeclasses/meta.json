@@ -1,0 +1,9 @@
+{
+  "title": "06. Polymorphism, Typeclasses & Error Translation",
+  "pages": [
+    "index",
+    "parametric-polymorphism",
+    "typeclasses",
+    "error-translation"
+  ]
+}
