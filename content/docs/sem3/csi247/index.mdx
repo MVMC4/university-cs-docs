@@ -1,82 +1,64 @@
 ---
-title: "Course Overview"
-description: "The ultimate blueprint for mastering data structures, algorithm analysis, and computational paradigms."
+title: Overview
+description: Welcome to CSI247. Master fundamental data structures, algorithm analysis, and Java implementations to solve complex computational problems efficiently.
 ---
 
-# Master Curriculum Memo: Data Structures & Algorithms
+# Welcome to CSI247: Data Structures & Algorithm Analysis
 
-This is the complete, high-level curriculum memo. No code snippets, no getting bogged down in the weeds—just a comprehensive, start-to-finish syllabus that outlines exactly *what* definitions, theorems, concepts, and implementations you are responsible for mastering in CSI247.
+Welcome to the comprehensive study guide and documentation for **CSI247: Data Structures**. This course is designed to bridge the gap between basic programming and advanced software engineering by teaching you how to organize, store, and manipulate data efficiently.
 
----
-
-## Module 1: Linear Data Structures
-
-### 1.1 Arrays & Matrices
-- **Definitions & Concepts:** Contiguous memory allocation, static vs. dynamic memory, multidimensional scaling.
-- **Theorems & Principles:** Memory addressing and 2D array indexing formulas.
-- **Required Skills:** You must know how to traverse 1D and 2D arrays, execute matrix multiplication (matching rows to columns mathematically), and analyze the bounds of your traversal loops.
-
-### 1.2 Linked Lists
-- **Definitions & Concepts:** Nodes, dynamic memory pointers, head/tail references, Singly vs. Doubly linked structures, null termination.
-- **Theorems & Principles:** Sequential access constraints (why you cannot randomly access a node like an array).
-- **Required Skills:** You must know the step-by-step logic to construct nodes, traverse lists to extract/filter data, count internal nodes without touching the boundaries, and safely sever/reconnect pointers for insertion and deletion without causing memory leaks.
-
-### 1.3 Stacks
-- **Definitions & Concepts:** Last-In-First-Out (LIFO) architecture, stack overflow/underflow.
-- **Theorems & Principles:** Call stack execution and recursive unwinding.
-- **Required Skills:** You must know the conceptual logic to implement a stack using both arrays and linked lists. You must be able to trace how a stack evaluates mathematical expressions or converts infix notation to postfix/prefix.
-
-### 1.4 Queues
-- **Definitions & Concepts:** First-In-First-Out (FIFO) architecture, Circular Queues, front/rear pointers.
-- **Required Skills:** You must know how to implement enqueue and dequeue methods logically using linked lists, and how to manage the front/rear pointers effectively to avoid dropping active elements.
+> **Course Objective:** Learn and implement common data structures, reinforce the concept that there are costs and benefits for every data structure, and master algorithm analysis to write highly optimized, scalable code.
 
 ---
 
-## Module 2: Algorithm Analysis, Searching, and Sorting
+## 🎯 What You Will Learn
 
-### 2.1 Complexity Analysis
-- **Definitions & Concepts:** Time complexity, Space complexity, Best/Worst/Average case scenarios.
-- **Theorems & Principles:** Asymptotic Notation bounds (Big-O, Big-Omega, Big-Theta).
-- **Required Skills:** You must be able to look at any standard algorithm or loop structure and definitively state its Big-O time and space complexity.
+In this course, we transition from simply writing code that *works* to writing code that *scales*. You will explore the fundamental building blocks of software systems and learn how to analyze their performance mathematically.
 
-### 2.2 Searching Algorithms
-- **Definitions & Concepts:** Linear iteration vs. Divide-and-conquer searching.
-- **Required Skills:** You must know how to trace a Linear Search and a Binary Search. You must be able to state the absolute prerequisites for Binary Search (i.e., the dataset must be pre-sorted).
-
-### 2.3 Quadratic Sorting ($O(n^2)$)
-- **Definitions & Concepts:** In-place sorting, stable vs. unstable algorithm behaviors.
-- **Required Skills:** You must know the step-by-step mechanical swapping process of Bubble Sort, Selection Sort, and Insertion Sort. You must be able to argue conceptually why one might be chosen over another for specific, small datasets.
-
-### 2.4 Logarithmic Sorting ($O(n \log n)$)
-- **Definitions & Concepts:** Recursive sorting, partitioning, and array merging.
-- **Required Skills:** You must know the divide-and-conquer mechanics of Merge Sort and Quick Sort. You must be able to explain how utilizing a pivot point or recursive division drastically outperforms quadratic algorithms on massive datasets.
+### Core Topics Covered:
+1. **Java Foundations & OOP**: A rigorous revision of Core Java, Object-Oriented Programming, and Generics to ensure a solid foundation for data structure implementation.
+2. **Java Collections Framework (JCF)**: Deep dive into the standard library's data structures (`ArrayList`, `HashMap`, `TreeSet`, etc.) and the internal mechanics of when to use them.
+3. **Algorithm Analysis (Big-O)**: Master asymptotic notation, amortized analysis, and computational complexity to mathematically prove your code's efficiency.
+4. **Recursion & Sorting/Searching**: Understand the call stack, master divide-and-conquer paradigms, and implement classic sorting and searching algorithms.
+5. **Linear Data Structures**: Implement and analyze Linked Lists, Stacks, and Queues, including advanced variants like Circular Queues and Monotonic Deques.
+6. **Non-Linear Data Structures**: Master Trees (BSTs, AVL Trees, Tries) and Graphs, including traversal algorithms, shortest-path solutions, and minimum spanning trees.
+7. **Hashing**: Understand hash functions, collision resolution techniques, and advanced structures like Bloom Filters and LRU Caches.
 
 ---
 
-## Module 3: Non-Linear Data Structures
+## 📚 Course Information
 
-### 3.1 Tree Fundamentals & BSTs
-- **Definitions & Concepts:** Root nodes, leaves, parent/child relationships, tree height, depth, and the structural properties of a Binary Search Tree (BST).
-- **Theorems & Principles:** The structural constraint that all left children are smaller than the parent, and all right children are larger.
-- **Required Skills:** You must know how to manually map out a BST from a raw dataset. You must be able to trace and output Depth-First traversals: Pre-order, In-order, and Post-order.
-
-### 3.2 Balanced Trees (AVL)
-- **Definitions & Concepts:** Height balance factor, self-balancing mechanics, tree degradation (when a tree becomes a linked list).
-- **Theorems & Principles:** The AVL constraint that the balance factor of any node must be bounded between -1 and 1.
-- **Required Skills:** You must know how to mathematically calculate a node's balance factor. You must know how to identify when a rotation is required during data insertion, and correctly execute Left, Right, Left-Right, and Right-Left rotations to rebalance the tree.
-
-### 3.3 Graph Theory
-- **Definitions & Concepts:** Vertices, edges, directed vs. undirected flow, weighted vs. unweighted paths, cyclic vs. acyclic graphs.
-- **Required Skills:** You must know how to represent complex network relationships computationally. Specifically, you must know how to construct an Adjacency List and translate that data accurately into an $N \times N$ Adjacency Matrix.
+| Attribute | Details |
+| :--- | :--- |
+| **Course Code** | CSI247 |
+| **Course Title** | Data Structures |
+| **Credits** | 3 Credits |
+| **Prerequisites** | CSI142 (Intro to Programming), ISS112 |
+| **Core Textbook** | *Data Structures & Algorithms in Java* by Goodrich, Tamassia, and Goldwasser |
+| **Reference** | *Introduction to Algorithms* by Cormen, Leiserson, Rivest, and Stein (CLRS) |
 
 ---
 
-## Module 4: Advanced Traversal & Algorithmic Paradigms
+## 🚀 How to Use This Documentation
 
-### 4.1 Graph Traversals & Pathfinding
-- **Definitions & Concepts:** Level-order exploration vs. deep-branch exploration, shortest-path principles.
-- **Required Skills:** You must know how to trace Breadth-First Search (BFS) tracking state with a Queue, and Depth-First Search (DFS) tracking state with a Stack. You must know how to manually trace Dijkstra's Algorithm across a weighted graph to find the shortest path between two nodes.
+This repository is structured as a sequential learning path. Each module contains:
+- **Conceptual Explanations**: Visual diagrams and real-world analogies to build intuition.
+- **Java Implementations**: Clean, well-commented code for every data structure and algorithm.
+- **Complexity Analysis**: Rigorous breakdowns of Time and Space complexity (Big-O).
+- **Knowledge Checks**: Interactive, rigorous quizzes at the end of each module to test your understanding and prepare for exams.
 
-### 4.2 Optimization Paradigms (Greedy & DP)
-- **Definitions & Concepts:** Local optimal choices vs. global optimums, overlapping subproblems, optimal substructure.
-- **Required Skills:** You must know how to formulate a Greedy algorithm solution for optimization puzzles (like mathematically deducing the absolute minimum number of Botswana Pula notes required for a transaction). You must also be able to explain theoretically when a Greedy approach fails and why Dynamic Programming is required.
+### Recommended Study Flow:
+1. Start with **Java Foundations** and **Big-O Notation** to build your analytical toolkit.
+2. Move through **Linear Structures** (Lists, Stacks, Queues) to understand memory and pointers.
+3. Tackle **Recursion** and **Sorting/Searching** to master algorithmic paradigms.
+4. Conclude with **Non-Linear Structures** (Trees, Graphs, Hash Tables), which form the backbone of modern databases, AI, and operating systems.
+
+---
+
+## 💡 The Golden Rule of Data Structures
+
+> *"There is no universally 'best' data structure. Every structure is a trade-off between time complexity, space complexity, and ease of implementation."*
+
+Whether you are optimizing a database index, building a game engine, or designing a social network's friend suggestion algorithm, choosing the right data structure is the difference between an application that crashes under load and one that scales to millions of users.
+
+Let's get started! Navigate to the first module using the sidebar.
