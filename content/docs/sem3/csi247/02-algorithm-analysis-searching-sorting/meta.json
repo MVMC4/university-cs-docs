@@ -1,0 +1,10 @@
+{
+  "title": "2. Algorithm Analysis, Searching, and Sorting",
+  "pages": [
+    "index",
+    "complexity-analysis",
+    "searching-algorithms",
+    "quadratic-sorting",
+    "logarithmic-sorting"
+  ]
+}

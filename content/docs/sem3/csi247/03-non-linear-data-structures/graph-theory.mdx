@@ -1,0 +1,56 @@
+---
+title: "3.3 Graph Theory"
+description: "Vertices, edges, flow directivity, and computational representations."
+---
+
+## 3.3 Graph Theory
+
+Graphs are the ultimate abstraction for modeling complex, interconnected networks. Mastery requires understanding how to translate visual network relationships into efficient computational memory structures.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 3.3.1: Vertices, Edges, and Flow Directivity"
+  description="The fundamental components of a graph."
+>
+
+- **Vertices (Nodes):** The entities in the network.
+- **Edges:** The connections between entities.
+- **Directed vs. Undirected:** Directed edges imply one-way flow (A $\to$ B). Undirected edges imply mutual relationship (A $\leftrightarrow$ B).
+- **Weighted vs. Unweighted:** Weighted edges carry a cost/distance metric. Unweighted edges imply uniform cost.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 3.3.1: Adjacency Matrix vs. Adjacency List"
+  description="The trade-offs in computational representation."
+>
+
+**Adjacency Matrix ($N \times N$ 2D Array):**
+- **Space:** $O(V^2)$. Highly wasteful for sparse graphs.
+- **Lookup:** $O(1)$ to check if an edge exists between $u$ and $v$.
+
+**Adjacency List (Array of Linked Lists):**
+- **Space:** $O(V + E)$. Highly efficient for sparse graphs.
+- **Lookup:** $O(\text{degree})$ to find neighbors.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Required Skill: Translating List to Matrix</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Initialize Matrix</StepTitle>
+    Create an $N \times N$ 2D array filled with zeros (or $\infty$ for weighted graphs).
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Iterate the List</StepTitle>
+    For each vertex $u$, iterate through its linked list of neighbors.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Map the Edges</StepTitle>
+    For every neighbor $v$ (with weight $w$) in $u$'s list, set `matrix[u][v] = w`. If undirected, also set `matrix[v][u] = w`.
+  </Step>
+</StepByStep>

@@ -1,0 +1,167 @@
+---
+title: "5.3 Heaps & Floyd's Heapify"
+description: "Array representation, sift operations, Floyd's Heapify, and complete Java implementation."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/05-trees-heaps/heaps-floyd-quiz';
+
+## 5.3 Heaps & Priority Queues
+
+A Heap is a specialized tree-based structure that satisfies the heap property. It is the standard implementation for Priority Queues.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.3.1: Array-Based Representation & Comparable Constraint"
+  description="A binary heap can be efficiently stored in an array without pointers. The generic type must be constrained to Comparable."
+>
+
+For a node at index $i$ (0-indexed):
+- **Left Child:** $2i + 1$
+- **Right Child:** $2i + 2$
+- **Parent:** $\lfloor (i-1) / 2 \rfloor$
+
+To maintain the heap property (e.g., Max-Heap where parent $\ge$ children), the generic type `T` must implement `Comparable<T>` so we can compare elements during sift operations.
+
+```java
+public class MaxHeap<T extends Comparable<T>> {
+    // ...
+}
+```
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Complete Java Implementation: Array-Based MaxHeap"
+  description="Production-ready implementation showing array indexing, iterative siftDown, and Floyd's heapify."
+>
+
+```java
+public class MaxHeap<T extends Comparable<T>> {
+    private Object[] heap;
+    private int size;
+
+    public MaxHeap(int capacity) {
+        heap = new Object[capacity];
+        size = 0;
+    }
+
+    // Array index arithmetic
+    private int parent(int i) { return (i - 1) / 2; }
+    private int leftChild(int i) { return 2 * i + 1; }
+    private int rightChild(int i) { return 2 * i + 2; }
+
+    @SuppressWarnings("unchecked")
+    private T get(int i) { return (T) heap[i]; }
+
+    private void swap(int i, int j) {
+        Object temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+
+    public void insert(T item) {
+        if (size == heap.length) resize();
+        heap[size] = item;
+        siftUp(size);
+        size++;
+    }
+
+    private void siftUp(int i) {
+        // While not at root and parent is smaller than current
+        while (i > 0 && get(parent(i)).compareTo(get(i)) < 0) {
+            swap(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+    public T extractMax() {
+        if (size == 0) throw new IllegalStateException("Heap is empty");
+        T max = get(0);
+
+        // Move last element to root and sift down
+        size--;
+        heap[0] = heap[size];
+        heap[size] = null; // Prevent memory leak
+        siftDown(0);
+
+        return max;
+    }
+
+    // ITERATIVE siftDown: Preferred in Java to avoid O(log n) call stack overhead
+    private void siftDown(int i) {
+        while (true) {
+            int max = i;
+            int l = leftChild(i);
+            int r = rightChild(i);
+
+            // Find the largest among node and its children
+            if (l < size && get(l).compareTo(get(max)) > 0) max = l;
+            if (r < size && get(r).compareTo(get(max)) > 0) max = r;
+
+            // If largest is not the node itself, swap and continue
+            if (max != i) {
+                swap(i, max);
+                i = max; // Move down the tree iteratively
+            } else {
+                break; // Heap property is satisfied
+            }
+        }
+    }
+
+    // Floyd's Bottom-Up Heapify: O(n)
+    public void heapify(Object[] arr) {
+        size = arr.length;
+        heap = arr;
+        // Start from the last parent node and sift down to the root
+        for (int i = parent(size - 1); i >= 0; i--) {
+            siftDown(i);
+        }
+    }
+
+    private void resize() {
+        Object[] newArr = new Object[heap.length * 2];
+        System.arraycopy(heap, 0, newArr, 0, size);
+        heap = newArr;
+    }
+}
+```
+
+**Why Iterative `siftDown`?**
+While `siftDown` can be written recursively, the **iterative approach is strongly preferred in Java**. A recursive `siftDown` creates $O(\log n)$ stack frames, consuming unnecessary memory and risking a `StackOverflowError` for very large heaps. The iterative version uses $O(1)$ auxiliary space and is faster due to the absence of method call overhead.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Mandatory Proof: Floyd's Bottom-Up Heapify is $O(n)$</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Algorithm</StepTitle>
+    Instead of inserting elements one by one (which takes $O(n \log n)$), we can build a heap from an unsorted array in linear time by calling `siftDown` on all non-leaf nodes, starting from the last parent up to the root.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Cost Analysis</StepTitle>
+    The cost of `siftDown` depends on the height of the node. A node at height $h$ costs $O(h)$.
+    In a perfect tree of height $H$, there are $2^{H-h}$ nodes at height $h$.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Summation</StepTitle>
+    The total cost $T(n)$ is the sum of costs for all nodes:
+    $$T(n) = \sum_{h=0}^{H} (\text{nodes at height } h) \times O(h) = \sum_{h=0}^{H} 2^{H-h} \cdot h$$
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Solving the Series</StepTitle>
+    Let $x = 1/2$. The sum is proportional to $2^H \sum h (1/2)^h$.
+    The series $\sum_{h=0}^{\infty} h x^h$ converges to a constant for $|x| < 1$.
+    Since $2^H \approx n$, the total cost is $O(n)$. $\blacksquare$
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Heaps & Priority Queues Assessment" questions={quizData} />

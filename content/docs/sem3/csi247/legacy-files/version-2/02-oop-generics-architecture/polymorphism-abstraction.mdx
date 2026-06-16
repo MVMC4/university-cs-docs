@@ -1,0 +1,86 @@
+---
+title: "2.1 Polymorphism & Abstraction"
+description: "Interfaces vs. Abstract Classes, and the formal constraints of the Liskov Substitution Principle."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/02-oop-generics-architecture/polymorphism-abstraction-quiz';
+
+## 2.1 Polymorphism & Abstraction
+
+Abstraction and polymorphism are the cornerstones of object-oriented design, allowing us to build flexible, extensible, and maintainable data structures.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 2.1.1: Abstract Classes vs. Interfaces"
+  description="The fundamental differences in state, inheritance, and use cases."
+>
+
+- **Abstract Class:** Can maintain state (instance fields), have constructors, and provide default method implementations. A class can only extend *one* abstract class.
+- **Interface:** Traditionally cannot maintain state (only `static final` constants). Prior to Java 8, could only declare abstract methods. A class can implement *multiple* interfaces.
+- **Rule of Thumb:** Use interfaces to define a *role* or *capability* (e.g., `Comparable`, `Iterable`). Use abstract classes to share *core identity* and *implementation* among closely related classes.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Why This Matters for Data Structures"
+  description="Connecting Interfaces to real-world Java Collections."
+>
+
+- **Structural Polymorphism:** We use the `Iterable<T>` interface so that `LinkedList`, `ArrayList`, and `BST` can all support the enhanced `for-each` loop. If Java relied on abstract classes for this, we would be forced into a rigid single-inheritance hierarchy, preventing a `TreeSet` from extending `AbstractCollection` while also implementing `NavigableSet`.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 2.1.2: The Liskov Substitution Principle (LSP)"
+  description="The 'L' in SOLID. Subtypes must be substitutable for their base types without altering the correctness of the program."
+>
+
+If S is a subtype of T, then objects of type T may be replaced with objects of type S without altering any of the desirable properties of the program (correctness, task performed, etc.).
+
+**Formal Constraint:** A subclass cannot strengthen the preconditions of its methods (require *more* restrictive inputs) or weaken the postconditions (return *less* restrictive outputs) compared to the superclass.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Classic LSP Violation: Square extending Rectangle</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Setup</StepTitle>
+    Assume `Square` extends `Rectangle`. A `Rectangle` has `setWidth(w)` and `setHeight(h)`.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>The Formal Violation</StepTitle>
+    A `Square` must enforce width = height. The `setWidth` method in `Square` **strengthens the precondition** by implicitly requiring the height to also change to maintain the invariant. This directly violates the contract of `Rectangle`, where `setWidth` must *only* modify the width. Furthermore, it **weakens the postcondition** because the area is no longer guaranteed to be `width * height`.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>The Consequence</StepTitle>
+    Because the subclass strengthened the precondition and weakened the postcondition, any client code expecting a `Rectangle` will behave incorrectly when given a `Square`. Thus, `Square` is *not* a valid subtype of `Rectangle` in a behavioral sense, violating LSP.
+  </Step>
+</StepByStep>
+
+<SafeImage
+  src="/images/csi247/lsp-violation.png"
+  alt="LSP Violation Visualization"
+  caption="Figure 1: The Square/Rectangle problem demonstrates that inheritance must model behavioral subtyping, not just structural similarity."
+  className="max-w-full h-auto"
+/>
+
+<HighlightCard
+  variant="neutral"
+  title="Why This Matters for Data Structures"
+  description="Connecting LSP to the Comparable/Comparator contracts."
+>
+
+- **The `Comparable` Contract & LSP:** Data structures like `TreeSet` and `TreeMap` rely entirely on the `compareTo()` method for equality checks, completely ignoring `equals()`. If your custom class violates LSP by making `compareTo()` inconsistent with `equals()`, or violates transitivity, the `TreeSet` will silently fail to find elements or allow duplicate entries, breaking the mathematical definition of a Set.
+
+</HighlightCard>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Polymorphism & Abstraction Assessment" questions={quizData} />

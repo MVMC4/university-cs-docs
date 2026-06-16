@@ -1,0 +1,10 @@
+{
+  "title": "1. Linear Data Structures",
+  "pages": [
+    "index",
+    "arrays-matrices",
+    "linked-lists",
+    "stacks",
+    "queues"
+  ]
+}

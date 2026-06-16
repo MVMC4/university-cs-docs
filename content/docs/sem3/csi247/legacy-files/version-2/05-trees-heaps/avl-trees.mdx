@@ -1,0 +1,163 @@
+---
+title: "5.4 AVL Trees"
+description: "Balance factor, rotations, exact Java pointer manipulation, and height proof."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/05-trees-heaps/avl-trees-quiz';
+
+## 5.4 AVL Trees
+
+AVL trees are self-balancing Binary Search Trees named after their inventors Adelson-Velsky and Landis. They guarantee $O(\log n)$ height.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.4.1: The Balance Factor Invariant"
+  description="For every node $N$ in an AVL tree, the balance factor $BF(N) = height(N_{left}) - height(N_{right})$ must be in the set $\{-1, 0, 1\}$."
+>
+
+If an insertion or deletion causes $|BF(N)| > 1$, the tree is unbalanced at $N$, and rotations are required to restore the invariant.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Exact Java Pointer Manipulation: The 4 Rotations & Height Updates"
+  description="The exact code required to execute LL, RR, LR, and RL rotations by reassigning node pointers and updating heights."
+>
+
+```java
+private static class Node<T> {
+    T item;
+    Node<T> left, right;
+    int height; // CRITICAL: Must track height for balance factor
+    Node(T item) { this.item = item; this.height = 1; }
+}
+
+// Helper methods
+private int height(Node<T> node) { return node == null ? 0 : node.height; }
+private void updateHeight(Node<T> node) {
+    if (node != null) node.height = 1 + Math.max(height(node.left), height(node.right));
+}
+
+// 1. Right Rotation (LL Case)
+private Node<T> rotateRight(Node<T> y) {
+    Node<T> x = y.left;
+    Node<T> T2 = x.right;
+
+    // Perform rotation
+    x.right = y;
+    y.left = T2;
+
+    // CRITICAL: Update heights after rotation
+    updateHeight(y); // y is now a child of x
+    updateHeight(x); // x is the new root
+
+    return x; // x is the new root
+}
+
+// 2. Left Rotation (RR Case)
+private Node<T> rotateLeft(Node<T> x) {
+    Node<T> y = x.right;
+    Node<T> T2 = y.left;
+
+    // Perform rotation
+    y.left = x;
+    x.right = T2;
+
+    // CRITICAL: Update heights after rotation
+    updateHeight(x); // x is now a child of y
+    updateHeight(y); // y is the new root
+
+    return y; // y is the new root
+}
+
+// 3. Left-Right Rotation (LR Case)
+private Node<T> rotateLR(Node<T> z) {
+    z.left = rotateLeft(z.left);
+    return rotateRight(z);
+}
+
+// 4. Right-Left Rotation (RL Case)
+private Node<T> rotateRL(Node<T> z) {
+    z.right = rotateRight(z.right);
+    return rotateLeft(z);
+}
+```
+
+**Integration with Insertion:**
+After recursively inserting a node, you update the height of the current node and check its balance factor. If $BF > 1$, it's an L-case (check $BF$ of left child to decide LL or LR). If $BF < -1$, it's an R-case (check $BF$ of right child to decide RR or RL).
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Worked Example: AVL Insertion Sequence (LR Case)</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Insert 30 and 10</StepTitle>
+    - Insert `30`: Root is `30` (height 1, BF 0).
+    - Insert `10`: `10` becomes the left child of `30`. 
+    - Tree: `30` (left: `10`). Heights: 10 is 1, 30 is 2. BF(30) = 1 - 0 = 1. (Balanced)
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Insert 20 and Detect Imbalance</StepTitle>
+    - Insert `20`: `20` is less than 30, so go left to 10. `20` is greater than 10, so it becomes the right child of `10`.
+    - Tree: `30` (left: `10` (right: `20`)).
+    - Update heights: 20 (h=1), 10 (h=2), 30 (h=3).
+    - Calculate Balance Factors: 
+      - BF(10) = height(left) - height(right) = 0 - 1 = -1.
+      - BF(30) = height(left) - height(right) = 2 - 0 = 2.
+    - **Imbalance Detected:** BF(30) = 2 (Left-heavy). We look at the left child, `10`. Its BF is -1 (Right-heavy). This is the **Left-Right (LR) Case**.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Execute LR Rotation</StepTitle>
+    The LR case requires two rotations: First a Left Rotation on the left child (`10`), then a Right Rotation on the unbalanced node (`30`).
+    - **Left Rotation on 10:** `10`'s right child (`20`) moves up. `10` becomes the left child of `20`. 
+      - Subtree becomes: `20` (left: `10`).
+    - **Right Rotation on 30:** `30`'s left child is now `20`. `20` moves up to become the new root. `30` becomes the right child of `20`.
+      - Final Tree: `20` (left: `10`, right: `30`).
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Verify Balance</StepTitle>
+    - Update heights: 10 (h=1), 30 (h=1), 20 (h=2).
+    - Calculate Balance Factors: BF(10) = 0, BF(30) = 0, BF(20) = 0.
+    - The AVL invariant is perfectly restored. The tree is now balanced with height 2.
+  </Step>
+</StepByStep>
+
+<StepByStep>
+  <StepByStepTitle>Proof: AVL Height is $O(\log n)$</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Define Minimum Nodes</StepTitle>
+    Let $N(h)$ be the minimum number of nodes in an AVL tree of height $h$.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Recurrence Relation</StepTitle>
+    To minimize nodes for height $h$, one subtree must have height $h-1$ and the other $h-2$ (to maintain balance factor $\le 1$).
+    $$N(h) = 1 + N(h-1) + N(h-2)$$
+    Base cases: $N(0) = 1, N(1) = 2$.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Relation to Fibonacci</StepTitle>
+    This recurrence is similar to the Fibonacci sequence $F_h = F_{h-1} + F_{h-2}$. Thus, $N(h)$ grows exponentially with $h$.
+    Specifically, $N(h) > F_h \approx \phi^h$ where $\phi \approx 1.618$.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Invert for Height</StepTitle>
+    Since $n \ge N(h) \approx \phi^h$, taking logs gives:
+    $$h \le \log_\phi n \approx 1.44 \log_2 n$$
+    Thus, $h = O(\log n)$. $\blacksquare$
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="AVL Trees Assessment" questions={quizData} />

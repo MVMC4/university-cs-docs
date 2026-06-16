@@ -1,0 +1,76 @@
+---
+title: "4.1 Graph Traversals & Pathfinding"
+description: "BFS, DFS, and Dijkstra's Algorithm mechanics."
+---
+
+## 4.1 Graph Traversals & Pathfinding
+
+Traversing a graph requires systematically visiting every vertex and edge. The choice of traversal algorithm dictates whether we explore broadly (level-by-level) or deeply (branch-by-branch).
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 4.1.1: Level-Order (BFS) vs. Deep-Branch (DFS)"
+  description="The two fundamental graph exploration paradigms."
+>
+
+- **Breadth-First Search (BFS):** Utilizes a **Queue** (FIFO). Explores all immediate neighbors before moving to the next depth level. **Guarantees the shortest path** in unweighted graphs.
+- **Depth-First Search (DFS):** Utilizes a **Stack** (LIFO) or recursion. Explores as deep as possible down a single branch before backtracking.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 4.1.1: Dijkstra's Greedy Choice & Relaxation"
+  description="Finding the shortest path in weighted graphs with non-negative edges."
+>
+
+Dijkstra's Algorithm uses a **Priority Queue** (Min-Heap) to greedily extract the unvisited node with the smallest known distance.
+**Edge Relaxation:** If `dist[u] + weight(u, v) < dist[v]`, update `dist[v]` and push it to the Priority Queue.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Exam Scenario: Tracing Dijkstra's on a 5-Node Graph</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Graph Setup</StepTitle>
+    Nodes: A, B, C, D, E.
+    Edges: A-B(4), A-C(2), C-B(1), B-D(5), C-D(8), D-E(2), C-E(10).
+    Find shortest path from **A** to all nodes.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Initialization</StepTitle>
+    `dist[A]=0`, all others $\infty$. PQ: `[(A, 0)]`.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Extract A (dist 0)</StepTitle>
+    Relax neighbors: B gets 4, C gets 2.
+    PQ: `[(C, 2), (B, 4)]`.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Extract C (dist 2)</StepTitle>
+    Relax neighbors: B gets `2+1=3` (Update B from 4 to 3!). D gets `2+8=10`. E gets `2+10=12`.
+    PQ: `[(B, 3), (B, 4), (D, 10), (E, 12)]`.
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>Extract B (dist 3)</StepTitle>
+    *(Note: The `(B, 4)` entry is stale and will be ignored when popped later).*
+    Relax neighbors: D gets `3+5=8` (Update D from 10 to 8!).
+    PQ: `[(B, 4), (D, 8), (D, 10), (E, 12)]`.
+  </Step>
+
+  <Step number={6}>
+    <StepTitle>Extract B (dist 4) -> STALE, Ignore.</StepTitle>
+    Extract D (dist 8). Relax neighbors: E gets `8+2=10` (Update E from 12 to 10!).
+    PQ: `[(D, 10), (E, 10), (E, 12)]`.
+  </Step>
+
+  <Step number={7}>
+    <StepTitle>Final Distances</StepTitle>
+    A:0, B:3, C:2, D:8, E:10. Shortest path A to E is 10 (A -> C -> B -> D -> E).
+  </Step>
+</StepByStep>

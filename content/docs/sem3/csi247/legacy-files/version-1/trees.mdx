@@ -1,0 +1,1032 @@
+---
+title: Trees Implementation
+description: Master trees from basics to advanced - binary trees, BSTs, AVL rotations, Tries, and Lowest Common Ancestor.
+---
+
+# Trees Implementation
+
+Trees are like organizational charts or family trees - they show hierarchical relationships. Each item (node) can have multiple items below it, creating a branching structure.
+
+> **Why Learn This?**
+> Imagine you're building:
+> - **File system**: Folders containing files and subfolders
+> - **Organization chart**: CEO → Managers → Employees
+> - **Decision tree**: Yes/No questions leading to conclusions
+> 
+> Trees help you organize and search hierarchical data efficiently!
+
+---
+
+## Part 1: Understanding Trees - The Basics
+
+### What is a Tree?
+
+**Simple Explanation**: A tree is like an upside-down real tree. The top is called the "root", branches split into more branches, and the ends are called "leaves".
+
+**Real-World Examples**:
+- **Family tree**: Grandparents → Parents → Children
+- **Company hierarchy**: CEO → Directors → Managers → Employees
+- **File system**: Root folder → Subfolders → Files
+- **Table of contents**: Chapters → Sections → Subsections
+
+### Tree Terminology
+
+**Key Terms**:
+1. **Root**: The top node (no parent)
+2. **Parent**: Node above another node
+3. **Child**: Node below another node
+4. **Leaf**: Node with no children
+5. **Sibling**: Nodes with the same parent
+6. **Height**: Longest path from node to leaf
+7. **Depth**: Distance from root to node
+
+**Visual Example**:
+
+```
+        A         ← Root (depth 0)
+       / \
+      B   C       ← Children of A, Siblings
+     / \   \
+    D   E   F     ← Leaves (no children)
+    
+Height of tree: 2 (longest path: A→B→D or A→B→E)
+```
+
+<SafeImage 
+  src="/images/csi247/tree-terminology.png" 
+  alt="Tree Terminology Diagram" 
+  caption="Figure 1: Tree structure showing root, parent, child, leaf, and height relationships" 
+  className="max-w-full h-auto"
+/>
+
+---
+
+## Part 2: Binary Trees
+
+### What is a Binary Tree?
+
+**Simple Explanation**: A binary tree is a tree where each node can have at most 2 children - a left child and a right child.
+
+**Real-World Analogy**: A decision tree where each question has 2 possible answers (Yes/No).
+
+**Node Structure**:
+
+```java
+class TreeNode {
+    int data;
+    TreeNode left;   // Left child
+    TreeNode right;  // Right child
+    
+    TreeNode(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+```
+
+**Visual Example**:
+
+```
+        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+    
+Each node has at most 2 children
+```
+
+---
+
+### 1. Tree Traversals (Visiting All Nodes)
+
+There are 4 main ways to visit all nodes in a tree:
+
+#### In-Order Traversal (Left → Root → Right)
+
+**Simple Explanation**: Visit left subtree first, then current node, then right subtree.
+
+**Real-World Analogy**: Reading a book from left page to right page.
+
+**Step-by-Step Example**:
+
+```
+        A
+       / \
+      B   C
+     / \
+    D   E
+
+In-Order Traversal:
+1. Go to leftmost: D
+2. Visit D
+3. Visit B (parent of D)
+4. Visit E (right of B)
+5. Visit A (root)
+6. Visit C (right of A)
+
+Result: D → B → E → A → C
+```
+
+**Code**:
+
+```java
+public void inOrder(TreeNode node) {
+    if (node == null) return;
+    
+    inOrder(node.left);           // Visit left
+    System.out.print(node.data + " ");  // Visit root
+    inOrder(node.right);          // Visit right
+}
+```
+
+**Use case**: For Binary Search Trees, in-order gives sorted order!
+
+---
+
+#### Pre-Order Traversal (Root → Left → Right)
+
+**Simple Explanation**: Visit current node first, then left subtree, then right subtree.
+
+**Real-World Analogy**: Copying a folder structure - you copy the folder first, then its contents.
+
+**Step-by-Step Example**:
+
+```
+        A
+       / \
+      B   C
+     / \
+    D   E
+
+Pre-Order Traversal:
+1. Visit A (root)
+2. Visit B (left of A)
+3. Visit D (left of B)
+4. Visit E (right of B)
+5. Visit C (right of A)
+
+Result: A → B → D → E → C
+```
+
+**Code**:
+
+```java
+public void preOrder(TreeNode node) {
+    if (node == null) return;
+    
+    System.out.print(node.data + " ");  // Visit root
+    preOrder(node.left);           // Visit left
+    preOrder(node.right);          // Visit right
+}
+```
+
+**Use case**: Copying trees, creating prefix expressions
+
+---
+
+#### Post-Order Traversal (Left → Right → Root)
+
+**Simple Explanation**: Visit left subtree first, then right subtree, then current node.
+
+**Real-World Analogy**: Deleting a folder - you delete contents first, then the folder itself.
+
+**Step-by-Step Example**:
+
+```
+        A
+       / \
+      B   C
+     / \
+    D   E
+
+Post-Order Traversal:
+1. Visit D (leftmost)
+2. Visit E (right of B)
+3. Visit B (parent of D and E)
+4. Visit C (right of A)
+5. Visit A (root)
+
+Result: D → E → B → C → A
+```
+
+**Code**:
+
+```java
+public void postOrder(TreeNode node) {
+    if (node == null) return;
+    
+    postOrder(node.left);          // Visit left
+    postOrder(node.right);         // Visit right
+    System.out.print(node.data + " ");  // Visit root
+}
+```
+
+**Use case**: Deleting trees, calculating disk space used
+
+---
+
+#### Level-Order Traversal (Breadth-First)
+
+**Simple Explanation**: Visit nodes level by level, from top to bottom, left to right.
+
+**Real-World Analogy**: Reading a family photo album row by row.
+
+**How it works**: Use a queue to track nodes at each level.
+
+**Step-by-Step Example**:
+
+```
+        A        ← Level 0
+       / \
+      B   C      ← Level 1
+     / \   \
+    D   E   F    ← Level 2
+
+Level-Order Traversal:
+1. Visit A (level 0)
+2. Visit B, C (level 1, left to right)
+3. Visit D, E, F (level 2, left to right)
+
+Result: A → B → C → D → E → F
+```
+
+**Code**:
+
+```java
+public void levelOrder(TreeNode root) {
+    if (root == null) return;
+    
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(root);
+    
+    while (!queue.isEmpty()) {
+        TreeNode node = queue.poll();
+        System.out.print(node.data + " ");
+        
+        if (node.left != null) {
+            queue.add(node.left);
+        }
+        if (node.right != null) {
+            queue.add(node.right);
+        }
+    }
+}
+```
+
+**Use case**: Finding shortest path, printing tree by levels
+
+---
+
+### Traversal Comparison
+
+| Traversal | Order | Use Case | Example Output |
+|-----------|-------|----------|----------------|
+| **In-Order** | Left → Root → Right | BST gives sorted order | D, B, E, A, C |
+| **Pre-Order** | Root → Left → Right | Copy tree, prefix notation | A, B, D, E, C |
+| **Post-Order** | Left → Right → Root | Delete tree, postfix | D, E, B, C, A |
+| **Level-Order** | Top to bottom, left to right | Shortest path, BFS | A, B, C, D, E, F |
+
+---
+
+## Part 3: Binary Search Trees (BST)
+
+### What is a Binary Search Tree?
+
+**Simple Explanation**: A BST is a binary tree with a special rule: for every node, all values in the left subtree are smaller, and all values in the right subtree are larger.
+
+**Real-World Analogy**: A dictionary - words starting with A-M go left, N-Z go right. You can quickly find any word.
+
+**BST Property**:
+
+```
+For any node:
+- All values in left subtree < node value
+- All values in right subtree > node value
+
+        8
+       / \
+      3   10
+     / \    \
+    1   6    14
+       / \   /
+      4   7 13
+      
+Left of 8: [1, 3, 4, 6, 7] - all smaller
+Right of 8: [10, 13, 14] - all larger
+```
+
+<SafeImage 
+  src="/images/csi247/bst-structure.png" 
+  alt="Binary Search Tree Structure" 
+  caption="Figure 2: BST maintains order - left subtree contains smaller values, right subtree contains larger values" 
+  className="max-w-full h-auto"
+/>
+
+---
+
+### 2. BST Operations
+
+#### Search in BST
+
+**Simple Explanation**: Start at root. If target is smaller, go left. If larger, go right. Repeat until found or reach null.
+
+**Step-by-Step Example**:
+
+```
+Search for 6 in:
+        8
+       / \
+      3   10
+     / \    \
+    1   6    14
+
+Step 1: Start at 8
+        6 < 8? Yes → Go left
+
+Step 2: At 3
+        6 > 3? Yes → Go right
+
+Step 3: At 6
+        6 == 6? Yes → Found!
+```
+
+**Code**:
+
+```java
+public TreeNode search(TreeNode root, int target) {
+    if (root == null || root.data == target) {
+        return root;
+    }
+    
+    if (target < root.data) {
+        return search(root.left, target);  // Search left
+    } else {
+        return search(root.right, target); // Search right
+    }
+}
+
+// Iterative version (faster, no recursion overhead)
+public TreeNode searchIterative(TreeNode root, int target) {
+    while (root != null && root.data != target) {
+        if (target < root.data) {
+            root = root.left;
+        } else {
+            root = root.right;
+        }
+    }
+    return root;
+}
+```
+
+**Speed**: O(h) where h is height
+- **Best/Average case**: O(log n) - balanced tree
+- **Worst case**: O(n) - skewed tree (like a linked list)
+
+---
+
+#### Insert in BST
+
+**Simple Explanation**: Search for the value. When you reach null, insert the new node there.
+
+**Step-by-Step Example**:
+
+```
+Insert 5 into:
+        8
+       / \
+      3   10
+     / \    \
+    1   6    14
+
+Step 1: Start at 8
+        5 < 8? Yes → Go left
+
+Step 2: At 3
+        5 > 3? Yes → Go right
+
+Step 3: At 6
+        5 < 6? Yes → Go left
+
+Step 4: Left of 6 is null
+        Insert 5 there!
+
+Result:
+        8
+       / \
+      3   10
+     / \    \
+    1   6    14
+       /
+      5
+```
+
+**Code**:
+
+```java
+public TreeNode insert(TreeNode root, int value) {
+    if (root == null) {
+        return new TreeNode(value);  // Insert here
+    }
+    
+    if (value < root.data) {
+        root.left = insert(root.left, value);  // Insert left
+    } else if (value > root.data) {
+        root.right = insert(root.right, value); // Insert right
+    }
+    // If value == root.data, don't insert (no duplicates)
+    
+    return root;
+}
+```
+
+**Speed**: O(h) - same as search
+
+---
+
+#### Delete in BST
+
+**Simple Explanation**: Three cases depending on how many children the node has.
+
+**Three Cases**:
+
+**Case 1: Node has no children (leaf)**
+```
+        8                    8
+       / \                  / \
+      3   10    → delete 3  3   10
+     / \                    \
+    1   6                    6
+        
+Simply remove it!
+```
+
+**Case 2: Node has one child**
+```
+        8                    8
+       / \                  / \
+      3   10    → delete 3  6   10
+     /                          
+    6                            
+        
+Replace node with its child!
+```
+
+**Case 3: Node has two children**
+```
+        8                    8                    8
+       / \                  / \                  / \
+      3   10   → delete 8  6   10   or delete 8 3   10
+     / \    \              / \    \              / \   \
+    1   6    14           3   7    14            1  6   14
+       / \               /                          \
+      4   7             1                            7
+      
+Find in-order successor (smallest in right subtree)
+or in-order predecessor (largest in left subtree)
+Replace node with successor/predecessor
+Delete successor/predecessor from its original position
+```
+
+**Code**:
+
+```java
+public TreeNode delete(TreeNode root, int key) {
+    if (root == null) return null;
+    
+    // Find the node to delete
+    if (key < root.data) {
+        root.left = delete(root.left, key);
+    } else if (key > root.data) {
+        root.right = delete(root.right, key);
+    } else {
+        // Node found - 3 cases
+        
+        // Case 1: No child (leaf)
+        if (root.left == null && root.right == null) {
+            return null;
+        }
+        
+        // Case 2: One child
+        if (root.left == null) {
+            return root.right;
+        } else if (root.right == null) {
+            return root.left;
+        }
+        
+        // Case 3: Two children
+        // Find in-order successor (smallest in right subtree)
+        TreeNode successor = findMin(root.right);
+        root.data = successor.data;  // Copy successor's value
+        root.right = delete(root.right, successor.data);  // Delete successor
+    }
+    
+    return root;
+}
+
+private TreeNode findMin(TreeNode node) {
+    while (node.left != null) {
+        node = node.left;
+    }
+    return node;
+}
+```
+
+**Speed**: O(h) - search + delete
+
+---
+
+### BST Performance
+
+| Operation | Average Case | Worst Case |
+|-----------|--------------|------------|
+| **Search** | O(log n) | O(n) |
+| **Insert** | O(log n) | O(n) |
+| **Delete** | O(log n) | O(n) |
+| **In-Order Traversal** | O(n) | O(n) |
+
+**Problem**: BST can become skewed (unbalanced), making operations O(n) instead of O(log n).
+
+**Solution**: Self-balancing trees (AVL, Red-Black Trees)
+
+---
+
+## Part 4: Advanced Tree Types
+
+### 3. AVL Trees (Self-Balancing BST)
+
+**Simple Explanation**: An AVL tree automatically balances itself after every insert/delete to keep operations fast.
+
+**How it works**: After each operation, check if any node is unbalanced (left and right heights differ by more than 1). If so, rotate to balance.
+
+**Balance Factor**: `height(left) - height(right)`
+- Must be -1, 0, or +1 for all nodes
+
+**Rotations**: 4 types of rotations to fix imbalance:
+1. **Left Rotation** (right-heavy)
+2. **Right Rotation** (left-heavy)
+3. **Left-Right Rotation** (left-right heavy)
+4. **Right-Left Rotation** (right-left heavy)
+
+**Visual Example**:
+
+```
+Before rotation (unbalanced):
+    3
+   / \
+  2   4
+ /     \
+1       5
+
+Balance factor of 3: -2 (unbalanced!)
+
+After Right Rotation:
+    2
+   / \
+  1   3
+     / \
+    4   5
+
+Now balanced!
+```
+
+**Speed**: Always O(log n) - guaranteed balanced!
+
+---
+
+### 4. Tries (Prefix Trees)
+
+**Simple Explanation**: A trie stores strings by their characters. Common prefixes share the same path.
+
+**Real-World Analogy**: A dictionary organized by first letter, then second letter, etc.
+
+**How it works**:
+
+```
+Insert "cat", "car", "card":
+
+        (root)
+         |
+         c
+         |
+         a
+        / \
+       t   r
+          / \
+         d   (end)
+        /
+      (end)
+
+"cat" ends at t
+"car" ends at r
+"card" ends at d
+
+Common prefix "ca" is shared!
+```
+
+**Node Structure**:
+
+```java
+class TrieNode {
+    Map<Character, TrieNode> children;
+    boolean isEndOfWord;
+    
+    TrieNode() {
+        children = new HashMap<>();
+        isEndOfWord = false;
+    }
+}
+```
+
+**Operations**:
+
+```java
+class Trie {
+    private TrieNode root;
+    
+    public Trie() {
+        root = new TrieNode();
+    }
+    
+    // Insert word
+    public void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            node.children.putIfAbsent(c, new TrieNode());
+            node = node.children.get(c);
+        }
+        node.isEndOfWord = true;
+    }
+    
+    // Search word
+    public boolean search(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            if (!node.children.containsKey(c)) {
+                return false;
+            }
+            node = node.children.get(c);
+        }
+        return node.isEndOfWord;
+    }
+    
+    // Check if any word starts with prefix
+    public boolean startsWith(String prefix) {
+        TrieNode node = root;
+        for (char c : prefix.toCharArray()) {
+            if (!node.children.containsKey(c)) {
+                return false;
+            }
+            node = node.children.get(c);
+        }
+        return true;
+    }
+}
+```
+
+**Speed**: O(L) where L is length of string
+- **Insert**: O(L)
+- **Search**: O(L)
+- **Prefix search**: O(L)
+
+**Use cases**: Autocomplete, spell check, IP routing
+
+---
+
+### 5. Finding Lowest Common Ancestor (LCA)
+
+**Problem**: Find the lowest node that has both p and q as descendants.
+
+**Simple Explanation**: The LCA is where the paths to p and q split.
+
+**For BST**:
+
+**How it works**: Use BST property - if both p and q are smaller than root, LCA is in left subtree. If both are larger, LCA is in right subtree. Otherwise, root is the split point.
+
+**Step-by-Step Example**:
+
+```
+Find LCA of 2 and 8:
+        6
+       / \
+      2   8
+     / \   \
+    0   4   9
+       / \
+      3   5
+
+Step 1: At 6
+        2 < 6 and 8 > 6? Yes → Split point!
+        
+Result: LCA is 6
+
+Find LCA of 2 and 4:
+Step 1: At 6
+        2 < 6 and 4 < 6? Yes → Go left
+        
+Step 2: At 2
+        2 == 2 and 4 > 2? Yes → Split point!
+        
+Result: LCA is 2
+```
+
+**Code**:
+
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    // Ensure p is smaller than q for easier logic
+    if (p.val > q.val) {
+        TreeNode temp = p; p = q; q = temp;
+    }
+    
+    while (root != null) {
+        // If both p and q are greater than root, LCA is in right subtree
+        if (root.val < p.val) {
+            root = root.right;
+        }
+        // If both p and q are smaller than root, LCA is in left subtree
+        else if (root.val > q.val) {
+            root = root.left;
+        }
+        // We found the split point! root is between p and q.
+        else {
+            return root;
+        }
+    }
+    return null;
+}
+```
+
+**Speed**: O(h) where h is height
+
+---
+
+### 6. Morris Traversal (O(1) Space In-Order)
+
+**Simple Explanation**: In-order traversal without recursion or stack - uses temporary "threads" in the tree.
+
+**How it works**: Create temporary links from rightmost node of left subtree back to current node. After visiting left subtree, use the thread to return.
+
+**Step-by-Step**:
+
+```
+Tree:
+    1
+   / \
+  2   3
+ / \
+4   5
+
+Step 1: At 1, has left child
+        Find rightmost of left subtree (5)
+        Create thread: 5 → 1
+        Move to 2
+
+Step 2: At 2, has left child
+        Find rightmost of left subtree (4)
+        Create thread: 4 → 2
+        Move to 4
+
+Step 3: At 4, no left child
+        Visit 4
+        Follow thread to 2
+
+Step 4: At 2, thread exists
+        Remove thread
+        Visit 2
+        Move to 5
+
+Step 5: At 5, no left child
+        Visit 5
+        Follow thread to 1
+
+Step 6: At 1, thread exists
+        Remove thread
+        Visit 1
+        Move to 3
+
+Step 7: At 3, no left child
+        Visit 3
+        Done!
+
+Result: 4 → 2 → 5 → 1 → 3
+```
+
+**Code**:
+
+```java
+public void morrisTraversal(TreeNode root) {
+    TreeNode curr = root;
+    while (curr != null) {
+        if (curr.left == null) {
+            // No left child, visit this node and move right
+            System.out.print(curr.val + " ");
+            curr = curr.right;
+        } else {
+            // Find the In-Order Predecessor (rightmost node of left subtree)
+            TreeNode pre = curr.left;
+            while (pre.right != null && pre.right != curr) {
+                pre = pre.right;
+            }
+            
+            if (pre.right == null) {
+                // Create a "thread" back to current node, then move left
+                pre.right = curr;
+                curr = curr.left;
+            } else {
+                // Thread already exists, meaning we've visited the left subtree.
+                // Revert the tree structure, visit current, and move right.
+                pre.right = null;
+                System.out.print(curr.val + " ");
+                curr = curr.right;
+            }
+        }
+    }
+}
+```
+
+**Speed**: O(n) time, O(1) space!
+
+---
+
+## Part 5: Tree Applications
+
+### Application 1: File System
+
+**How it works**: Directories are nodes, files are leaves.
+
+```
+root/
+├── home/
+│   ├── user1/
+│   │   ├── documents/
+│   │   └── pictures/
+│   └── user2/
+└── var/
+    └── log/
+```
+
+**Operations**:
+- **Search**: Find file by path
+- **Insert**: Create new file/folder
+- **Delete**: Remove file/folder
+- **Traverse**: List all files (recursive)
+
+---
+
+### Application 2: Expression Trees
+
+**How it works**: Operators are internal nodes, operands are leaves.
+
+```
+Expression: (3 + 5) * 2
+
+      *
+     / \
+    +   2
+   / \
+  3   5
+
+In-order: 3 + 5 * 2 (infix)
+Pre-order: * + 3 5 2 (prefix)
+Post-order: 3 5 + 2 * (postfix)
+```
+
+---
+
+### Application 3: Huffman Coding
+
+**How it works**: Build a tree based on character frequency for compression.
+
+```
+Characters: A(5), B(9), C(12), D(13), E(16), F(45)
+
+Build tree by combining lowest frequency nodes:
+
+        100
+       /   \
+      55    F(45)
+     /  \
+    25   30
+   / \   / \
+  A  B C   D
+ (5)(9)(12)(13)
+
+Assign 0 to left, 1 to right:
+A: 1100
+B: 1101
+C: 111
+D: 10
+E: 0
+F: 1
+
+Frequent characters get shorter codes!
+```
+
+---
+
+## Part 6: Common Mistakes
+
+### Mistake 1: Forgetting Base Case
+
+```java
+// WRONG: No null check
+public void traverse(TreeNode node) {
+    traverse(node.left);   // NullPointerException if node is null!
+    System.out.print(node.data);
+    traverse(node.right);
+}
+
+// CORRECT
+public void traverse(TreeNode node) {
+    if (node == null) return;  // Base case
+    traverse(node.left);
+    System.out.print(node.data);
+    traverse(node.right);
+}
+```
+
+---
+
+### Mistake 2: Not Handling Skewed Trees
+
+```java
+// BST can become a linked list if inserted in sorted order:
+insert(1);
+insert(2);
+insert(3);
+insert(4);
+
+Result:
+1
+ \
+  2
+   \
+    3
+     \
+      4
+
+Operations become O(n) instead of O(log n)!
+
+Solution: Use self-balancing trees (AVL, Red-Black)
+```
+
+---
+
+### Mistake 3: Modifying Tree During Traversal
+
+```java
+// WRONG: Modifying tree while traversing
+public void deleteEven(TreeNode node) {
+    if (node == null) return;
+    
+    deleteEven(node.left);
+    
+    if (node.data % 2 == 0) {
+        delete(node);  // DANGER! Modifying during traversal
+    }
+    
+    deleteEven(node.right);
+}
+
+// CORRECT: Collect nodes first, then delete
+List<TreeNode> toDelete = new ArrayList<>();
+collectEvenNodes(root, toDelete);
+for (TreeNode node : toDelete) {
+    delete(node);
+}
+```
+
+---
+
+## Summary
+
+**Tree Types**:
+- **Binary Tree**: At most 2 children per node
+- **BST**: Left < Root < Right (ordered)
+- **AVL Tree**: Self-balancing BST
+- **Trie**: Prefix tree for strings
+
+**Traversals**:
+- **In-Order**: Left → Root → Right (sorted for BST)
+- **Pre-Order**: Root → Left → Right (copy tree)
+- **Post-Order**: Left → Right → Root (delete tree)
+- **Level-Order**: Top to bottom (BFS)
+
+**Key Operations**:
+- **Search**: O(log n) average, O(n) worst
+- **Insert**: O(log n) average, O(n) worst
+- **Delete**: O(log n) average, O(n) worst
+
+**Advanced Topics**:
+- **LCA**: Find common ancestor in O(h)
+- **Morris Traversal**: In-order with O(1) space
+- **Balancing**: Keep tree height O(log n)
+
+**Remember**: 
+- Always handle null cases
+- BST property: Left < Root < Right
+- Use self-balancing trees for guaranteed performance
+
+---

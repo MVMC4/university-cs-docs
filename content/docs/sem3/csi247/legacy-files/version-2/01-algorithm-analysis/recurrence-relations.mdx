@@ -1,0 +1,107 @@
+---
+title: "1.3 Recurrence Relations"
+description: "Solving recursive algorithms using the Iteration Method, Recursion Trees, and the Master Theorem."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/01-algorithm-analysis/recurrence-relations-quiz';
+
+## 1.3 Recurrence Relations
+
+Recursive algorithms are described by recurrences. Solving them requires formal mathematical techniques.
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 1.3.1: The Master Theorem"
+  description="Provides a cookbook solution for recurrences of the form $T(n) = aT(n/b) + f(n)$, where $a \ge 1, b > 1$."
+>
+
+Let $c_{crit} = \log_b a$. Compare $f(n)$ to $n^{c_{crit}}$:
+1. **Case 1:** If $f(n) = O(n^{c_{crit} - \epsilon})$ for some $\epsilon > 0$, then $T(n) = \Theta(n^{c_{crit}})$.
+2. **Case 2:** If $f(n) = \Theta(n^{c_{crit}})$, then $T(n) = \Theta(n^{c_{crit}} \log n)$.
+3. **Case 3:** If $f(n) = \Omega(n^{c_{crit} + \epsilon})$ and $a f(n/b) \le k f(n)$ for some $k < 1$, then $T(n) = \Theta(f(n))$.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Proof: Solving $T(n) = 2T(n/2) + n$ via Master Theorem</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Identify Parameters</StepTitle>
+
+    $a = 2$, $b = 2$, $f(n) = n$.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Calculate Critical Exponent</StepTitle>
+
+    $c_{crit} = \log_b a = \log_2 2 = 1$.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Compare $f(n)$ to $n^{c_{crit}}$</StepTitle>
+
+    $f(n) = n$ and $n^{c_{crit}} = n^1 = n$.
+    Therefore, $f(n) = \Theta(n^{c_{crit}})$.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Apply Case 2</StepTitle>
+
+    Since $f(n)$ matches $n^{c_{crit}}$ exactly, Case 2 applies:
+    $T(n) = \Theta(n^1 \log n) = \Theta(n \log n)$. $\blacksquare$
+  </Step>
+</StepByStep>
+
+<StepByStep>
+  <StepByStepTitle>Proof: Master Theorem Case 3 with Regularity Condition</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Recurrence</StepTitle>
+
+    Solve $T(n) = 2T(n/2) + n^2$.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Identify Parameters and Critical Exponent</StepTitle>
+
+    $a = 2$, $b = 2$, $f(n) = n^2$.
+    $c_{crit} = \log_b a = \log_2 2 = 1$.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Compare $f(n)$ to $n^{c_{crit}}$</StepTitle>
+
+    $f(n) = n^2$. We need $f(n) = \Omega(n^{c_{crit} + \epsilon})$ for some $\epsilon > 0$.
+    $n^2 = \Omega(n^{1 + 1})$, so $\epsilon = 1$. Case 3 might apply.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Verify the Regularity Condition</StepTitle>
+
+    We must prove that $a f(n/b) \le k f(n)$ for some constant $k < 1$ and sufficiently large $n$.
+    Substitute the parameters: $2 f(n/2) \le k f(n)$.
+    $2 (n/2)^2 \le k n^2 \implies 2 \left(\frac{n^2}{4}\right) \le k n^2 \implies \frac{1}{2} n^2 \le k n^2$.
+    By choosing $k = 1/2$, the inequality holds. Since $k = 0.5 < 1$, the regularity condition is strictly satisfied.
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>Conclusion</StepTitle>
+
+    Since $f(n)$ is polynomially larger than $n^{c_{crit}}$ and the regularity condition holds, Case 3 applies.
+    Therefore, $T(n) = \Theta(f(n)) = \Theta(n^2)$. $\blacksquare$
+  </Step>
+</StepByStep>
+
+<Card>
+
+### Definition 1.3.2: The Recursion Tree Method
+
+The recursion tree method visualizes the cost of each level of recursion. The total cost is the sum of the costs at all levels. For $T(n) = 2T(n/2) + n$, the tree has $\log_2 n$ levels, and each level performs exactly $n$ work, yielding $n \log_2 n$.
+
+</Card>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Recurrence Relations Assessment" questions={quizData} />

@@ -1,0 +1,127 @@
+---
+title: "5.2 Binary Search Trees (BST)"
+description: "The BST invariant, operations, and complete Java implementation with Comparable constraint."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/05-trees-heaps/bst-operations-quiz';
+
+## 5.2 Binary Search Trees (BST)
+
+A Binary Search Tree (BST) is a binary tree that maintains a specific ordering invariant, allowing for efficient search, insertion, and deletion.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.2.1: The BST Invariant & Comparable Constraint"
+  description="For every node $N$: All values in $N$'s left subtree are strictly less than $N$'s value. All values in $N$'s right subtree are strictly greater."
+>
+
+To enforce this invariant at compile time, the generic type `T` must be constrained to implement `Comparable<T>`. This allows the tree to use `compareTo()` instead of `<` or `>` operators, which are undefined for generic objects in Java.
+
+```java
+public class BST<T extends Comparable<T>> {
+    // ...
+}
+```
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Complete Java Implementation: BST Insert & Delete"
+  description="Production-ready recursive implementation showing the critical 2-child deletion case using the in-order successor."
+>
+
+```java
+public class BST<T extends Comparable<T>> {
+    private static class Node<T> {
+        T item;
+        Node<T> left, right;
+        Node(T item) { this.item = item; }
+    }
+
+    private Node<T> root;
+
+    public void insert(T item) {
+        root = insertRec(root, item);
+    }
+
+    private Node<T> insertRec(Node<T> node, T item) {
+        if (node == null) return new Node<>(item);
+
+        int cmp = item.compareTo(node.item);
+        if (cmp < 0) node.left = insertRec(node.left, item);
+        else if (cmp > 0) node.right = insertRec(node.right, item);
+
+        return node; // Duplicate values are ignored
+    }
+
+    public void delete(T item) {
+        root = deleteRec(root, item);
+    }
+
+    private Node<T> deleteRec(Node<T> node, T item) {
+        if (node == null) return null;
+
+        int cmp = item.compareTo(node.item);
+        if (cmp < 0) node.left = deleteRec(node.left, item);
+        else if (cmp > 0) node.right = deleteRec(node.right, item);
+        else {
+            // Node found! Handle the 3 cases.
+
+            // Case 1 & 2: Node has 0 or 1 child
+            if (node.left == null) return node.right;
+            if (node.right == null) return node.left;
+
+            // Case 3: Node has TWO children
+            // 1. Find the in-order successor (smallest in right subtree)
+            Node<T> successor = findMin(node.right);
+
+            // 2. Copy the successor's value into this node
+            node.item = successor.item;
+
+            // 3. Recursively delete the successor node from the right subtree
+            // (This will fall into Case 1 or 2, as the successor has no left child)
+            node.right = deleteRec(node.right, successor.item);
+        }
+        return node;
+    }
+
+    private Node<T> findMin(Node<T> node) {
+        while (node.left != null) node = node.left;
+        return node;
+    }
+}
+```
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Time Complexity of BST Deletion"
+  description="Why deletion is $O(h)$ and not $O(1)$."
+>
+
+**Finding the Successor:** The `findMin(node.right)` operation traverses down the right spine of the left subtree (or left spine of the right subtree) to find the minimum. In the worst case, this takes **$O(h)$** time, where $h$ is the height of the tree.
+**Overall Deletion:** Because finding the successor and recursively deleting it both take $O(h)$ time, the overall time complexity of the `delete` operation is strictly **$O(h)$**. 
+- In a balanced BST, $h = O(\log n)$, making deletion $O(\log n)$.
+- In a degenerate BST, $h = O(n)$, making deletion $O(n)$.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 5.2.1: BST Degeneration"
+  description="In the worst case, a BST can degenerate into a linked list, resulting in $O(n)$ time complexity."
+>
+
+**Worst Case Input:** Inserting elements in sorted (or reverse sorted) order.
+**Example:** Inserting `1, 2, 3, 4, 5` results in a tree where every node has only a right child, effectively becoming a linked list of height $n-1$.
+**Solution:** Self-balancing trees (AVL, Red-Black) enforce height constraints to guarantee $O(\log n)$ operations.
+
+</HighlightCard>
+
+---
+
+## Topic Assessment
+
+<Quiz title="BST Operations Assessment" questions={quizData} />

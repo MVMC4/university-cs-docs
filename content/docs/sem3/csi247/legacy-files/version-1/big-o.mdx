@@ -1,0 +1,892 @@
+---
+title: Algorithm Analysis and Big-O Notation
+description: Complete guide to asymptotic analysis, amortized complexity, computational theory, and practical algorithm evaluation.
+---
+
+# Algorithm Analysis and Big-O Notation
+
+When we write code, we often ask: "Is this algorithm fast?" But "fast" is relative—what's fast for 10 items might be impossibly slow for 10 million. **Big-O notation** gives us a rigorous, hardware-independent way to describe how an algorithm's performance scales as input grows.
+
+> **Key Insight**: Big-O doesn't tell you how many seconds your code takes. It tells you how the runtime grows as your input size approaches infinity. This lets us compare algorithms based on their fundamental efficiency, not the speed of your CPU.
+
+---
+
+## 1. Why Algorithm Analysis Matters
+
+Imagine you're building a search feature for an e-commerce site with 1 million products. You have two approaches:
+
+**Approach A**: Check each product one by one (linear search)  
+**Approach B**: Use a binary search on sorted data
+
+For 1 million products:
+- Approach A: Up to 1,000,000 comparisons
+- Approach B: Only 20 comparisons (log base 2 of 1,000,000 ≈ 20)
+
+Both will work, but one is **50,000x faster**. This is the power of understanding algorithm complexity.
+
+### The Three Questions We Ask
+
+When analyzing any algorithm, we want to know:
+
+1. **Time Complexity**: How does runtime grow with input size?
+2. **Space Complexity**: How does memory usage grow with input size?
+3. **Scalability**: Will this algorithm still work when data grows 10x? 100x? 1000x?
+
+Big-O notation answers these questions by focusing on the **growth rate** rather than exact measurements.
+
+---
+
+## 2. Visualizing Growth Rates
+
+Before diving into formal definitions, let's build intuition by seeing how different growth rates behave as input size increases.
+
+<SafeImage 
+  src="/images/csi247/bigo-graph.png" 
+  alt="Big-O Growth Rates Graph" 
+  caption="Figure 1: Execution time vs input size (n). Notice how O(n!) and O(2ⁿ) become impossible beyond n=20, while O(n log n) scales gracefully to millions."
+  className="max-w-full h-auto"
+/>
+
+### The Growth Rate Hierarchy
+
+From fastest (most efficient) to slowest (least efficient):
+
+**O(1)** is faster than **O(log log n)**, which is faster than **O(log n)**, which is faster than **O(√n)**, which is faster than **O(n)**, which is faster than **O(n log n)**, which is faster than **O(n²)**, which is faster than **O(n³)**, which is faster than **O(2ⁿ)**, which is faster than **O(n!)**, which is faster than **O(nⁿ)**
+
+### What These Numbers Mean in Practice
+
+Let's make this concrete. Here's how many operations each complexity requires for different input sizes:
+
+| Complexity | n=10 | n=100 | n=1,000 | n=10,000 | Real-World Example |
+|------------|------|-------|---------|----------|-------------------|
+| **O(1)** | 1 | 1 | 1 | 1 | Hash table lookup |
+| **O(log n)** | 3 | 7 | 10 | 13 | Binary search |
+| **O(n)** | 10 | 100 | 1,000 | 10,000 | Linear search |
+| **O(n log n)** | 33 | 664 | 9,966 | 132,877 | Merge sort |
+| **O(n²)** | 100 | 10,000 | 1M | 100M | Bubble sort |
+| **O(2ⁿ)** | 1,024 | 1.27×10³⁰ | ∞ |  | Subset generation |
+| **O(n!)** | 3.6M | 9.3×10¹⁵⁷ | ∞ | ∞ | Traveling Salesman |
+
+> **Rule of Thumb**: For n > 10⁶, only `O(1)`, `O(log n)`, and `O(n)` are practical. `O(n log n)` is acceptable. `O(n²)` and worse are usually too slow.
+
+### Why Constants Don't Matter (Asymptotically)
+
+Consider two algorithms:
+- **Algorithm A**: `1000n` operations (linear but slow constant)
+- **Algorithm B**: `n²` operations (quadratic but fast constant)
+
+For small n, Algorithm B might be faster. But as n grows:
+- n=10: A = 10,000 ops, B = 100 ops → **B wins**
+- n=1,000: A = 1M ops, B = 1M ops → **Tie**
+- n=10,000: A = 10M ops, B = 100M ops → **A wins**
+- n=100,000: A = 100M ops, B = 10B ops → **A dominates**
+
+As n approaches infinity, the **highest-order term always dominates**, regardless of constants. This is why we drop constants in Big-O notation—we care about growth rates, not absolute speed.
+
+---
+
+## 3. Formal Mathematical Definitions
+
+Now that we have intuition, let's make this rigorous. Big-O is part of a family of notations that describe different types of bounds.
+
+### Big-O Notation (Upper Bound)
+
+**Definition**: `f(n) = O(g(n))` if there exist positive constants `c` and `n₀` such that:
+
+`0 ≤ f(n) ≤ c · g(n)` for all `n ≥ n₀`
+
+**Intuition**: `g(n)` is an **upper bound** on `f(n)` for sufficiently large n. In other words, `f(n)` grows **at most** as fast as `g(n)`.
+
+**Example**: Prove `3n² + 2n + 1 = O(n²)`
+
+We need to find `c` and `n₀` such that `3n² + 2n + 1 ≤ c · n²` for all `n ≥ n₀`.
+
+For `n ≥ 1`:
+- `2n ≤ 2n²` (since `n ≤ n²` for `n ≥ 1`)
+- `1 ≤ n²` (since `1 ≤ n²` for `n ≥ 1`)
+
+Therefore: `3n² + 2n + 1 ≤ 3n² + 2n² + n² = 6n²`
+
+So `c = 6` and `n₀ = 1` work. Thus, `3n² + 2n + 1 = O(n²)`. ✓
+
+### Big-Omega Notation (Lower Bound)
+
+**Definition**: `f(n) = Ω(g(n))` if there exist positive constants `c` and `n₀` such that:
+
+`0 ≤ c · g(n) ≤ f(n)` for all `n ≥ n₀`
+
+**Intuition**: `g(n)` is a **lower bound** on `f(n)`. In other words, `f(n)` grows **at least** as fast as `g(n)`.
+
+**Example**: Prove `n³ = Ω(n²)`
+
+We need `c · n² ≤ n³` for all `n ≥ n₀`.
+
+Dividing both sides by `n²`: `c ≤ n`
+
+So for `c = 1` and `n₀ = 1`, we have `n² ≤ n³`. Thus, `n³ = Ω(n²)`. ✓
+
+### Big-Theta Notation (Tight Bound)
+
+**Definition**: `f(n) = Θ(g(n))` if there exist positive constants `c₁`, `c₂`, and `n₀` such that:
+
+`0 ≤ c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)` for all `n ≥ n₀`
+
+**Intuition**: `f(n)` grows at **exactly the same rate** as `g(n)` (within constant factors). This is the most precise notation.
+
+**Theorem**: `f(n) = Θ(g(n))` if and only if `f(n) = O(g(n))` AND `f(n) = Ω(g(n))`.
+
+**Example**: Prove `2n² + 3n = Θ(n²)`
+
+**Upper bound** (`O(n²)`):
+For `n ≥ 1`: `2n² + 3n ≤ 2n² + 3n² = 5n²`
+So `c₂ = 5` works.
+
+**Lower bound** (`Ω(n²)`):
+For `n ≥ 1`: `2n² + 3n ≥ 2n²` (since `3n ≥ 0`)
+So `c₁ = 2` works.
+
+Thus, `2n² + 3n = Θ(n²)`. ✓
+
+### Little-o and Little-omega (Strict Bounds)
+
+**Little-o**: `f(n) = o(g(n))` means `f(n)` grows **strictly slower** than `g(n)`.
+
+`lim(n→∞) f(n)/g(n) = 0`
+
+**Example**: `n = o(n²)` because `lim(n→∞) n/n² = lim(n→∞) 1/n = 0`
+
+**Little-omega**: `f(n) = ω(g(n))` means `f(n)` grows **strictly faster** than `g(n)`.
+
+`lim(n→∞) f(n)/g(n) = ∞`
+
+**Example**: `n² = ω(n)` because `lim(n→∞) n²/n = lim(n→∞) n = ∞`
+
+### Summary of Notations
+
+| Notation | Symbol | Meaning | Analogy |
+|----------|--------|---------|---------|
+| **Big-O** | O | Upper bound | `f(n)` grows **at most** as fast as `g(n)` |
+| **Big-Omega** | Ω | Lower bound | `f(n)` grows **at least** as fast as `g(n)` |
+| **Big-Theta** | Θ | Tight bound | `f(n)` grows **exactly** as fast as `g(n)` |
+| **Little-o** | o | Strict upper bound | `f(n)` grows **strictly slower** than `g(n)` |
+| **Little-omega** | ω | Strict lower bound | `f(n)` grows **strictly faster** than `g(n)` |
+
+---
+
+## 4. Common Patterns in Code
+
+Now let's see how these concepts apply to real code. We'll analyze common patterns you'll encounter.
+
+### Pattern 1: Simple Loops
+
+```java
+/**
+ * Time Complexity: O(n)
+ * 
+ * The loop runs n times, and each iteration does O(1) work.
+ * Total: n × O(1) = O(n)
+ */
+public void simpleLoop(int n) {
+    for (int i = 0; i < n; i++) {
+        System.out.println(i); // O(1) operation
+    }
+}
+```
+
+### Pattern 2: Nested Loops
+
+```java
+/**
+ * Time Complexity: O(n²)
+ * 
+ * Analysis:
+ * - Outer loop runs n times
+ * - Inner loop runs n times for each outer iteration
+ * - Total: n × n = n² operations
+ */
+public void nestedLoops(int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            System.out.println(i + "," + j); // O(1)
+        }
+    }
+}
+```
+
+### Pattern 3: Nested Loops with Dependencies
+
+```java
+/**
+ * Time Complexity: O(n²)
+ * 
+ * Analysis:
+ * - When i=0, inner loop runs n times
+ * - When i=1, inner loop runs n-1 times
+ * - When i=2, inner loop runs n-2 times
+ * - ...
+ * - When i=n-1, inner loop runs 1 time
+ * 
+ * Total = n + (n-1) + (n-2) + ... + 1
+ *       = n(n+1)/2
+ *       = n²/2 + n/2
+ * 
+ * In Big-O: Drop constants (1/2) and lower-order terms (n/2)
+ * Result: O(n²)
+ */
+public void dependentLoops(int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i; j < n; j++) {
+            System.out.println(i + "," + j);
+        }
+    }
+}
+```
+
+### Pattern 4: Logarithmic Loops
+
+```java
+/**
+ * Time Complexity: O(log n)
+ * 
+ * Analysis:
+ * - i starts at 1
+ * - i doubles each iteration: i *= 2
+ * - Values of i: 1, 2, 4, 8, 16, ..., 2^k
+ * - Loop stops when 2^k >= n
+ * - Solving: k = log₂(n)
+ * 
+ * Note: Base of logarithm doesn't matter in Big-O
+ * log₂(n) = log₁₀(n) / log₁₀(2) = Θ(log₁₀(n))
+ * Constant factor 1/log₁₀(2) is dropped.
+ */
+public void logarithmicLoop(int n) {
+    for (int i = 1; i < n; i *= 2) {
+        System.out.println(i);
+    }
+}
+```
+
+### Pattern 5: Mixed Complexities
+
+```java
+/**
+ * Time Complexity: O(n log n)
+ * 
+ * Analysis:
+ * - Outer loop: O(n) iterations
+ * - Inner loop: O(log n) iterations (doubles each time)
+ * - Total: O(n) × O(log n) = O(n log n)
+ */
+public void mixedComplexity(int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 1; j < n; j *= 2) {
+            System.out.println(i + "," + j);
+        }
+    }
+}
+```
+
+### Pattern 6: Recursive Algorithms
+
+```java
+/**
+ * Time Complexity: O(2ⁿ)
+ * 
+ * Analysis:
+ * - Each call makes 2 recursive calls
+ * - Recurrence: T(n) = 2T(n-1) + O(1)
+ * - This creates a binary tree of calls with depth n
+ * - Total nodes in tree: 2ⁿ - 1
+ * 
+ * This is why naive Fibonacci is so slow!
+ */
+public int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+/**
+ * Time Complexity: O(n log n)
+ * 
+ * Analysis:
+ * - Divide: Split array in half (O(1))
+ * - Conquer: Recursively sort both halves (2T(n/2))
+ * - Combine: Merge sorted halves (O(n))
+ * 
+ * Recurrence: T(n) = 2T(n/2) + O(n)
+ * By Master Theorem: O(n log n)
+ */
+public void mergeSort(int[] arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+```
+
+---
+
+## 5. Real-World Scenarios
+
+Let's see how these concepts apply to real engineering decisions.
+
+### Scenario 1: Database Indexing
+
+**Question**: Why do databases like MySQL use B-Trees (`O(log n)`) instead of Hash Maps (`O(1)`) for primary keys?
+
+**Answer**: While Hash Maps offer `O(1)` average-case lookup, they have critical limitations:
+
+1. **No Range Queries**: `SELECT * WHERE age BETWEEN 20 AND 30` requires scanning all entries (`O(n)`)
+2. **No Ordering**: `ORDER BY` queries require full sorting (`O(n log n)`)
+3. **No Prefix Searches**: `WHERE name LIKE 'John%'` is impossible with hashing
+
+**B-Trees** provide:
+- Point lookup: `O(log n)` (slightly slower than hash)
+- Range queries: `O(log n + k)` where k is results found
+- Sorted order: Maintained automatically
+- Prefix searches: Efficient with B+Tree variants
+
+**Trade-off**: Sacrifice `O(1)` for `O(log n)` to gain powerful query capabilities.
+
+### Scenario 2: Social Network Friend Suggestions
+
+**Problem**: Finding "Friends of Friends" (FOAF) is a graph traversal problem.
+
+**Naive Approach** (`O(N²)`):
+```java
+// For each friend of user
+for (Friend friend : user.getFriends()) {
+    // Check all their friends
+    for (Friend foaf : friend.getFriends()) {
+        if (!isAlreadyFriend(foaf)) {
+            suggestions.add(foaf);
+        }
+    }
+}
+```
+
+If a user has 500 friends, and each has 500 friends, we check 500 × 500 = 250,000 nodes.
+
+**Optimized BFS Approach** (`O(V + E)`):
+```java
+public Set<User> findFriendsOfFriends(User user) {
+    Set<User> suggestions = new HashSet<>();
+    Set<User> visited = new HashSet<>();
+    Queue<User> queue = new LinkedList<>();
+    
+    // Mark user's direct friends as visited
+    visited.add(user);
+    for (Friend friend : user.getFriends()) {
+        visited.add(friend);
+        queue.offer(friend);
+    }
+    
+    // BFS to depth 2
+    int depth = 0;
+    while (!queue.isEmpty() && depth < 2) {
+        int levelSize = queue.size();
+        for (int i = 0; i < levelSize; i++) {
+            User current = queue.poll();
+            
+            for (Friend neighbor : current.getFriends()) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    suggestions.add(neighbor);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        depth++;
+    }
+    
+    return suggestions;
+}
+```
+
+**Complexity**: `O(V + E)` where V is vertices (users) and E is edges (friendships). Much more efficient!
+
+### Scenario 3: E-Commerce Search Autocomplete
+
+**Problem**: As user types, suggest products in real-time (< 100ms).
+
+**Approaches**:
+
+1. **Linear Search** (`O(n)`): Scan all products
+   - n = 1,000,000 products → 1M comparisons
+   - Too slow for real-time
+
+2. **Binary Search** (`O(log n)`): Sorted array
+   - log₂(1,000,000) ≈ 20 comparisons
+   - Fast, but requires exact prefix matching
+
+3. **Trie (Prefix Tree)** (`O(k)` where k = query length):
+   - "iph" → traverse 3 nodes
+   - Independent of total products!
+   - Best for autocomplete
+
+```java
+class TrieNode {
+    Map<Character, TrieNode> children = new HashMap<>();
+    List<String> suggestions = new ArrayList<>();
+}
+
+class Autocomplete {
+    private TrieNode root = new TrieNode();
+    
+    public void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            node.children.putIfAbsent(c, new TrieNode());
+            node = node.children.get(c);
+            node.suggestions.add(word);
+        }
+    }
+    
+    public List<String> search(String prefix) {
+        TrieNode node = root;
+        for (char c : prefix.toCharArray()) {
+            if (!node.children.containsKey(c)) {
+                return Collections.emptyList();
+            }
+            node = node.children.get(c);
+        }
+        return node.suggestions;
+    }
+}
+```
+
+**Complexity**: `O(k)` where k is query length (typically 3-20 characters). Perfect for real-time!
+
+---
+
+## 6. Amortized Analysis
+
+Sometimes, an operation is usually fast but occasionally slow. **Amortized analysis** gives us the average cost over a sequence of operations, even in the worst case.
+
+### The Dynamic Array Example
+
+Consider ArrayList's `add()` operation:
+- Most of the time: `O(1)` - just append to array
+- Occasionally: `O(n)` - when array is full, resize and copy all elements
+
+<SafeImage 
+  src="/images/csi247/amortized-sawtooth.png" 
+  alt="Amortized Analysis Sawtooth Graph" 
+  caption="Figure 2: The 'sawtooth' pattern of Dynamic Array insertion. Most operations cost O(1), but occasional resizes cost O(n). The amortized cost averages out to O(1) per insertion."
+  className="max-w-full h-auto"
+/>
+
+**Question**: Is ArrayList append `O(1)` or `O(n)`?
+
+**Answer**: It's **`O(1)` amortized**. Here's why:
+
+### Method 1: Aggregate Analysis
+
+Total cost for n insertions:
+- n insertions at `O(1)` each: n operations
+- Resizes at sizes 1, 2, 4, 8, ..., n/2: 1 + 2 + 4 + 8 + ... + n/2 = n - 1 operations
+
+Total: n + (n - 1) = 2n - 1 = `O(n)`
+
+Amortized cost per operation: `O(n)` / n = **`O(1)`**
+
+### Method 2: Accounting (Banker's) Method
+
+Charge $3 for each append:
+- $1 for the actual insertion
+- $2 saved as credit for future resize
+
+When resize happens at size k:
+- Need k credits to copy elements
+- We have exactly k credits saved (from previous k/2 insertions)
+
+Amortized cost: **`O(1)`** per operation
+
+### Method 3: Potential Method (Most Powerful)
+
+Define potential function: `Φ(D) = 2 · size - capacity`
+
+**Case 1: Normal Insert (no resize)**
+- Actual cost: 1
+- ΔΦ = [2(k+1) - C] - [2k - C] = 2
+- Amortized cost = 1 + 2 = 3 = **`O(1)`**
+
+**Case 2: Insert with Resize**
+- Actual cost: k + 1 (copy k elements + insert 1)
+- ΔΦ = [2(k+1) - 2k] - [2k - k] = 2 - k
+- Amortized cost = (k+1) + (2-k) = 3 = **`O(1)`**
+
+Both cases have amortized cost `O(1)`!
+
+### Binary Counter Example
+
+```java
+/**
+ * Increment a binary counter
+ * 
+ * Naive Analysis:
+ * - Worst case: O(k) where k is number of bits
+ *   (e.g., 0111...1 → 1000...0 flips all k bits)
+ * 
+ * Amortized Analysis:
+ * - Over n increments, total bit flips:
+ *   - Bit 0 flips every increment: n times
+ *   - Bit 1 flips every 2 increments: n/2 times
+ *   - Bit 2 flips every 4 increments: n/4 times
+ *   - ...
+ * 
+ * Total flips = n + n/2 + n/4 + n/8 + ...
+ *             = n(1 + 1/2 + 1/4 + 1/8 + ...)
+ *             = n × 2  [geometric series]
+ *             = 2n = O(n)
+ * 
+ * Amortized cost per increment = O(n) / n = O(1)
+ */
+public class BinaryCounter {
+    private boolean[] bits;
+    
+    public BinaryCounter(int numBits) {
+        bits = new boolean[numBits];
+    }
+    
+    public void increment() {
+        int i = 0;
+        
+        // Flip trailing 1s to 0s
+        while (i < bits.length && bits[i]) {
+            bits[i] = false;
+            i++;
+        }
+        
+        // Flip first 0 to 1
+        if (i < bits.length) {
+            bits[i] = true;
+        }
+    }
+}
+```
+
+### Queue with Two Stacks
+
+```java
+/**
+ * Implement a queue using two stacks
+ * 
+ * Strategy:
+ * - Use stack1 for enqueue
+ * - Use stack2 for dequeue
+ * - When stack2 is empty, transfer all from stack1 to stack2
+ * 
+ * Amortized Analysis:
+ * - enqueue: O(1) always
+ * - dequeue: 
+ *   - If stack2 not empty: O(1)
+ *   - If stack2 empty: O(n) to transfer
+ *   - But each element transferred at most once!
+ *   - Amortized: O(1)
+ */
+public class QueueWithStacks<T> {
+    private Stack<T> stack1 = new Stack<>();
+    private Stack<T> stack2 = new Stack<>();
+    
+    public void enqueue(T item) {
+        stack1.push(item); // O(1)
+    }
+    
+    public T dequeue() {
+        if (stack2.isEmpty()) {
+            // Transfer all elements: O(n), but rare
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        
+        if (stack2.isEmpty()) {
+            throw new RuntimeException("Queue is empty");
+        }
+        
+        return stack2.pop(); // O(1)
+    }
+}
+```
+
+---
+
+## 7. Space Complexity
+
+So far we've focused on time. But memory matters too! **Space complexity** measures the extra memory (auxiliary space) an algorithm uses, excluding the input.
+
+### Common Space Complexities
+
+| Complexity | Description | Example |
+|------------|-------------|---------|
+| **O(1)** | Constant space | Iterative binary search |
+| **O(log n)** | Logarithmic space | Recursive binary search (call stack) |
+| **O(n)** | Linear space | Merge sort (auxiliary array) |
+| **O(n²)** | Quadratic space | 2D DP table |
+
+### Examples
+
+```java
+/**
+ * Iterative Binary Search
+ * Space: O(1) - only uses a few variables
+ */
+public int binarySearchIterative(int[] arr, int target) {
+    int left = 0;
+    int right = arr.length - 1;
+    
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    return -1;
+    // Total space: O(1)
+}
+
+/**
+ * Recursive Binary Search
+ * Space: O(log n) - call stack depth
+ */
+public int binarySearchRecursive(int[] arr, int target, int left, int right) {
+    if (left > right) {
+        return -1;
+    }
+    
+    int mid = left + (right - left) / 2;
+    
+    if (arr[mid] == target) {
+        return mid;
+    } else if (arr[mid] < target) {
+        return binarySearchRecursive(arr, target, mid + 1, right);
+    } else {
+        return binarySearchRecursive(arr, target, left, mid - 1);
+    }
+    // Space: O(log n) for recursion stack
+}
+
+/**
+ * Merge Sort
+ * Space: O(n) - auxiliary array for merging
+ */
+public void mergeSort(int[] arr) {
+    int[] aux = new int[arr.length]; // O(n) extra space
+    mergeSort(arr, aux, 0, arr.length - 1);
+}
+// Total space: O(n) + O(log n) = O(n)
+```
+
+### Space-Time Tradeoffs
+
+Often, we can trade space for time:
+
+```java
+// Naive Fibonacci: Time O(2ⁿ), Space O(n)
+public int fibNaive(int n) {
+    if (n <= 1) return n;
+    return fibNaive(n-1) + fibNaive(n-2);
+}
+
+// Memoized Fibonacci: Time O(n), Space O(n)
+public int fibMemo(int n, int[] memo) {
+    if (n <= 1) return n;
+    if (memo[n] != 0) return memo[n];
+    return memo[n] = fibMemo(n-1, memo) + fibMemo(n-2, memo);
+}
+
+// Trade: Use O(n) space to reduce time from O(2ⁿ) to O(n)
+```
+
+---
+
+## 8. Computational Complexity Theory
+
+Beyond analyzing individual algorithms, computer scientists study the **inherent difficulty** of entire classes of problems.
+
+### Complexity Classes
+
+**P (Polynomial Time)**:
+Problems solvable in polynomial time by a deterministic Turing machine.
+
+Examples:
+- Sorting: `O(n log n)`
+- Binary search: `O(log n)`
+- Shortest path (Dijkstra): `O((V+E) log V)`
+
+**NP (Nondeterministic Polynomial Time)**:
+Problems **verifiable** in polynomial time.
+
+Examples:
+- Traveling Salesperson: Given a tour, verify cost ≤ k in `O(n)`
+- Sudoku: Given a solution, verify correctness in `O(n²)`
+- Boolean Satisfiability (SAT): Given an assignment, verify formula is true in `O(n)`
+
+### The P vs NP Question
+
+**The million-dollar question**: Is P = NP?
+
+- If P = NP: Every problem we can verify quickly, we can also solve quickly
+- If P ≠ NP: Some problems are inherently harder to solve than to verify
+
+**Most computer scientists believe P ≠ NP**.
+
+**Implications if P = NP**:
+1. **Cryptography breaks**: RSA, AES, all public-key crypto rely on problems believed to be hard
+2. **Optimization revolution**: Solve TSP, scheduling, resource allocation optimally
+3. **AI advances**: Automated theorem proving, program synthesis
+
+### NP-Complete Problems
+
+Problems that are:
+1. In NP
+2. NP-Hard (at least as hard as the hardest problems in NP)
+
+Examples:
+- Traveling Salesperson Problem (TSP)
+- Boolean Satisfiability (SAT)
+- Clique Problem
+- Vertex Cover
+- Subset Sum
+- Knapsack Problem
+- Graph Coloring
+
+If you find a polynomial-time algorithm for **any** NP-Complete problem, you prove P = NP!
+
+### The Halting Problem
+
+**Theorem**: There is no algorithm that can determine whether an arbitrary program will halt or run forever.
+
+**Proof by Contradiction**:
+Assume we have a program `HaltChecker(program, input)` that returns true if program halts, false otherwise.
+
+Construct a paradoxical program:
+```java
+public void Paradox(Program p) {
+    if (HaltChecker(p, p)) {
+        while (true) { } // Loop forever
+    } else {
+        return; // Halt immediately
+    }
+}
+```
+
+Now ask: What happens when we run `Paradox(Paradox)`?
+- If `Paradox` halts → `HaltChecker` returns true → `Paradox` loops forever ❌
+- If `Paradox` loops forever → `HaltChecker` returns false → `Paradox` halts ❌
+
+**Contradiction!** Therefore, `HaltChecker` cannot exist.
+
+---
+
+## 9. Reference Tables
+
+### Sorting Algorithms
+
+| Algorithm | Best | Average | Worst | Space | Stable |
+|-----------|------|---------|-------|-------|--------|
+| **Bubble Sort** | `O(n)` | `O(n²)` | `O(n²)` | `O(1)` | Yes |
+| **Selection Sort** | `O(n²)` | `O(n²)` | `O(n²)` | `O(1)` | No |
+| **Insertion Sort** | `O(n)` | `O(n²)` | `O(n²)` | `O(1)` | Yes |
+| **Merge Sort** | `O(n log n)` | `O(n log n)` | `O(n log n)` | `O(n)` | Yes |
+| **Quick Sort** | `O(n log n)` | `O(n log n)` | `O(n²)` | `O(log n)` | No |
+| **Heap Sort** | `O(n log n)` | `O(n log n)` | `O(n log n)` | `O(1)` | No |
+| **Counting Sort** | `O(n + k)` | `O(n + k)` | `O(n + k)` | `O(k)` | Yes |
+
+### Searching Algorithms
+
+| Algorithm | Data Structure | Time | Space |
+|-----------|---------------|------|-------|
+| **Linear Search** | Array/List | `O(n)` | `O(1)` |
+| **Binary Search** | Sorted Array | `O(log n)` | `O(1)` |
+| **Hash Table Lookup** | Hash Map | `O(1)` avg | `O(n)` |
+| **BST Search** | Binary Search Tree | `O(log n)` avg | `O(log n)` |
+| **Trie Search** | Trie | `O(k)` | `O(nk)` |
+
+### Graph Algorithms
+
+| Algorithm | Time | Space | Use Case |
+|-----------|------|-------|----------|
+| **BFS** | `O(V + E)` | `O(V)` | Shortest path (unweighted) |
+| **DFS** | `O(V + E)` | `O(V)` | Cycle detection, topological sort |
+| **Dijkstra** | `O((V+E) log V)` | `O(V)` | Shortest path (weighted, non-negative) |
+| **Bellman-Ford** | `O(VE)` | `O(V)` | Shortest path (negative edges) |
+| **Floyd-Warshall** | `O(V³)` | `O(V²)` | All-pairs shortest path |
+| **Kruskal** | `O(E log E)` | `O(V)` | Minimum spanning tree |
+| **Prim** | `O(E log V)` | `O(V)` | Minimum spanning tree |
+
+---
+
+## 10. Best Practices
+
+### 1. Identify the Dominant Operation
+
+Focus on the operation that contributes most to runtime:
+- Sorting: Comparisons
+- Graph algorithms: Edge traversals
+- String algorithms: Character comparisons
+
+### 2. Consider All Cases
+
+- **Best case**: Often misleading (e.g., bubble sort `O(n)` if already sorted)
+- **Average case**: Requires probability assumptions
+- **Worst case**: Most important for guarantees
+
+### 3. Don't Ignore Constants (Initially)
+
+When choosing between algorithms with same Big-O:
+- QuickSort vs MergeSort: Both `O(n log n)`, but QuickSort has better constants
+- Hash table vs BST: Both `O(log n)` worst-case, but hash table has better average
+
+### 4. Profile Before Optimizing
+
+```java
+// Don't guess - measure!
+long start = System.nanoTime();
+algorithm(input);
+long end = System.nanoTime();
+System.out.println("Time: " + (end - start) / 1e6 + " ms");
+```
+
+### 5. Understand Your Input
+
+- Small input (n < 100): Simplicity matters more than complexity
+- Medium input (100 < n < 10⁵): `O(n log n)` is usually fine
+- Large input (n > 10⁶): Only `O(n)` or `O(log n)` acceptable
+
+### 6. Use the Right Data Structure
+
+| Operation | Array | LinkedList | HashSet | TreeMap |
+|-----------|-------|------------|---------|---------|
+| **Access** | `O(1)` | `O(n)` | - | `O(log n)` |
+| **Search** | `O(n)` | `O(n)` | `O(1)` | `O(log n)` |
+| **Insert** | `O(n)` | `O(1)` | `O(1)` | `O(log n)` |
+| **Delete** | `O(n)` | `O(1)` | `O(1)` | `O(log n)` |
+
+---
+
+## Summary
+
+- **Big-O Notation**: Upper bound on growth rate  
+- **Big-Theta**: Tight bound (exact growth rate)  
+- **Big-Omega**: Lower bound  
+- **Amortized Analysis**: Average cost over worst-case sequence  
+- **Potential Method**: Formal framework for amortized analysis  
+- **P vs NP**: Fundamental question in computer science  
+- **Space Complexity**: Memory usage analysis  
+- **Common Complexities**: Know the standard algorithms  
+- **Best Practices**: Profile, understand input, choose right data structures  
+
+**Next Steps**: Practice analyzing your own code, study classic algorithms, and understand tradeoffs!
+
+---
+

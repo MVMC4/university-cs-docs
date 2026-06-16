@@ -1,36 +1,82 @@
 ---
-title: Course Overview
-description: Information for CSI247 Data Structures & Algorithms.
+title: "CSI247: Data Structures & Algorithms"
+description: "The ultimate blueprint for mastering data structures, algorithm analysis, and computational paradigms."
 ---
 
-# CSI247: Data Structures & Algorithms
+# Master Curriculum Memo: Data Structures & Algorithms
 
-This course introduces students to fundamental data structures, data abstraction, algorithm analysis, and design paradigms using Java.
+This is the complete, high-level curriculum memo. No code snippets, no getting bogged down in the weeds—just a comprehensive, start-to-finish syllabus that outlines exactly *what* definitions, theorems, concepts, and implementations you are responsible for mastering in CSI247.
 
-## Course Details
+---
 
-| Attribute | Details |
-| :--- | :--- |
-| **Code** | CSI247 |
-| **Title** | Data Structures & Algorithms |
-| **Credits** | 3 |
-| **Type** | Core |
-| **Semester** | 3 |
-| **Pre-requisites** | CSI142, ISS112 |
-| **Co-requisites** | none |
+## Module 1: Linear Data Structures
 
-## Course Synopsis
-The curriculum is structured progressively to build from language fundamentals to advanced custom data structures:
-1. **Java Foundations & OOP**: Classes, arrays, packages, OOP principles, and Generics.
-2. **Algorithmic Thinking**: Recursion and Big-O notation.
-3. **Algorithms**: Searching and sorting algorithms (array-based).
-4. **Standard Libraries**: Using Java's pre-defined Collections Framework.
-5. **Custom Implementations**: Building LinkedLists, Stacks, Queues, Hash Tables, Trees, and Graphs from scratch.
+### 1.1 Arrays & Matrices
+- **Definitions & Concepts:** Contiguous memory allocation, static vs. dynamic memory, multidimensional scaling.
+- **Theorems & Principles:** Memory addressing and 2D array indexing formulas.
+- **Required Skills:** You must know how to traverse 1D and 2D arrays, execute matrix multiplication (matching rows to columns mathematically), and analyze the bounds of your traversal loops.
 
-## Learning Outcomes
-After completion of the course, students should be able to:
-1. Apply advanced Java features including Generics and OOP principles.
-2. Perform worst-case runtime analysis (Big-O) on algorithms.
-3. Choose appropriate data structures for any given problem.
-4. Implement user-defined data structures in Java from scratch.
-5. Utilize Java's pre-defined Collections Framework effectively.
+### 1.2 Linked Lists
+- **Definitions & Concepts:** Nodes, dynamic memory pointers, head/tail references, Singly vs. Doubly linked structures, null termination.
+- **Theorems & Principles:** Sequential access constraints (why you cannot randomly access a node like an array).
+- **Required Skills:** You must know the step-by-step logic to construct nodes, traverse lists to extract/filter data, count internal nodes without touching the boundaries, and safely sever/reconnect pointers for insertion and deletion without causing memory leaks.
+
+### 1.3 Stacks
+- **Definitions & Concepts:** Last-In-First-Out (LIFO) architecture, stack overflow/underflow.
+- **Theorems & Principles:** Call stack execution and recursive unwinding.
+- **Required Skills:** You must know the conceptual logic to implement a stack using both arrays and linked lists. You must be able to trace how a stack evaluates mathematical expressions or converts infix notation to postfix/prefix.
+
+### 1.4 Queues
+- **Definitions & Concepts:** First-In-First-Out (FIFO) architecture, Circular Queues, front/rear pointers.
+- **Required Skills:** You must know how to implement enqueue and dequeue methods logically using linked lists, and how to manage the front/rear pointers effectively to avoid dropping active elements.
+
+---
+
+## Module 2: Algorithm Analysis, Searching, and Sorting
+
+### 2.1 Complexity Analysis
+- **Definitions & Concepts:** Time complexity, Space complexity, Best/Worst/Average case scenarios.
+- **Theorems & Principles:** Asymptotic Notation bounds (Big-O, Big-Omega, Big-Theta).
+- **Required Skills:** You must be able to look at any standard algorithm or loop structure and definitively state its Big-O time and space complexity.
+
+### 2.2 Searching Algorithms
+- **Definitions & Concepts:** Linear iteration vs. Divide-and-conquer searching.
+- **Required Skills:** You must know how to trace a Linear Search and a Binary Search. You must be able to state the absolute prerequisites for Binary Search (i.e., the dataset must be pre-sorted).
+
+### 2.3 Quadratic Sorting ($O(n^2)$)
+- **Definitions & Concepts:** In-place sorting, stable vs. unstable algorithm behaviors.
+- **Required Skills:** You must know the step-by-step mechanical swapping process of Bubble Sort, Selection Sort, and Insertion Sort. You must be able to argue conceptually why one might be chosen over another for specific, small datasets.
+
+### 2.4 Logarithmic Sorting ($O(n \log n)$)
+- **Definitions & Concepts:** Recursive sorting, partitioning, and array merging.
+- **Required Skills:** You must know the divide-and-conquer mechanics of Merge Sort and Quick Sort. You must be able to explain how utilizing a pivot point or recursive division drastically outperforms quadratic algorithms on massive datasets.
+
+---
+
+## Module 3: Non-Linear Data Structures
+
+### 3.1 Tree Fundamentals & BSTs
+- **Definitions & Concepts:** Root nodes, leaves, parent/child relationships, tree height, depth, and the structural properties of a Binary Search Tree (BST).
+- **Theorems & Principles:** The structural constraint that all left children are smaller than the parent, and all right children are larger.
+- **Required Skills:** You must know how to manually map out a BST from a raw dataset. You must be able to trace and output Depth-First traversals: Pre-order, In-order, and Post-order.
+
+### 3.2 Balanced Trees (AVL)
+- **Definitions & Concepts:** Height balance factor, self-balancing mechanics, tree degradation (when a tree becomes a linked list).
+- **Theorems & Principles:** The AVL constraint that the balance factor of any node must be bounded between -1 and 1.
+- **Required Skills:** You must know how to mathematically calculate a node's balance factor. You must know how to identify when a rotation is required during data insertion, and correctly execute Left, Right, Left-Right, and Right-Left rotations to rebalance the tree.
+
+### 3.3 Graph Theory
+- **Definitions & Concepts:** Vertices, edges, directed vs. undirected flow, weighted vs. unweighted paths, cyclic vs. acyclic graphs.
+- **Required Skills:** You must know how to represent complex network relationships computationally. Specifically, you must know how to construct an Adjacency List and translate that data accurately into an $N \times N$ Adjacency Matrix.
+
+---
+
+## Module 4: Advanced Traversal & Algorithmic Paradigms
+
+### 4.1 Graph Traversals & Pathfinding
+- **Definitions & Concepts:** Level-order exploration vs. deep-branch exploration, shortest-path principles.
+- **Required Skills:** You must know how to trace Breadth-First Search (BFS) tracking state with a Queue, and Depth-First Search (DFS) tracking state with a Stack. You must know how to manually trace Dijkstra's Algorithm across a weighted graph to find the shortest path between two nodes.
+
+### 4.2 Optimization Paradigms (Greedy & DP)
+- **Definitions & Concepts:** Local optimal choices vs. global optimums, overlapping subproblems, optimal substructure.
+- **Required Skills:** You must know how to formulate a Greedy algorithm solution for optimization puzzles (like mathematically deducing the absolute minimum number of Botswana Pula notes required for a transaction). You must also be able to explain theoretically when a Greedy approach fails and why Dynamic Programming is required.

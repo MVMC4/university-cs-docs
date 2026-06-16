@@ -1,0 +1,86 @@
+---
+title: "1.1 Arrays & Matrices"
+description: "Contiguous memory allocation, multidimensional scaling, matrix multiplication, and 2D traversal labs."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/01-linear-data-structures/arrays-matrices-quiz';
+
+## 1.1 Arrays & Matrices
+
+Arrays are the most fundamental data structure in computer science, relying on contiguous memory allocation to provide deterministic, constant-time random access. Mastery of arrays requires understanding how high-level multidimensional abstractions map to flat, one-dimensional physical memory.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 1.1.1: Contiguous Memory & Random Access"
+  description="The physical reality of array allocation."
+>
+
+An array allocates a single, uninterrupted block of memory. Because the memory is contiguous, the physical address of any element can be calculated mathematically in strictly $O(1)$ time using the base address and the element's index.
+- **Static Memory:** Size is fixed at compile time (e.g., `int[] arr = new int[10];`). The bounds are immutable.
+- **Dynamic Memory:** Size can grow (e.g., `ArrayList`), but requires allocating a completely new contiguous block and executing an $O(n)$ memory copy operation when capacity is exceeded.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 1.1.1: 2D Array Indexing Formulas"
+  description="How compilers map 2D coordinates $(i, j)$ to 1D memory addresses."
+>
+
+Physical memory is strictly one-dimensional. To store a 2D matrix, compilers use one of two mapping strategies:
+
+**1. Row-Major Order (Java, C, C++):**
+Rows are stored contiguously one after another. For a matrix with $C$ columns, the 1D memory offset for element at row $i$ and column $j$ is:
+$$\text{Offset}(i, j) = (i \times C) + j$$
+
+**2. Column-Major Order (Fortran, MATLAB, R):**
+Columns are stored contiguously. For a matrix with $R$ rows, the offset is:
+$$\text{Offset}(i, j) = (j \times R) + i$$
+
+**Physical Address Calculation:**
+$$\text{Address} = \text{Base Address} + [\text{Offset}] \times \text{Size of Element (in bytes)}$$
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Lab Scenario: Matrix Multiplication & Bounds Analysis</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Mathematical Constraint</StepTitle>
+    To multiply Matrix $A$ (dimensions $R_A \times C_A$) by Matrix $B$ (dimensions $R_B \times C_B$), the inner dimensions must match: the number of columns in $A$ **must strictly equal** the number of rows in $B$ ($C_A = R_B$). The resulting matrix $C$ will have dimensions $R_A \times C_B$.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>The Dot Product Algorithm</StepTitle>
+    The element at $C[i][j]$ is the mathematical dot product of Row $i$ of $A$ and Column $j$ of $B$:
+    $$C[i][j] = \sum_{k=0}^{C_A-1} A[i][k] \times B[k][j]$$
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Java Implementation & Complexity</StepTitle>
+    ```java
+    public static int[][] multiply(int[][] A, int[][] B) {
+        int rA = A.length, cA = A[0].length;
+        int rB = B.length, cB = B[0].length;
+        if (cA != rB) throw new IllegalArgumentException("Dimension mismatch");
+        
+        int[][] C = new int[rA][cB];
+        for (int i = 0; i < rA; i++) {
+            for (int j = 0; j < cB; j++) {
+                for (int k = 0; k < cA; k++) {
+                    C[i][j] += A[i][k] * B[k][j];
+                }
+            }
+        }
+        return C;
+    }
+    ```
+    **Time Complexity:** $O(R_A \times C_B \times C_A)$. For square matrices of size $N \times N$, this is strictly $O(N^3)$.
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Arrays & Matrices Assessment" questions={quizData} />

@@ -1,0 +1,40 @@
+---
+title: "6.1 Hash Functions & Separate Chaining"
+description: "Hash functions, universal hashing, and separate chaining."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/06-hash-tables/hash-functions-chaining-quiz';
+
+## 6.1 Hash Functions & Separate Chaining
+
+A hash table maps keys to values using a hash function to compute an index into an array of buckets.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 6.1.1: Hash Function Methods"
+  description="Common methods to map a key $k$ to a bucket index $0 \le i < m$."
+>
+
+- **Division Method:** $h(k) = k \pmod m$. Works well if $m$ is a prime not close to a power of 2.
+- **Multiplication Method:** $h(k) = \lfloor m (kA \pmod 1) \rfloor$, where $0 < A < 1$. Knuth recommends $A \approx (\sqrt{5}-1)/2$.
+- **Universal Hashing:** A family of hash functions where the probability of collision between any two distinct keys is exactly $1/m$. Prevents HashDoS attacks.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 6.1.2: Separate Chaining"
+  description="Each bucket in the array points to a linked list of entries that hashed to that index."
+>
+
+- **Insert:** Add to the head of the list at `bucket[index]`. $O(1)$ average.
+- **Search:** Traverse the list at `bucket[index]`. $O(1 + \lambda)$ average, where $\lambda = n/m$ is the load factor.
+- **Expected Chain Length:** Under simple uniform hashing, the expected length of the chain at any bucket is exactly $\lambda$.
+
+</HighlightCard>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Hash Functions & Chaining Assessment" questions={quizData} />

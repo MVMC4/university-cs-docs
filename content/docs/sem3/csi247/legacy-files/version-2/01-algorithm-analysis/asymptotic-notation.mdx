@@ -1,0 +1,65 @@
+---
+title: "1.1 Asymptotic Notation"
+description: "Formal definitions of Big-O, Omega, and Theta using constants."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/01-algorithm-analysis/asymptotic-notation-quiz';
+
+## 1.1 Asymptotic Notation
+
+To rigorously analyze algorithms, we abstract away hardware-dependent constants and focus on the **growth rate** of the running time function $T(n)$ as $n \to \infty$.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 1.1.1: Big-O (Asymptotic Upper Bound)"
+  description="Formal definition using constants $c$ and $n_0$."
+>
+
+$T(n) = O(g(n))$ if there exist positive constants $c$ and $n_0$ such that:
+$$0 \le T(n) \le c \cdot g(n) \quad \text{for all } n \ge n_0$$
+
+</HighlightCard>
+
+<Card>
+
+### Definition 1.1.2: Omega and Theta
+
+- **Big-Omega ($\Omega$):** Asymptotic lower bound. $T(n) = \Omega(g(n))$ if $0 \le c \cdot g(n) \le T(n)$ for all $n \ge n_0$.
+- **Big-Theta ($\Theta$):** Asymptotic tight bound. $T(n) = \Theta(g(n))$ if $T(n) = O(g(n))$ and $T(n) = \Omega(g(n))$.
+
+</Card>
+
+<StepByStep>
+  <StepByStepTitle>Proof: $3n^2 + 2n + 1 = O(n^2)$ using Constants</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>State the Goal</StepTitle>
+
+    Find $c > 0$ and $n_0 \ge 1$ such that $3n^2 + 2n + 1 \le c \cdot n^2$ for all $n \ge n_0$.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Bound Lower-Order Terms</StepTitle>
+
+    For $n \ge 1$, we know $n \le n^2$ and $1 \le n^2$.
+    Therefore, $2n \le 2n^2$ and $1 \le n^2$.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Substitute and Simplify</StepTitle>
+
+    $3n^2 + 2n + 1 \le 3n^2 + 2n^2 + n^2 = 6n^2$.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Identify Constants and Conclude</StepTitle>
+
+    Let $c = 6$ and $n_0 = 1$. Thus, by definition, with $c=6$ and $n_0=1$, the inequality $3n^2 + 2n + 1 \le 6n^2$ holds for all $n \ge n_0$. $\blacksquare$
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Asymptotic Notation Assessment" questions={quizData} />

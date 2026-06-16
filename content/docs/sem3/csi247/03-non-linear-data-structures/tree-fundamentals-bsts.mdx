@@ -1,0 +1,51 @@
+---
+title: "3.1 Tree Fundamentals & BSTs"
+description: "Tree terminology, the BST invariant, and Depth-First traversals."
+---
+
+## 3.1 Tree Fundamentals & BSTs
+
+Trees are hierarchical, non-linear data structures composed of nodes and edges. The Binary Search Tree (BST) imposes a strict ordering invariant that enables highly efficient searching and sorting.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 3.1.1: Tree Terminology & Structural Properties"
+  description="The anatomy of a tree."
+>
+
+- **Root:** The topmost node (no parent).
+- **Leaf:** A node with no children.
+- **Height:** The number of edges on the longest downward path from a node to a leaf.
+- **Depth:** The number of edges from the root to a specific node.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 3.1.1: The BST Invariant & Degeneration"
+  description="The mathematical constraint that defines a Binary Search Tree."
+>
+
+**The Invariant:** For any given node, all values in its left subtree must be strictly less than the node's value, and all values in its right subtree must be strictly greater.
+**Degeneration:** If elements are inserted in sorted order, the BST degenerates into a linked list, causing the height to become $O(n)$ and destroying the $O(\log n)$ search efficiency.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Required Skill: Depth-First Traversals</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Pre-Order (Root, Left, Right)</StepTitle>
+    Used to copy or serialize the tree structure. Visits the node before its children.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>In-Order (Left, Root, Right)</StepTitle>
+    **Crucial:** On a valid BST, an In-Order traversal will always output the elements in strictly ascending sorted order.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Post-Order (Left, Right, Root)</StepTitle>
+    Used to safely delete the tree. Visits all children before deleting the parent node.
+  </Step>
+</StepByStep>

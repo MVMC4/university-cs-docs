@@ -1,0 +1,63 @@
+---
+title: "3.2 Balanced Trees (AVL)"
+description: "Height balance factors, tree degradation, and rotation matrices."
+---
+
+## 3.2 Balanced Trees (AVL)
+
+To prevent BST degeneration, AVL trees enforce a strict mathematical constraint on the height of subtrees, guaranteeing $O(\log n)$ operations through structural rotations.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 3.2.1: Height Balance Factor"
+  description="The mathematical metric used to detect imbalance."
+>
+
+The Balance Factor (BF) of any node is calculated as:
+$$BF = \text{Height}(\text{Left Subtree}) - \text{Height}(\text{Right Subtree})$$
+**The AVL Constraint:** For every single node in the tree, the BF must be strictly bounded within the set $\{-1, 0, 1\}$. If $|BF| > 1$, a rotation is mandatory.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Exam Scenario: AVL Insertion & Rotation Trace</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Dataset</StepTitle>
+    Insert the following sequence into an initially empty AVL Tree: `[45, 58, 46, 7, 44, 20]`.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Insert 45, 58, 46</StepTitle>
+    - Insert 45 (Root).
+    - Insert 58 (Right child of 45).
+    - Insert 46 (Left child of 58).
+    **Imbalance:** Node 45 has $BF = -2$ (Right heavy). Its right child (58) has $BF = +1$ (Left heavy). This is an **RL (Right-Left) Imbalance**.
+    **Fix:** Right rotate 58, then Left rotate 45. 
+    *Resulting Tree:* Root is 46. Left child is 45. Right child is 58.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Insert 7, 44, 20</StepTitle>
+    - Insert 7 (Left child of 45).
+    - Insert 44 (Right child of 45).
+    - Insert 20 (Right child of 7).
+    **Imbalance:** Node 46 has $BF = +2$ (Left heavy). Its left child (45) has $BF = +1$ (Left heavy, because height of 7's subtree is 2, height of 44 is 0). This is an **LL (Left-Left) Imbalance**.
+    **Fix:** Right rotate 46. 45 moves up to become the new root. 46 becomes the right child of 45. 45's old right child (44) becomes the left child of 46.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Final Tree Structure</StepTitle>
+    - Root: **45**
+    - 45 Left: **7** (Right child: 20)
+    - 45 Right: **46** (Left child: 44, Right child: 58)
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>Post-Order Traversal Output (Left, Right, Root)</StepTitle>
+    Traverse 7's subtree: `20, 7`.
+    Traverse 46's subtree: `44, 58, 46`.
+    Visit Root: `45`.
+    **Final Output:** `20, 7, 44, 58, 46, 45`
+  </Step>
+</StepByStep>

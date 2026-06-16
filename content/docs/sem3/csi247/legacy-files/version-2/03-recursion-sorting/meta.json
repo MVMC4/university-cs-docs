@@ -1,0 +1,11 @@
+{
+  "title": "3. Recursion, Sorting, & Lower Bounds",
+  "pages": [
+    "index",
+    "recursion-mechanics",
+    "sorting-algorithms",
+    "divide-conquer-lower-bounds",
+    "heap-sort-priority-queues",
+    "comparable-comparator"
+  ]
+}

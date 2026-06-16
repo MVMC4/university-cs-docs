@@ -1,0 +1,131 @@
+---
+title: "7.2 DAGs & Shortest Paths"
+description: "Topological Sort, Dijkstra, and Bellman-Ford with complete Java implementations."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi247/legacy-files/version-2/07-graphs/dag-shortest-paths-quiz';
+
+## 7.2 DAGs & Shortest Paths
+
+Directed Acyclic Graphs (DAGs) and shortest path algorithms are foundational for scheduling and routing.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 7.2.1: Topological Sorting"
+  description="A linear ordering of vertices such that for every directed edge $u \\to v$, $u$ comes before $v$."
+>
+
+- **Kahn's Algorithm (In-Degrees):** Repeatedly remove nodes with in-degree 0. $O(V + E)$.
+- **DFS Post-Order:** Run DFS, and push nodes to a stack upon finishing their recursion. Pop the stack to get the order. $O(V + E)$.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Complete Java Implementation: Dijkstra's Algorithm"
+  description="Uses a PriorityQueue (Min-Heap) to greedily extract the node with the smallest known distance."
+>
+
+```java
+import java.util.*;
+
+class Edge {
+    int to;
+    int weight;
+    Edge(int to, int weight) {
+        this.to = to;
+        this.weight = weight;
+    }
+}
+
+public class Dijkstra {
+    private final int V;
+    private final List<List<Edge>> adj;
+
+    public Dijkstra(int V) {
+        this.V = V;
+        adj = new ArrayList<>(V);
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+    }
+
+    public void addEdge(int u, int v, int weight) {
+        adj.get(u).add(new Edge(v, weight));
+        adj.get(v).add(new Edge(u, weight)); // Undirected
+    }
+
+    public int[] shortestPath(int start) {
+        int[] dist = new int[V];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[start] = 0;
+
+        // PriorityQueue stores int[]{vertex, distance}
+        // Sorted by distance (index 1)
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[]{start, 0});
+
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int u = current[0];
+            int d = current[1];
+
+            // CRITICAL OPTIMIZATION: Skip stale entries in the PQ
+            if (d > dist[u]) continue;
+
+            for (Edge edge : adj.get(u)) {
+                int v = edge.to;
+                int weight = edge.weight;
+
+                // Relaxation step
+                if (dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    pq.add(new int[]{v, dist[v]});
+                }
+            }
+        }
+        return dist;
+    }
+}
+```
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Why Dijkstra Fails with Negative Weights: The 3-Node Counterexample"
+  description="The Greedy Choice Property assumes that once a node is extracted, its shortest path is final. Negative weights break this assumption."
+>
+
+**The Counterexample Graph:**
+- **Nodes:** S, A, B
+- **Edges:** S $\\to$ A (weight 2), S $\\to$ B (weight 1), A $\\to$ B (weight -5)
+
+**Execution Trace:**
+1. Start at S (dist 0). PQ: `(A, 2)`, `(B, 1)`.
+2. Extract B (dist 1). Because of the Greedy Choice Property, B is marked as **finalized** (shortest path found).
+3. Extract A (dist 2). A is marked as **finalized**.
+4. A relaxes edge A $\\to$ B: `dist[A] + (-5) = 2 - 5 = -3`.
+5. We found a shorter path to B (-3), but B is already finalized! 
+
+Because Dijkstra assumes non-negative weights, it incorrectly assumes B's shortest path is 1, completely missing the true shortest path of -3. This is why Bellman-Ford is required for negative weights.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 7.2.2: Bellman-Ford Algorithm"
+  description="Handles negative edge weights and detects negative-weight cycles."
+>
+
+- **Mechanism:** Relax all $E$ edges exactly $V-1$ times.
+- **Complexity:** $O(VE)$.
+- **Negative Cycle Detection:** If on the $V$-th iteration, any distance can still be relaxed, a negative-weight cycle exists.
+
+</HighlightCard>
+
+---
+
+## Topic Assessment
+
+<Quiz title="DAGs & Shortest Paths Assessment" questions={quizData} />

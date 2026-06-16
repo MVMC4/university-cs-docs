@@ -1,4 +1,9 @@
 {
   "title": "MAT221: Calculus I",
-  "pages": ["index", "limits", "derivatives", "question-bank", "resources"]
+  "pages": [
+    "index", 
+    "limits", 
+    "derivatives", 
+    "resources"
+  ]
 }

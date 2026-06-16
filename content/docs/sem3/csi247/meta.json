@@ -2,16 +2,11 @@
   "title": "CSI247: Data Structures & Algorithms",
   "pages": [
     "index",
-    "java-basics-oop",
-    "recursion",
-    "big-o",
-    "sorting-searching",
-    "java-collections",
-    "linked-lists",
-    "stacks-queues",
-    "hash-tables",
-    "trees",
-    "graphs",
+    "01-linear-data-structures",
+    "02-algorithm-analysis-searching-sorting",
+    "03-non-linear-data-structures",
+    "04-advanced-traversal-paradigms",
+    "legacy-files",
     "resources"
   ]
 }

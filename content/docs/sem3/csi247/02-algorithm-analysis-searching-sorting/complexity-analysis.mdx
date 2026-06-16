@@ -1,0 +1,66 @@
+---
+title: "2.1 Complexity Analysis"
+description: "Time/Space complexity and formal Asymptotic Notation bounds."
+---
+
+## 2.1 Complexity Analysis
+
+To rigorously analyze algorithms, we abstract away hardware-dependent constants and focus on the mathematical growth rate of resource consumption as the input size $n$ approaches infinity.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 2.1.1: Time & Space Complexity"
+  description="Measuring computational resources independent of hardware."
+>
+
+- **Time Complexity:** The number of fundamental operations executed as a function of input size $n$.
+- **Space Complexity:** The amount of auxiliary memory allocated as a function of input size $n$ (excluding the input itself).
+- **Scenarios:**
+  - **Best Case:** The minimum operations required (e.g., finding the target on the first try).
+  - **Worst Case:** The maximum operations required (the absolute upper bound).
+  - **Average Case:** The expected operations over all possible inputs.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 2.1.1: Formal Asymptotic Bounds"
+  description="The mathematical definitions of Big-O, Omega, and Theta."
+>
+
+- **Big-O ($O$):** Asymptotic Upper Bound. $T(n) \le c \cdot g(n)$ for all $n \ge n_0$. Represents the worst-case ceiling.
+- **Big-Omega ($\Omega$):** Asymptotic Lower Bound. $T(n) \ge c \cdot g(n)$ for all $n \ge n_0$. Represents the best-case floor.
+- **Big-Theta ($\Theta$):** Asymptotic Tight Bound. $c_1 \cdot g(n) \le T(n) \le c_2 \cdot g(n)$. The algorithm grows exactly at the rate of $g(n)$.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Required Skill: Analyzing Nested Loop Structures</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Independent Loops</StepTitle>
+    ```java
+    for(int i=0; i<n; i++) { ... } // O(n)
+    for(int j=0; j<n; j++) { ... } // O(n)
+    ```
+    Total Time: $O(n) + O(n) = O(n)$.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Dependent Nested Loops</StepTitle>
+    ```java
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<i; j++) { ... }
+    }
+    ```
+    The inner loop runs $i$ times. Total operations: $\sum_{i=1}^n i = \frac{n(n+1)}{2} = O(n^2)$.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Logarithmic Loops</StepTitle>
+    ```java
+    for(int i=1; i<n; i*=2) { ... }
+    ```
+    The variable $i$ doubles each iteration. It reaches $n$ in exactly $\log_2(n)$ steps. Total Time: $O(\log n)$.
+  </Step>
+</StepByStep>

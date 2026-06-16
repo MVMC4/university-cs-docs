@@ -1,0 +1,91 @@
+---
+title: "1.4 Queues"
+description: "FIFO architecture, circular queues, linked-list implementation, and Martin's Bookmark Lab."
+---
+
+## 1.4 Queues
+
+A Queue is a restricted linear structure enforcing a strict First-In-First-Out (FIFO) access pattern. It is the foundational mechanism for scheduling, buffering, and breadth-first traversals.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 1.4.1: FIFO Architecture"
+  description="Elements are added at the 'rear' (tail) and removed from the 'front' (head)."
+>
+
+- **Enqueue:** Adds an element to the rear.
+- **Dequeue:** Removes and returns the front element.
+- **Linked List Implementation:** Maintains explicit `head` (front) and `tail` (rear) pointers to ensure both operations execute in strictly $O(1)$ time without traversing the structure.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Lab Scenario: Martin's Bookmark Queue Implementation</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Problem</StepTitle>
+    Martin is building a `BookmarkQueue` using a Linked List. He needs to implement the `insert(String bookmark)` method (which acts as `enqueue`) without dropping any active nodes or breaking the tail pointer.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>The Logic</StepTitle>
+    1. Create the new node.
+    2. If the queue is empty, the new node becomes **both** the `head` and the `tail`.
+    3. If the queue has elements, link the current `tail.next` to the new node, then update the `tail` pointer to the new node.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>The Code</StepTitle>
+    ```java
+    public class BookmarkQueue {
+        Node head, tail;
+        int size = 0;
+
+        public void insert(String bookmarkName) {
+            Node newNode = new Node(bookmarkName);
+            
+            if (isEmpty()) {
+                head = tail = newNode; // First item becomes both head and tail
+            } else {
+                tail.next = newNode;   // Link current tail to new node
+                tail = newNode;        // Update tail pointer to the new node
+            }
+            size++;
+        }
+        
+        public boolean isEmpty() {
+            return size == 0;
+        }
+    }
+    ```
+  </Step>
+</StepByStep>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 1.4.2: Circular Queues & Modulo Arithmetic"
+  description="Solving the 'unusable space' problem in array-based queues."
+>
+
+In a standard array queue, dequeuing advances the front pointer, leaving empty slots at the beginning that cannot be reused.
+A **Circular Queue** treats the array as a continuous ring using modulo arithmetic:
+- `rear = (rear + 1) % capacity`
+- `front = (front + 1) % capacity`
+This allows the rear pointer to wrap around to index 0 and reuse vacated slots at the beginning of the array.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Required Skill: Managing Front/Rear Pointers</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Full vs. Empty Ambiguity</StepTitle>
+    If `front == rear`, is the queue empty or full? To resolve this without maintaining a separate `size` integer, we intentionally sacrifice one memory slot.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>The Mathematical Condition</StepTitle>
+    The queue is strictly **Full** if advancing the rear pointer by one lands exactly on the front pointer:
+    `(rear + 1) % capacity == front`
+  </Step>
+</StepByStep>

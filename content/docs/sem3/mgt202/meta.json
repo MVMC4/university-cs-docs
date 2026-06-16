@@ -1,4 +1,7 @@
 {
   "title": "MGT202: Management",
-  "pages": ["index", "planning", "organizing", "question-bank", "resources"]
+  "pages": [
+    "index", 
+    "resources"
+  ]
 }
