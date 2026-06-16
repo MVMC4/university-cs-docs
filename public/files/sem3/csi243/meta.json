@@ -1,12 +1,11 @@
 [
   {
-    "id": "lec-intro",
-    "title": "Lecture 1: Intro to Functional Programming",
+    "id": "course-content",
+    "title": "Course Content & Syllabus",
     "category": "Lectures",
     "type": "pdf",
-    "url": "/files/sem3/csi243/Lecture 1 Intro to FP (1).pdf",
-    "description": "Introduction to the FP paradigm, immutability, and pure functions.",
-    "isNew": true
+    "url": "/files/sem3/csi243/Course Content.pdf",
+    "description": "Official module outline and assessment details."
   },
   {
     "id": "lec-notes",
@@ -15,28 +14,23 @@
     "type": "folder",
     "description": "Detailed notes covering functions, Haskell programs, and recursion.",
     "children": [
-      { "id": "course-content", "title": "Course Content & Syllabus", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Course Content.pdf", "description": "Official module outline and assessment details." },
+      { 
+        "id": "lec-intro", 
+        "title": "Lecture 1: Intro to Functional Programming", 
+        "category": "Lectures", 
+        "type": "pdf", 
+        "url": "/files/sem3/csi243/lectures/Lecture 1 Intro to FP (1).pdf", 
+        "description": "Introduction to the FP paradigm, immutability, and pure functions.",
+        "isNew": true 
+      },
       { "id": "lec2", "title": "Lecture 2: Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Lecture 2 Functions  (1).pdf", "description": "Defining functions, basic syntax, and evaluation." },
       { "id": "lec3", "title": "Lecture 3: A Haskell Program", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Lecture 3  A Haskell Program (1).pdf", "description": "Structuring a complete Haskell script and basic IO." },
       { "id": "lec-rec", "title": "Recursion Concepts", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Recursion.pdf", "description": "Theoretical foundation of recursive definitions." }
     ]
   },
   {
-    "id": "lab-manuals",
-    "title": "Lab Manuals (PDF/DOCX)",
-    "category": "Labs",
-    "type": "folder",
-    "description": "Official lab instruction sheets.",
-    "children": [
-      { "id": "lab1-pdf", "title": "Lab 1: Introduction", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/labs/Lab 1 .pdf", "description": "Getting started with GHCi and basic syntax." },
-      { "id": "lab2-pdf", "title": "Lab 2: Recursion", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/labs/Lab 2 Recursion.pdf", "description": "Implementing recursive functions." },
-      { "id": "lab3-pdf", "title": "Lab 3: Recursion Continued", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/labs/Lab 3 Recursion Continued.pdf", "description": "Advanced recursion and list processing." },
-      { "id": "lab4-docx", "title": "Lab 4: Pattern Matching", "category": "Labs", "type": "docx", "url": "/files/sem3/csi243/labs/Lab 4 Pattern Matching.docx", "description": "Guards, case expressions, and pattern matching." }
-    ]
-  },
-  {
     "id": "haskell-code",
-    "title": "Haskell Code & Solutions",
+    "title": "Labs",
     "category": "Labs",
     "type": "folder",
     "description": "Starter code (.hs) and lab instructions for Labs 1 through 6.",
@@ -89,14 +83,14 @@
   },
   {
     "id": "textbooks",
-    "title": "Recommended Textbooks",
+    "title": "Reading & Resources",
     "category": "Books",
     "type": "folder",
-    "description": "Core textbooks and reference books for Functional Programming and Haskell.",
+    "description": "Core textbooks, official support, and reference books listed in the course syllabus.",
     "children": [
       { "id": "book-thompson", "title": "Haskell: The Craft of Functional Programming", "category": "Books", "type": "link", "url": "https://www.amazon.com/Haskell-Functional-Programming-International-Computer/dp/0201342758", "description": "Simon Thompson - The official course textbook (3rd Ed)." },
+      { "id": "book-haskell-org", "title": "Haskell Support & Documentation", "category": "Books", "type": "link", "url": "https://www.haskell.org/", "description": "Official Haskell support, downloads, and documentation." },
       { "id": "book-lyah", "title": "Learn You a Haskell for Great Good!", "category": "Books", "type": "link", "url": "http://learnyouahaskell.com/", "description": "Miran Lipovaca - A fun, illustrated beginner's guide (Free online)." },
-      { "id": "book-rwh", "title": "Real World Haskell", "category": "Books", "type": "link", "url": "http://book.realworldhaskell.org/", "description": "O'Sullivan, Stewart, Goerzen - For building real applications (Free online)." },
       { "id": "book-fernandez", "title": "Models of Computation", "category": "Books", "type": "link", "url": "https://www.amazon.com/Models-Computation-Introduction-Computability/dp/1848824343", "description": "Fernandez M - Introduction to computability theory." },
       { "id": "book-enderton", "title": "A Mathematical Introduction to Logic", "category": "Books", "type": "link", "url": "https://www.amazon.com/Mathematical-Introduction-Logic-Second-Edition/dp/0122384520", "description": "Enderton H B - For the mathematical reasoning and proofs aspect." }
     ]

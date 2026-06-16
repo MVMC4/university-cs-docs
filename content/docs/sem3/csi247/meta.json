@@ -3,16 +3,16 @@
     "pages": [
         "index",
         "java-basics-oop",
-        "java-collections",
         "big-o",
         "recursion",
-        "sorting-searching",
         "linked-lists",
         "stacks-queues",
+        "sorting-searching",
         "trees",
         "hash-tables",
         "graphs",
-        "legacy-files",
-        "resources"
+        "java-collections",
+        "resources",
+        "legacy-files"
     ]
 }
