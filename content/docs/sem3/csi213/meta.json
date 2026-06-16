@@ -1,12 +1,14 @@
 {
   "title": "CSI213 Discrete Structures III",
   "pages": [
+    "index",
     "01-set-theory",
     "02-probability",
     "03-conditional-probability",
     "04-random-var-distributions",
     "05-discrete-distributions",
     "06-continuous-distributions",
-    "07-regression-analysis"
+    "07-regression-analysis",
+    "resources"
   ]
 }

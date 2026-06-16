@@ -1,6 +1,9 @@
 [
   {
-    "id": "lec-outline", "title": "Course Outline", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/lectures/CSI213-CourseOutline_7b7464f661ae676125c623d4a69753f2.pdf", "description": "Official syllabus and assessment structure.", "isNew": true
+    "id": "lec-outline", "title": "Course Outline 1", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/CourseOutlinev1.pdf", "description": "Official syllabus and assessment structure.", "isNew": true
+  },
+  {
+    "id": "lec-outline", "title": "Course Outline 2", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/CourseOutlinev2.pdf", "description": "Official syllabus and assessment structure.", "isNew": true
   },
   {
     "id": "lec-basics", "title": "Java Basics & OOP Lectures", "category": "Lectures", "type": "folder", "description": "Foundational Java concepts, methods, and OOP.",

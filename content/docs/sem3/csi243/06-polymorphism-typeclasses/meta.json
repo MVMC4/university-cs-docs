@@ -1,5 +1,5 @@
 {
-  "title": "06. Polymorphism, Typeclasses & Error Translation",
+  "title": "6. Polymorphism, Typeclasses & Error Translation",
   "pages": [
     "index",
     "parametric-polymorphism",

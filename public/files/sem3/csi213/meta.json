@@ -1,99 +1,63 @@
 [
   {
-    "id": "lec-outline",
-    "title": "Course Outline & Syllabus",
-    "category": "Lectures",
-    "type": "pdf",
-    "url": "/files/sem3/csi213/CSI213-CourseOutline.pdf",
-    "description": "Official module outline, topics, and assessment details for Discrete Structures III.",
-    "isNew": true
+    "id": "lec-outline", "title": "Course Outline", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/CSI213-CourseOutline.pdf", "description": "Official syllabus and assessment structure.", "isNew": true
   },
   {
-    "id": "lec-notes",
-    "title": "Core Lecture Notes",
-    "category": "Lectures",
-    "type": "folder",
-    "description": "Detailed notes covering counting principles, probability, distributions, and regression.",
-    "children": [
-      { "id": "lec-counting", "title": "Combinatorics & Counting", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/lectures/01-Combinatorics.pdf", "description": "Permutations, combinations, and base systems." },
-      { "id": "lec-prob", "title": "Probability & Bayes' Theorem", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/lectures/02-Probability.pdf", "description": "Conditional probability, independence, and Bayes." },
-      { "id": "lec-discrete", "title": "Discrete Distributions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/lectures/03-Discrete-Distributions.pdf", "description": "Binomial, Poisson, Geometric, and Hypergeometric distributions." },
-      { "id": "lec-continuous", "title": "Continuous Distributions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/lectures/04-Continuous-Distributions.pdf", "description": "Exponential, Normal distributions, and Z-scores." },
-      { "id": "lec-regression", "title": "Reliability & Regression", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/lectures/05-Regression.pdf", "description": "System reliability and simple linear regression." }
-    ]
-  },
-  {
-    "id": "tutorials",
-    "title": "Tutorial Sheets & Solutions",
-    "category": "Labs",
-    "type": "folder",
-    "description": "Weekly tutorial problem sets and step-by-step solutions.",
-    "children": [
-      { "id": "tut1", "title": "Tutorial 1: Counting Principles", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi213/tutorials/Tut1-Counting.pdf", "description": "Exercises on permutations and combinations." },
-      { "id": "tut2", "title": "Tutorial 2: Probability & Bayes", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi213/tutorials/Tut2-Probability.pdf", "description": "Conditional probability and total probability exercises." },
-      { "id": "tut3", "title": "Tutorial 3: Distributions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi213/tutorials/Tut3-Distributions.pdf", "description": "Identifying and applying discrete and continuous distributions." }
-    ]
-  },
-  {
-    "id": "past-papers",
-    "title": "Past Exam Papers & Memos",
-    "category": "Past Papers",
-    "type": "folder",
-    "description": "Previous years' exam papers and marking guidelines.",
-    "children": [
-      { "id": "exam-2023", "title": "CSI213 Final Exam 2023", "category": "Past Papers", "type": "pdf", "url": "/files/sem3/csi213/exams/CSI213_Exam_2023.pdf", "description": "Past paper featuring the Zebras and Carrot problems." },
-      { "id": "memo-2023", "title": "Exam 2023 Memo & Solutions", "category": "Past Papers", "type": "pdf", "url": "/files/sem3/csi213/exams/CSI213_Memo_2023.pdf", "description": "Step-by-step solutions and common pitfalls." },
-      { "id": "exam-2022", "title": "CSI213 Final Exam 2022", "category": "Past Papers", "type": "pdf", "url": "/files/sem3/csi213/exams/CSI213_Exam_2022.pdf", "description": "Past paper featuring reliability and regression." }
-    ]
-  },
-  {
-    "id": "tools-stats",
-    "title": "Statistical Tools & Tables",
-    "category": "Tools",
-    "type": "folder",
-    "description": "Essential tables, corrected formula sheets, and calculator guides.",
-    "children": [
-      { "id": "tool-ztable", "title": "Standard Normal (Z) Table", "category": "Tools", "type": "pdf", "url": "/files/sem3/csi213/tools/Standard_Normal_Table.pdf", "description": "High-res, printable Z-table for Normal distribution problems." },
-      { "id": "tool-formulas", "title": "Corrected Formula Sheet", "category": "Tools", "type": "pdf", "url": "/files/sem3/csi213/tools/Formula_Sheet_Corrected.pdf", "description": "Official formula sheet with corrected Geometric and Hypergeometric variances." },
-      { "id": "tool-casio", "title": "Casio fx-991EX Calculator Guide", "category": "Tools", "type": "pdf", "url": "/files/sem3/csi213/tools/Casio_Stats_Guide.pdf", "description": "How to use STAT mode for regression and distributions." },
-      { "id": "tool-python", "title": "Python Simulation Scripts", "category": "Tools", "type": "code", "url": "/files/sem3/csi213/tools/stats_simulations.py", "description": "Python/SciPy scripts to visualize distributions and the CLT." }
-    ]
-  },
-  {
-    "id": "textbooks",
-    "title": "Recommended Textbooks",
-    "category": "Books",
-    "type": "folder",
-    "description": "Core textbooks and reference books for Probability and Statistics.",
+    "id": "textbooks", "title": "Recommended Textbooks", "category": "Books", "type": "folder", "description": "Core textbooks for Probability, Statistics, and Discrete Mathematics.",
     "children": [
       { "id": "book-devore", "title": "Probability and Statistics for Engineering", "category": "Books", "type": "link", "url": "https://www.amazon.com/Probability-Statistics-Engineering-Sciences-Jay/dp/1305253809", "description": "Jay L. Devore - The standard textbook for engineering statistics." },
-      { "id": "book-ross", "title": "A First Course in Probability", "category": "Books", "type": "link", "url": "https://www.amazon.com/First-Course-Probability-Sheldon-Ross/dp/0134753119", "description": "Sheldon Ross - Excellent for deep theoretical understanding." },
-      { "id": "book-walpole", "title": "Probability & Statistics for Engineers", "category": "Books", "type": "link", "url": "https://www.amazon.com/Probability-Statistics-Engineers-Scientists-Walpole/dp/0321693345", "description": "Walpole, Myers, Myers, Ye - Great for practical applications." }
+      { "id": "book-ross", "title": "A First Course in Probability", "category": "Books", "type": "link", "url": "https://www.amazon.com/First-Course-Probability-Sheldon-Ross/dp/0134753119", "description": "Sheldon Ross - Excellent for deep theoretical understanding of probability." },
+      { "id": "book-walpole", "title": "Probability & Statistics for Engineers", "category": "Books", "type": "link", "url": "https://www.amazon.com/Probability-Statistics-Engineers-Scientists-Walpole/dp/0321693345", "description": "Walpole, Myers, Myers, Ye - Great for practical applications and regression." },
+      { "id": "book-rosen", "title": "Discrete Mathematics and Its Applications", "category": "Books", "type": "link", "url": "https://www.amazon.com/Discrete-Mathematics-Its-Applications-Seventh/dp/0073383090", "description": "Kenneth Rosen - The definitive guide for counting, permutations, and combinations." },
+      { "id": "book-montgomery", "title": "Introduction to Linear Regression Analysis", "category": "Books", "type": "link", "url": "https://www.amazon.com/Introduction-Regression-Analysis-Douglas-Montgomery/dp/1119578728", "description": "Montgomery, Peck, Vining - Deep dive into the regression analysis portion of the syllabus." }
     ]
   },
   {
-    "id": "videos-stats",
-    "title": "Video Lectures & Playlists",
-    "category": "Videos",
-    "type": "folder",
-    "description": "Curated YouTube channels and playlists for mastering statistics.",
+    "id": "videos", "title": "Video Lectures & Playlists", "category": "Videos", "type": "folder", "description": "Curated YouTube channels and playlists for mastering statistics and probability.",
     "children": [
-      { "id": "vid-statquest", "title": "StatQuest with Josh Starmer", "category": "Videos", "type": "link", "url": "https://www.youtube.com/c/statquest", "description": "The absolute best channel for intuitive explanations of stats." },
-      { "id": "vid-zedstats", "title": "ZedStatistics", "category": "Videos", "type": "link", "url": "https://www.youtube.com/c/ZedStatistics", "description": "Clear, concise, and well-animated videos on distributions." },
+      { "id": "vid-statquest", "title": "StatQuest with Josh Starmer", "category": "Videos", "type": "link", "url": "https://www.youtube.com/c/statquest", "description": "The absolute best channel for intuitive explanations of stats, distributions, and regression." },
+      { "id": "vid-zedstats", "title": "ZedStatistics", "category": "Videos", "type": "link", "url": "https://www.youtube.com/c/ZedStatistics", "description": "Clear, concise, and well-animated videos on probability and distributions." },
       { "id": "vid-khan", "title": "Khan Academy: Statistics & Probability", "category": "Videos", "type": "link", "url": "https://www.khanacademy.org/math/statistics-probability", "description": "Comprehensive, step-by-step foundational video lessons." },
-      { "id": "vid-jbstats", "title": "jbstatistics", "category": "Videos", "type": "link", "url": "https://www.youtube.com/c/jbstatistics", "description": "Great for specific distribution derivations and hypothesis testing." }
+      { "id": "vid-jbstats", "title": "jbstatistics", "category": "Videos", "type": "link", "url": "https://www.youtube.com/c/jbstatistics", "description": "Great for specific distribution derivations (Poisson, Binomial, Hypergeometric)." },
+      { "id": "vid-mit1805", "title": "MIT 18.05 - Intro to Probability & Statistics", "category": "Videos", "type": "link", "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/", "description": "Complete semester course from MIT with lecture notes and exams." },
+      { "id": "vid-trevor", "title": "Trevor F. Miller - Regression & ANOVA", "category": "Videos", "type": "link", "url": "https://www.youtube.com/user/trevorsstatistics", "description": "Excellent walkthroughs for linear regression and hypothesis testing." }
     ]
   },
   {
-    "id": "practice-stats",
-    "title": "Practice Platforms",
-    "category": "Practice",
-    "type": "folder",
-    "description": "Interactive platforms to test your probability and statistics skills.",
+    "id": "practice", "title": "Practice Platforms & Problems", "category": "Practice", "type": "folder", "description": "Interactive platforms to test your probability and statistics skills.",
     "children": [
-      { "id": "pr-brilliant", "title": "Brilliant.org - Probability", "category": "Practice", "type": "link", "url": "https://brilliant.org/courses/probability/", "description": "Interactive, visual problem-solving for probability intuition." },
+      { "id": "pr-brilliant", "title": "Brilliant.org - Probability & Statistics", "category": "Practice", "type": "link", "url": "https://brilliant.org/courses/probability/", "description": "Interactive, visual problem-solving for probability intuition and distributions." },
       { "id": "pr-khan-ex", "title": "Khan Academy Exercises", "category": "Practice", "type": "link", "url": "https://www.khanacademy.org/math/statistics-probability", "description": "Free, auto-graded practice problems for every stats topic." },
-      { "id": "pr-setosa", "title": "Setosa Data Visualization", "category": "Practice", "type": "link", "url": "https://setosa.io/ev/", "description": "Interactive visualizations for distributions and Bayes." }
+      { "id": "pr-statshowto", "title": "Statistics How To", "category": "Practice", "type": "link", "url": "https://www.statisticshowto.com/", "description": "Massive library of step-by-step solved statistics problems and calculator guides." },
+      { "id": "pr-varsity", "title": "Varsity Tutors - Probability", "category": "Practice", "type": "link", "url": "https://www.varsitytutors.com/hotmath/keywords/probability", "description": "Quick practice questions for basic probability and counting." }
+    ]
+  },
+  {
+    "id": "interactive", "title": "Interactive Visualizations", "category": "Tools", "type": "folder", "description": "Visualize distributions, regression, and probability concepts in action.",
+    "children": [
+      { "id": "tool-seeing", "title": "Seeing Theory (Brown University)", "category": "Tools", "type": "link", "url": "https://seeing-theory.brown.edu/", "description": "A visual introduction to probability and statistics. Absolutely stunning interactive demos." },
+      { "id": "tool-setosa", "title": "Setosa Explained Visually", "category": "Tools", "type": "link", "url": "https://setosa.io/ev/", "description": "Interactive visualizations for Ordinary Least Squares Regression, Markov Chains, and Conditional Probability." },
+      { "id": "tool-rossman", "title": "Rossman/Chance Applets", "category": "Tools", "type": "link", "url": "https://www.rossmanchance.com/applets/", "description": "Academic-grade simulation applets for distributions, sampling, and regression." },
+      { "id": "tool-geogebra", "title": "GeoGebra Probability & Stats", "category": "Tools", "type": "link", "url": "https://www.geogebra.org/m/probability", "description": "Interactive calculators for Normal, Binomial, Poisson, and other distributions." }
+    ]
+  },
+  {
+    "id": "dev-tools", "title": "Calculators & Software Tools", "category": "Tools", "type": "folder", "description": "Essential tools, tables, and software for statistical analysis.",
+    "children": [
+      { "id": "tool-casio", "title": "Casio fx-991EX Calculator Guide", "category": "Tools", "type": "link", "url": "https://www.casio.com/intl/scientific-calculators/", "description": "How to use STAT mode for regression, mean, variance, and distributions." },
+      { "id": "tool-ztable", "title": "Standard Normal (Z) Table", "category": "Tools", "type": "link", "url": "https://www.statisticshowto.com/tables/z-table/", "description": "High-res, printable Z-table for Normal distribution problems." },
+      { "id": "tool-scipy", "title": "Python SciPy Stats Documentation", "category": "Tools", "type": "link", "url": "https://docs.scipy.org/doc/scipy/reference/stats.html", "description": "Python library for calculating PDFs, CDFs, and running regression." },
+      { "id": "tool-rproject", "title": "R Project for Statistical Computing", "category": "Tools", "type": "link", "url": "https://www.r-project.org/", "description": "The industry-standard free software for heavy statistical analysis." },
+      { "id": "tool-overleaf", "title": "Overleaf (LaTeX Editor)", "category": "Tools", "type": "link", "url": "https://www.overleaf.com/", "description": "Essential for typing up complex mathematical formulas and proofs cleanly." }
+    ]
+  },
+  {
+    "id": "community", "title": "Community & Study Strategy", "category": "Tools", "type": "folder", "description": "Forums, cheat sheets, and study resources.",
+    "children": [
+      { "id": "com-cv", "title": "Cross Validated (Stack Exchange)", "category": "Tools", "type": "link", "url": "https://stats.stackexchange.com/", "description": "The premier Q&A site for statistics, machine learning, and data analysis." },
+      { "id": "com-mathse", "title": "Math Stack Exchange - Probability", "category": "Tools", "type": "link", "url": "https://math.stackexchange.com/questions/tagged/probability", "description": "Q&A for theoretical probability and combinatorics." },
+      { "id": "com-reddit-stats", "title": "Reddit r/statistics", "category": "Tools", "type": "link", "url": "https://www.reddit.com/r/statistics/", "description": "Community discussion for statistics concepts and software." },
+      { "id": "com-cheat", "title": "Probability & Statistics Cheat Sheets", "category": "Tools", "type": "link", "url": "https://www.sas.upenn.edu/~astocker/lab/teaching-files/PSYC739/cheatsheets/", "description": "Quick reference guides for distributions, expected values, and variances." }
     ]
   }
 ]
