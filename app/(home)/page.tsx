@@ -53,31 +53,34 @@ export default function HomePage() {
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen w-full text-white overflow-hidden"
+      className="
+        relative min-h-screen w-full overflow-hidden
+        bg-white dark:bg-[#0a0a0a]
+        text-gray-900 dark:text-white
+        bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)]
+        dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)]
+        bg-[length:40px_40px]
+      "
       style={{
         fontFamily: '"Inter", system-ui, -apple-system, sans-serif',
-        backgroundColor: '#0a0a0a',
-        backgroundImage:
-          'linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)',
-        backgroundSize: '40px 40px',
       }}
     >
       {/* Hero Content */}
       <div className="relative flex flex-col items-center justify-center min-h-screen px-4 py-4 sm:py-6 md:py-12 z-20">
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.6, type: "spring" }} className="inline-flex items-center justify-center w-10 h-10 sm:w-12 md:w-14 lg:w-16 rounded-lg sm:rounded-xl md:rounded-2xl bg-white/5 border border-white/10 mb-2 sm:mb-4 md:mb-6">
-          <Binary className="w-4 h-4 sm:w-5 md:w-6 lg:w-7 text-white/90" />
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.6, type: "spring" }} className="inline-flex items-center justify-center w-10 h-10 sm:w-12 md:w-14 lg:w-16 rounded-lg sm:rounded-xl md:rounded-2xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 mb-2 sm:mb-4 md:mb-6">
+          <Binary className="w-4 h-4 sm:w-5 md:w-6 lg:w-7 text-gray-700 dark:text-white/90" />
         </motion.div>
 
-        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-1.5 sm:mb-2 text-center leading-tight px-2">
+        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-1.5 sm:mb-2 text-center leading-tight px-2 text-gray-900 dark:text-white">
           University CS Docs
         </motion.h1>
 
-        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} className="text-xs sm:text-sm md:text-base text-white/60 max-w-[260px] sm:max-w-sm md:max-w-md mx-auto mb-3 sm:mb-5 md:mb-8 font-light text-center px-2">
+        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} className="text-xs sm:text-sm md:text-base text-gray-500 dark:text-white/60 max-w-[260px] sm:max-w-sm md:max-w-md mx-auto mb-3 sm:mb-5 md:mb-8 font-light text-center px-2">
           Notes, code & quizzes for University of Botswana CS.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }} className="w-full sm:w-auto px-2">
-          <Link href="/docs" className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-white text-black rounded-lg sm:rounded-xl font-medium hover:bg-white/90 transition-all text-xs sm:text-sm">
+          <Link href="/docs" className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 sm:px-7 py-2.5 sm:py-3 bg-gray-900 text-white dark:bg-white dark:text-black rounded-lg sm:rounded-xl font-medium hover:bg-gray-800 dark:hover:bg-white/90 transition-all text-xs sm:text-sm shadow-lg dark:shadow-none">
             Access Docs
             <ArrowRight className="w-3 h-3 sm:w-3.5 transition-transform group-hover:translate-x-1" />
           </Link>
@@ -131,21 +134,21 @@ export default function HomePage() {
         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between pt-[22vh] pb-[16vh] px-3">
           <div className="flex justify-center gap-3 w-full max-w-[300px] mx-auto">
             <div className="relative w-[48%] h-40">
-              <div className="absolute inset-0 bg-[#111]/80 border border-white/5 rounded-xl transform translate-x-1.5 translate-y-1.5" />
+              <div className="absolute inset-0 bg-gray-100/80 dark:bg-[#111]/80 border border-gray-200 dark:border-white/5 rounded-xl transform translate-x-1.5 translate-y-1.5" />
               <MobileCard icon={<GitBranch className="w-3 h-3" />} code="CSI247" title="Data Struct" preview={<Preview type="ds" mobile />} />
             </div>
             <div className="relative w-[48%] h-40">
-              <div className="absolute inset-0 bg-[#111]/80 border border-white/5 rounded-xl transform -translate-x-1.5 -translate-y-1.5" />
+              <div className="absolute inset-0 bg-gray-100/80 dark:bg-[#111]/80 border border-gray-200 dark:border-white/5 rounded-xl transform -translate-x-1.5 -translate-y-1.5" />
               <MobileCard icon={<FunctionSquare className="w-3 h-3" />} code="CSI243" title="Functional" preview={<Preview type="fp" mobile />} />
             </div>
           </div>
           <div className="flex justify-center gap-3 w-full max-w-[300px] mx-auto">
             <div className="relative w-[48%] h-40">
-              <div className="absolute inset-0 bg-[#111]/80 border border-white/5 rounded-xl transform translate-x-1.5 -translate-y-1.5" />
+              <div className="absolute inset-0 bg-gray-100/80 dark:bg-[#111]/80 border border-gray-200 dark:border-white/5 rounded-xl transform translate-x-1.5 -translate-y-1.5" />
               <MobileCard icon={<Sigma className="w-3 h-3" />} code="CSI213" title="Discrete" preview={<Preview type="disc" mobile />} />
             </div>
             <div className="relative w-[48%] h-40">
-              <div className="absolute inset-0 bg-[#111]/80 border border-white/5 rounded-xl transform -translate-x-1.5 translate-y-1.5" />
+              <div className="absolute inset-0 bg-gray-100/80 dark:bg-[#111]/80 border border-gray-200 dark:border-white/5 rounded-xl transform -translate-x-1.5 translate-y-1.5" />
               <MobileCard icon={<Calculator className="w-3 h-3" />} code="MAT221" title="Calculus" preview={<Preview type="calc" mobile />} />
             </div>
           </div>
@@ -170,21 +173,21 @@ function ModuleCard({ className = "", delay = 0, style, icon, code, title, previ
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: delay * 0.5 }} 
         className="relative h-full"
       >
-        <div className="bg-gradient-to-br from-[#161616] to-[#0d0d0d] border border-white/10 rounded-xl shadow-2xl backdrop-blur-md flex flex-col h-full overflow-hidden">
-          <div className="flex items-center gap-2.5 p-3 border-b border-white/5 bg-white/[0.02]">
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-white/5 border border-white/10 text-white/90 flex-shrink-0 shadow-inner">
+        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-[#161616] dark:to-[#0d0d0d] border border-gray-200 dark:border-white/10 rounded-xl shadow-lg dark:shadow-2xl backdrop-blur-md flex flex-col h-full overflow-hidden">
+          <div className="flex items-center gap-2.5 p-3 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
+            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/90 flex-shrink-0 shadow-inner">
               {icon}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[10px] font-semibold text-white/40 uppercase tracking-wider truncate">{code}</div>
-              <div className="text-sm font-bold text-white/95 truncate leading-tight">{title}</div>
+              <div className="text-[10px] font-semibold text-gray-400 dark:text-white/40 uppercase tracking-wider truncate">{code}</div>
+              <div className="text-sm font-bold text-gray-900 dark:text-white/95 truncate leading-tight">{title}</div>
             </div>
           </div>
-          <div className="flex-1 bg-[#0d0d0d]/50 p-3 font-mono leading-relaxed overflow-hidden flex items-start">
+          <div className="flex-1 bg-gray-50/50 dark:bg-[#0d0d0d]/50 p-3 font-mono leading-relaxed overflow-hidden flex items-start">
             {preview}
           </div>
         </div>
-        <div className="absolute -inset-1 bg-white/5 rounded-xl blur-md -z-10 opacity-50" />
+        <div className="absolute -inset-1 bg-gray-200 dark:bg-white/5 rounded-xl blur-md -z-10 opacity-50" />
       </motion.div>
     </motion.div>
   );
@@ -193,34 +196,35 @@ function ModuleCard({ className = "", delay = 0, style, icon, code, title, previ
 // Mobile Card (Static)
 function MobileCard({ icon, code, title, preview }: { icon: React.ReactNode; code: string; title: string; preview: React.ReactNode }) {
   return (
-    <div className="relative bg-gradient-to-br from-[#161616] to-[#0d0d0d] border border-white/10 rounded-xl shadow-xl backdrop-blur-md flex flex-col h-full overflow-hidden z-10">
-      <div className="flex items-center gap-2 p-2.5 border-b border-white/5 bg-white/[0.02]">
-        <div className="flex items-center justify-center w-6 h-6 rounded-md bg-white/5 border border-white/10 text-white/90 flex-shrink-0 shadow-inner">
+    <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-[#161616] dark:to-[#0d0d0d] border border-gray-200 dark:border-white/10 rounded-xl shadow-lg dark:shadow-xl backdrop-blur-md flex flex-col h-full overflow-hidden z-10">
+      <div className="flex items-center gap-2 p-2.5 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
+        <div className="flex items-center justify-center w-6 h-6 rounded-md bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/90 flex-shrink-0 shadow-inner">
           {icon}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-[9px] font-semibold text-white/40 uppercase tracking-wider truncate">{code}</div>
-          <div className="text-xs font-bold text-white/95 truncate leading-tight">{title}</div>
+          <div className="text-[9px] font-semibold text-gray-400 dark:text-white/40 uppercase tracking-wider truncate">{code}</div>
+          <div className="text-xs font-bold text-gray-900 dark:text-white/95 truncate leading-tight">{title}</div>
         </div>
       </div>
-      <div className="flex-1 bg-[#0d0d0d]/50 p-2.5 font-mono leading-relaxed overflow-hidden flex items-start">
+      <div className="flex-1 bg-gray-50/50 dark:bg-[#0d0d0d]/50 p-2.5 font-mono leading-relaxed overflow-hidden flex items-start">
         {preview}
       </div>
     </div>
   );
 }
 
-// VS Code Dark+ Syntax Highlighting
+// VS Code Syntax Highlighting (Light+ & Dark+)
 function Preview({ type, mobile = false }: { type: 'ds' | 'fp' | 'disc' | 'calc'; mobile?: boolean }) {
   const baseText = mobile ? 'text-[10px]' : 'text-[11px]';
   const sp = 'space-y-1.5';
 
-  const kw = "text-[#c678dd]"; 
-  const fn = "text-[#e5c07b]"; 
-  const typeC = "text-[#56b6c2]";
-  const str = "text-[#98c379]"; 
-  const num = "text-[#d19a66]"; 
-  const cm = "text-[#5c6370]";
+  // Light mode uses GitHub/VS Code Light+ colors, Dark mode uses Dark+
+  const kw = "text-[#d73a49] dark:text-[#c678dd]"; 
+  const fn = "text-[#6f42c1] dark:text-[#e5c07b]"; 
+  const typeC = "text-[#005cc5] dark:text-[#56b6c2]";
+  const str = "text-[#22863a] dark:text-[#98c379]"; 
+  const num = "text-[#e36209] dark:text-[#d19a66]"; 
+  const cm = "text-[#6a737d] dark:text-[#5c6370]";
 
   if (type === 'ds') return (
     <div className={`${baseText} ${sp} w-full`}>
