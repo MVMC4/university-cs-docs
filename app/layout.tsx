@@ -3,6 +3,7 @@ import { RootProvider } from 'fumadocs-ui/provider/next';
 import './global.css';
 import 'katex/dist/katex.css';
 import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: {
@@ -35,6 +36,7 @@ export default function Layout({ children }: LayoutProps<'/'>) {
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen font-sans">
         <RootProvider>{children}</RootProvider>
+        <Analytics />
       </body>
     </html>
   );
