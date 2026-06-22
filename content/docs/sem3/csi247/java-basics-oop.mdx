@@ -8,7 +8,7 @@ description: Comprehensive revision guide for Core Java concepts, Object-Oriente
 This document serves as a complete revision guide for Java programming fundamentals, Object-Oriented Programming (OOP) principles, and the Generics system.
 
 <SafeImage 
-  src="/images/java-overview.png" 
+  src="/images/sem3/csi247/java-overview.png" 
   alt="Java Platform Overview" 
   caption="Figure 1: Java's write-once-run-anywhere architecture"
   className="w-full max-w-3xl mx-auto"
@@ -26,7 +26,7 @@ Java is a **strongly typed** language, meaning every variable must be declared w
 These are the most basic data types built into Java. They hold simple values and are stored in the **Stack** memory for fast access.
 
 <SafeImage 
-  src="/images/primitive-types-chart.png" 
+  src="/images/sem3/csi247/primitive-types-chart.png" 
   alt="Java Primitive Data Types" 
   caption="Figure 2: The 8 primitive types with their sizes and ranges"
   className="w-full max-w-4xl mx-auto"
@@ -47,7 +47,7 @@ These are the most basic data types built into Java. They hold simple values and
 These refer to objects and arrays. They are stored in the **Heap** memory, and the variable holds a *reference* (memory address) to the actual data.
 
 <SafeImage 
-  src="/images/stack-vs-heap-variables.png" 
+  src="/images/sem3/csi247/stack-vs-heap.png" 
   alt="Stack vs Heap Memory" 
   caption="Figure 3: Primitives on Stack, Objects on Heap"
   className="w-full max-w-3xl mx-auto"
@@ -226,7 +226,7 @@ int value = matrix[1][2];
 ```
 
 <SafeImage 
-  src="/images/2d-array-grid.png" 
+  src="/images/sem3/csi247/2d-array-grid.png" 
   alt="2D Array Visualization" 
   caption="Figure 8: Matrix[row][column] indexing"
   className="w-full max-w-2xl mx-auto"
@@ -296,96 +296,154 @@ myCar.drive(); // "The Toyota is driving."
 
 ---
 
-## 5. The Four Pillars of OOP
+## 5. The Four Pillars of OOP: Architectural Mechanics
 
-### 1. Encapsulation
-Bundling data and methods while restricting direct access.
 
-**How**: `private` fields + `public` getters/setters  
-**Why**: Protects internal state from unintended changes
+Object-Oriented Programming (OOP) is a structural paradigm designed to manage software complexity. 
 
-<SafeImage 
-  src="/images/encapsulation-capsule.png" 
-  alt="Encapsulation Concept" 
-  caption="Figure 11: Data hidden inside, controlled access via methods"
-  className="w-full max-w-2xl mx-auto"
-/>
+### 1. Encapsulation: State Protection and Interface Contracts
 
-### 2. Inheritance
-A subclass acquires properties of a superclass.
+Encapsulation is the bundling of data (state) and methods (behavior) into a single unit while restricting direct access to internal components. Its primary architectural objective is to enforce class invariants and prevent external state corruption.
+
+#### Access Modifiers and Visibility
+Java enforces encapsulation through a four-tier visibility model. Understanding these boundaries is critical for API design.
+
+| Modifier | Class | Package | Subclass | Global | Architectural Use Case |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| `private` | Yes | No | No | No | Internal state, sensitive data, implementation details. |
+| *default* | Yes | Yes | No | No | Package-private utilities, internal helper classes. |
+| `protected` | Yes | Yes | Yes | No | Methods intended for overriding by subclasses. |
+| `public` | Yes | Yes | Yes | Yes | The public API contract. |
+
+#### Accessors, Mutators, and Invariant Enforcement
+Accessors (getters) and mutators (setters) are not mere syntactic boilerplate; they are validation gates. By routing all state mutations through mutators, a class can enforce invariants and hide its internal data representation from external modules.
 
 ```java
-public class Animal {
-    public void eat() { 
-        System.out.println("Eating..."); 
-    }
-}
+public class BankAccount {
+    // Hide the data (The Fortress)
+    private double balance; 
 
-public class Dog extends Animal {
-    public void bark() { 
-        System.out.println("Woof!"); 
-    }
-}
-
-Dog d = new Dog();
-d.eat();  // Inherited from Animal
-d.bark(); // Defined in Dog
-```
-
-<SafeImage 
-  src="/images/inheritance-tree.png" 
-  alt="Inheritance Hierarchy" 
-  caption="Figure 12: Parent-child class relationship"
-  className="w-full max-w-3xl mx-auto"
-/>
-
-### 3. Polymorphism
-"Many forms" - methods behave differently based on the object.
-
-**Compile-time (Overloading)**:
-```java
-public int add(int a, int b) { return a + b; }
-public double add(double a, double b) { return a + b; }
-```
-
-**Run-time (Overriding)**:
-```java
-@Override
-public void eat() { 
-    System.out.println("Dog eating bones"); 
-}
-```
-
-### 4. Abstraction
-Hide complexity, show essentials.
-
-**Abstract Class**:
-```java
-abstract class Shape {
-    abstract double area(); // Must implement
-    
-    public void display() { 
-        System.out.println("Area: " + area()); 
+    // The Setter/Behavior (The Contract & Validation)
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit must be positive.");
+        }
+        this.balance += amount;
     }
 }
 ```
 
-**Interface**:
-```java
-interface Drivable {
-    void drive();
-    void stop();
-}
-```
+<Callout type="warn" title="The Hazard of Public State:">
+If a class exposes public mutable fields (e.g., `public double balance`), any external module can corrupt the state (e.g., `account.balance = -5000;`). Encapsulation forces all state transitions through controlled methods, ensuring the object remains in a mathematically valid state.
+</Callout>
 
-<SafeImage 
-  src="/images/abstraction-car.png" 
-  alt="Abstraction Example" 
-  caption="Figure 13: You use the steering wheel (interface), not the engine (implementation)"
-  className="w-full max-w-3xl mx-auto"
-/>
+#### Class-Level State: The `static` Keyword
+While encapsulation typically applies to instance state, the `static` keyword designates class-level state.
+*   **Static Variables**: Shared across all instances in the JVM Method Area (e.g., tracking the total number of instantiated objects).
+*   **Static Methods**: Utility functions that operate without instance context (e.g., `Math.max()`). They cannot access instance variables or utilize the `this` reference.
 
 ---
+
+### 2. Inheritance: Hierarchical Classification and Coupling
+
+Inheritance establishes an "IS-A" relationship, allowing a subclass to inherit the state and behavior of a superclass. It facilitates polymorphic design but introduces tight coupling between classes.
+
+#### Constructor Chaining and `super`
+When a subclass is instantiated, Java must initialize the superclass state first. This is achieved via constructor chaining using the `super()` keyword, which must be the first executable statement in the subclass constructor.
+
+```java
+public class Vehicle {
+    protected String make;
+    
+    public Vehicle(String make) {
+        this.make = make;
+        System.out.println("Vehicle constructor called");
+    }
+}
+
+public class Car extends Vehicle {
+    private int numDoors;
+    
+    public Car(String make, int numDoors) {
+        super(make); // CRITICAL: Must be the first line!
+        this.numDoors = numDoors;
+        System.out.println("Car constructor called");
+    }
+}
+```
+
+**Execution Sequence:**
+1. Execution begins when `new Car("Toyota", 4)` is called.
+2. The `super(make)` call pauses the `Car` constructor and delegates initialization to the `Vehicle` constructor.
+3. The `Vehicle` constructor executes and initializes `make`.
+4. Control unwinds back to `Car`, which initializes `numDoors`.
+
+<Callout type="info" title="Architectural Trade-off: Composition over Inheritance">
+Inheritance creates a "Fragile Base Class" problem: modifying the superclass can inadvertently break all subclasses. Use inheritance strictly when a true "IS-A" relationship exists. If the goal is merely code reuse or a "HAS-A" relationship, use **Composition** (instantiating the dependency as a private field) to maintain loose coupling.
+</Callout>
+
+---
+
+### 3. Polymorphism: Dynamic Method Dispatch
+
+Polymorphism allows objects of different concrete classes to be treated as objects of a common superclass. The exact method execution is determined at runtime via **Dynamic Method Dispatch**, utilizing the JVM's Virtual Method Table (vtable).
+
+#### Compile-Time vs. Run-Time Polymorphism
+1.  **Method Overloading (Compile-Time)**: Multiple methods with the same name but different parameter signatures. The compiler resolves the call based on the static type of the arguments.
+2.  **Method Overriding (Run-Time)**: A subclass provides a specific implementation of a superclass method. The JVM resolves the call at runtime based on the actual object in memory (the dynamic type).
+
+#### Polymorphic Collections and Upcasting
+Polymorphism enables the creation of heterogeneous collections governed by a unified interface.
+
+```java
+// Upcasting: Treating a specific type as a general type (Implicit and safe)
+List<PaymentMethod> checkoutCart = new ArrayList<>();
+
+// The list accepts concrete implementations
+checkoutCart.add(new CreditCard());
+checkoutCart.add(new CryptoWallet());
+
+// Dynamic dispatch: The JVM invokes the correct overridden method at runtime
+for (PaymentMethod pm : checkoutCart) {
+    pm.pay(100.0); 
+}
+```
+<Callout type="warn" title="Type Casting and Safety">
+**Upcasting** (e.g., `PaymentMethod pm = new CreditCard()`) is implicit and always safe. **Downcasting** (e.g., `CreditCard cc = (CreditCard) pm`) is explicit and risky; if the dynamic type does not match the cast, the JVM throws a `ClassCastException`. Always use the `instanceof` operator (or pattern matching in modern Java) to verify the dynamic type before downcasting.
+</Callout>
+
+---
+
+### 4. Abstraction: Hiding Implementation Complexity
+
+Abstraction separates the logical properties of an object (the "what") from its implementation details (the "how"). In Java, this is enforced through Abstract Classes and Interfaces.
+
+#### Abstract Classes vs. Interfaces
+An **Abstract Class** cannot be instantiated. It serves as a foundational blueprint, capable of holding both abstract methods (which subclasses *must* implement) and concrete methods (which provide shared default behavior). It can also maintain instance state.
+
+An **Interface** defines a strict contract of behavior. It cannot hold instance state (only `public static final` constants). A class can implement multiple interfaces, solving the multiple-inheritance ambiguity problem inherent in class-based inheritance.
+
+| Feature | Abstract Class | Interface |
+| :--- | :--- | :--- |
+| **Relationship** | IS-A (Core identity) | CAN-DO / ACTS-AS (Behavioral capability) |
+| **State** | Can maintain instance variables | No instance state (only constants) |
+| **Constructors** | Yes (invoked by subclasses) | No |
+| **Inheritance** | Single inheritance only | Multiple implementation |
+| **Access Modifiers**| Any (private, protected, public) | Methods are implicitly public |
+| **Design Intent** | Share core code and identity among closely related classes. | Define a capability across unrelated classes. |
+
+#### Design Principle: Program to an Interface
+To maximize flexibility and testability, declare variables and method parameters using interface types rather than concrete implementations.
+
+```java
+// Rigid: Tied to a specific implementation
+ArrayList<String> list = new ArrayList<>();
+
+// Flexible: Tied to an abstraction
+List<String> list = new ArrayList<>();
+```
+
+By relying on the `List` abstraction, the underlying implementation can be swapped (e.g., to `LinkedList`) without modifying the dependent code. This makes the system pluggable and highly testable (e.g., swapping a real Database for a Mock Database during unit testing).
 
 ## 6. Packages & Access Control
 

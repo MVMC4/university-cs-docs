@@ -7,32 +7,55 @@ description: Complete guide to asymptotic analysis, amortized complexity, comput
 
 When we write code, we often ask: "Is this algorithm fast?" But "fast" is relative—what's fast for 10 items might be impossibly slow for 10 million. **Big-O notation** gives us a rigorous, hardware-independent way to describe how an algorithm's performance scales as input grows.
 
-> **Key Insight**: Big-O doesn't tell you how many seconds your code takes. It tells you how the runtime grows as your input size approaches infinity. This lets us compare algorithms based on their fundamental efficiency, not the speed of your CPU.
+<Card>
+Big-O doesn't tell you how many seconds your code takes. 
+It tells you how the runtime grows as your input size approaches infinity. 
+This lets us compare algorithms based on their fundamental efficiency, not the speed of your CPU.
+</Card>
 
 ---
 
 ## 1. Why Algorithm Analysis Matters
 
-Imagine you're building a search feature for an e-commerce site with 1 million products. You have two approaches:
+<CaseAnalysis title="Example: Searching 1 Million E-Commerce Products">
+  <Case 
+    condition={"Approach A: Linear Search"} 
+    explanation="The brute-force method. You scan every single product one by one. It requires zero setup, but it forces the server to do maximum work."
+  >
+    **The Reality:**
+    - **Prerequisite:** None (works on messy, unsorted data).
+    - **Worst-Case Scenario:** 1,000,000 comparisons.
+    - **Scalability:** $O(n)$ — If inventory doubles to 2 million, search time doubles.
+    - **Verdict:** Unacceptable for real-time user searches.
+  </Case>
+  
+  <Case 
+    condition={"Approach B: Binary Search"} 
+    explanation="The divide-and-conquer method. You eliminate half of the remaining products with every single check. It is lightning fast, but demands organized data."
+  >
+    **The Reality:**
+    - **Prerequisite:** Data **must** be sorted beforehand.
+    - **Worst-Case Scenario:** ~20 comparisons.
+    - **Scalability:** $O(\log n)$ — If inventory doubles to 2 million, it only takes 1 extra check (21 total).
+    - **Verdict:** 50,000x faster. The industry standard for lookups.
+  </Case>
+</CaseAnalysis>
 
-**Approach A**: Check each product one by one (linear search)  
-**Approach B**: Use a binary search on sorted data
+Both approaches will successfully find the product, but Approach B is **50,000x faster**. This dramatic difference illustrates the true power of understanding algorithm complexity.
 
-For 1 million products:
-- Approach A: Up to 1,000,000 comparisons
-- Approach B: Only 20 comparisons (log base 2 of 1,000,000 ≈ 20)
+<StepByStep title="The Three Core Questions of Algorithm Analysis">
+  <Step number={1} title="Time Complexity">
+    How does the algorithm's runtime grow as the input size ($n$) increases? This measures the number of fundamental operations executed relative to the input.
+  </Step>
+  <Step number={2} title="Space Complexity">
+    How does the algorithm's memory footprint grow with the input size? This accounts for both auxiliary space (extra data structures) and the recursion call stack.
+  </Step>
+  <Step number={3} title="Scalability">
+    Will the algorithm remain viable when the dataset scales by orders of magnitude (10x, 100x, or 1,000,000x)? This determines if the solution will survive in a production environment.
+  </Step>
+</StepByStep>
 
-Both will work, but one is **50,000x faster**. This is the power of understanding algorithm complexity.
-
-### The Three Questions We Ask
-
-When analyzing any algorithm, we want to know:
-
-1. **Time Complexity**: How does runtime grow with input size?
-2. **Space Complexity**: How does memory usage grow with input size?
-3. **Scalability**: Will this algorithm still work when data grows 10x? 100x? 1000x?
-
-Big-O notation answers these questions by focusing on the **growth rate** rather than exact measurements.
+Big-O notation answers these three questions by abstracting away hardware-specific constants and focusing strictly on the **asymptotic growth rate** rather than exact, machine-dependent measurements.
 
 ---
 
@@ -41,7 +64,7 @@ Big-O notation answers these questions by focusing on the **growth rate** rather
 Before diving into formal definitions, let's build intuition by seeing how different growth rates behave as input size increases.
 
 <SafeImage 
-  src="/images/csi247/bigo-graph.png" 
+  src="/images/sem3/csi247/bigo-graph.png" 
   alt="Big-O Growth Rates Graph" 
   caption="Figure 1: Execution time vs input size (n). Notice how O(n!) and O(2ⁿ) become impossible beyond n=20, while O(n log n) scales gracefully to millions."
   className="max-w-full h-auto"
@@ -51,7 +74,41 @@ Before diving into formal definitions, let's build intuition by seeing how diffe
 
 From fastest (most efficient) to slowest (least efficient):
 
-**O(1)** is faster than **O(log log n)**, which is faster than **O(log n)**, which is faster than **O(√n)**, which is faster than **O(n)**, which is faster than **O(n log n)**, which is faster than **O(n²)**, which is faster than **O(n³)**, which is faster than **O(2ⁿ)**, which is faster than **O(n!)**, which is faster than **O(nⁿ)**
+<StepByStep title="The Big-O Growth Rate Hierarchy (Fastest to Slowest)">
+  <Step number={1} title="O(1)">
+    **Constant Time.** Execution time remains strictly constant regardless of the input size $n$. Typical of hash table lookups or direct array indexing.
+  </Step>
+  <Step number={2} title="O(log log n)">
+    **Double Logarithmic Time.** An extremely slow growth rate, rarely encountered in standard algorithms but present in specialized data structures like the van Emde Boas tree.
+  </Step>
+  <Step number={3} title="O(log n)">
+    **Logarithmic Time.** The problem space is reduced by a constant fraction (usually halved) at each step. Characteristic of binary search and balanced tree operations.
+  </Step>
+  <Step number={4} title="O(√n)">
+    **Square Root Time.** Growth is sub-linear but faster than logarithmic. Often seen in specific number-theoretic algorithms, trial division for primality testing, or Mo's algorithm.
+  </Step>
+  <Step number={5} title="O(n)">
+    **Linear Time.** Execution time scales directly and proportionally with the input size. Required when every element in an unsorted collection must be examined at least once.
+  </Step>
+  <Step number={6} title="O(n log n)">
+    **Linearithmic Time.** The standard lower bound for comparison-based sorting. Achieved by optimal divide-and-conquer algorithms such as Merge Sort and Heap Sort.
+  </Step>
+  <Step number={7} title="O(n^2)">
+    **Quadratic Time.** Execution time scales with the square of the input size. Typical of algorithms with nested iterations over the dataset, such as Bubble Sort or naive matrix multiplication.
+  </Step>
+  <Step number={8} title="O(n^3)">
+    **Cubic Time.** Execution time scales with the cube of the input size. Common in naive dynamic programming formulations or algorithms processing 3D grids and tensor operations.
+  </Step>
+  <Step number={9} title="O(2^n)">
+    **Exponential Time.** The time required doubles with every additional element in the input. Characteristic of exhaustive search algorithms, naive recursive Fibonacci, and generating all subsets.
+  </Step>
+  <Step number={10} title="O(n!)">
+    **Factorial Time.** Execution time grows factorially, rendering the algorithm completely intractable for $n > 20$. Typical of brute-force solutions to the Traveling Salesperson Problem or generating all permutations.
+  </Step>
+  <Step number={11} title="O(n^n)">
+    **Super-Exponential Time.** An astronomically fast growth rate that exceeds factorial time. Represents the absolute worst-case combinatorial explosion, practically unsolvable for any $n > 10$.
+  </Step>
+</StepByStep>
 
 ### What These Numbers Mean in Practice
 
@@ -67,21 +124,49 @@ Let's make this concrete. Here's how many operations each complexity requires fo
 | **O(2ⁿ)** | 1,024 | 1.27×10³⁰ | ∞ |  | Subset generation |
 | **O(n!)** | 3.6M | 9.3×10¹⁵⁷ | ∞ | ∞ | Traveling Salesman |
 
-> **Rule of Thumb**: For n > 10⁶, only `O(1)`, `O(log n)`, and `O(n)` are practical. `O(n log n)` is acceptable. `O(n²)` and worse are usually too slow.
+<Card>
+**Rule of Thumb**
+
+For n > 10⁶, only `O(1)`, `O(log n)`, and `O(n)` are practical. `O(n log n)` is acceptable. `O(n²)` and worse are usually too slow.
+</Card>
 
 ### Why Constants Don't Matter (Asymptotically)
 
-Consider two algorithms:
-- **Algorithm A**: `1000n` operations (linear but slow constant)
-- **Algorithm B**: `n²` operations (quadratic but fast constant)
+<CaseAnalysis title="Algorithm A (1000n) vs Algorithm B (n²): The Asymptotic Crossover">
+  <Case 
+    condition={"Small Scale (n ≤ 1,000)"} 
+    explanation="At small input sizes, the constant multiplier heavily influences execution time. Algorithm B's quadratic growth is temporarily masked because it lacks a heavy constant multiplier."
+  >
+    **The Numbers:**
+    - **Algorithm A** ($1000n$): 10,000 ops (at $n=10$)
+    - **Algorithm B** ($n^2$): 100 ops (at $n=10$)
+    - **Verdict:** Algorithm B wins.
+  </Case>
+  
+  <Case 
+    condition={"The Crossover Point (n = 1,000)"} 
+    explanation="The linear accumulation of Algorithm A finally catches up to the quadratic explosion of Algorithm B. The constant factor of 1,000 is perfectly offset by the input size."
+  >
+    **The Numbers:**
+    - **Algorithm A** ($1000n$): 1,000,000 ops
+    - **Algorithm B** ($n^2$): 1,000,000 ops
+    - **Verdict:** Exact Tie.
+  </Case>
 
-For small n, Algorithm B might be faster. But as n grows:
-- n=10: A = 10,000 ops, B = 100 ops → **B wins**
-- n=1,000: A = 1M ops, B = 1M ops → **Tie**
-- n=10,000: A = 10M ops, B = 100M ops → **A wins**
-- n=100,000: A = 100M ops, B = 10B ops → **A dominates**
+  <Case 
+    condition={"Production Scale (n ≥ 10,000)"} 
+    explanation="As n scales, the highest-order term ($n^2$) grows drastically faster than the linear term ($n$). The constant multiplier becomes mathematically insignificant."
+  >
+    **The Numbers:**
+    - **At n = 10,000**: A = 10M ops, B = 100M ops
+    - **At n = 100,000**: A = 100M ops, B = 10B ops
+    - **Verdict:** Algorithm A strictly dominates.
+  </Case>
+</CaseAnalysis>
 
-As n approaches infinity, the **highest-order term always dominates**, regardless of constants. This is why we drop constants in Big-O notation—we care about growth rates, not absolute speed.
+<Card>
+**The Takeaway:** As $n \to \infty$, the highest-order term *always* dominates, regardless of constants. This is why we drop constants in Big-O notation—we evaluate algorithms based on their fundamental asymptotic growth rates, not their absolute speed.pproaches infinity, the **highest-order term always dominates**, regardless of constants. This is why we drop constants in Big-O notation—we care about growth rates, not absolute speed.
+</Card>
 
 ---
 
@@ -91,9 +176,9 @@ Now that we have intuition, let's make this rigorous. Big-O is part of a family 
 
 ### Big-O Notation (Upper Bound)
 
-**Definition**: `f(n) = O(g(n))` if there exist positive constants `c` and `n₀` such that:
+<HighlightCard variant="neutral" title="Big-O Notation (Upper Bound)">
 
-`0 ≤ f(n) ≤ c · g(n)` for all `n ≥ n₀`
+**Definition**: `f(n) = O(g(n))` if there exist positive constants `c` and `n₀` such that `0 ≤ f(n) ≤ c · g(n)` for all `n ≥ n₀`.
 
 **Intuition**: `g(n)` is an **upper bound** on `f(n)` for sufficiently large n. In other words, `f(n)` grows **at most** as fast as `g(n)`.
 
@@ -109,11 +194,13 @@ Therefore: `3n² + 2n + 1 ≤ 3n² + 2n² + n² = 6n²`
 
 So `c = 6` and `n₀ = 1` work. Thus, `3n² + 2n + 1 = O(n²)`. ✓
 
+</HighlightCard>
+
 ### Big-Omega Notation (Lower Bound)
 
-**Definition**: `f(n) = Ω(g(n))` if there exist positive constants `c` and `n₀` such that:
+<HighlightCard variant="neutral" title="Big-Omega Notation (Lower Bound)">
 
-`0 ≤ c · g(n) ≤ f(n)` for all `n ≥ n₀`
+**Definition**: `f(n) = Ω(g(n))` if there exist positive constants `c` and `n₀` such that `0 ≤ c · g(n) ≤ f(n)` for all `n ≥ n₀`.
 
 **Intuition**: `g(n)` is a **lower bound** on `f(n)`. In other words, `f(n)` grows **at least** as fast as `g(n)`.
 
@@ -125,11 +212,13 @@ Dividing both sides by `n²`: `c ≤ n`
 
 So for `c = 1` and `n₀ = 1`, we have `n² ≤ n³`. Thus, `n³ = Ω(n²)`. ✓
 
+</HighlightCard>
+
 ### Big-Theta Notation (Tight Bound)
 
-**Definition**: `f(n) = Θ(g(n))` if there exist positive constants `c₁`, `c₂`, and `n₀` such that:
+<HighlightCard variant="neutral" title="Big-Theta Notation (Tight Bound)">
 
-`0 ≤ c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)` for all `n ≥ n₀`
+**Definition**: `f(n) = Θ(g(n))` if there exist positive constants `c₁`, `c₂`, and `n₀` such that `0 ≤ c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)` for all `n ≥ n₀`.
 
 **Intuition**: `f(n)` grows at **exactly the same rate** as `g(n)` (within constant factors). This is the most precise notation.
 
@@ -138,40 +227,30 @@ So for `c = 1` and `n₀ = 1`, we have `n² ≤ n³`. Thus, `n³ = Ω(n²)`. ✓
 **Example**: Prove `2n² + 3n = Θ(n²)`
 
 **Upper bound** (`O(n²)`):
-For `n ≥ 1`: `2n² + 3n ≤ 2n² + 3n² = 5n²`
-So `c₂ = 5` works.
+For `n ≥ 1`: `2n² + 3n ≤ 2n² + 3n² = 5n²`. So `c₂ = 5` works.
 
 **Lower bound** (`Ω(n²)`):
-For `n ≥ 1`: `2n² + 3n ≥ 2n²` (since `3n ≥ 0`)
-So `c₁ = 2` works.
+For `n ≥ 1`: `2n² + 3n ≥ 2n²` (since `3n ≥ 0`). So `c₁ = 2` works.
 
 Thus, `2n² + 3n = Θ(n²)`. ✓
 
+</HighlightCard>
+
 ### Little-o and Little-omega (Strict Bounds)
 
-**Little-o**: `f(n) = o(g(n))` means `f(n)` grows **strictly slower** than `g(n)`.
+<HighlightCard variant="neutral" title="Little-o and Little-omega (Strict Bounds)">
 
+**Little-o**: `f(n) = o(g(n))` means `f(n)` grows **strictly slower** than `g(n)`.
 `lim(n→∞) f(n)/g(n) = 0`
 
 **Example**: `n = o(n²)` because `lim(n→∞) n/n² = lim(n→∞) 1/n = 0`
 
 **Little-omega**: `f(n) = ω(g(n))` means `f(n)` grows **strictly faster** than `g(n)`.
-
 `lim(n→∞) f(n)/g(n) = ∞`
 
 **Example**: `n² = ω(n)` because `lim(n→∞) n²/n = lim(n→∞) n = ∞`
 
-### Summary of Notations
-
-| Notation | Symbol | Meaning | Analogy |
-|----------|--------|---------|---------|
-| **Big-O** | O | Upper bound | `f(n)` grows **at most** as fast as `g(n)` |
-| **Big-Omega** | Ω | Lower bound | `f(n)` grows **at least** as fast as `g(n)` |
-| **Big-Theta** | Θ | Tight bound | `f(n)` grows **exactly** as fast as `g(n)` |
-| **Little-o** | o | Strict upper bound | `f(n)` grows **strictly slower** than `g(n)` |
-| **Little-omega** | ω | Strict lower bound | `f(n)` grows **strictly faster** than `g(n)` |
-
----
+</HighlightCard>
 
 ## 4. Common Patterns in Code
 

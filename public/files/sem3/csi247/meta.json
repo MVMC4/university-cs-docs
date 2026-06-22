@@ -1,21 +1,28 @@
 [
   {
-    "id": "lec-outline-1",
-    "title": "Course Outline v1",
+    "id": "course-outlines",
+    "title": "Course Outlines & Syllabus",
     "category": "Lectures",
-    "type": "pdf",
-    "url": "/files/sem3/csi247/CourseOutlinev1.pdf",
-    "description": "Official syllabus and assessment structure (v1).",
-    "isNew": true
-  },
-  {
-    "id": "lec-outline-2",
-    "title": "Course Outline v2",
-    "category": "Lectures",
-    "type": "pdf",
-    "url": "/files/sem3/csi247/CourseOutlinev2.pdf",
-    "description": "Official syllabus and assessment structure (v2).",
-    "isNew": true
+    "type": "folder",
+    "description": "Official course outlines and assessment structures.",
+    "children": [
+      {
+        "id": "outline-v1",
+        "title": "Course Outline v1",
+        "category": "Lectures",
+        "type": "pdf",
+        "url": "/files/sem3/csi247/CourseOutlinev1.pdf",
+        "description": "Original course outline and assessment structure."
+      },
+      {
+        "id": "outline-v2",
+        "title": "Course Outline v2",
+        "category": "Lectures",
+        "type": "pdf",
+        "url": "/files/sem3/csi247/CourseOutlinev2.pdf",
+        "description": "Updated course outline and assessment structure."
+      }
+    ]
   },
   {
     "id": "lectures-folder",
@@ -54,6 +61,389 @@
       { "id": "lab4", "title": "Lab 4: Sorting", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab4 - Sorting.pdf", "description": "Sorting algorithms." },
       { "id": "lab5", "title": "Lab 5: List Comprehensions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 5 List Comprehensions.pdf", "description": "Advanced list processing." },
       { "id": "lab6", "title": "Lab 6: Polymorphism", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 6 Polymorphism and Overloading.pdf", "description": "OOP polymorphism." }
+    ]
+  },
+  {
+    "id": "visualizers",
+    "title": "Algorithm Visualizers & Interactive Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Interactive visualizations to understand algorithms and data structures.",
+    "children": [
+      {
+        "id": "vis-bigo",
+        "title": "Big-O Cheat Sheet",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://www.bigocheatsheet.com/",
+        "description": "Visual reference for time and space complexity of common algorithms."
+      },
+      {
+        "id": "vis-visualgo",
+        "title": "VisuAlgo",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://visualgo.net/en",
+        "description": "Visualizing data structures and algorithms through animations."
+      },
+      {
+        "id": "vis-usfca",
+        "title": "USFCA Data Structure Visualizations",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://www.cs.usfca.edu/~galles/visualization/Algorithms.html",
+        "description": "Interactive visualizations of algorithms and data structures."
+      },
+      {
+        "id": "vis-algo-vis",
+        "title": "Algorithm Visualizer",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://algorithm-visualizer.org/",
+        "description": "Interactive platform for visualizing algorithms."
+      },
+      {
+        "id": "vis-sorting",
+        "title": "Sorting Algorithms Animations",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://www.toptal.com/developers/sorting-algorithms",
+        "description": "Compare sorting algorithms side-by-side with animations."
+      },
+      {
+        "id": "vis-pathfinding",
+        "title": "Pathfinding Visualizer",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://qiao.github.io/PathFinding.js/visual/",
+        "description": "Visualize graph search algorithms like BFS, DFS, Dijkstra, and A*."
+      },
+      {
+        "id": "vis-bst",
+        "title": "Binary Search Tree Visualizer",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://www.cs.usfca.edu/~galles/visualization/BST.html",
+        "description": "Visualize BST insertions, deletions, and traversals."
+      }
+    ]
+  },
+  {
+    "id": "video-lectures",
+    "title": "Recommended Video Lectures & Tutorials",
+    "category": "Videos",
+    "type": "folder",
+    "description": "Curated video resources for learning data structures and algorithms.",
+    "children": [
+      {
+        "id": "vid-kunal-java",
+        "title": "Kunal Kushwaha - Java + DSA Bootcamp",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://www.youtube.com/playlist?list=PL9gnSGHSqcnr_DxHsP7AW9ftq0AtAyYqJ",
+        "description": "Complete Java and Data Structures course with detailed explanations."
+      },
+      {
+        "id": "vid-abdul-bari",
+        "title": "Abdul Bari - Algorithms",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O",
+        "description": "Best explanations of algorithms, Big-O, recursion, and data structures."
+      },
+      {
+        "id": "vid-william-fiset",
+        "title": "William Fiset - Data Structures",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://www.youtube.com/playlist?list=PLDV1Zr2gOxokRQh9-8Z6P1vY6r5X5r5X5",
+        "description": "Professional animations and implementations of data structures."
+      },
+      {
+        "id": "vid-mit-ocw",
+        "title": "MIT 6.006 - Introduction to Algorithms",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+        "description": "Complete MIT course on algorithms with lecture videos and notes."
+      },
+      {
+        "id": "vid-reducible",
+        "title": "Reducible - Algorithm Visualizations",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://www.youtube.com/c/Reducible",
+        "description": "Beautiful visual explanations of complex algorithms."
+      },
+      {
+        "id": "vid-mycode-school",
+        "title": "MyCodeSchool - Data Structures",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://www.youtube.com/user/mycodeschool",
+        "description": "Clear explanations of data structures and algorithms fundamentals."
+      },
+      {
+        "id": "vid-back-to-back",
+        "title": "Back To Back SWE",
+        "category": "Videos",
+        "type": "video",
+        "url": "https://www.youtube.com/c/BackToBackSWE",
+        "description": "Deep dives into algorithmic patterns and interview preparation."
+      }
+    ]
+  },
+  {
+    "id": "practice-platforms",
+    "title": "Practice Platforms & Problems",
+    "category": "Practice",
+    "type": "folder",
+    "description": "Online platforms to practice data structures and algorithms.",
+    "children": [
+      {
+        "id": "pr-leetcode",
+        "title": "LeetCode",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://leetcode.com/",
+        "description": "Industry standard for coding interview preparation."
+      },
+      {
+        "id": "pr-neetcode",
+        "title": "NeetCode 150",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://neetcode.io/",
+        "description": "Curated list of 150 essential LeetCode problems with solutions."
+      },
+      {
+        "id": "pr-hackerrank",
+        "title": "HackerRank - Data Structures",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://www.hackerrank.com/domains/data-structures",
+        "description": "Practice problems for arrays, linked lists, trees, and more."
+      },
+      {
+        "id": "pr-hackerearth",
+        "title": "HackerEarth",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://www.hackerearth.com/practice/",
+        "description": "Tutorials and practice problems for algorithms and data structures."
+      },
+      {
+        "id": "pr-geeksforgeeks",
+        "title": "GeeksforGeeks",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://www.geeksforgeeks.org/data-structures/",
+        "description": "Comprehensive resource with articles and practice problems."
+      },
+      {
+        "id": "pr-codeforces",
+        "title": "Codeforces",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://codeforces.com/",
+        "description": "Competitive programming platform with regular contests."
+      },
+      {
+        "id": "pr-exercism",
+        "title": "Exercism - Java Track",
+        "category": "Practice",
+        "type": "link",
+        "url": "https://exercism.org/tracks/java",
+        "description": "Mentored practice with community code reviews."
+      }
+    ]
+  },
+  {
+    "id": "textbooks",
+    "title": "Recommended Textbooks & References",
+    "category": "Books",
+    "type": "folder",
+    "description": "Core textbooks and reference books for Data Structures and Algorithms.",
+    "children": [
+      {
+        "id": "book-goodrich",
+        "title": "Data Structures and Algorithms in Java (Goodrich)",
+        "category": "Books",
+        "type": "link",
+        "url": "https://www.amazon.com/Data-Structures-Algorithms-Java-Michael/dp/1118771338",
+        "description": "Primary textbook - comprehensive coverage with Java examples."
+      },
+      {
+        "id": "book-clrs",
+        "title": "Introduction to Algorithms (CLRS)",
+        "category": "Books",
+        "type": "link",
+        "url": "https://mitpress.mit.edu/books/introduction-algorithms-third-edition",
+        "description": "The definitive reference for algorithms - comprehensive and rigorous."
+      },
+      {
+        "id": "book-sedgewick",
+        "title": "Algorithms (Sedgewick & Wayne)",
+        "category": "Books",
+        "type": "link",
+        "url": "https://algs4.cs.princeton.edu/home/",
+        "description": "Java-based algorithms textbook with excellent visualizations."
+      },
+      {
+        "id": "book-grokking",
+        "title": "Grokking Algorithms",
+        "category": "Books",
+        "type": "link",
+        "url": "https://www.amazon.com/Grokking-Algorithms-illustrated-programmers-curious/dp/1617292230",
+        "description": "Visual, intuitive explanations perfect for beginners."
+      },
+      {
+        "id": "book-cracking",
+        "title": "Cracking the Coding Interview",
+        "category": "Books",
+        "type": "link",
+        "url": "https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850",
+        "description": "189 programming questions and solutions for interview prep."
+      },
+      {
+        "id": "book-lafore",
+        "title": "Data Structures and Algorithms in Java (Lafore)",
+        "category": "Books",
+        "type": "link",
+        "url": "https://www.amazon.com/Data-Structures-Algorithms-Java-2nd/dp/0672324539",
+        "description": "Step-by-step implementations with clear explanations."
+      }
+    ]
+  },
+  {
+    "id": "development-tools",
+    "title": "Development Tools & IDEs",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Software and extensions for Java development and debugging.",
+    "children": [
+      {
+        "id": "tool-intellij",
+        "title": "IntelliJ IDEA",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://www.jetbrains.com/idea/",
+        "description": "Best Java IDE (Community Edition is free)."
+      },
+      {
+        "id": "tool-vscode",
+        "title": "Visual Studio Code",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://code.visualstudio.com/",
+        "description": "Lightweight alternative with Java extensions."
+      },
+      {
+        "id": "tool-visualvm",
+        "title": "VisualVM",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://visualvm.github.io/",
+        "description": "Profile Java applications and analyze memory usage."
+      },
+      {
+        "id": "tool-junit",
+        "title": "JUnit 5",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://junit.org/junit5/",
+        "description": "Unit testing framework for Java."
+      },
+      {
+        "id": "tool-git",
+        "title": "Git & GitHub",
+        "category": "Tools",
+        "type": "link",
+        "url": "https://git-scm.com/",
+        "description": "Version control for tracking code changes."
+      }
+    ]
+  },
+  {
+    "id": "study-resources",
+    "title": "Study Guides & Cheat Sheets",
+    "category": "Resources",
+    "type": "folder",
+    "description": "Quick reference guides and study materials.",
+    "children": [
+      {
+        "id": "ref-complexity",
+        "title": "Time Complexity Cheat Sheet",
+        "category": "Resources",
+        "type": "link",
+        "url": "https://www.bigocheatsheet.com/",
+        "description": "Quick reference for Big-O complexities of common operations."
+      },
+      {
+        "id": "ref-ds-patterns",
+        "title": "Data Structures Patterns",
+        "category": "Resources",
+        "type": "link",
+        "url": "https://seanprashad.com/leetcode-patterns/",
+        "description": "Common patterns for solving data structure problems."
+      },
+      {
+        "id": "ref-java-collections",
+        "title": "Java Collections Framework Guide",
+        "category": "Resources",
+        "type": "link",
+        "url": "https://docs.oracle.com/javase/8/docs/technotes/guides/collections/overview.html",
+        "description": "Official Oracle documentation for Java Collections."
+      },
+      {
+        "id": "ref-algo-templates",
+        "title": "Algorithm Templates",
+        "category": "Resources",
+        "type": "link",
+        "url": "https://github.com/graykode/algorithm-template",
+        "description": "Reusable code templates for common algorithms."
+      }
+    ]
+  },
+  {
+    "id": "community",
+    "title": "Community & Discussion Forums",
+    "category": "Community",
+    "type": "folder",
+    "description": "Forums and communities for asking questions and learning.",
+    "children": [
+      {
+        "id": "com-stackoverflow",
+        "title": "Stack Overflow - Java Tag",
+        "category": "Community",
+        "type": "link",
+        "url": "https://stackoverflow.com/questions/tagged/java",
+        "description": "Q&A platform for Java programming questions."
+      },
+      {
+        "id": "com-reddit-dsa",
+        "title": "Reddit r/algorithms",
+        "category": "Community",
+        "type": "link",
+        "url": "https://www.reddit.com/r/algorithms/",
+        "description": "Discussion forum for algorithms and data structures."
+      },
+      {
+        "id": "com-reddit-learnjava",
+        "title": "Reddit r/learnjava",
+        "category": "Community",
+        "type": "link",
+        "url": "https://www.reddit.com/r/learnjava/",
+        "description": "Community for learning Java programming."
+      },
+      {
+        "id": "com-discord",
+        "title": "Programming Discord Servers",
+        "category": "Community",
+        "type": "link",
+        "url": "https://discord.com/",
+        "description": "Real-time chat communities for programmers."
+      }
     ]
   }
 ]
