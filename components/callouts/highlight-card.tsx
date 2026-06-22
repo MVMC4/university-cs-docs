@@ -43,23 +43,21 @@ export function HighlightCard({
   variant = 'primary',
   children
 }: {
-  title?: string;
-  description?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
   variant?: Variant;
   children: React.ReactNode;
 }) {
   const styles = variantStyles[variant];
 
   return (
-    <div className={`my-6 w-full overflow-hidden rounded-xl border-2 ${styles.outer} px-6 py-2`}>
-      <div className="space-y-2">
-        {title && <h3 className={`text-lg font-bold ${styles.title}`}>{title}</h3>}
-        {description && <p className="text-sm leading-relaxed text-fd-foreground/90">{description}</p>}
-        
-        {/* Inner Card for Math/Code */}
-        <div className={`rounded-lg border ${styles.inner} p-4 overflow-x-auto`}>
-          {children}
-        </div>
+    <div className={`my-6 w-full overflow-hidden rounded-xl border-2 ${styles.outer} p-4`}>
+      {title && <h3 className={`text-base font-bold ${styles.title} mb-1`}>{title}</h3>}
+      {description && <div className="text-sm leading-relaxed text-fd-foreground/90 mb-2">{description}</div>}
+      
+      {/* Inner Card for Math/Code */}
+      <div className={`rounded-lg border ${styles.inner} p-3 overflow-x-auto`}>
+        {children}
       </div>
     </div>
   );

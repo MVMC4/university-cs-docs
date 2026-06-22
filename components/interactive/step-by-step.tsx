@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ListOrdered } from 'lucide-react';
 
 interface StepProps {
   number: number;
@@ -16,7 +17,6 @@ export function Step({ number, title, children }: StepProps) {
         {number}
       </div>
       <div className="min-w-0">
-        {/* Changed from <h4> to <div> for consistency */}
         {title && <div className="font-semibold text-fd-foreground mb-1 break-words">{title}</div>}
         <div className="text-sm text-fd-muted-foreground leading-relaxed break-words overflow-x-auto">
           {children}
@@ -36,7 +36,8 @@ export function StepByStep({ title, children }: StepByStepProps) {
     <div className="my-6 w-full overflow-hidden rounded-lg border border-fd-border bg-fd-background p-6 shadow-sm">
       {title && (
         <h3 className="text-lg font-bold text-fd-foreground mb-4 flex items-center gap-2">
-          <span className="text-fd-primary">⚙️</span> <span className="break-words">{title}</span>
+          <ListOrdered className="h-5 w-5 text-fd-primary shrink-0" />
+          <span className="break-words">{title}</span>
         </h3>
       )}
       <div className="ml-2 min-w-0">
@@ -55,7 +56,8 @@ export function StepByStep({ title, children }: StepByStepProps) {
 export function StepByStepTitle({ children }: { children: React.ReactNode }) {
   return (
     <span className="flex text-lg font-bold text-fd-foreground mb-4 items-center gap-2">
-      <span className="text-fd-primary">⚙️</span> <span className="break-words">{children}</span>
+      <ListOrdered className="h-5 w-5 text-fd-primary shrink-0" />
+      <span className="break-words">{children}</span>
     </span>
   );
 }
