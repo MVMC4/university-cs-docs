@@ -1,0 +1,97 @@
+[
+  {
+    "id": "outline",
+    "title": "Course Outline 2025",
+    "category": "Lectures",
+    "type": "pdf",
+    "url": "/files/sem1/csi131/CSI131 Course Outline 2025 August_copy.pdf",
+    "description": "Official syllabus, schedule, and assessment details.",
+    "isNew": true
+  },
+  {
+    "id": "lectures",
+    "title": "Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Weekly lecture slides covering logic, sets, proofs, and discrete mathematics.",
+    "children": [
+      { "id": "lec01", "title": "Lecture 01: Propositional Logic", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 01.pdf", "description": "Propositions, negation, disjunction, conjunction, implication." },
+      { "id": "lec02", "title": "Lecture 02: Truth Tables", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 02.pdf", "description": "Truth tables for compound propositions." },
+      { "id": "lec03", "title": "Lecture 03: Propositional Equivalences", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 03.pdf", "description": "Logical equivalences and De Morgan's Laws." },
+      { "id": "lec04", "title": "Lecture 04: Predicates and Quantifiers", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 04.pdf", "description": "Predicate logic and quantifiers." },
+      { "id": "lec05", "title": "Lecture 05: Rules of Inference", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 05.pdf", "description": "Rules of inference for propositional logic." },
+      { "id": "lec06", "title": "Lecture 06: Introduction to Proofs", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 06.pdf", "description": "Direct proof, contraposition, contradiction." },
+      { "id": "lec07", "title": "Lecture 07: Set Theory", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 07.pdf", "description": "Introduction to sets and set operations." },
+      { "id": "lec09", "title": "Lecture 09: Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 09.pdf", "description": "One-to-one and onto functions." },
+      { "id": "lec10", "title": "Lecture 10: Sequences and Summations", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 10.pdf", "description": "Recurrence relations and sigma notation." },
+      { "id": "lec11", "title": "Lecture 11: Mathematical Induction", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 11.pdf", "description": "Proof by induction." },
+      { "id": "lec12", "title": "Lecture 12: Algorithms", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi131/lectures/LE 12.pdf", "description": "Introduction to algorithms and complexity." }
+    ]
+  },
+  {
+    "id": "tutorials",
+    "title": "Tutorial Sets",
+    "category": "Labs",
+    "type": "folder",
+    "description": "Tutorial exercises and problem sets.",
+    "children": [
+      { "id": "tut-sets", "title": "All Tutorial Sets", "category": "Labs", "type": "pdf", "url": "/files/sem1/csi131/tutorials/tutorial-sets.pdf", "description": "Complete collection of tutorial sets." },
+      { "id": "tut07", "title": "Lecture 07 Tutorial", "category": "Labs", "type": "pdf", "url": "/files/sem1/csi131/tutorials/LE 07 TUT.pdf", "description": "Tutorial for Lecture 7." },
+      { "id": "tut09", "title": "Lecture 09 Tutorial", "category": "Labs", "type": "pdf", "url": "/files/sem1/csi131/tutorials/LE 09 TUT.pdf", "description": "Tutorial for Lecture 9." },
+      { "id": "tut10", "title": "Lecture 10 Tutorial", "category": "Labs", "type": "pdf", "url": "/files/sem1/csi131/tutorials/LE 10 TUT.pdf", "description": "Tutorial for Lecture 10." },
+      { "id": "tut11", "title": "Lecture 11 Tutorial", "category": "Labs", "type": "pdf", "url": "/files/sem1/csi131/tutorials/LE 11 TUT.pdf", "description": "Tutorial for Lecture 11." }
+    ]
+  },
+  {
+    "id": "videos-discrete",
+    "title": "Video Lectures & Tutorials",
+    "category": "Videos",
+    "type": "folder",
+    "description": "Curated video resources for discrete mathematics.",
+    "children": [
+      { "id": "vid-trefor-bazile", "title": "Trefor Bazile - Discrete Math Playlist", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxcJXnLr08cyNaWI49aH1bZe", "description": "Complete discrete mathematics course with clear explanations." },
+      { "id": "vid-trevor-sandbox", "title": "Trevor Sanderson - Discrete Math", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxcJXnLr08cyNaWI49aH1bZe", "description": "Comprehensive discrete math tutorials." },
+      { "id": "vid-njmath", "title": "NJMAT - Discrete Mathematics", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxcJXnLr08cyNaWI49aH1bZe", "description": "Discrete math concepts explained step-by-step." },
+      { "id": "vid-khan-academy", "title": "Khan Academy - Logic and Proofs", "category": "Videos", "type": "video", "url": "https://www.khanacademy.org/math/geometry/hs-geo-analytic-geometry/hs-geo-distance-and-midpoints/v/distance-formula", "description": "Introduction to mathematical logic and proof techniques." },
+      { "id": "vid-mathdoctor", "title": "MathDoctorBob - Set Theory", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=ELRSCt66MQQ", "description": "Set theory fundamentals and operations." }
+    ]
+  },
+  {
+    "id": "textbooks-csi131",
+    "title": "Textbooks & References",
+    "category": "Books",
+    "type": "folder",
+    "description": "Core textbooks and reference materials.",
+    "children": [
+      { "id": "book-rosen", "title": "Discrete Mathematics and Its Applications (Rosen)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Discrete-Mathematics-Its-Applications-Introductory/dp/1259676512", "description": "Kenneth H. Rosen - Primary textbook (8th Edition)." },
+      { "id": "book-ensley", "title": "Discrete Mathematics: Mathematical Reasoning and Proof", "category": "Books", "type": "link", "url": "https://www.amazon.com/Discrete-Mathematics-Mathematical-Reasoning-Proof/dp/0471476801", "description": "Ensley & Crawley - Supplementary text with puzzles and games." },
+      { "id": "book-cupillari", "title": "The Nuts and Bolts of Proofs", "category": "Books", "type": "link", "url": "https://www.amazon.com/Nuts-Bolts-Proofs-Antonella-Cupillari/dp/0123822765", "description": "Cupillari - Guide to mathematical proof techniques." },
+      { "id": "book-grimaldi", "title": "Discrete and Combinatorial Mathematics", "category": "Books", "type": "link", "url": "https://www.amazon.com/Discrete-Combinatorial-Mathematics-Applied-Introduction/dp/0201199122", "description": "Grimaldi - Advanced discrete mathematics reference." }
+    ]
+  },
+  {
+    "id": "practice-csi131",
+    "title": "Practice Platforms",
+    "category": "Practice",
+    "type": "folder",
+    "description": "Online platforms for practicing discrete math problems.",
+    "children": [
+      { "id": "pr-brilliant", "title": "Brilliant - Logic and Proofs", "category": "Practice", "type": "link", "url": "https://brilliant.org/courses/logic-deduction/", "description": "Interactive logic and proof problems." },
+      { "id": "pr-khan-logic", "title": "Khan Academy - Logic", "category": "Practice", "type": "link", "url": "https://www.khanacademy.org/math/geometry/hs-geo-analytic-geometry/hs-geo-distance-and-midpoints/v/distance-formula", "description": "Practice problems for logic and set theory." },
+      { "id": "pr-discrete-math", "title": "Discrete Math Problems", "category": "Practice", "type": "link", "url": "https://discrete.openmathbooks.org/dmoi2/", "description": "Open textbook with practice problems." },
+      { "id": "pr-project-euler", "title": "Project Euler", "category": "Practice", "type": "link", "url": "https://projecteuler.net/", "description": "Mathematical and computational problems." }
+    ]
+  },
+  {
+    "id": "tools-csi131",
+    "title": "Study Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Tools and resources for studying discrete mathematics.",
+    "children": [
+      { "id": "tool-wolfram", "title": "Wolfram Alpha - Discrete Math", "category": "Tools", "type": "link", "url": "https://www.wolframalpha.com/examples/mathematics/discrete-mathematics", "description": "Compute logic expressions, set operations, and more." },
+      { "id": "tool-truth-table", "title": "Truth Table Generator", "category": "Tools", "type": "link", "url": "https://www.emathhelp.net/calculators/discrete-mathematics/truth-table-calculator/", "description": "Generate truth tables for logical expressions." },
+      { "id": "tool-set-theory", "title": "Set Theory Visualizer", "category": "Tools", "type": "link", "url": "https://www.desmos.com/calculator", "description": "Visualize set operations and Venn diagrams." }
+    ]
+  }
+]

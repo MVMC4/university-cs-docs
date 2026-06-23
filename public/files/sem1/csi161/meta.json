@@ -1,0 +1,71 @@
+[
+  {
+    "id": "lectures",
+    "title": "Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Comprehensive lecture slides covering computer systems, hardware, software, and networks.",
+    "children": [
+      { "id": "lec1", "title": "Lecture 1: Introduction to Computing", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 1 - Introduction to Computing.pdf", "description": "Overview of computing and information systems." },
+      { "id": "lec2", "title": "Lecture 2: Computer Organization & Architecture", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 2 - Computer Organization and Architecture.pdf", "description": "CPU, memory hierarchy, and system buses." },
+      { "id": "lec3", "title": "Lecture 3: Computer Hardware", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 3 - Computer Hardware.pdf", "description": "Input, output, and storage devices." },
+      { "id": "lec4", "title": "Lecture 4: Software & Operating Systems", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 4 - Software and Operating Systems.pdf", "description": "System software, application software, and OS fundamentals." },
+      { "id": "lec5", "title": "Lecture 5: Data and Information", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 5 - Data and Information.pdf", "description": "Data representation, databases, and information systems." },
+      { "id": "lec8", "title": "Lecture 8: Networks & Telecommunications", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 8 - Networks and Telecommunications.pdf", "description": "Network topologies, protocols, and the Internet." },
+      { "id": "lec9", "title": "Lecture 9: Emerging Technologies", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Lecture 9 - Emerging Technologies.pdf", "description": "Cloud computing, AI, and future trends." },
+      { "id": "moodle", "title": "Moodle Playlists Guide", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi161/remade-lectures/Moodle Playlists Guide.pdf", "description": "Guide to supplementary video playlists on Moodle." }
+    ]
+  },
+  {
+    "id": "videos-computing",
+    "title": "Video Lectures & Tutorials",
+    "category": "Videos",
+    "type": "folder",
+    "description": "Curated video resources for computer systems and architecture.",
+    "children": [
+      { "id": "vid-crash-course", "title": "Crash Course Computer Science", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PL8dPuuaLjXtNlUrzyH5r6jN9ulIgZBpdo", "description": "Complete computer science fundamentals series." },
+      { "id": "vid-nandgame", "title": "NandGame - From NAND to Tetris", "category": "Videos", "type": "video", "url": "https://nandgame.com/", "description": "Build a computer from scratch starting with NAND gates." },
+      { "id": "vid-computerphile", "title": "Computerphile - Computer Science Videos", "category": "Videos", "type": "video", "url": "https://www.youtube.com/user/Computerphile", "description": "Deep dives into computer science topics." },
+      { "id": "vid-networking", "title": "Networking Fundamentals", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxcJXnLr08cyNaWI49aH1bZe", "description": "Computer networking basics and protocols." },
+      { "id": "vid-os-basics", "title": "Operating Systems Basics", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxcJXnLr08cyNaWI49aH1bZe", "description": "Operating system concepts and internals." }
+    ]
+  },
+  {
+    "id": "textbooks-csi161",
+    "title": "Textbooks & References",
+    "category": "Books",
+    "type": "folder",
+    "description": "Core textbooks and reference materials.",
+    "children": [
+      { "id": "book-brookshear", "title": "Computer Science: An Overview (Brookshear)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Computer-Science-Overview-Glenn-Brookshear/dp/0134875468", "description": "Glenn Brookshear - Comprehensive CS overview." },
+      { "id": "book-patt-patel", "title": "Introduction to Computing Systems (Patt & Patel)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Introduction-Computing-Systems-Bits-Gates/dp/0072467509", "description": "Patt & Patel - From bits and gates to C." },
+      { "id": "book-tanenbaum", "title": "Structured Computer Organization (Tanenbaum)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Structured-Computer-Organization-Andrew-Tanenbaum/dp/0132916355", "description": "Andrew Tanenbaum - Computer organization fundamentals." },
+      { "id": "book-stallings", "title": "Computer Organization and Architecture (Stallings)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Computer-Organization-Architecture-William-Stallings/dp/0134102061", "description": "William Stallings - Design principles." }
+    ]
+  },
+  {
+    "id": "practice-csi161",
+    "title": "Practice & Simulation Tools",
+    "category": "Practice",
+    "type": "folder",
+    "description": "Interactive tools and simulators.",
+    "children": [
+      { "id": "pr-logisim", "title": "Logisim - Digital Logic Simulator", "category": "Practice", "type": "link", "url": "http://www.cburch.com/logisim/", "description": "Design and simulate digital logic circuits." },
+      { "id": "pr-mips", "title": "MARS MIPS Simulator", "category": "Practice", "type": "link", "url": "https://courses.missouristate.edu/KenVollmar/MARS/", "description": "MIPS assembly language simulator." },
+      { "id": "pr-cpu-sim", "title": "CPU Simulator", "category": "Practice", "type": "link", "url": "https://www.peterhigginson.co.uk/CPU/", "description": "Interactive CPU architecture simulator." },
+      { "id": "pr-network-sim", "title": "Cisco Packet Tracer", "category": "Practice", "type": "link", "url": "https://www.netacad.com/courses/packet-tracer", "description": "Network simulation and visualization tool." }
+    ]
+  },
+  {
+    "id": "tools-csi161",
+    "title": "Study Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Tools for learning computer systems.",
+    "children": [
+      { "id": "tool-binary-converter", "title": "Binary/Hex Converter", "category": "Tools", "type": "link", "url": "https://www.binaryhexconverter.com/", "description": "Convert between binary, decimal, and hexadecimal." },
+      { "id": "tool-logic-gates", "title": "Logic Gate Simulator", "category": "Tools", "type": "link", "url": "https://logic.ly/demo/", "description": "Online logic gate circuit simulator." },
+      { "id": "tool-os-sim", "title": "OS Simulation Tools", "category": "Tools", "type": "link", "url": "https://www.osdev.org/", "description": "Operating system development resources." }
+    ]
+  }
+]

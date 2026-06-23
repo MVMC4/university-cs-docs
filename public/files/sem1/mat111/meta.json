@@ -1,0 +1,120 @@
+[
+  {
+    "id": "outline",
+    "title": "Course Outline 2025",
+    "category": "Lectures",
+    "type": "pdf",
+    "url": "/files/sem1/mat111/MAT111 Course Outline(BQA) 2025.pdf",
+    "description": "Official syllabus, schedule, and assessment details.",
+    "isNew": true
+  },
+  {
+    "id": "lectures",
+    "title": "Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Weekly lecture slides covering functions, polynomials, trigonometry, and complex numbers.",
+    "children": [
+      { "id": "w1", "title": "Week 1: Functions and Graphs", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Week 1.pdf", "description": "Introduction to functions, domain, and range." },
+      { "id": "w2", "title": "Week 2: Function Properties", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Week 2.pdf", "description": "One-to-one, onto, and inverse functions." },
+      { "id": "w3", "title": "Week 3: Polynomial Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Week 3.pdf", "description": "Polynomial functions and graphs." },
+      { "id": "w4", "title": "Week 4: Rational Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Week 4.pdf", "description": "Rational functions and asymptotes." },
+      { "id": "w5", "title": "Week 5: Exponential Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson 5.pdf", "description": "Exponential functions and properties." },
+      { "id": "w6", "title": "Week 6: Logarithmic Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson 6.pdf", "description": "Logarithmic functions and equations." },
+      { "id": "w7", "title": "Week 7: Trigonometry Basics", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 7.pdf", "description": "Introduction to trigonometric functions." },
+      { "id": "w9", "title": "Week 9: Trig Identities", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 9.pdf", "description": "Trigonometric identities and equations." },
+      { "id": "w10", "title": "Week 10: Trig Equations", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 10.pdf", "description": "Solving trigonometric equations." },
+      { "id": "w11", "title": "Week 11: Complex Numbers Intro", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 11.pdf", "description": "Introduction to complex numbers." },
+      { "id": "w12", "title": "Week 12: Argand Diagrams", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 12.pdf", "description": "Complex plane and Argand diagrams." },
+      { "id": "w13", "title": "Week 13: De Moivre's Theorem", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 13.pdf", "description": "De Moivre's theorem and applications." },
+      { "id": "w14", "title": "Week 14: Roots of Complex Numbers", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 14.pdf", "description": "Finding roots of complex numbers." },
+      { "id": "w15", "title": "Week 15: Revision", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 15.pdf", "description": "Course revision and exam preparation." },
+      { "id": "w16", "title": "Week 16: Final Review", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 16.pdf", "description": "Final course review." },
+      { "id": "w17", "title": "Week 17: Practice Problems", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 17.pdf", "description": "Practice problem solutions." },
+      { "id": "w19", "title": "Week 19: Advanced Topics", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 19.pdf", "description": "Advanced mathematical concepts." },
+      { "id": "w20", "title": "Week 20: Applications", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 20.pdf", "description": "Real-world applications." },
+      { "id": "w21", "title": "Week 21: Problem Solving", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/Lesson 21.pdf", "description": "Problem-solving techniques." },
+      { "id": "w22", "title": "Week 22: Exam Prep 1", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson22.pdf", "description": "Exam preparation part 1." },
+      { "id": "w23", "title": "Week 23: Exam Prep 2", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson23.pdf", "description": "Exam preparation part 2." },
+      { "id": "w25", "title": "Week 25: Mock Exam", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson25.pdf", "description": "Mock exam solutions." },
+      { "id": "w26", "title": "Week 26: Review Session", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson26.pdf", "description": "Final review session." },
+      { "id": "w27", "title": "Week 27: Q&A Session", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson27.pdf", "description": "Questions and answers." },
+      { "id": "w28", "title": "Week 28: Final Prep", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson28.pdf", "description": "Final exam preparation." },
+      { "id": "w29", "title": "Week 29: Tips & Tricks", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson29.pdf", "description": "Exam tips and tricks." },
+      { "id": "w30", "title": "Week 30: Last Review", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson30.pdf", "description": "Last review before exams." },
+      { "id": "w31", "title": "Week 31: Final Notes", "category": "Lectures", "type": "pdf", "url": "/files/sem1/mat111/lectures/lesson31.pdf", "description": "Final course notes." }
+    ]
+  },
+  {
+    "id": "pastpapers",
+    "title": "Past Exam Papers",
+    "category": "Past Papers",
+    "type": "folder",
+    "description": "Previous years' exam papers and marking keys for exam preparation.",
+    "children": [
+      { "id": "pp02", "title": "2002 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2002 MAT 111.pdf", "description": "2002 past paper." },
+      { "id": "pp09", "title": "2009 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2009 MAT 111.pdf", "description": "2009 past paper." },
+      { "id": "pp10", "title": "2010 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2010 MAT 111.pdf", "description": "2010 past paper." },
+      { "id": "pp11", "title": "2011 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2011 MAT 111.pdf", "description": "2011 past paper." },
+      { "id": "pp14", "title": "2014 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2014 MATH 111.pdf", "description": "2014 past paper." },
+      { "id": "pp15", "title": "2015 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2015 MAT 111.pdf", "description": "2015 past paper." },
+      { "id": "pp16", "title": "2016 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2016 MAT 111.pdf", "description": "2016 past paper." },
+      { "id": "pp17", "title": "2017 Exam", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/2017 MAT 111.pdf", "description": "2017 past paper." },
+      { "id": "key24", "title": "Nov 2024 Marking Key", "category": "Past Papers", "type": "pdf", "url": "/files/sem1/mat111/pastpapers/MAT111 EXAM MARKING KEY(NOV 2024).pdf", "description": "Official marking key for the Nov 2024 exam.", "isNew": true }
+    ]
+  },
+  {
+    "id": "videos-mat111",
+    "title": "Video Tutorials",
+    "category": "Videos",
+    "type": "folder",
+    "description": "Curated video resources for pre-calculus mathematics.",
+    "children": [
+      { "id": "vid-khan-precalc", "title": "Khan Academy - Precalculus", "category": "Videos", "type": "video", "url": "https://www.khanacademy.org/math/precalculus", "description": "Complete precalculus course with videos and exercises." },
+      { "id": "vid-patrickjmt", "title": "PatrickJMT - Algebra & Trig", "category": "Videos", "type": "video", "url": "https://www.youtube.com/user/patrickJMTmath", "description": "Algebra and trigonometry tutorials." },
+      { "id": "vid-professor-leonard", "title": "Professor Leonard - Precalculus", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLDesaqWTN6ESM55sRiGc94HjbTPrM5r7E", "description": "Complete precalculus lecture series." },
+      { "id": "vid-yaymath", "title": "Yay Math - Algebra 2 & Trig", "category": "Videos", "type": "video", "url": "https://www.youtube.com/user/yaymath", "description": "Algebra 2 and trigonometry explained simply." },
+      { "id": "vid-math-the-beautiful", "title": "Math The Beautiful - Complex Numbers", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=T6ZnGIKtBlE", "description": "Beautiful visual explanation of complex numbers." },
+      { "id": "vid-3blue1brown", "title": "3Blue1Brown - Complex Numbers", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=T6ZnGIKtBlE", "description": "Visual intuition for complex numbers and e^(iπ)." }
+    ]
+  },
+  {
+    "id": "textbooks-mat111",
+    "title": "Textbooks & References",
+    "category": "Books",
+    "type": "folder",
+    "description": "Core textbooks and reference materials.",
+    "children": [
+      { "id": "book-cengage", "title": "Introductory Mathematics (UB Customized)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Introductory-Mathematics-Customized-Version-Botswana/dp/1473754058", "description": "Cengage Learning - Primary textbook for UB." },
+      { "id": "book-cowen", "title": "Introductory Concepts of Mathematics", "category": "Books", "type": "link", "url": "https://www.amazon.com/Introductory-Concepts-Mathematics-R-Cowen/dp/9991025774", "description": "Cowen & Lungu - Supplementary text." },
+      { "id": "book-thomas", "title": "Thomas' Calculus (11th Edition)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Thomas-Calculus-11th-Edition/dp/0321185544", "description": "Weir, Hass, Giordano - Reference for calculus preparation." },
+      { "id": "book-stewart", "title": "Precalculus: Mathematics for Calculus", "category": "Books", "type": "link", "url": "https://www.amazon.com/Precalculus-Mathematics-Calculus-James-Stewart/dp/1305071751", "description": "Stewart, Redlin, Watson - Comprehensive precalculus." }
+    ]
+  },
+  {
+    "id": "practice-mat111",
+    "title": "Practice Platforms",
+    "category": "Practice",
+    "type": "folder",
+    "description": "Online platforms for practicing mathematics.",
+    "children": [
+      { "id": "pr-khan-academy", "title": "Khan Academy - Precalculus", "category": "Practice", "type": "link", "url": "https://www.khanacademy.org/math/precalculus", "description": "Interactive precalculus exercises and videos." },
+      { "id": "pr-brilliant", "title": "Brilliant - Algebra & Trig", "category": "Practice", "type": "link", "url": "https://brilliant.org/courses/algebra/", "description": "Interactive algebra and trigonometry problems." },
+      { "id": "pr-wolfram-problems", "title": "Wolfram Problem Generator", "category": "Practice", "type": "link", "url": "https://www.wolframalpha.com/pro/problem-generator/", "description": "Generate unlimited practice problems." },
+      { "id": "pr-symbolab", "title": "Symbolab Practice", "category": "Practice", "type": "link", "url": "https://www.symbolab.com/practice", "description": "Step-by-step math practice problems." }
+    ]
+  },
+  {
+    "id": "tools-mat111",
+    "title": "Study Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Tools and calculators for mathematics.",
+    "children": [
+      { "id": "tool-wolfram-alpha", "title": "Wolfram Alpha", "category": "Tools", "type": "link", "url": "https://www.wolframalpha.com/", "description": "Computational engine for mathematics." },
+      { "id": "tool-desmos", "title": "Desmos Graphing Calculator", "category": "Tools", "type": "link", "url": "https://www.desmos.com/calculator", "description": "Online graphing calculator for functions." },
+      { "id": "tool-geogebra", "title": "GeoGebra", "category": "Tools", "type": "link", "url": "https://www.geogebra.org/", "description": "Interactive geometry, algebra, and calculus." },
+      { "id": "tool-symbolab", "title": "Symbolab Calculator", "category": "Tools", "type": "link", "url": "https://www.symbolab.com/", "description": "Step-by-step calculator for algebra and calculus." }
+    ]
+  }
+]
