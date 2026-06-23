@@ -1,0 +1,84 @@
+[
+  {
+    "id": "outline",
+    "title": "Course Outline 2024/25",
+    "category": "Lectures",
+    "type": "pdf",
+    "url": "/files/sem1/csi141/csi141_course_outline_2024_copy.pdf",
+    "description": "Official syllabus, schedule, and assessment details.",
+    "isNew": true
+  },
+  {
+    "id": "lectures",
+    "title": "Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Weekly lecture slides covering Java programming fundamentals.",
+    "children": [
+      { "id": "ch1", "title": "Chapter 1: Introduction to Programming", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Chapter 1 - Intorduction.pdf", "description": "Introduction to programming and Java basics." },
+      { "id": "ch2", "title": "Chapter 2: Fundamental Data Types", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Chapter 2 – Fundamental Data Types.pdf", "description": "Variables, primitives, and data types." },
+      { "id": "ch3", "title": "Chapter 3: Decisions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Chapter 3 – Decisions.pdf", "description": "If/else statements and boolean logic." },
+      { "id": "ch4", "title": "Chapter 4: Loops", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Lecture 4 - Loops.pdf", "description": "While, for, and do-while loops." },
+      { "id": "ch5", "title": "Chapter 5: Methods", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Chapter 5 - Methods.pdf", "description": "Defining and calling methods." },
+      { "id": "ch6", "title": "Chapter 6: Arrays and ArrayLists", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Chapter 6 – Arrays and Array Lists.pdf", "description": "Arrays and ArrayList data structures." },
+      { "id": "ch7", "title": "Chapter 7: Input/Output and Exceptions", "category": "Lectures", "type": "pdf", "url": "/files/sem1/csi141/lectures/Chapter 7 – InputOutput and Exception Handling.pdf", "description": "File I/O and exception handling." }
+    ]
+  },
+  {
+    "id": "videos-java",
+    "title": "Video Tutorials & Courses",
+    "category": "Videos",
+    "type": "folder",
+    "description": "Curated Java programming video resources.",
+    "children": [
+      { "id": "vid-kunal-kushwaha", "title": "Kunal Kushwaha - Java + DSA Bootcamp", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PL9gnSGHSqcnr_DxHsP7AW9ftq0AtAyYqJ", "description": "Complete Java course from basics to advanced with DSA." },
+      { "id": "vid-telusko", "title": "Telusko - Java Tutorial for Beginners", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLsyeobzWxl7oZ-fxDYkOToURHhZWD13HY", "description": "Beginner-friendly Java programming tutorials." },
+      { "id": "vid-code-with-harry", "title": "CodeWithHarry - Java in One Video", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=xk4_1vDrzzo", "description": "Complete Java course in one video." },
+      { "id": "vid-coding-ninjas", "title": "Coding Ninjas - Java Course", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLBZBJbE_rGRWeh5mIBhD-hhDwSEDxogAL", "description": "Comprehensive Java programming course." },
+      { "id": "vid-java-brains", "title": "Java Brains - Java Basics", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLqq-6Pq4lTTanEhK2Yw7696wK2sFPhZKv", "description": "Java fundamentals and object-oriented programming." },
+      { "id": "vid-amigoscode", "title": "Amigoscode - Java Full Course", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=eIrMbAQSU34", "description": "Complete Java course for beginners." }
+    ]
+  },
+  {
+    "id": "textbooks-csi141",
+    "title": "Textbooks & References",
+    "category": "Books",
+    "type": "folder",
+    "description": "Core textbooks and reference materials for Java programming.",
+    "children": [
+      { "id": "book-horstmann", "title": "Java Concepts, Late Objects (Horstmann)", "category": "Books", "type": "link", "url": "https://www.amazon.com/Java-Concepts-Late-Objects-3rd/dp/1119424666", "description": "Cay Horstmann - Primary textbook (3rd Edition)." },
+      { "id": "book-runestone", "title": "Introduction to Programming with Java (Runestone)", "category": "Books", "type": "link", "url": "https://runestone.academy/ns/books/published/csjava/index.html", "description": "Free online interactive Java textbook." },
+      { "id": "book-eck", "title": "Introduction to Programming Using Java (David Eck)", "category": "Books", "type": "link", "url": "https://math.hws.edu/javanotes/", "description": "David J. Eck - Free comprehensive Java textbook." },
+      { "id": "book-think-java", "title": "Think Java: How to Think Like a Computer Scientist", "category": "Books", "type": "link", "url": "https://greenteapress.com/wp/think-java-2e/", "description": "Allen Downey & Chris Mayfield - Free O'Reilly book." },
+      { "id": "book-head-first", "title": "Head First Java", "category": "Books", "type": "link", "url": "https://www.amazon.com/Head-First-Java-Kathy-Sierra/dp/0596009208", "description": "Kathy Sierra & Bert Bates - Beginner-friendly Java guide." }
+    ]
+  },
+  {
+    "id": "practice-csi141",
+    "title": "Practice Platforms",
+    "category": "Practice",
+    "type": "folder",
+    "description": "Online platforms for practicing Java programming.",
+    "children": [
+      { "id": "pr-hackerrank-java", "title": "HackerRank - Java Track", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/java", "description": "Practice Java syntax and object-oriented programming." },
+      { "id": "pr-codingbat", "title": "CodingBat - Java", "category": "Practice", "type": "link", "url": "https://codingbat.com/java", "description": "Java practice problems for beginners." },
+      { "id": "pr-exercism-java", "title": "Exercism - Java Track", "category": "Practice", "type": "link", "url": "https://exercism.org/tracks/java", "description": "Mentored Java practice with community reviews." },
+      { "id": "pr-codewars", "title": "Codewars - Java", "category": "Practice", "type": "link", "url": "https://www.codewars.com/kata/search/java", "description": "Gamified Java coding challenges." },
+      { "id": "pr-leetcode", "title": "LeetCode - Java Problems", "category": "Practice", "type": "link", "url": "https://leetcode.com/problemset/all/?difficulty=EASY&tags=java", "description": "Java programming problems for interviews." }
+    ]
+  },
+  {
+    "id": "tools-csi141",
+    "title": "Development Tools",
+    "category": "Tools",
+    "type": "folder",
+    "description": "Tools and IDEs for Java development.",
+    "children": [
+      { "id": "tool-intellij", "title": "IntelliJ IDEA Community Edition", "category": "Tools", "type": "link", "url": "https://www.jetbrains.com/idea/download/", "description": "Free professional Java IDE." },
+      { "id": "tool-eclipse", "title": "Eclipse IDE", "category": "Tools", "type": "link", "url": "https://www.eclipse.org/downloads/", "description": "Popular open-source Java IDE." },
+      { "id": "tool-vscode-java", "title": "VS Code with Java Extensions", "category": "Tools", "type": "link", "url": "https://code.visualstudio.com/docs/java/java-tutorial", "description": "Lightweight Java development environment." },
+      { "id": "tool-java-visualizer", "title": "Java Visualizer", "category": "Tools", "type": "link", "url": "https://cscircles.cemc.uwaterloo.ca/java_visualize/", "description": "Visualize Java code execution step-by-step." },
+      { "id": "tool-replit", "title": "Replit - Online Java IDE", "category": "Tools", "type": "link", "url": "https://replit.com/languages/java10", "description": "Code Java online without installation." }
+    ]
+  }
+]
