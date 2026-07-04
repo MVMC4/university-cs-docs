@@ -1,1 +1,10 @@
-{ "title": "5. Sorting & Searching", "pages": ["sorting-searching", "questions", "review", "resources"] }
+{
+  "title": "5. Sorting & Searching",
+  "pages": [
+    "searching",
+    "sorting",
+    "questions",
+    "resources",
+    "review"
+  ]
+}
