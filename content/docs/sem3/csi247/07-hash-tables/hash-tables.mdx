@@ -52,7 +52,7 @@ Array: [_, _, _, _, _, "apple→red", _, _, _, _]
 ```
 
 <SafeImage 
-  src="/images/csi247/hash-table-basics.png" 
+  src="/images/sem3/csi247/07-hash-tables/hash-table-basics.png" 
   alt="Hash Table Basic Structure" 
   caption="Figure 1: Hash table uses a hash function to convert keys into array indices for constant time access" 
   className="max-w-full h-auto"
@@ -152,7 +152,7 @@ Collision! Both want bucket 2
 ```
 
 <SafeImage 
-  src="/images/csi247/hash-collision-example.png" 
+  src="/images/sem3/csi247/07-hash-tables/hash-collision-example.png" 
   alt="Hash Collision Example" 
   caption="Figure 2: Collision occurs when two different keys map to the same bucket index" 
   className="max-w-full h-auto"
@@ -194,7 +194,7 @@ Array:
 ```
 
 <SafeImage 
-  src="/images/csi247/separate-chaining-visual.png" 
+  src="/images/sem3/csi247/07-hash-tables/separate-chaining-visual.png" 
   alt="Separate Chaining Visualization" 
   caption="Figure 3: Separate chaining uses linked lists at each bucket to handle collisions" 
   className="max-w-full h-auto"
@@ -513,7 +513,7 @@ private void rehash() {
 ```
 
 <SafeImage 
-  src="/images/csi247/rehashing-visual.png" 
+  src="/images/sem3/csi247/07-hash-tables/rehashing-visual.png" 
   alt="Rehashing Process" 
   caption="Figure 4: Rehashing doubles the capacity and redistributes all items with new hash codes" 
   className="max-w-full h-auto"
@@ -628,7 +628,7 @@ Keys for A and C stay put!
 - CDN caching
 
 <SafeImage 
-  src="/images/csi247/consistent-hashing-ring.png" 
+  src="/images/sem3/csi247/07-hash-tables/consistent-hashing-ring.png" 
   alt="Consistent Hashing Ring" 
   caption="Figure 5: Consistent hashing maps servers and keys to a ring, minimizing data movement when servers change" 
   className="max-w-full h-auto"

@@ -42,7 +42,7 @@ Java Collections has **two separate families**:
    - LinkedHashMap: Ordered by insertion
 
 <SafeImage 
-  src="/images/csi247/jcf-hierarchy-simple.png" 
+  src="/images/sem3/csi247/01-java-foundations/jcf-hierarchy-simple.png" 
   alt="JCF Hierarchy Diagram" 
   caption="Figure 1: The Java Collections Framework - Collection and Map are separate hierarchies" 
   className="max-w-full h-auto"
@@ -102,7 +102,7 @@ fruits.remove(2);  // [Apple, Blueberry, Cherry]
 ```
 
 <SafeImage 
-  src="/images/csi247/arraylist-operations.png" 
+  src="/images/sem3/csi247/01-java-foundations/arraylist-operations.png" 
   alt="ArrayList Operations Visualization" 
   caption="Figure 2: ArrayList - fast access by index, but slow insert/delete in middle (requires shifting)" 
   className="max-w-full h-auto"
@@ -171,7 +171,7 @@ tasks.remove(2);  // [Wake up] → [Make bed] → [Eat breakfast]
 ```
 
 <SafeImage 
-  src="/images/csi247/linkedlist-structure.png" 
+  src="/images/sem3/csi247/01-java-foundations/linkedlist-structure.png" 
   alt="LinkedList Structure" 
   caption="Figure 3: LinkedList - each node points to next and previous nodes. Fast insert/delete, slow access." 
   className="max-w-full h-auto"
@@ -213,7 +213,7 @@ numbers.add(1, 5);      // [2] → [5] → [3]
 ### ArrayList vs LinkedList - Which to Choose?
 
 <SafeImage 
-  src="/images/csi247/arraylist-vs-linkedlist.png" 
+  src="/images/sem3/csi247/01-java-foundations/arraylist-vs-linkedlist.png" 
   alt="ArrayList vs LinkedList Comparison" 
   caption="Figure 4: ArrayList vs LinkedList - ArrayList is faster for access, LinkedList is faster for insert/delete" 
   className="max-w-full h-auto"
@@ -280,7 +280,7 @@ boolean exists = uniqueWords.contains("hello");  // true - instant!
 ```
 
 <SafeImage 
-  src="/images/csi247/hashset-buckets.png" 
+  src="/images/sem3/csi247/01-java-foundations/hashset-buckets.png" 
   alt="HashSet Bucket Structure" 
   caption="Figure 5: HashSet uses buckets based on hash codes for O(1) average lookup time" 
   className="max-w-full h-auto"
@@ -351,7 +351,7 @@ System.out.println(numbers.subSet(20, 80));  // [20, 50]
 ```
 
 <SafeImage 
-  src="/images/csi247/treeset-structure.png" 
+  src="/images/sem3/csi247/01-java-foundations/treeset-structure.png" 
   alt="TreeSet Red-Black Tree Structure" 
   caption="Figure 6: TreeSet uses a Red-Black Tree to maintain sorted order with O(log n) operations" 
   className="max-w-full h-auto"
@@ -492,7 +492,7 @@ ages.remove("Charlie");  // Charlie removed
 ```
 
 <SafeImage 
-  src="/images/csi247/hashmap-structure.png" 
+  src="/images/sem3/csi247/01-java-foundations/hashmap-structure.png" 
   alt="HashMap Bucket Structure" 
   caption="Figure 7: HashMap stores key-value pairs in buckets based on hash codes for O(1) lookup" 
   className="max-w-full h-auto"
@@ -671,7 +671,7 @@ HashMap<String, Integer> map = new HashMap<>();
 **JDK 8+ Approach**: Uses CAS (Compare-And-Swap) and locks only the specific bucket being modified. Much faster!
 
 <SafeImage 
-  src="/images/csi247/concurrenthashmap-segments.png" 
+  src="/images/sem3/csi247/01-java-foundations/concurrenthashmap-segments.png" 
   alt="ConcurrentHashMap Segments" 
   caption="Figure 8: ConcurrentHashMap allows multiple threads to write simultaneously by locking only specific buckets" 
   className="max-w-full h-auto"
@@ -842,7 +842,7 @@ cache.put("D", "Value D");  // Removes B (least recently used)
 ### Decision Guide
 
 <SafeImage 
-  src="/images/csi247/collection-decision-tree.png" 
+  src="/images/sem3/csi247/01-java-foundations/collection-decision-tree.png" 
   alt="Collection Choice Decision Tree" 
   caption="Figure 9: Decision tree for choosing the right collection based on your needs" 
   className="max-w-full h-auto"

@@ -32,7 +32,7 @@ Linked lists are one of the most fundamental data structures in computer science
 ### Array vs Linked List
 
 <SafeImage 
-  src="/images/csi247/array-vs-linkedlist.png" 
+  src="/images/sem3/csi247/04-linear-structures/array-vs-linkedlist.png" 
   alt="Array vs Linked List Memory Layout" 
   caption="Figure 1: Arrays store data contiguously (fast access), while linked lists scatter nodes in memory (flexible size)" 
   className="max-w-full h-auto"
@@ -80,7 +80,7 @@ Head → [Data|Next] → [Data|Next] → [Data|Next] → null
 ```
 
 <SafeImage 
-  src="/images/csi247/singly-linked-list-basic.png" 
+  src="/images/sem3/csi247/04-linear-structures/singly-linked-list-basic.png" 
   alt="Singly Linked List Structure" 
   caption="Figure 2: Each node contains data and a pointer to the next node. The last node points to null." 
   className="max-w-full h-auto"
@@ -164,7 +164,7 @@ head = newNode;       // Update head to new node
 ```
 
 <SafeImage 
-  src="/images/csi247/insert-at-head.png" 
+  src="/images/sem3/csi247/04-linear-structures/insert-at-head.png" 
   alt="Insert at Head Visualization" 
   caption="Figure 3: Inserting at head - create node, point to old head, update head pointer" 
   className="max-w-full h-auto"
@@ -227,7 +227,7 @@ current.next = newNode;       // Node 10 now points to 25
 ```
 
 <SafeImage 
-  src="/images/csi247/insert-at-position.png" 
+  src="/images/sem3/csi247/04-linear-structures/insert-at-position.png" 
   alt="Insert at Position Visualization" 
   caption="Figure 4: Inserting at position - find previous node, update pointers to insert new node" 
   className="max-w-full h-auto"
@@ -369,7 +369,7 @@ public Node reverseList(Node head) {
 ```
 
 <SafeImage 
-  src="/images/csi247/reverse-linked-list.png" 
+  src="/images/sem3/csi247/04-linear-structures/reverse-linked-list.png" 
   alt="Reverse Linked List Step by Step" 
   caption="Figure 5: Reversing a linked list - flip each pointer one by one using three pointers (prev, curr, next)" 
   className="max-w-full h-auto"
@@ -415,7 +415,7 @@ null ← [Prev|Data|Next] ↔ [Prev|Data|Next] ↔ [Prev|Data|Next] → null
 ```
 
 <SafeImage 
-  src="/images/csi247/doubly-linked-list-structure.png" 
+  src="/images/sem3/csi247/04-linear-structures/doubly-linked-list-structure.png" 
   alt="Doubly Linked List Structure" 
   caption="Figure 6: Doubly linked list - each node has prev and next pointers for bidirectional traversal" 
   className="max-w-full h-auto"
@@ -500,7 +500,7 @@ while (current != null) {
 ### SLL vs DLL Comparison
 
 <SafeImage 
-  src="/images/csi247/sll-vs-dll-comparison.png" 
+  src="/images/sem3/csi247/04-linear-structures/sll-vs-dll-comparison.png" 
   alt="Singly vs Doubly Linked List Comparison" 
   caption="Figure 7: SLL uses less memory but DLL allows backward traversal and faster deletion" 
   className="max-w-full h-auto"
@@ -550,7 +550,7 @@ public Node findMiddle(Node head) {
 ```
 
 <SafeImage 
-  src="/images/csi247/find-middle-pointer.png" 
+  src="/images/sem3/csi247/04-linear-structures/find-middle-pointer.png" 
   alt="Find Middle Using Two Pointers" 
   caption="Figure 8: Fast/slow pointer technique - when fast reaches end, slow is at middle" 
   className="max-w-full h-auto"
@@ -601,7 +601,7 @@ public boolean hasCycle(Node head) {
 ```
 
 <SafeImage 
-  src="/images/csi247/floyds-cycle-detection.png" 
+  src="/images/sem3/csi247/04-linear-structures/floyds-cycle-detection.png" 
   alt="Floyd's Cycle Detection Algorithm" 
   caption="Figure 9: Floyd's Tortoise and Hare - fast and slow pointers meet inside a cycle" 
   className="max-w-full h-auto"

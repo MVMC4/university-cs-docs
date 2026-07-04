@@ -19,7 +19,7 @@ When a function calls itself, Java needs to remember where it was. It does this 
 ### Visual: How the Stack Works
 
 <SafeImage 
-  src="/images/csi247/stack-plates.png" 
+  src="/images/sem3/csi247/03-recursion/stack-plates.png" 
   alt="Stack of plates visualization" 
   caption="Figure 1: Like a stack of plates—add on top (push), remove from top (pop)" 
   className="max-w-md mx-auto"
@@ -42,7 +42,7 @@ public int factorial(int n) {
 ```
 
 <SafeImage 
-  src="/images/csi247/factorial-stack.png" 
+  src="/images/sem3/csi247/03-recursion/factorial-stack.png" 
   alt="Factorial call stack visualization" 
   caption="Figure 2: factorial(4) builds a stack of 4 frames, then unwinds" 
   className="max-w-full h-auto"
@@ -65,7 +65,7 @@ public void infiniteRecursion() {
 ```
 
 <SafeImage 
-  src="/images/csi247/stack-overflow.png" 
+  src="/images/sem3/csi247/03-recursion/stack-overflow.png" 
   alt="Stack overflow visualization" 
   caption="Figure 3: Without a base case, the stack grows until it crashes" 
   className="max-w-full h-auto"
@@ -188,7 +188,7 @@ public int fib(int n) {
 ```
 
 <SafeImage 
-  src="/images/csi247/fib-tree.png" 
+  src="/images/sem3/csi247/03-recursion/fib-tree.png" 
   alt="Fibonacci recursion tree" 
   caption="Figure 4: fib(5) recalculates fib(3) twice and fib(2) three times—very inefficient!" 
   className="max-w-full h-auto"
@@ -231,7 +231,7 @@ public int fib(int n) {
 ```
 
 <SafeImage 
-  src="/images/csi247/fib-comparison.png" 
+  src="/images/sem3/csi247/03-recursion/fib-comparison.png" 
   alt="Fibonacci approaches comparison" 
   caption="Figure 5: Three approaches—naive (exponential), memoized (linear), iterative (linear + O(1) space)" 
   className="max-w-full h-auto"
@@ -242,7 +242,7 @@ public int fib(int n) {
 Search a **sorted** array by repeatedly dividing in half.
 
 <SafeImage 
-  src="/images/csi247/binary-search.png" 
+  src="/images/sem3/csi247/03-recursion/binary-search.png" 
   alt="Binary search visualization" 
   caption="Figure 6: Each step cuts the search space in half—find target in O(log n) time" 
   className="max-w-full h-auto"
@@ -285,7 +285,7 @@ public int binarySearch(int[] arr, int target) {
 Sort by dividing array in half, sorting each half, then merging.
 
 <SafeImage 
-  src="/images/csi247/merge-sort.png" 
+  src="/images/sem3/csi247/03-recursion/merge-sort.png" 
   alt="Merge sort visualization" 
   caption="Figure 7: Divide until single elements, then merge back in sorted order" 
   className="max-w-full h-auto"
@@ -319,7 +319,7 @@ Draw the recursion as a tree and add up the work at each level.
 **Example**: Merge Sort `T(n) = 2T(n/2) + n`
 
 <SafeImage 
-  src="/images/csi247/recursion-tree-merge.png" 
+  src="/images/sem3/csi247/03-recursion/recursion-tree-merge.png" 
   alt="Merge sort recursion tree" 
   caption="Figure 8: Each level does n work, and there are log n levels, so total = n log n" 
   className="max-w-full h-auto"
@@ -336,7 +336,7 @@ Draw the recursion as a tree and add up the work at each level.
 **Example**: Binary Search `T(n) = T(n/2) + 1`
 
 <SafeImage 
-  src="/images/csi247/recursion-tree-binary.png" 
+  src="/images/sem3/csi247/03-recursion/recursion-tree-binary.png" 
   alt="Binary search recursion tree" 
   caption="Figure 9: Each level does constant work, log n levels, total = O(log n)" 
   className="max-w-full h-auto"
@@ -360,7 +360,7 @@ Where:
 **The Three Cases**:
 
 <SafeImage 
-  src="/images/csi247/master-theorem.png" 
+  src="/images/sem3/csi247/03-recursion/master-theorem.png" 
   alt="Master Theorem visualization" 
   caption="Figure 10: Three cases based on comparing f(n) with n^(log_b(a))" 
   className="max-w-full h-auto"
@@ -498,7 +498,7 @@ Backtracking is recursion for **trying different options** and undoing bad choic
 Place N queens on a chessboard so none attack each other.
 
 <SafeImage 
-  src="/images/csi247/nqueens.png" 
+  src="/images/sem3/csi247/03-recursion/nqueens.png" 
   alt="N-Queens solution" 
   caption="Figure 11: 4-Queens solution—no two queens share a row, column, or diagonal" 
   className="max-w-md mx-auto"
@@ -534,7 +534,7 @@ private void backtrack(char[][] board, int row) {
 ```
 
 <SafeImage 
-  src="/images/csi247/backtracking-tree.png" 
+  src="/images/sem3/csi247/03-recursion/backtracking-tree.png" 
   alt="Backtracking decision tree" 
   caption="Figure 12: Try a placement, if it fails, backtrack and try the next option" 
   className="max-w-full h-auto"
@@ -574,7 +574,7 @@ Recursion isn't just theory—it's used everywhere!
 Finding all files in a folder and its subfolders.
 
 <SafeImage 
-  src="/images/csi247/file-tree.png" 
+  src="/images/sem3/csi247/03-recursion/file-tree.png" 
   alt="File system tree" 
   caption="Figure 13: Folders contain files and subfolders—perfect for recursion" 
   className="max-w-md mx-auto"
@@ -615,7 +615,7 @@ Each nested object requires recursive parsing.
 Visiting all nodes in a tree structure.
 
 <SafeImage 
-  src="/images/csi247/tree-traversal.png" 
+  src="/images/sem3/csi247/03-recursion/tree-traversal.png" 
   alt="Tree traversal" 
   caption="Figure 14: Visit root, then recursively visit left and right subtrees" 
   className="max-w-md mx-auto"
@@ -636,7 +636,7 @@ public void traverseTree(Node node) {
 ## 8. Common Complexities
 
 <SafeImage 
-  src="/images/csi247/complexity-graph.png" 
+  src="/images/sem3/csi247/03-recursion/complexity-graph.png" 
   alt="Complexity comparison graph" 
   caption="Figure 15: How different complexities scale—avoid exponential time!" 
   className="max-w-full h-auto"

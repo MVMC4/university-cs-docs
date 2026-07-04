@@ -7,6 +7,13 @@ description: Core Java syntax, control flow, 1D/2D arrays (matrices), and JVM me
 
 This document serves as a complete revision guide for Core Java programming fundamentals, control flow, matrix operations, and JVM memory architecture.
 
+<SafeImage
+  src="/images/sem3/csi247/01-java-foundations/java-overview.png"
+  alt="Java Primitive Data Types"
+  caption="Java's write-once-run-anywhere architecture"
+  className="w-full max-w-4xl mx-auto"
+/>
+
 > **Quick Tip**: Java is case-sensitive. `myVariable` and `myvariable` are different!
 
 ---
@@ -19,7 +26,7 @@ Java is a **strongly typed** language, meaning every variable must be declared w
 These are the most basic data types built into Java. They hold simple values and are stored in the **Stack** memory for fast access.
 
 <SafeImage
-  src="/images/sem3/csi247/primitive-types-chart.png"
+  src="/images/sem3/csi247/01-java-foundations/primitive-types-chart.png"
   alt="Java Primitive Data Types"
   caption="Figure 1: The 8 primitive types with their sizes and ranges"
   className="w-full max-w-4xl mx-auto"
@@ -68,6 +75,13 @@ int myInt = (int) myDouble; // 9 - decimal truncated!
 ## 2. Control Flow Statements
 
 Control flow statements dictate the order in which your code is executed.
+
+<SafeImage
+  src="/images/sem3/csi247/01-java-foundations/control-flow.png"
+  alt="Java Primitive Data Types"
+  caption="Figure 2: Decision-making statments in Java"
+  className="w-full max-w-4xl mx-auto"
+/>
 
 ### Conditional Statements
 
@@ -224,7 +238,7 @@ Because Java 2D arrays are arrays of references, each row can have a different l
 ## 4. Memory Management: Stack vs. Heap
 
 <SafeImage
-  src="/images/stack-heap-detailed.png"
+  src="/images/sem3/csi247/00-shared/stack-vs-heap.png"
   alt="Stack and Heap Memory"
   caption="Figure 2: Complete memory model with references and objects"
   className="w-full max-w-4xl mx-auto"

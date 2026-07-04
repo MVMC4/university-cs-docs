@@ -8,7 +8,7 @@ description: Comprehensive revision guide for Core Java concepts, Object-Oriente
 This document serves as a complete revision guide for Java programming fundamentals, Object-Oriented Programming (OOP) principles, and the Generics system.
 
 <SafeImage 
-  src="/images/sem3/csi247/java-overview.png" 
+  src="/images/sem3/csi247/01-java-foundations/java-overview.png" 
   alt="Java Platform Overview" 
   caption="Figure 1: Java's write-once-run-anywhere architecture"
   className="w-full max-w-3xl mx-auto"
@@ -26,7 +26,7 @@ Java is a **strongly typed** language, meaning every variable must be declared w
 These are the most basic data types built into Java. They hold simple values and are stored in the **Stack** memory for fast access.
 
 <SafeImage 
-  src="/images/sem3/csi247/primitive-types-chart.png" 
+  src="/images/sem3/csi247/01-java-foundations/primitive-types-chart.png" 
   alt="Java Primitive Data Types" 
   caption="Figure 2: The 8 primitive types with their sizes and ranges"
   className="w-full max-w-4xl mx-auto"
@@ -47,7 +47,7 @@ These are the most basic data types built into Java. They hold simple values and
 These refer to objects and arrays. They are stored in the **Heap** memory, and the variable holds a *reference* (memory address) to the actual data.
 
 <SafeImage 
-  src="/images/sem3/csi247/stack-vs-heap.png" 
+  src="/images/sem3/csi247/01-java-foundations/stack-vs-heap.png" 
   alt="Stack vs Heap Memory" 
   caption="Figure 3: Primitives on Stack, Objects on Heap"
   className="w-full max-w-3xl mx-auto"
@@ -78,7 +78,7 @@ int myInt = (int) myDouble; // 9 - decimal truncated!
 ```
 
 <SafeImage 
-  src="/images/type-casting-diagram.png" 
+  src="/images/sem3/csi247/01-java-foundations/type-casting-diagram.png" 
   alt="Type Casting Visualization" 
   caption="Figure 4: Widening vs Narrowing casting"
   className="w-full max-w-2xl mx-auto"
@@ -110,7 +110,7 @@ if (score >= 90) {
 ```
 
 <SafeImage 
-  src="/images/if-else-flowchart.png" 
+  src="/images/sem3/csi247/01-java-foundations/if-else-flowchart.png" 
   alt="If-Else Flowchart" 
   caption="Figure 5: Decision tree for grade calculation"
   className="w-full max-w-2xl mx-auto"
@@ -142,7 +142,7 @@ switch (day) {
 ### Loops
 
 <SafeImage 
-  src="/images/loop-types-diagram.png" 
+  src="/images/sem3/csi247/01-java-foundations/loop-types-diagram.png" 
   alt="Java Loop Types Comparison" 
   caption="Figure 6: When to use each loop type"
   className="w-full max-w-4xl mx-auto"
@@ -190,7 +190,7 @@ An array is a fixed-size, contiguous block of memory storing multiple values of 
 ### 1D Arrays
 
 <SafeImage 
-  src="/images/array-memory-layout.png" 
+  src="/images/sem3/csi247/01-java-foundations/array-memory-layout.png" 
   alt="Array Memory Layout" 
   caption="Figure 7: Contiguous memory allocation with index access"
   className="w-full max-w-3xl mx-auto"
@@ -226,7 +226,7 @@ int value = matrix[1][2];
 ```
 
 <SafeImage 
-  src="/images/sem3/csi247/2d-array-grid.png" 
+  src="/images/sem3/csi247/01-java-foundations/2d-array-grid.png" 
   alt="2D Array Visualization" 
   caption="Figure 8: Matrix[row][column] indexing"
   className="w-full max-w-2xl mx-auto"
@@ -251,7 +251,7 @@ Java is Object-Oriented. **Classes** are blueprints; **Objects** are instances.
 ### Anatomy of a Class
 
 <SafeImage 
-  src="/images/class-anatomy.png" 
+  src="/images/sem3/csi247/01-java-foundations/class-anatomy.png" 
   alt="Class Structure Diagram" 
   caption="Figure 9: Fields, constructors, and methods"
   className="w-full max-w-3xl mx-auto"
@@ -288,7 +288,7 @@ myCar.drive(); // "The Toyota is driving."
 ```
 
 <SafeImage 
-  src="/images/class-vs-object.png" 
+  src="/images/sem3/csi247/01-java-foundations/class-vs-object.png" 
   alt="Class vs Object" 
   caption="Figure 10: Class is the blueprint, Object is the house built from it"
   className="w-full max-w-3xl mx-auto"
@@ -459,7 +459,7 @@ import java.util.ArrayList;
 ### Access Modifiers
 
 <SafeImage 
-  src="/images/access-modifiers-chart.png" 
+  src="/images/sem3/csi247/01-java-foundations/access-modifiers-chart.png" 
   alt="Access Modifiers Visibility" 
   caption="Figure 14: Visibility scope of each modifier"
   className="w-full max-w-4xl mx-auto"
@@ -495,7 +495,7 @@ String s = list.get(0); // No cast needed!
 ```
 
 <SafeImage 
-  src="/images/generics-safety.png" 
+  src="/images/sem3/csi247/01-java-foundations/generics-safety.png" 
   alt="Generics Type Safety" 
   caption="Figure 15: Compile-time checking prevents runtime errors"
   className="w-full max-w-3xl mx-auto"
@@ -536,7 +536,7 @@ public <T extends Number> void printValue(T num) {
 3. **`?`** - Any type (unbounded)
 
 <SafeImage 
-  src="/images/wildcard-types.png" 
+  src="/images/sem3/csi247/01-java-foundations/wildcard-types.png" 
   alt="Generic Wildcards" 
   caption="Figure 16: PECS rule - Producer Extends, Consumer Super"
   className="w-full max-w-3xl mx-auto"
@@ -547,7 +547,7 @@ public <T extends Number> void printValue(T num) {
 ## 8. Memory Management: Stack vs. Heap
 
 <SafeImage 
-  src="/images/stack-heap-detailed.png" 
+  src="/images/sem3/csi247/01-java-foundations/stack-heap-detailed.png" 
   alt="Stack and Heap Memory" 
   caption="Figure 17: Complete memory model with references and objects"
   className="w-full max-w-4xl mx-auto"

@@ -64,7 +64,7 @@ Big-O notation answers these three questions by abstracting away hardware-specif
 Before diving into formal definitions, let's build intuition by seeing how different growth rates behave as input size increases.
 
 <SafeImage 
-  src="/images/sem3/csi247/bigo-graph.png" 
+  src="/images/sem3/csi247/02-algorithm-analysis/bigo-graph.png" 
   alt="Big-O Growth Rates Graph" 
   caption="Figure 1: Execution time vs input size (n). Notice how O(n!) and O(2ⁿ) become impossible beyond n=20, while O(n log n) scales gracefully to millions."
   className="max-w-full h-auto"
@@ -551,7 +551,7 @@ Consider ArrayList's `add()` operation:
 - Occasionally: `O(n)` - when array is full, resize and copy all elements
 
 <SafeImage 
-  src="/images/csi247/amortized-sawtooth.png" 
+  src="/images/sem3/csi247/02-algorithm-analysis/amortized-sawtooth.png" 
   alt="Amortized Analysis Sawtooth Graph" 
   caption="Figure 2: The 'sawtooth' pattern of Dynamic Array insertion. Most operations cost O(1), but occasional resizes cost O(n). The amortized cost averages out to O(1) per insertion."
   className="max-w-full h-auto"
