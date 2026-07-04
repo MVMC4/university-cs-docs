@@ -1,0 +1,70 @@
+---
+title: Interactive Components Demo
+description: Showcasing the new ExamQuestion and FlashcardDeck components.
+---
+
+# Interactive Components Demo
+
+This page demonstrates the new components designed for viewing exam questions and browsing flashcards.
+
+## 1. Exam Question Viewer
+
+This component allows you to display complex, multi-part university exam questions. Students can read the prompt and click to reveal the solution and potential variations.
+
+<ExamQuestion title="Question 3: Circular Queue Implementation [15 Marks]">
+  <SubQuestion 
+    part="a" 
+    prompt={<>Write the <code>enqueue(PrintJob job)</code> and <code>dequeue()</code> methods. You must use the modulo operator <code>%</code> to handle the wrap-around of the <code>front</code> and <code>rear</code> pointers. [6]</>}
+    solution={<> 
+      <p>Here is the implementation using the modulo operator:</p>
+      <pre><code className="language-java">{`public void enqueue(PrintJob job) {
+    if (isFull()) throw new IllegalStateException("Queue is full");
+    array[rear] = job;
+    rear = (rear + 1) % capacity;
+    size++;
+}`}</code></pre>
+    </>}
+    variations={<>
+      <p><strong>Variation:</strong> What if the queue was implemented using a singly linked list instead of an array? Would you still need the modulo operator? (Answer: No, linked lists naturally handle dynamic sizing and do not require circular index math unless explicitly making a circular linked list).</p>
+    </>}
+  />
+  <SubQuestion 
+    part="b" 
+    prompt={<>Write a method <code>isFull()</code>. Explain why a circular array of size N can only hold N-1 elements if you rely solely on <code>front == rear</code> to check if it's empty, and how you resolve this ambiguity. [5]</>}
+    solution={<>
+      <p>If <code>front == rear</code> means empty, then when the array is completely full, <code>rear</code> will wrap around and equal <code>front</code> again. To resolve this, we either:</p>
+      <ol>
+        <li>Keep a <code>size</code> counter variable.</li>
+        <li>Leave one slot permanently empty (capacity becomes N-1).</li>
+      </ol>
+    </>}
+  />
+</ExamQuestion>
+
+---
+
+## 2. Flashcard Deck
+
+This component turns multiple individual flashcards into a navigable carousel. Use the buttons to flip through the deck.
+
+<FlashcardDeck>
+  <Flashcard 
+    front="What is the time complexity of inserting into a Binary Heap?" 
+    back={<p>O(log N) because the element must bubble up through the height of the tree.</p>} 
+  />
+  <Flashcard 
+    front="What is the main advantage of a Trie over a Hash Table for string operations?" 
+    back={<p>Tries allow for efficient prefix searching (autocompletion) and ordered traversal, which Hash Tables cannot do easily.</p>} 
+  />
+  <Flashcard 
+    front="State the Master Theorem for recurrences of the form T(n) = aT(n/b) + f(n)." 
+    back={<> 
+      <p>It compares f(n) with n^(log_b(a)):</p>
+      <ol>
+        <li>If f(n) = O(n^(log_b(a) - ε)), then T(n) = Θ(n^(log_b(a))).</li>
+        <li>If f(n) = Θ(n^(log_b(a))), then T(n) = Θ(n^(log_b(a)) log n).</li>
+        <li>If f(n) = Ω(n^(log_b(a) + ε)), then T(n) = Θ(f(n)).</li>
+      </ol>
+    </>}
+  />
+</FlashcardDeck>

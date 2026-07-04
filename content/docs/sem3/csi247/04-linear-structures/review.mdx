@@ -1,0 +1,34 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/04-linear-structures/flashcards';
+import { quizData as linkedListsQuiz } from '@/content/quiz-data/sem3/csi247/04-linear-structures/linked-lists-quiz';
+import { quizData as stacksQueuesQuiz } from '@/content/quiz-data/sem3/csi247/04-linear-structures/stacks-queues-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Linear Structures Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 4 Quick Check"
+  questions={[
+    {
+      question: "When evaluating a postfix expression, what happens when you encounter an operator?",
+      options: ["Push it to the stack", "Pop one operand and apply", "Pop two operands, apply, and push result", "Clear the stack"],
+      correctIndex: 2,
+      explanation: "Postfix evaluation requires two operands for any binary operator. You pop the top two, compute, and push the result back."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessments
+<Quiz title="Linked Lists Assessment" questions={linkedListsQuiz} />
+<Quiz title="Stacks & Queues Assessment" questions={stacksQueuesQuiz} />

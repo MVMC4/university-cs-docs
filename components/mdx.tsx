@@ -26,6 +26,8 @@ import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { Steps as FumaSteps, Step as FumaStep } from 'fumadocs-ui/components/steps';
 
+import { ExamQuestion, SubQuestion } from './interactive/exam-question';
+import { FlashcardDeck } from './interactive/flashcard-deck';
 
 export function getMDXComponents(components?: MDXComponents) {
   return {
@@ -65,6 +67,9 @@ export function getMDXComponents(components?: MDXComponents) {
     FumaStep,
     Card,
     ResourceHub,
+    ExamQuestion,
+    SubQuestion,
+    FlashcardDeck,
     
     // Allow any other passed components to override
     ...components,

@@ -1,0 +1,32 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/07-hash-tables/flashcards';
+import { quizData as hashTablesQuiz } from '@/content/quiz-data/sem3/csi247/07-hash-tables/hash-tables-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Hash Tables Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 7 Quick Check"
+  questions={[
+    {
+      question: "In Separate Chaining, what happens when the load factor exceeds the threshold?",
+      options: ["The oldest elements are evicted", "A rehash is triggered to double the array capacity", "The linked lists are converted to binary search trees", "The hash function is changed"],
+      correctIndex: 1,
+      explanation: "To maintain O(1) amortized operations, the underlying array is doubled in size and all existing elements are re-inserted using the new modulo base."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessment
+<Quiz title="Hash Tables Assessment" questions={hashTablesQuiz} />

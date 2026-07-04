@@ -1,0 +1,32 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/08-graphs/flashcards';
+import { quizData as graphsQuiz } from '@/content/quiz-data/sem3/csi247/08-graphs/graphs-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Graphs Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 8 Quick Check"
+  questions={[
+    {
+      question: "In Kruskal's algorithm, what data structure is used to efficiently detect cycles?",
+      options: ["Priority Queue", "Adjacency Matrix", "Disjoint Set Union (Union-Find)", "Stack"],
+      correctIndex: 2,
+      explanation: "DSU allows near O(1) checks to see if two vertices belong to the same connected component, which prevents forming a cycle."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessment
+<Quiz title="Graphs Assessment" questions={graphsQuiz} />

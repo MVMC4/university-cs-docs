@@ -1,0 +1,32 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/05-sorting-searching/flashcards';
+import { quizData as sortingSearchingQuiz } from '@/content/quiz-data/sem3/csi247/05-sorting-searching/sorting-searching-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Sorting & Searching Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 5 Quick Check"
+  questions={[
+    {
+      question: "In Quick Sort, what is the primary purpose of the Median-of-Three pivot selection?",
+      options: ["To guarantee O(N log N) worst-case time", "To prevent O(N^2) degradation on already sorted arrays", "To reduce space complexity to O(1)", "To make the sort stable"],
+      correctIndex: 1,
+      explanation: "It avoids picking the absolute minimum or maximum as the pivot when the array is already sorted, which causes the worst-case partitioning."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessment
+<Quiz title="Sorting & Searching Assessment" questions={sortingSearchingQuiz} />

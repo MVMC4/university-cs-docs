@@ -1,0 +1,32 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/06-trees/flashcards';
+import { quizData as treesQuiz } from '@/content/quiz-data/sem3/csi247/06-trees/trees-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Trees Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 6 Quick Check"
+  questions={[
+    {
+      question: "If an AVL tree node has a balance factor of -2 and its right child has a balance factor of +1, which rotation is needed?",
+      options: ["Left-Left (Single Right)", "Right-Right (Single Left)", "Right-Left (Double)", "Left-Right (Double)"],
+      correctIndex: 2,
+      explanation: "The node is right-heavy (-2), but the right child is left-heavy (+1). This requires a Right rotation on the child, followed by a Left rotation on the node."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessment
+<Quiz title="Trees Assessment" questions={treesQuiz} />

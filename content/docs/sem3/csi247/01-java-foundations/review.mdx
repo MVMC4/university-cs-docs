@@ -1,0 +1,34 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/01-java-foundations/flashcards';
+import { quizData as javaBasicsQuiz } from '@/content/quiz-data/sem3/csi247/01-java-foundations/java-basics-oop-quiz';
+import { quizData as javaCollectionsQuiz } from '@/content/quiz-data/sem3/csi247/01-java-foundations/java-collections-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Java Foundations Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 1 Quick Check"
+  questions={[
+    {
+      question: "If a Truck has 2 axles and weighs 1000kg, what is its toll? (10 base + 1.50/axle + 0.05/kg)",
+      options: ["63.00", "53.00", "60.00", "13.00"],
+      correctIndex: 0,
+      explanation: "10 + (2 * 1.50) + (1000 * 0.05) = 10 + 3 + 50 = 63.00."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessments
+<Quiz title="Java Basics & OOP Assessment" questions={javaBasicsQuiz} />
+<Quiz title="Java Collections Assessment" questions={javaCollectionsQuiz} />

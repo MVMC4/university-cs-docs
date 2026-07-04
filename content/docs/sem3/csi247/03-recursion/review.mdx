@@ -1,0 +1,32 @@
+---
+title: Chapter Review
+description: Flashcards and quick quizzes to test your knowledge.
+---
+
+# Chapter Review
+
+import { flashcardData } from '@/content/flashcard-data/sem3/csi247/03-recursion/flashcards';
+import { quizData as recursionQuiz } from '@/content/quiz-data/sem3/csi247/03-recursion/recursion-quiz';
+
+## Flashcards
+<FlashcardDeck cards={flashcardData} title="Recursion Deck" />
+
+---
+
+## Quick Quiz
+<Quiz
+  title="Chapter 3 Quick Check"
+  questions={[
+    {
+      question: "For the coin change problem, which approach guarantees the minimum number of coins for ANY arbitrary set of denominations?",
+      options: ["Greedy Algorithm", "Dynamic Programming", "Divide and Conquer", "Binary Search"],
+      correctIndex: 1,
+      explanation: "Dynamic Programming explores all combinations and guarantees the global optimum, whereas Greedy can get stuck in local optima for non-canonical coin systems."
+    }
+  ]}
+/>
+
+---
+
+## Full Chapter Assessment
+<Quiz title="Recursion Assessment" questions={recursionQuiz} />
