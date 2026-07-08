@@ -1,18 +1,12 @@
 {
-    "title": "CSI247: Data Structures",
-    "pages": [
-        "index",
-        "java-basics-oop",
-        "big-o",
-        "recursion",
-        "linked-lists",
-        "stacks-queues",
-        "sorting-searching",
-        "trees",
-        "hash-tables",
-        "graphs",
-        "java-collections",
-        "resources",
-        "legacy-files"
-    ]
+  "title": "CSI247: Data Structures",
+  "pages": [
+    "index",
+    "time-complexity",
+    "arrays-and-arraylists",
+    "collections-sorting-searching",
+    "linked-lists-traversals",
+    "stacks-and-queues",
+    "resources"
+  ]
 }

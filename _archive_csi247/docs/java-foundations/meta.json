@@ -1,0 +1,13 @@
+{
+  "title": "Java Foundations",
+  "pages": [
+    "basic",
+    "oop",
+    "generics",
+    "file-io",
+    "java-collections",
+    "questions",
+    "review",
+    "resources"
+  ]
+}

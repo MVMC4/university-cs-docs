@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Check, X, RotateCcw, AlertCircle } from 'lucide-react';
-import katex from 'katex';
+import { MathText } from './math-text';
 
 type Question = {
   question: string;
@@ -15,41 +15,7 @@ type QuizProps = {
   questions?: Question[];
 };
 
-// 🧮 Helper component to parse and render inline LaTeX math
-const MathText = ({ text }: { text: string }) => {
-  if (!text) return null;
-  
-  // Regex to split text by $$...$$ (display) or $...$ (inline)
-  const parts = text.split(/(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g);
-  
-  return (
-    <>
-      {parts.map((part, index) => {
-        if (part.startsWith('$$') && part.endsWith('$$')) {
-          const math = part.slice(2, -2);
-          try {
-            const html = katex.renderToString(math, { displayMode: true, throwOnError: false });
-            return <span key={index} dangerouslySetInnerHTML={{ __html: html }} />;
-          } catch {
-            return <span key={index}>{part}</span>;
-          }
-        } else if (part.startsWith('$') && part.endsWith('$')) {
-          const math = part.slice(1, -1);
-          try {
-            const html = katex.renderToString(math, { displayMode: false, throwOnError: false });
-            return <span key={index} dangerouslySetInnerHTML={{ __html: html }} />;
-          } catch {
-            return <span key={index}>{part}</span>;
-          }
-        }
-        return <span key={index}>{part}</span>;
-      })}
-    </>
-  );
-};
-
 export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
-  // Empty state handling
   if (!questions || questions.length === 0) {
     return (
       <div className="my-8 rounded-xl border border-fd-border bg-fd-muted/30 p-6 shadow-sm">
@@ -98,9 +64,7 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
   return (
     <div className="my-8 rounded-xl border border-fd-border bg-fd-muted/30 p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between border-b border-fd-border pb-4">
-        <h3 className="text-2xl font-bold text-fd-foreground">
-          {title}
-        </h3>
+        <h3 className="text-2xl font-bold text-fd-foreground">{title}</h3>
         {isSubmitted && <ScoreDisplay />}
       </div>
 
@@ -113,23 +77,14 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
             <div className="space-y-2 pl-2">
               {q.options.map((option, optIndex) => {
                 let btnClass = 'w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between text-sm ';
-
                 if (!isSubmitted) {
-                  if (answers[qIndex] === optIndex) {
-                    btnClass += 'border-fd-primary bg-fd-primary/10 text-fd-primary font-medium';
-                  } else {
-                    btnClass += 'border-fd-border bg-fd-background hover:border-fd-primary/50 hover:bg-fd-muted text-fd-foreground';
-                  }
+                  if (answers[qIndex] === optIndex) btnClass += 'border-fd-primary bg-fd-primary/10 text-fd-primary font-medium';
+                  else btnClass += 'border-fd-border bg-fd-background hover:border-fd-primary/50 hover:bg-fd-muted text-fd-foreground';
                 } else {
-                  if (optIndex === q.correctIndex) {
-                    btnClass += 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium';
-                  } else if (answers[qIndex] === optIndex) {
-                    btnClass += 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400';
-                  } else {
-                    btnClass += 'border-fd-border bg-fd-background opacity-50 text-fd-muted-foreground';
-                  }
+                  if (optIndex === q.correctIndex) btnClass += 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium';
+                  else if (answers[qIndex] === optIndex) btnClass += 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400';
+                  else btnClass += 'border-fd-border bg-fd-background opacity-50 text-fd-muted-foreground';
                 }
-
                 return (
                   <button key={optIndex} onClick={() => handleSelect(qIndex, optIndex)} className={btnClass} disabled={isSubmitted}>
                     <span><MathText text={option} /></span>
@@ -139,7 +94,6 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
                 );
               })}
             </div>
-
             {isSubmitted && q.explanation && (
               <div className="mt-3 p-4 rounded-lg bg-fd-muted border border-fd-border text-sm text-fd-muted-foreground">
                 <span className="font-semibold text-fd-foreground">Explanation:</span> <MathText text={q.explanation} />
@@ -153,20 +107,13 @@ export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
         {isSubmitted ? (
           <>
             <ScoreDisplay />
-            <button
-              onClick={handleReset}
-              className="px-6 py-2 rounded-lg bg-fd-muted border border-fd-border text-fd-foreground font-medium hover:bg-fd-background transition-colors flex items-center gap-2"
-            >
-              <RotateCcw className="h-4 w-4" />
-              Retake Quiz
+            <button onClick={handleReset} className="px-6 py-2 rounded-lg bg-fd-muted border border-fd-border text-fd-foreground font-medium hover:bg-fd-background transition-colors flex items-center gap-2">
+              <RotateCcw className="h-4 w-4" /> Retake Quiz
             </button>
           </>
         ) : (
           <div className="w-full flex justify-end">
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 rounded-lg bg-fd-primary text-fd-primary-foreground font-medium hover:bg-fd-primary/90 transition-colors shadow-sm"
-            >
+            <button onClick={handleSubmit} className="px-6 py-2 rounded-lg bg-fd-primary text-fd-primary-foreground font-medium hover:bg-fd-primary/90 transition-colors shadow-sm">
               Submit Answers
             </button>
           </div>
