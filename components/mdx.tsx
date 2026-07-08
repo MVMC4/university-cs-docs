@@ -31,6 +31,9 @@ import { FlashcardDeck } from './interactive/flashcard-deck';
 
 import { ExcalidrawCanvas } from './interactive/excalidraw-canvas';
 
+import { ResourceCard, ResourceGrid } from './interactive/resource-card';
+
+
 export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
@@ -73,6 +76,8 @@ export function getMDXComponents(components?: MDXComponents) {
     SubQuestion,
     FlashcardDeck,
     ExcalidrawCanvas,
+    ResourceCard, 
+    ResourceGrid,
     
     // Allow any other passed components to override
     ...components,
