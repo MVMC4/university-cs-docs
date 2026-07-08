@@ -3,10 +3,16 @@
   "pages": [
     "index",
     "time-complexity",
-    "arrays-and-arraylists",
-    "collections-sorting-searching",
-    "linked-lists-traversals",
-    "stacks-and-queues",
+    "linear-structures",
+    "sorting-and-searching",
+    "trees-and-bsts",
     "resources"
+  ],
+  "_note": "These are done for now. Move them back to 'pages' when ready to build the Excalidraw canvases for them.",
+  "_hidden_pages": [
+    "java-foundations",
+    "recursion",
+    "hash-tables",
+    "graphs"
   ]
 }
