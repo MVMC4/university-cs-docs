@@ -2,9 +2,17 @@
 
 import katex from 'katex';
 
-export const MathText = ({ text }: { text: string }) => {
+export const MathText = ({ text }: { text: any }) => {
   if (!text) return null;
+
+  // 🛡️ BULLETPROOF FIX: If text is a React node, number, or object, just render it directly.
+  // This prevents the 'a.split is not a function' crash when passing JSX to MathText.
+  if (typeof text !== 'string') {
+    return <>{text}</>;
+  }
+
   const parts = text.split(/(\$\$[\s\S]+?\$\$|\$[^\$\n]+?\$)/g);
+
   return (
     <>
       {parts.map((part, index) => {
