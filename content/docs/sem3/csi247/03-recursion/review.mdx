@@ -1,19 +1,40 @@
 ---
 title: Chapter Review
-description: Flashcards and quick quizzes to test your knowledge.
+description: Self-assessment checklist, flashcards, and quizzes for Recursion.
 ---
 
 # Chapter Review
 
 import { flashcardData } from '@/content/flashcard-data/sem3/csi247/03-recursion/flashcards';
 import { quizData as recursionQuiz } from '@/content/quiz-data/sem3/csi247/03-recursion/recursion-quiz';
+import { quizData as mechanicsQuiz } from '@/content/quiz-data/sem3/csi247/03-recursion/recursion-mechanics-quiz';
+
+## Self-Assessment Checklist
+
+<Checklist
+  title="Chapter 3  --  You Should Be Able To..."
+  rules={[
+    { type: "must", text: "Identify the base case and recursive case in any recursive function, and verify progress is made toward the base case." },
+    { type: "must", text: "Trace a recursive call stack by hand for factorial(4) and fibonacci(5), showing every frame." },
+    { type: "must", text: "Apply the Master Theorem to recurrences of the form T(n) = aT(n/b) + f(n)." },
+    { type: "must", text: "Convert a recursive solution to an iterative one using an explicit stack." },
+    { type: "must", text: "Explain the backtracking pattern: choose -> explore -> unchoose." },
+    { type: "avoid", text: "Writing recursive functions without a guaranteed-reachable base case  --  this always causes StackOverflowError." },
+    { type: "avoid", text: "Assuming greedy always gives the optimal solution  --  for coin change with arbitrary denominations, only DP guarantees it." },
+    { type: "note", text: "Memoisation converts O(2^n) naive fibonacci to O(n) by caching subproblem results." },
+  ]}
+/>
+
+---
 
 ## Flashcards
+
 <FlashcardDeck cards={flashcardData} title="Recursion Deck" />
 
 ---
 
 ## Quick Quiz
+
 <Quiz
   title="Chapter 3 Quick Check"
   questions={[
@@ -28,5 +49,7 @@ import { quizData as recursionQuiz } from '@/content/quiz-data/sem3/csi247/03-re
 
 ---
 
-## Full Chapter Assessment
+## Full Chapter Assessments
+
 <Quiz title="Recursion Assessment" questions={recursionQuiz} />
+<Quiz title="Recursion Mechanics Deep Dive" questions={mechanicsQuiz} />

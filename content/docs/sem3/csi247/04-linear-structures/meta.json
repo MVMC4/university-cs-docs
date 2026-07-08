@@ -1,1 +1,13 @@
-{ "title": "4. Linear Structures", "pages": ["linked-lists", "stacks-queues", "questions", "review", "resources"] }
+{
+  "title": "4. Linear Structures",
+  "pages": [
+    "linked-lists",
+    "linked-list-patterns",
+    "stacks-queues",
+    "stack-patterns",
+    "interactive-demo",
+    "questions",
+    "review",
+    "resources"
+  ]
+}

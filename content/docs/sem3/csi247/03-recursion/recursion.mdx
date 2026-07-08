@@ -1,746 +1,332 @@
 ---
 title: Recursion and Algorithmic Problem Solving
-description: Master recursion through visual examples, step-by-step breakdowns, and practical applications.
+description: Master recursion through call-stack visualisation, step-by-step interactive breakdowns, the Master Theorem, backtracking, and real-world applications.
 ---
-
 
 # Recursion and Algorithmic Problem Solving
 
-Recursion is when a function calls itself to solve smaller versions of the same problem. Think of it like Russian nesting dolls—each doll contains a smaller version of itself until you reach the tiniest one.
+Recursion is when a function solves a problem by calling a smaller version of itself. The key insight is that the solution structure repeats at every level — like Russian nesting dolls, each one containing a smaller copy of itself.
 
-> **Simple Explanation**: Recursion = Solving a big problem by solving smaller copies of the same problem.
+<PresetCard type="builds">
+Recursion is the foundation of **Merge Sort and Quick Sort** (Chapter 5), all **tree traversals** (Chapter 6), and **graph DFS** (Chapter 8). Mastering recursion here pays dividends across the entire course.
+</PresetCard>
+
+<PresetCard type="exam">
+**Exam patterns to expect:** (1) Write a recursive method with a correct base case. (2) Trace a call stack by hand. (3) Apply the Master Theorem to a recurrence. (4) Identify whether greedy or DP solves a given problem optimally.
+</PresetCard>
 
 ---
 
 ## 1. Understanding the Call Stack
 
-When a function calls itself, Java needs to remember where it was. It does this using a **stack** (like a stack of plates).
+When a function calls itself, Java saves the current state (local variables, return address) as a **stack frame** on the call stack. Frames are added on each call and removed on each return — exactly like a stack (LIFO).
 
-### Visual: How the Stack Works
+### Factorial — Step by Step
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/stack-plates.png" 
-  alt="Stack of plates visualization" 
-  caption="Figure 1: Like a stack of plates—add on top (push), remove from top (pop)" 
-  className="max-w-md mx-auto"
-/>
+<InteractiveStepper>
+  <StepperStep title="factorial(4) is called  --  frame pushed">
+    ```
+    Call Stack:
+    ┌─────────────────┐
+    │ factorial(4)    │  ← waiting for factorial(3)
+    └─────────────────┘
+    ```
+    n=4 is not the base case. Java saves this frame and calls `factorial(3)`.
+  </StepperStep>
+  <StepperStep title="factorial(3), factorial(2), factorial(1) stack up">
+    ```
+    Call Stack (top = most recent):
+    ┌─────────────────┐
+    │ factorial(1)    │  ← BASE CASE: returns 1
+    ├─────────────────┤
+    │ factorial(2)    │  ← waiting
+    ├─────────────────┤
+    │ factorial(3)    │  ← waiting
+    ├─────────────────┤
+    │ factorial(4)    │  ← waiting
+    └─────────────────┘
+    ```
+    `factorial(1)` hits the base case `if (n &lt;= 1) return 1`. The stack now unwinds.
+  </StepperStep>
+  <StepperStep title="Stack unwinds  --  each frame computes and returns">
+    `factorial(1)` returns **1** -> frame popped
 
-**Key Idea**: 
-- Each function call = add a plate (push)
-- Each function return = remove a plate (pop)
-- Too many calls = stack overflows (plates fall!)
+    `factorial(2)` computes 2 x 1 = **2** -> frame popped
 
-### Example: Factorial Step-by-Step
+    `factorial(3)` computes 3 x 2 = **6** -> frame popped
 
-```java
-public int factorial(int n) {
-    if (n == 1) return 1;  // Base case
-    return n * factorial(n - 1);
-}
+    `factorial(4)` computes 4 x 6 = **24** -> frame popped
 
-// factorial(4) creates this stack:
-```
+    **Final result: 24**
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/factorial-stack.png" 
-  alt="Factorial call stack visualization" 
-  caption="Figure 2: factorial(4) builds a stack of 4 frames, then unwinds" 
-  className="max-w-full h-auto"
-/>
-
-**What Happens**:
-1. `factorial(4)` waits for `factorial(3)`
-2. `factorial(3)` waits for `factorial(2)`
-3. `factorial(2)` waits for `factorial(1)`
-4. `factorial(1)` returns 1 (base case!)
-5. Stack unwinds: `2*1=2`, `3*2=6`, `4*6=24`
+    ```java
+    public int factorial(int n) {
+        if (n <= 1) return 1;           // Base case
+        return n * factorial(n - 1);    // Recursive case — makes progress
+    }
+    ```
+  </StepperStep>
+</InteractiveStepper>
 
 ### StackOverflowError
 
 ```java
-// DANGER: No base case!
+// DANGER: No base case — infinite recursion
 public void infiniteRecursion() {
-    infiniteRecursion();  // Calls itself forever
+    infiniteRecursion(); // Pushes frames forever until memory runs out
 }
 ```
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/stack-overflow.png" 
-  alt="Stack overflow visualization" 
-  caption="Figure 3: Without a base case, the stack grows until it crashes" 
-  className="max-w-full h-auto"
-/>
-
-**Why it crashes**: The stack has limited memory (~1MB). Too many function calls = out of memory.
+The JVM gives each thread ~512KB of stack space. Without a base case, frames accumulate until a `StackOverflowError` is thrown. This is not catchable in production — always verify your base case is reachable.
 
 ---
 
-## 2. The Two Rules of Recursion
+## 2. The Two Laws of Recursion
 
-Every recursive function needs **two parts**:
+Every correct recursive function must satisfy both:
 
-### Rule 1: Base Case (The Stop Button)
-
-The condition that stops the recursion.
-
-```java
-if (n == 1) return 1;  // STOP here!
-```
-
-**Without it**: Infinite loop leads to StackOverflowError
-
-### Rule 2: Recursive Case (The Progress)
-
-The part that calls itself with a **smaller** problem.
+<HighlightCard variant="danger" title="Law 1: There must be a base case">
+The base case is the condition where the function returns a direct answer without calling itself. Without it, recursion never terminates.
 
 ```java
-return n * factorial(n - 1);  // n-1 is smaller than n
+if (n <= 1) return 1; // BASE CASE — stops here
 ```
+</HighlightCard>
 
-**Without progress**: Never reaches base case leads to StackOverflowError
-
-### Good vs Bad Examples
+<HighlightCard variant="warning" title="Law 2: Every recursive call must make progress toward the base case">
+The recursive call must bring you closer to the base case. `factorial(n-1)` reduces n by 1 each time — guaranteed to reach n=1.
 
 ```java
-// GOOD: Has base case AND makes progress
-public int factorial(int n) {
-    if (n <= 1) return 1;           // Base case
-    return n * factorial(n - 1);    // Progress: n-1
-}
-
-// BAD: No base case
-public int bad1(int n) {
-    return n * bad1(n - 1);  // Never stops!
-}
-
-// BAD: No progress toward base case
-public int bad2(int n) {
-    if (n == 0) return 1;
-    return n * bad2(n);  // n doesn't change!
-}
+return n * factorial(n - 1); // n decreases → moves toward base case
 ```
+
+If the argument does not decrease (or increase toward the base case), you have infinite recursion.
+</HighlightCard>
 
 ---
 
 ## 3. Recursion vs Iteration
 
-Many problems can be solved **both ways**. Let's compare:
+<Columns>
+  <Column>
+  ### Recursive Factorial
+  ```java
+  public int factorial(int n) {
+      if (n <= 1) return 1;
+      return n * factorial(n - 1);
+  }
+  ```
+  - Elegant, mirrors mathematical definition
+  - O(n) space (call stack frames)
+  - Risk of StackOverflowError for large n
+  </Column>
+  <Column>
+  ### Iterative Factorial
+  ```java
+  public int factorial(int n) {
+      int result = 1;
+      for (int i = 2; i <= n; i++) result *= i;
+      return result;
+  }
+  ```
+  - More verbose
+  - **O(1) space** — no stack frames
+  - No overflow risk for reasonable n
+  </Column>
+</Columns>
 
-### Example: Factorial
+<PresetCard type="trap">
+**Exam trap:** "Recursion is always slower than iteration." FALSE. Tail-recursive calls can be optimised by some compilers/JVMs. More importantly, some problems (tree traversal, backtracking, divide-and-conquer) are dramatically cleaner with recursion, and the overhead difference is negligible for typical input sizes.
+</PresetCard>
 
-**Recursive Approach**:
+---
+
+## 4. Classic Recursive Examples
+
+### Fibonacci Numbers
+
 ```java
-public int factorial(int n) {
-    if (n <= 1) return 1;
-    return n * factorial(n - 1);
+// Naive — O(2^n): recalculates the same subproblems exponentially
+public int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n - 1) + fib(n - 2);
 }
-```
 
-**Iterative Approach**:
-```java
-public int factorial(int n) {
-    int result = 1;
-    for (int i = 2; i <= n; i++) {
-        result *= i;
-    }
+// Memoised — O(n): cache results to avoid repeated computation
+private Map<Integer, Integer> memo = new HashMap<>();
+public int fibMemo(int n) {
+    if (n <= 1) return n;
+    if (memo.containsKey(n)) return memo.get(n); // Cache hit
+    int result = fibMemo(n - 1) + fibMemo(n - 2);
+    memo.put(n, result);                          // Cache miss — store
     return result;
 }
 ```
 
-### Comparison Table
+### Binary Search (Recursive)
 
-| Aspect | Recursion | Iteration |
-|--------|-----------|-----------|
-| **Code** | Shorter, cleaner | Longer, more verbose |
-| **Memory** | Uses stack `O(n)` | Uses variables `O(1)` |
-| **Speed** | Slower (function calls) | Faster |
-| **Readability** | Easier for recursive problems | Easier for simple loops |
-| **Risk** | StackOverflow if too deep | No stack risk |
-
-### When to Use Which?
-
-**Use Recursion When:**
-- Problem is naturally recursive (trees, graphs, nested data)
-- Code clarity is more important than speed
-- Depth is limited (won't cause stack overflow)
-
-**Use Iteration When:**
-- Performance matters
-- Simple counting/looping
-- Depth could be very large
-
----
-
-## 4. Classic Examples
-
-### Example 1: Fibonacci Numbers
-
-Fibonacci: Each number is the sum of the two before it.
-
-`0, 1, 1, 2, 3, 5, 8, 13, 21...`
-
-**Naive Recursive (SLOW!)**:
 ```java
-public int fib(int n) {
-    if (n <= 1) return n;
-    return fib(n-1) + fib(n-2);
+public int binarySearch(int[] arr, int target, int low, int high) {
+    if (low > high) return -1; // Base case: not found
+    int mid = low + (high - low) / 2;
+    if (arr[mid] == target) return mid;
+    if (arr[mid] > target) return binarySearch(arr, target, low, mid - 1);
+    return binarySearch(arr, target, mid + 1, high);
 }
 ```
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/fib-tree.png" 
-  alt="Fibonacci recursion tree" 
-  caption="Figure 4: fib(5) recalculates fib(3) twice and fib(2) three times—very inefficient!" 
-  className="max-w-full h-auto"
-/>
-
-**Problem**: Recalculates the same values over and over!
-- `fib(5)` needs `fib(4)` and `fib(3)`
-- `fib(4)` needs `fib(3)` and `fib(2)` — `fib(3)` again!
-
-**Better: Memoization (Caching)**:
-```java
-int[] memo = new int[100];  // Cache
-
-public int fib(int n) {
-    if (n <= 1) return n;
-    
-    if (memo[n] != 0) return memo[n];  // Use cached value
-    
-    memo[n] = fib(n-1) + fib(n-2);  // Calculate and cache
-    return memo[n];
-}
-```
-
-**Even Better: Iterative**:
-```java
-public int fib(int n) {
-    if (n <= 1) return n;
-    
-    int prev2 = 0;  // fib(0)
-    int prev1 = 1;  // fib(1)
-    
-    for (int i = 2; i <= n; i++) {
-        int current = prev1 + prev2;
-        prev2 = prev1;
-        prev1 = current;
-    }
-    
-    return prev1;
-}
-```
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/fib-comparison.png" 
-  alt="Fibonacci approaches comparison" 
-  caption="Figure 5: Three approaches—naive (exponential), memoized (linear), iterative (linear + O(1) space)" 
-  className="max-w-full h-auto"
-/>
-
-### Example 2: Binary Search
-
-Search a **sorted** array by repeatedly dividing in half.
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/binary-search.png" 
-  alt="Binary search visualization" 
-  caption="Figure 6: Each step cuts the search space in half—find target in O(log n) time" 
-  className="max-w-full h-auto"
-/>
-
-**Recursive**:
-```java
-public int binarySearch(int[] arr, int left, int right, int target) {
-    if (left > right) return -1;  // Not found
-    
-    int mid = left + (right - left) / 2;
-    
-    if (arr[mid] == target) return mid;           // Found!
-    if (arr[mid] > target) {
-        return binarySearch(arr, left, mid-1, target);  // Search left
-    }
-    return binarySearch(arr, mid+1, right, target);     // Search right
-}
-```
-
-**Iterative** (preferred):
-```java
-public int binarySearch(int[] arr, int target) {
-    int left = 0, right = arr.length - 1;
-    
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        
-        if (arr[mid] == target) return mid;
-        if (arr[mid] > target) right = mid - 1;
-        else left = mid + 1;
-    }
-    
-    return -1;
-}
-```
-
-### Example 3: Merge Sort
-
-Sort by dividing array in half, sorting each half, then merging.
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/merge-sort.png" 
-  alt="Merge sort visualization" 
-  caption="Figure 7: Divide until single elements, then merge back in sorted order" 
-  className="max-w-full h-auto"
-/>
+### Merge Sort (Preview — Chapter 5)
 
 ```java
 public void mergeSort(int[] arr, int left, int right) {
-    if (left >= right) return;  // Base case: 1 element
-    
+    if (left >= right) return; // Base case: single element
     int mid = left + (right - left) / 2;
-    
     mergeSort(arr, left, mid);       // Sort left half
-    mergeSort(arr, mid+1, right);    // Sort right half
+    mergeSort(arr, mid + 1, right);  // Sort right half
     merge(arr, left, mid, right);    // Merge sorted halves
 }
 ```
 
-**Time**: `O(n log n)`  
-**Space**: `O(n)` for temporary arrays
-
 ---
 
-## 5. Analyzing Recursive Algorithms
+## 5. Analysing Recursive Algorithms
 
-Understanding how fast recursive algorithms run is crucial. Here are four methods:
+### Method 1: The Master Theorem
 
-### Method 1: The Recursion Tree Method (Visual)
+For recurrences of the form **T(n) = aT(n/b) + f(n)**:
 
-Draw the recursion as a tree and add up the work at each level.
+<CaseAnalysis title="The Master Theorem  --  Three Cases">
+  <Case
+    condition="Case 1: f(n) = O(n^(log_b(a) - e)) for some e > 0"
+    explanation="The recursive work dominates. The root-to-leaf cost grows geometrically."
+  >
+    Example: `T(n) = 8T(n/2) + n²`
 
-**Example**: Merge Sort `T(n) = 2T(n/2) + n`
+    `log₂(8) = 3`. Is `n²` = O(n^(3-e))? Yes (e=1). -> **Case 1**: T(n) = **Theta(n^3)**
+  </Case>
+  <Case
+    condition="Case 2: f(n) = Theta(n^(log_b(a)))"
+    explanation="Recursive work and non-recursive work are equal at each level. Cost grows by a log factor."
+  >
+    Example: `T(n) = 2T(n/2) + n`
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/recursion-tree-merge.png" 
-  alt="Merge sort recursion tree" 
-  caption="Figure 8: Each level does n work, and there are log n levels, so total = n log n" 
-  className="max-w-full h-auto"
-/>
+    `log₂(2) = 1`. Is `n` = Theta(n^1)? Yes. -> **Case 2**: T(n) = **Theta(n log n)**
 
-**How to analyze**:
-1. **Level 0**: 1 problem of size n, work = n
-2. **Level 1**: 2 problems of size n/2, work = n/2 + n/2 = n
-3. **Level 2**: 4 problems of size n/4, work = n/4 * 4 = n
-4. **Continue**: Each level does n work
-5. **How many levels?**: Keep dividing by 2 until we reach 1: `log₂(n)` levels
-6. **Total work**: `n * log₂(n) = O(n log n)`
+    This is Merge Sort's recurrence.
+  </Case>
+  <Case
+    condition="Case 3: f(n) = Omega(n^(log_b(a) + e)) for some e > 0"
+    explanation="Non-recursive work dominates. The top-level cost eclipses the recursive work."
+  >
+    Example: `T(n) = 2T(n/2) + n²`
 
-**Example**: Binary Search `T(n) = T(n/2) + 1`
+    `log₂(2) = 1`. Is `n²` = Omega(n^(1+e))? Yes (e=1). -> **Case 3**: T(n) = **Theta(n^2)**
+  </Case>
+</CaseAnalysis>
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/recursion-tree-binary.png" 
-  alt="Binary search recursion tree" 
-  caption="Figure 9: Each level does constant work, log n levels, total = O(log n)" 
-  className="max-w-full h-auto"
-/>
+### Method 2: The Recursion Tree
 
-1. **Each level**: Does 1 unit of work (compare mid element)
-2. **Levels**: `log₂(n)` (keep dividing by 2)
-3. **Total**: `1 * log₂(n) = O(log n)`
-
-### Method 2: The Master Theorem (Formula)
-
-The Master Theorem gives you a quick formula for divide-and-conquer recurrences:
-
-**Formula**: `T(n) = a * T(n/b) + f(n)`
-
-Where:
-- `a` = number of subproblems
-- `b` = factor to divide input size (each subproblem is size n/b)
-- `f(n)` = work to divide and combine (outside the recursive calls)
-
-**The Three Cases**:
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/master-theorem.png" 
-  alt="Master Theorem visualization" 
-  caption="Figure 10: Three cases based on comparing f(n) with n^(log_b(a))" 
-  className="max-w-full h-auto"
-/>
-
-**Case 1: Most work at leaves**
-- If `f(n)` is **small** compared to `n^(log_b(a))`
-- Specifically: `f(n) = O(n^(log_b(a) - ε))` for some ε > 0
-- Then: `T(n) = Θ(n^(log_b(a)))`
-- **Meaning**: The recursive calls dominate
-
-**Example**: `T(n) = 8T(n/2) + n²`
-- a = 8, b = 2, f(n) = n²
-- `n^(log_b(a)) = n^(log₂(8)) = n³`
-- n² is smaller than n³, so Case 1 applies
-- **Answer**: `T(n) = Θ(n³)`
-
-**Case 2: Work evenly distributed**
-- If `f(n)` is **about the same** as `n^(log_b(a))`
-- Specifically: `f(n) = Θ(n^(log_b(a)) * log^k(n))` for k >= 0
-- Then: `T(n) = Θ(n^(log_b(a)) * log^(k+1)(n))`
-- **Meaning**: Work is balanced across all levels
-
-**Example**: `T(n) = 2T(n/2) + n` (Merge Sort)
-- a = 2, b = 2, f(n) = n
-- `n^(log_b(a)) = n^(log₂(2)) = n¹ = n`
-- f(n) = n is the same as n, so Case 2 applies (k=0)
-- **Answer**: `T(n) = Θ(n log n)`
-
-**Example**: `T(n) = 2T(n/2) + n log n`
-- a = 2, b = 2, f(n) = n log n
-- `n^(log_b(a)) = n`
-- f(n) = n log n = `Θ(n * log¹(n))`, so k=1
-- **Answer**: `T(n) = Θ(n log²(n))`
-
-**Case 3: Most work at root**
-- If `f(n)` is **large** compared to `n^(log_b(a))`
-- Specifically: `f(n) = Ω(n^(log_b(a) + ε))` for some ε > 0
-- AND the regularity condition: `a * f(n/b) <= c * f(n)` for some c < 1
-- Then: `T(n) = Θ(f(n))`
-- **Meaning**: The divide/combine work dominates
-
-**Example**: `T(n) = 2T(n/2) + n²`
-- a = 2, b = 2, f(n) = n²
-- `n^(log_b(a)) = n^(log₂(2)) = n`
-- n² is larger than n, so Case 3 might apply
-- Check regularity: `2 * (n/2)² = 2 * n²/4 = n²/2 <= c * n²` for c = 1/2 < 1 ✓
-- **Answer**: `T(n) = Θ(n²)`
-
-### Quick Reference Table
-
-| Recurrence | a | b | `n^(log_b(a))` | f(n) | Case | Result |
-|------------|---|---|--------------|------|------|--------|
-| `T(n) = T(n/2) + 1` | 1 | 2 | `n⁰ = 1` | 1 | Case 2 | `O(log n)` |
-| `T(n) = 2T(n/2) + n` | 2 | 2 | n | n | Case 2 | `O(n log n)` |
-| `T(n) = 8T(n/2) + n²` | 8 | 2 | n³ | n² | Case 1 | `O(n³)` |
-| `T(n) = 2T(n/2) + n²` | 2 | 2 | n | n² | Case 3 | `O(n²)` |
-| `T(n) = 3T(n/4) + n` | 3 | 4 | n^0.79 | n | Case 3 | `O(n)` |
-
-### Method 3: Substitution Method (Proof by Induction)
-
-Guess the answer, then prove it's correct using mathematical induction.
-
-**Example**: Prove `T(n) = 2T(n/2) + n` is `O(n log n)`
-
-**Step 1: Guess**
-Guess: `T(n) <= c * n log n` for some constant c
-
-**Step 2: Base Case**
-For small n (like n=1), check if it holds:
-- `T(1) = 1` (usually)
-- `c * 1 * log(1) = c * 1 * 0 = 0`
-- Need `T(1) <= 0`, which might not hold, so adjust: `T(n) <= c * n log n + d`
-
-**Step 3: Inductive Step**
-Assume it's true for smaller values: `T(n/2) <= c * (n/2) log(n/2)`
-
-Now prove for T(n):
-```
-T(n) = 2T(n/2) + n
-     <= 2[c * (n/2) log(n/2)] + n           (by induction hypothesis)
-     = c * n log(n/2) + n
-     = c * n (log n - log 2) + n
-     = c * n log n - c * n + n
-     = c * n log n - n(c - 1)
-```
-
-For this to be `<= c * n log n`, we need:
-- `n(c - 1) >= 0`
-- `c >= 1`
-
-So if we choose `c >= 1`, the proof works!
-
-**Conclusion**: `T(n) = O(n log n)` ✓
-
-### Method 4: Iteration Method (Expand the Recurrence)
-
-Repeatedly substitute the recurrence into itself until you see a pattern.
-
-**Example**: `T(n) = 2T(n/2) + n`
+Draw the recursion tree. At each level, count the total work. Sum across all levels.
 
 ```
 T(n) = 2T(n/2) + n
-     = 2[2T(n/4) + n/2] + n
-     = 4T(n/4) + n + n
-     = 4[2T(n/8) + n/4] + 2n
-     = 8T(n/8) + n + n + n
-     = 8T(n/8) + 3n
-     ...
-     = 2^k * T(n/2^k) + k*n
-```
 
-When does it stop? When `n/2^k = 1`, so `k = log₂(n)`
+Level 0: n               (1 call × n work)
+Level 1: n/2 + n/2 = n  (2 calls × n/2 work)
+Level 2: n/4×4 = n      (4 calls × n/4 work)
+...
+Level log n: base cases
 
-```
-T(n) = 2^(log n) * T(1) + n log n
-     = n * 1 + n log n
-     = n + n log n
-     = O(n log n)
+Total levels: log n. Work per level: n. Total: n log n.
 ```
 
 ---
 
 ## 6. Backtracking: Try, Explore, Undo
 
-Backtracking is recursion for **trying different options** and undoing bad choices.
+Backtracking is a systematic way to enumerate all possibilities by building a solution incrementally and abandoning ("pruning") paths that cannot lead to a valid solution.
 
-**Pattern**:
-1. **Choose** an option
-2. **Explore** recursively
-3. **Un-choose** (backtrack) if it doesn't work
-
-### Example: N-Queens Problem
-
-Place N queens on a chessboard so none attack each other.
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/nqueens.png" 
-  alt="N-Queens solution" 
-  caption="Figure 11: 4-Queens solution—no two queens share a row, column, or diagonal" 
-  className="max-w-md mx-auto"
-/>
-
+**Pattern:**
 ```java
-public void solveNQueens(int n) {
-    char[][] board = new char[n][n];
-    backtrack(board, 0);
-}
-
-private void backtrack(char[][] board, int row) {
-    // Base case: All rows filled
-    if (row == board.length) {
-        printBoard(board);
+void backtrack(State state) {
+    if (isSolution(state)) {
+        recordSolution(state);
         return;
     }
-    
-    // Try each column
-    for (int col = 0; col < board.length; col++) {
-        if (isValid(board, row, col)) {
-            // CHOOSE: Place queen
-            board[row][col] = 'Q';
-            
-            // EXPLORE: Next row
-            backtrack(board, row + 1);
-            
-            // UN-CHOOSE: Remove queen (backtrack)
-            board[row][col] = '.';
+    for (Choice choice : getChoices(state)) {
+        makeChoice(state, choice);    // Choose
+        backtrack(state);             // Explore
+        undoChoice(state, choice);    // Un-choose (backtrack)
+    }
+}
+```
+
+### N-Queens Problem
+
+Place N queens on an NxN chessboard so no two queens attack each other.
+
+```java
+public void solveNQueens(int row, boolean[] cols, boolean[] diag1, boolean[] diag2, List<Integer> placement) {
+    if (row == n) {
+        solutions.add(new ArrayList<>(placement)); return;
+    }
+    for (int col = 0; col < n; col++) {
+        if (!cols[col] && !diag1[row - col + n] && !diag2[row + col]) {
+            // Choose
+            cols[col] = diag1[row - col + n] = diag2[row + col] = true;
+            placement.add(col);
+            // Explore
+            solveNQueens(row + 1, cols, diag1, diag2, placement);
+            // Un-choose
+            cols[col] = diag1[row - col + n] = diag2[row + col] = false;
+            placement.remove(placement.size() - 1);
         }
     }
 }
 ```
 
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/backtracking-tree.png" 
-  alt="Backtracking decision tree" 
-  caption="Figure 12: Try a placement, if it fails, backtrack and try the next option" 
-  className="max-w-full h-auto"
-/>
+---
 
-### Example: Generate Permutations
+## 7. Common Complexities
 
-Generate all arrangements of a string.
-
-```java
-public void permute(String str, String prefix) {
-    // Base case: No characters left
-    if (str.length() == 0) {
-        System.out.println(prefix);
-        return;
-    }
-    
-    // Try each character as next
-    for (int i = 0; i < str.length(); i++) {
-        String remaining = str.substring(0, i) + str.substring(i + 1);
-        permute(remaining, prefix + str.charAt(i));
-    }
-}
-
-// permute("ABC", "") prints:
-// ABC, ACB, BAC, BCA, CAB, CBA
-```
+| Recurrence | Pattern | Complexity |
+|---|---|---|
+| T(n) = T(n-1) + O(1) | Linear recursion (factorial) | O(n) |
+| T(n) = 2T(n-1) + O(1) | Doubling (naive Fibonacci) | O(2^n) |
+| T(n) = T(n/2) + O(1) | Half-input (binary search) | O(log n) |
+| T(n) = 2T(n/2) + O(n) | Split-and-merge (Merge Sort) | O(n log n) |
+| T(n) = T(n-1) + O(n) | Selection Sort recursion | O(n^2) |
 
 ---
 
-## 7. Real-World Applications
+## 8. Common Mistakes
 
-Recursion isn't just theory—it's used everywhere!
-
-### Application 1: File System Traversal
-
-Finding all files in a folder and its subfolders.
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/file-tree.png" 
-  alt="File system tree" 
-  caption="Figure 13: Folders contain files and subfolders—perfect for recursion" 
-  className="max-w-md mx-auto"
-/>
+### Mistake 1: Missing or Unreachable Base Case
 
 ```java
-public void findFiles(File folder, String extension) {
-    for (File file : folder.listFiles()) {
-        if (file.isDirectory()) {
-            findFiles(file, extension);  // Recurse into subfolder
-        } else if (file.getName().endsWith(extension)) {
-            System.out.println(file);
-        }
-    }
-}
-```
-
-### Application 2: JSON Parsing
-
-Parsing nested JSON objects.
-
-```json
-{
-  "user": {
-    "name": "Alice",
-    "address": {
-      "city": "Boston",
-      "zip": "02101"
-    }
-  }
-}
-```
-
-Each nested object requires recursive parsing.
-
-### Application 3: Tree Traversal
-
-Visiting all nodes in a tree structure.
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/tree-traversal.png" 
-  alt="Tree traversal" 
-  caption="Figure 14: Visit root, then recursively visit left and right subtrees" 
-  className="max-w-md mx-auto"
-/>
-
-```java
-public void traverseTree(Node node) {
-    if (node == null) return;
-    
-    System.out.println(node.value);      // Visit node
-    traverseTree(node.left);             // Recurse left
-    traverseTree(node.right);            // Recurse right
-}
-```
-
----
-
-## 8. Common Complexities
-
-<SafeImage 
-  src="/images/sem3/csi247/03-recursion/complexity-graph.png" 
-  alt="Complexity comparison graph" 
-  caption="Figure 15: How different complexities scale—avoid exponential time!" 
-  className="max-w-full h-auto"
-/>
-
-| Complexity | Name | Example |
-|------------|------|---------|
-| **O(1)** | Constant | Array access |
-| **O(log n)** | Logarithmic | Binary search |
-| **O(n)** | Linear | Simple loop |
-| **O(n log n)** | Linearithmic | Merge sort |
-| **O(n²)** | Quadratic | Nested loops |
-| **O(2ⁿ)** | Exponential | Naive Fibonacci |
-
----
-
-## 9. Common Mistakes and How to Fix Them
-
-### Mistake 1: Forgetting Base Case
-
-```java
-// WRONG
-public int factorial(int n) {
-    return n * factorial(n - 1);  // Never stops!
+// BUG: n can be negative — base case never reached!
+public int countdown(int n) {
+    if (n == 0) return 0;
+    return countdown(n - 2); // Skips 0 for odd n
 }
 
-// CORRECT
-public int factorial(int n) {
-    if (n <= 1) return 1;  // Base case!
-    return n * factorial(n - 1);
+// FIX: Use <= instead of ==
+public int countdown(int n) {
+    if (n <= 0) return 0;
+    return countdown(n - 2);
 }
 ```
 
 ### Mistake 2: Not Making Progress
 
 ```java
-// WRONG
-public int bad(int n) {
-    if (n == 0) return 1;
-    return n * bad(n);  // n doesn't change!
-}
-
-// CORRECT
-public int good(int n) {
-    if (n == 0) return 1;
-    return n * good(n - 1);  // n decreases
+// BUG: n never changes!
+public int broken(int n) {
+    if (n == 0) return 0;
+    return broken(n); // Same argument → infinite recursion
 }
 ```
 
-### Mistake 3: Too Much Memory
+### Mistake 3: Excessive Stack Depth for Large Input
 
-```java
-// SLOW: Creates new array each call
-public void process(int[] arr) {
-    int[] smaller = Arrays.copyOfRange(arr, 1, arr.length);
-    process(smaller);  // O(n²) space!
-}
-
-// FAST: Use indices
-public void process(int[] arr, int start) {
-    process(arr, start + 1);  // O(n) space
-}
-```
-
----
-
-## 10. Practice Problems
-
-### Easy
-1. **Sum of Array**: Add all elements recursively
-2. **Reverse String**: Reverse a string using recursion
-3. **Power**: Calculate `x^n` recursively
-4. **GCD**: Find greatest common divisor
-
-### Medium
-1. **Binary Search**: Implement recursively
-2. **Merge Sort**: Sort an array
-3. **Tower of Hanoi**: Solve the puzzle
-4. **Subsets**: Generate all subsets of a set
-
-### Hard
-1. **N-Queens**: Place N queens safely
-2. **Sudoku Solver**: Solve Sudoku puzzles
-3. **Permutations**: Generate all permutations
-4. **Edit Distance**: Minimum operations to convert strings
-
----
-
-## Summary
-
-- **Base Case**: Always have a stopping condition  
-- **Progress**: Each call must move toward the base case  
-- **Recursion vs Iteration**: Recursion is cleaner, iteration is faster  
-- **Backtracking**: Choose, Explore, Un-choose  
-- **Memory**: Recursion uses stack space `O(n)`  
-- **Analysis Methods**: Recursion tree (visual), Master theorem (formula), Substitution (proof), Iteration (expansion)  
-- **Applications**: File systems, trees, JSON parsing, games  
-
-**Key Takeaway**: Recursion is a tool. Use it when it makes code clearer, but watch out for stack overflow!
-
----
-
-
-
----
-
-
+For n &gt; ~5000, recursive solutions risk StackOverflowError in Java's default configuration. Convert to iterative with an explicit stack, or use tail recursion (if your JVM supports it).

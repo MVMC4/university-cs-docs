@@ -1,70 +1,143 @@
 ---
-title: Interactive Components Demo
-description: Showcasing the new ExamQuestion and FlashcardDeck components.
+title: Pointer Mechanics — Interactive Walkthrough
+description: Step-by-step visual walkthroughs of linked list pointer manipulation and stack/queue operations.
 ---
 
-# Interactive Components Demo
+# Pointer Mechanics — Interactive Walkthrough
 
-This page demonstrates the new components designed for viewing exam questions and browsing flashcards.
-
-## 1. Exam Question Viewer
-
-This component allows you to display complex, multi-part university exam questions. Students can read the prompt and click to reveal the solution and potential variations.
-
-<ExamQuestion title="Question 3: Circular Queue Implementation [15 Marks]">
-  <SubQuestion 
-    part="a" 
-    prompt={<>Write the <code>enqueue(PrintJob job)</code> and <code>dequeue()</code> methods. You must use the modulo operator <code>%</code> to handle the wrap-around of the <code>front</code> and <code>rear</code> pointers. [6]</>}
-    solution={<> 
-      <p>Here is the implementation using the modulo operator:</p>
-      <pre><code className="language-java">{`public void enqueue(PrintJob job) {
-    if (isFull()) throw new IllegalStateException("Queue is full");
-    array[rear] = job;
-    rear = (rear + 1) % capacity;
-    size++;
-}`}</code></pre>
-    </>}
-    variations={<>
-      <p><strong>Variation:</strong> What if the queue was implemented using a singly linked list instead of an array? Would you still need the modulo operator? (Answer: No, linked lists naturally handle dynamic sizing and do not require circular index math unless explicitly making a circular linked list).</p>
-    </>}
-  />
-  <SubQuestion 
-    part="b" 
-    prompt={<>Write a method <code>isFull()</code>. Explain why a circular array of size N can only hold N-1 elements if you rely solely on <code>front == rear</code> to check if it's empty, and how you resolve this ambiguity. [5]</>}
-    solution={<>
-      <p>If <code>front == rear</code> means empty, then when the array is completely full, <code>rear</code> will wrap around and equal <code>front</code> again. To resolve this, we either:</p>
-      <ol>
-        <li>Keep a <code>size</code> counter variable.</li>
-        <li>Leave one slot permanently empty (capacity becomes N-1).</li>
-      </ol>
-    </>}
-  />
-</ExamQuestion>
+The most common source of bugs in linked list code is incorrect pointer sequencing. These walkthroughs show the exact order of operations required for safe pointer manipulation.
 
 ---
 
-## 2. Flashcard Deck
+## Linked List: Insert in the Middle
 
-This component turns multiple individual flashcards into a navigable carousel. Use the buttons to flip through the deck.
+We want to insert a new node with value **42** between nodes **A** and **C** in the list `A → C → D`.
 
-<FlashcardDeck>
-  <Flashcard 
-    front="What is the time complexity of inserting into a Binary Heap?" 
-    back={<p>O(log N) because the element must bubble up through the height of the tree.</p>} 
-  />
-  <Flashcard 
-    front="What is the main advantage of a Trie over a Hash Table for string operations?" 
-    back={<p>Tries allow for efficient prefix searching (autocompletion) and ordered traversal, which Hash Tables cannot do easily.</p>} 
-  />
-  <Flashcard 
-    front="State the Master Theorem for recurrences of the form T(n) = aT(n/b) + f(n)." 
-    back={<> 
-      <p>It compares f(n) with n^(log_b(a)):</p>
-      <ol>
-        <li>If f(n) = O(n^(log_b(a) - ε)), then T(n) = Θ(n^(log_b(a))).</li>
-        <li>If f(n) = Θ(n^(log_b(a))), then T(n) = Θ(n^(log_b(a)) log n).</li>
-        <li>If f(n) = Ω(n^(log_b(a) + ε)), then T(n) = Θ(f(n)).</li>
-      </ol>
-    </>}
-  />
-</FlashcardDeck>
+<InteractiveStepper>
+  <StepperStep title="Step 1: Traverse to the predecessor node (A)">
+    Start at `head`. Walk the list until you reach the node **before** the insertion point.
+
+    ```java
+    Node curr = head;
+    while (curr != null && curr.data != targetPrev) {
+        curr = curr.next;
+    }
+    // curr now points to node A
+    ```
+
+    **State:** `curr → A`, `A.next → C`
+  </StepperStep>
+  <StepperStep title="Step 2: Create the new node">
+    ```java
+    Node newNode = new Node(42);
+    ```
+
+    **State:** `newNode → [42 | null]`, `curr → A`, `A.next → C`
+  </StepperStep>
+  <StepperStep title="Step 3: Point new node to the successor FIRST">
+    This step MUST happen before step 4. If you disconnect A->C before saving the reference to C, you lose the rest of the list.
+
+    ```java
+    newNode.next = curr.next; // newNode → C
+    ```
+
+    **State:** `newNode.next → C`, `A.next → C` (still unchanged)
+  </StepperStep>
+  <StepperStep title="Step 4: Point predecessor to new node">
+    Now it is safe to update A's pointer, because newNode already holds the reference to C.
+
+    ```java
+    curr.next = newNode; // A → newNode
+    ```
+
+    **Final state:** `A → [42] → C → D` ✓
+  </StepperStep>
+</InteractiveStepper>
+
+<PresetCard type="trap">
+**The #1 pointer bug:** Updating `curr.next = newNode` BEFORE saving `newNode.next = curr.next`. Once `curr.next` is overwritten, the reference to C is gone and the rest of the list is unreachable (memory leak).
+</PresetCard>
+
+---
+
+## Linked List: Delete a Middle Node
+
+Delete node **C** from the list `A → C → D`.
+
+<InteractiveStepper>
+  <StepperStep title="Step 1: Traverse to the predecessor of the node to delete">
+    ```java
+    Node curr = head;
+    while (curr.next != null && curr.next.data != targetVal) {
+        curr = curr.next;
+    }
+    // curr → A, curr.next → C (the node to delete)
+    ```
+  </StepperStep>
+  <StepperStep title="Step 2: Save reference to the node being deleted">
+    ```java
+    Node toDelete = curr.next; // toDelete → C
+    ```
+    Optional in Java (GC handles memory), but good practice and required in C/C++.
+  </StepperStep>
+  <StepperStep title="Step 3: Bypass the deleted node">
+    ```java
+    curr.next = curr.next.next; // A.next → D (skip C)
+    ```
+
+    **Final state:** `A → D` ✓  Node C is now unreferenced and will be garbage-collected.
+  </StepperStep>
+</InteractiveStepper>
+
+---
+
+## Stack: Balanced Parentheses Algorithm
+
+Given a string of brackets, determine if they are balanced.
+
+<InteractiveStepper>
+  <StepperStep title="Setup: Use a stack for opening brackets">
+    ```java
+    Deque<Character> stack = new ArrayDeque<>();
+    String input = "{[()]}";
+    ```
+    Rule: Push every opening bracket. On closing bracket, pop and check it matches.
+  </StepperStep>
+  <StepperStep title="Process: '{' -> push, '[' -> push, '(' -> push">
+    Input: `{ [ ( ) ] }`
+
+    After `{`: stack = `[{]`
+
+    After `[`: stack = `[{, []`
+
+    After `(`: stack = `[{, [, (]`
+  </StepperStep>
+  <StepperStep title="Process: ')' -> pop '('  --  match! ']' -> pop '['  --  match!">
+    After `)`: pop `(`, compare -> `(` matches `)` ✓ stack = `[{, []`
+
+    After `]`: pop `[`, compare -> `[` matches `]` ✓ stack = `[{]`
+  </StepperStep>
+  <StepperStep title="Process: '}' -> pop '{'  --  match! Stack is empty  --  BALANCED">
+    After `}`: pop `{`, compare -> `{` matches `}` ✓ stack = `[]`
+
+    Stack is empty -> **return true** (balanced).
+
+    ```java
+    public boolean isBalanced(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) return false; // Closing bracket with nothing to match
+                char top = stack.pop();
+                if ((c == ')' && top != '(') ||
+                    (c == ']' && top != '[') ||
+                    (c == '}' && top != '{')) return false;
+            }
+        }
+        return stack.isEmpty(); // True only if all brackets matched
+    }
+    ```
+  </StepperStep>
+</InteractiveStepper>
