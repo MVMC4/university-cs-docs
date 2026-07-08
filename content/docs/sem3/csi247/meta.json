@@ -2,14 +2,14 @@
   "title": "CSI247: Data Structures",
   "pages": [
     "index",
-    "01-java-foundations",
-    "02-algorithm-analysis",
-    "03-recursion",
-    "04-linear-structures",
-    "05-sorting-searching",
-    "06-trees",
-    "07-hash-tables",
-    "08-graphs",
+    "java-foundations",
+    "algorithm-analysis",
+    "recursion",
+    "linear-structures",
+    "sorting-searching",
+    "trees",
+    "hash-tables",
+    "graphs",
     "resources",
     "legacy-files"
   ]

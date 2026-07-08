@@ -29,6 +29,8 @@ import { Steps as FumaSteps, Step as FumaStep } from 'fumadocs-ui/components/ste
 import { ExamQuestion, SubQuestion } from './interactive/exam-question';
 import { FlashcardDeck } from './interactive/flashcard-deck';
 
+import { ExcalidrawCanvas } from './interactive/excalidraw-canvas';
+
 export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
@@ -70,6 +72,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ExamQuestion,
     SubQuestion,
     FlashcardDeck,
+    ExcalidrawCanvas,
     
     // Allow any other passed components to override
     ...components,
