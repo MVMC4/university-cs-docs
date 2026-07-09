@@ -3,9 +3,9 @@
   "pages": [
     "index",
     "time-complexity",
+    "sorting-and-searching",
     "linked-lists-traversals",
     "stacks-and-queues",
-    "sorting-and-searching",
     "trees-and-bsts",
     "resources"
   ],
