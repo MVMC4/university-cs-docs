@@ -1,92 +1,17 @@
 export const quizData = [
-  {
-    question: "Worst-case height of an unbalanced Binary Search Tree?",
-    options: ["$O(1)$", "$O(\\log n)$", "$O(n)$", "$O(n \\log n)$"],
-    correctIndex: 2,
-    explanation: "It degrades into a linked list if inserted in sorted order."
-  },
-  {
-    question: "The balance factor of a node in an AVL tree must be?",
-    options: ["0 or 1", "-1, 0, or 1", "Any integer", "Strictly positive"],
-    correctIndex: 1,
-    explanation: "Height(left) - Height(right) must be within [-1, 1]."
-  },
-  {
-    question: "Which rotation fixes a Left-Right imbalance in an AVL tree?",
-    options: ["Right rotation on root", "Left rotation on root", "Left rotation on left child, then Right on root", "Right rotation on right child, then Left on root"],
-    correctIndex: 2,
-    explanation: "A double rotation is required for zig-zag imbalances."
-  },
-  {
-    question: "Time complexity of searching in a Trie?",
-    options: ["$O(n)$", "$O(\\log n)$", "$O(L)$ where L is key length", "$O(n \\log n)$"],
-    correctIndex: 2,
-    explanation: "It traverses one node per character in the search string."
-  },
-  {
-    question: "Space complexity of Morris Traversal?",
-    options: ["$O(1)$", "$O(\\log n)$", "$O(n)$", "$O(h)$"],
-    correctIndex: 0,
-    explanation: "It uses temporary 'threads' (pointers) instead of a stack or recursion."
-  },
-  {
-    question: "In-order traversal of a valid BST yields?",
-    options: ["Reverse sorted order", "Sorted ascending order", "Level-order", "Random order"],
-    correctIndex: 1,
-    explanation: "Visiting Left -> Root -> Right naturally processes smaller values first."
-  },
-  {
-    question: "Optimal time complexity to find LCA in a BST?",
-    options: ["$O(n)$", "$O(\\log n)$ average / $O(h)$", "$O(n \\log n)$", "$O(1)$"],
-    correctIndex: 1,
-    explanation: "You traverse down the tree, taking $O(h)$ time based on height."
-  },
-  {
-    question: "Huffman coding builds its tree based on?",
-    options: ["Alphabetical order", "Character frequency", "Random assignment", "String length"],
-    correctIndex: 1,
-    explanation: "Frequent characters are placed closer to the root for shorter codes."
-  },
-  {
-    question: "A 'Full' Binary Tree is defined as?",
-    options: ["Every level is completely filled", "Every node has exactly 0 or 2 children", "All leaves are at the same depth", "It contains no null nodes"],
-    correctIndex: 1,
-    explanation: "No node can have exactly 1 child."
-  },
-  {
-    question: "A 'Complete' Binary Tree is defined as?",
-    options: ["Every node has 0 or 2 children", "All levels are full except possibly the last, which is filled left-to-right", "It is perfectly balanced", "It contains no null nodes"],
-    correctIndex: 1,
-    explanation: "This structure is ideal for array-based heap implementations."
-  },
-  {
-    question: "Pre-order traversal visits nodes in which order?",
-    options: ["Left, Root, Right", "Root, Left, Right", "Left, Right, Root", "Level by level"],
-    correctIndex: 1,
-    explanation: "It processes the current node before its subtrees."
-  },
-  {
-    question: "Post-order traversal visits nodes in which order?",
-    options: ["Root, Left, Right", "Left, Root, Right", "Left, Right, Root", "Right, Left, Root"],
-    correctIndex: 2,
-    explanation: "It processes subtrees before the current node (useful for deletion)."
-  },
-  {
-    question: "Level-order traversal fundamentally requires?",
-    options: ["A Stack", "A Queue", "Recursion only", "A Hash Map"],
-    correctIndex: 1,
-    explanation: "A queue ensures nodes are processed level by level (BFS)."
-  },
-  {
-    question: "Red-Black Trees differ from AVL trees by?",
-    options: ["Allowing taller trees to minimize rotations", "Strictly enforcing height balance", "Using ternary nodes", "Being unbalanced"],
-    correctIndex: 0,
-    explanation: "Red-Black trees use color properties, allowing $O(\\log n)$ height with fewer rebalancing operations."
-  },
-  {
-    question: "Post-order traversal of an Expression Tree yields?",
-    options: ["Infix notation", "Prefix notation", "Postfix notation (Reverse Polish)", "Polish notation"],
-    correctIndex: 2,
-    explanation: "It naturally outputs operands followed by their operator."
-  }
+  { question: "To find the largest value in the left subtree of a BST implemented via linked nodes, what is the correct traversal?", options: ["Go left until null", "Go left once, then right until null", "Go right until null", "Perform in-order traversal"], correctIndex: 1, explanation: "The left subtree contains values smaller than the root. The maximum of that subtree is found by stepping left once, then going as far right as possible." },
+  { question: "Given the list: 45, 51, 36, 17, 60, 47, 49, 53, 38, 44, 20. What is the root of the resulting BST?", options: ["45", "51", "36", "60"], correctIndex: 0, explanation: "The first element inserted into an empty BST becomes the root. Here, 45 is the first element." },
+  { question: "In a Post-Order traversal of a BST, when is the root node processed?", options: ["First", "Second", "Last", "When the left subtree is empty"], correctIndex: 2, explanation: "Post-Order visits Left, then Right, then Root. The root is always the final node processed in its subtree." },
+  { question: "Converting a directed graph from an Adjacency List to an Adjacency Matrix takes what time complexity?", options: ["$\\mathcal{O}(V)$", "$\\mathcal{O}(V + E)$", "$\\mathcal{O}(V^2)$", "$\\mathcal{O}(E \\log V)$"], correctIndex: 2, explanation: "You must initialize a $V \\times V$ matrix with zeros ($\\mathcal{O}(V^2)$), then iterate the list to populate edges ($\\mathcal{O}(V + E)$). The dominant term is $\\mathcal{O}(V^2)$." },
+  { question: "What is the space complexity of an Adjacency Matrix for a graph with $V$ vertices?", options: ["$\\mathcal{O}(V)$", "$\\mathcal{O}(E)$", "$\\mathcal{O}(V^2)$", "$\\mathcal{O}(V + E)$"], correctIndex: 2, explanation: "It requires a $V \\times V$ 2D array regardless of the number of edges, making it $\\mathcal{O}(V^2)$." },
+  { question: "Which traversal of a BST yields the elements in strictly ascending order?", options: ["Pre-Order", "In-Order", "Post-Order", "Level-Order"], correctIndex: 1, explanation: "In-Order (Left, Root, Right) naturally processes smaller values before larger ones in a valid BST." },
+  { question: "If a BST is constructed from an already sorted array, what is its worst-case height?", options: ["$\\mathcal{O}(1)$", "$\\mathcal{O}(\\log N)$", "$\\mathcal{O}(N)$", "$\\mathcal{O}(N \\log N)$"], correctIndex: 2, explanation: "Inserting sorted elements causes every node to have only a right (or left) child, degrading the tree into a linked list of height $N$." },
+  { question: "What is the time complexity to search for an element in a balanced BST?", options: ["$\\mathcal{O}(1)$", "$\\mathcal{O}(\\log N)$", "$\\mathcal{O}(N)$", "$\\mathcal{O}(N \\log N)$"], correctIndex: 1, explanation: "A balanced BST halves the search space at each step, resulting in logarithmic time complexity." },
+  { question: "In an array-based Min-Heap, where is the left child of the node at index $i$?", options: ["$2i$", "$2i + 1$", "$2i - 1$", "$i / 2$"], correctIndex: 1, explanation: "Using 0-based indexing, the left child is at $2i + 1$ and the right child is at $2i + 2$." },
+  { question: "What is the primary advantage of an Adjacency List over an Adjacency Matrix?", options: ["Faster edge lookup", "Space efficiency for sparse graphs", "Easier to implement", "Better for dense graphs"], correctIndex: 1, explanation: "An Adjacency List only stores existing edges, taking $\\mathcal{O}(V + E)$ space, which is vastly superior for sparse graphs." },
+  { question: "Which rotation fixes a Left-Right imbalance in an AVL tree?", options: ["Single Right Rotation", "Single Left Rotation", "Left Rotation on left child, then Right on root", "Right Rotation on right child, then Left on root"], correctIndex: 2, explanation: "A 'zig-zag' imbalance requires a double rotation: first straighten the child, then rotate the root." },
+  { question: "What does the `isEndOfWord` boolean signify in a Trie node?", options: ["The node has no children", "The path from root to this node forms a valid word", "The character is a vowel", "The tree is balanced"], correctIndex: 1, explanation: "It distinguishes between a prefix and a complete word (e.g., 'app' vs 'apple')." },
+  { question: "Huffman coding builds its tree based on what metric?", options: ["Alphabetical order", "Character frequency", "String length", "ASCII value"], correctIndex: 1, explanation: "Frequent characters are placed closer to the root to receive shorter binary codes, optimizing compression." },
+  { question: "What is the time complexity of the Heapify operation on an arbitrary array?", options: ["$\\mathcal{O}(1)$", "$\\mathcal{O}(\\log N)$", "$\\mathcal{O}(N)$", "$\\mathcal{O}(N \\log N)$"], correctIndex: 2, explanation: "While sifting down takes $\\mathcal{O}(\\log N)$, the mathematical sum of heights across all nodes results in a linear $\\mathcal{O}(N)$ build time." },
+  { question: "In a directed graph, if `matrix[i][j] == 1`, what does it mean?", options: ["An edge exists from j to i", "An edge exists from i to j", "i and j are the same node", "The graph is undirected"], correctIndex: 1, explanation: "In an adjacency matrix for a directed graph, row $i$ represents the outgoing edges from vertex $i$." }
 ];
