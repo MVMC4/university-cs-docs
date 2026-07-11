@@ -6,7 +6,7 @@ description: Exam-style questions on the Java Collections Framework.
 # Practice Questions: Collections
 
 <ExamQuestion title="Question 1: HashMap Internals [10 Marks]">
-  <SubQuestion part="a" prompt={<>Explain how <code>HashMap</code> handles collisions in Java 8+. What is the threshold for treeification? [5]</>} solution={<>It uses separate chaining with linked lists. If a bucket exceeds 8 nodes (and total capacity >= 64), it converts the list to a Red-Black Tree to improve worst-case lookup from O(N) to O(log N).</>} />
+  <SubQuestion part="a" prompt={<>Explain how <code>HashMap</code> handles collisions in Java 8+. What is the threshold for treeification? [5]</>} solution={<>It uses separate chaining with linked lists. If a bucket exceeds 8 nodes (and total capacity &ge; 64), it converts the list to a Red-Black Tree to improve worst-case lookup from O(N) to O(log N).</>} />
   <SubQuestion part="b" prompt={<>What happens if you use a mutable object as a key in a HashMap, and then mutate it after insertion? [5]</>} solution={<>The object's hashCode changes. When you try to retrieve it, the HashMap looks in the wrong bucket, and the entry is effectively lost (memory leak).</>} />
 </ExamQuestion>
 

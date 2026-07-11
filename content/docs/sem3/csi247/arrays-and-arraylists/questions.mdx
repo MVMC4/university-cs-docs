@@ -1,0 +1,16 @@
+---
+title: Arrays Practice Questions
+description: Exam-style questions on Arrays and ArrayLists.
+---
+
+# Practice Questions: Arrays & ArrayLists
+
+<ExamQuestion title="Question 1: ArrayList Resizing & Amortized Analysis [10 Marks]">
+  <SubQuestion part="a" prompt={<>Explain the resizing mechanism of a standard Dynamic Array (ArrayList) when it reaches capacity. What is the standard growth factor? [4]</>} solution={<>When the array is full, it allocates a new backing array (typically 1.5x or 2x the current capacity), copies all existing elements over using native memory blocks, and updates the internal reference. The old array is garbage collected.</>} />
+  <SubQuestion part="b" prompt={<>Using the Aggregate Method, prove that the amortized time complexity of appending to a dynamic array is $O(1)$, even though a single resize operation takes $O(N)$. [6]</>} solution={<>If we double the capacity, resizing happens at powers of 2 (1, 2, 4, 8... N). The total cost of N inserts is N (for the basic inserts) + N/2 + N/4 + ... + 1 (for the copies). The geometric series sums to roughly 2N. Dividing 2N total work by N operations yields an amortized cost of $O(1)$.</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 2: Matrix Memory Layout [8 Marks]">
+  <SubQuestion part="a" prompt={<>Explain the difference between Row-Major and Column-Major order in 2D array memory allocation. [4]</>} solution={<>Row-Major (used in C/C++/Java) stores consecutive elements of a row in contiguous memory. Column-Major (used in Fortran/MATLAB) stores consecutive elements of a column contiguously.</>} />
+  <SubQuestion part="b" prompt={<>Why does iterating a Row-Major 2D array column-by-column cause severe performance degradation compared to iterating row-by-row? [4]</>} solution={<>CPU Cache Locality. Accessing memory sequentially (row by row) results in cache hits because the hardware prefetcher loads contiguous blocks into the L1/L2 cache. Jumping across rows (column by column) causes frequent cache misses, forcing the CPU to fetch from much slower main RAM.</>} />
+</ExamQuestion>

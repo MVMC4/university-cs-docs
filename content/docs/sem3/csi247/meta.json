@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "time-complexity",
+    "arrays-and-arraylists",
     "linked-lists-traversals",
     "stacks-and-queues",
     "collections",
@@ -16,7 +17,6 @@
     "java-foundations",
     "recursion",
     "hash-tables",
-    "arrays-and-arraylists",
     "linear-structures",
     "collections-sorting-searching"
   ]
