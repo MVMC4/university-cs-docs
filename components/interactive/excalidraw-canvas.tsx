@@ -116,7 +116,7 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
         await new Promise(resolve => setTimeout(resolve, 50));
 
         try {
-          const blob = new Blob(chunks);
+          const blob = new Blob(chunks as BlobPart[]);
           const json = await new Response(blob).json(); 
           
           dataRef.current = json;
