@@ -38,6 +38,9 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
   const [loadedBytes, setLoadedBytes] = useState(0);
   const [totalBytes, setTotalBytes] = useState(0);
   
+  // 🛠️ FIX: Simulated progress for when CDN hides Content-Length or compresses the stream
+  const [simulatedProgress, setSimulatedProgress] = useState(0);
+  
   const dataRef = useRef<any>(null);
   const downloadIdRef = useRef(0);
   const [showCanvas, setShowCanvas] = useState(false);
@@ -73,6 +76,23 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  // 🛠️ FIX: Creep the simulated progress up to 90% while downloading
+  useEffect(() => {
+    if (status === 'downloading') {
+      const interval = setInterval(() => {
+        setSimulatedProgress(prev => {
+          if (prev >= 90) return 90; 
+          return prev + Math.random() * 2 + 0.5; 
+        });
+      }, 300);
+      return () => clearInterval(interval);
+    } else if (status === 'parsing') {
+      setSimulatedProgress(100);
+    } else {
+      setSimulatedProgress(0);
+    }
+  }, [status]);
 
   useEffect(() => {
     if (status !== 'downloading') return;
@@ -167,6 +187,7 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
     setProgress(0);
     setLoadedBytes(0);
     setTotalBytes(0);
+    setSimulatedProgress(0);
     setRetryKey((k) => k + 1);
     setStatus('downloading');
   };
@@ -201,15 +222,12 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
     >
       <div className="h-15 px-3 border-b border-fd-border bg-fd-muted/50 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-
           <h4 className="text-sm font-semibold text-fd-foreground leading-none">{title}</h4>
         </div>
         
         <div className="flex items-center gap-1">
           {status === 'ready' && showCanvas && (
-            <span className="">
-             
-            </span>
+            <span className=""></span>
           )}
           
           <button 
@@ -235,8 +253,6 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
           >
             {isFullscreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
           </button>
-          
-        
         </div>
       </div>
       
@@ -280,20 +296,27 @@ export function ExcalidrawCanvas({ src, title }: { src: string; title: string })
   }
 
   if (status === 'downloading' || status === 'parsing') {
+    // 🛠️ FIX: Determine if we have reliable progress data
+    // Vercel CDN often strips Content-Length or sends compressed size vs uncompressed stream
+    const hasReliableTotal = totalBytes > 0 && loadedBytes <= totalBytes;
+    const displayProgress = hasReliableTotal 
+      ? Math.round((loadedBytes / totalBytes) * 100) 
+      : Math.round(simulatedProgress);
+
     const loadedMB = (loadedBytes / (1024 * 1024)).toFixed(1);
-    const totalMB = totalBytes > 0 ? (totalBytes / (1024 * 1024)).toFixed(1) : null;
+    const totalMB = hasReliableTotal ? (totalBytes / (1024 * 1024)).toFixed(1) : null;
 
     return (
       <CanvasWrapper>
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-fd-muted/30 p-6">
           <Loader2 className="h-8 w-8 animate-spin text-fd-primary mb-4" />
           <p className="text-sm font-semibold text-fd-foreground mb-3">
-            {status === 'parsing' ? 'Parsing Diagram Data...' : `Downloading Map... ${totalBytes > 0 ? progress + '%' : ''}`}
+            {status === 'parsing' ? 'Parsing Diagram Data...' : `Downloading Map... ${displayProgress}%`}
           </p>
           <div className="w-full max-w-xs h-2 bg-fd-border rounded-full overflow-hidden mb-2">
             <div 
-              className={`h-full bg-fd-primary transition-all duration-150 ease-out ${totalBytes === 0 && status === 'downloading' ? 'w-1/3 animate-pulse' : ''}`}
-              style={{ width: totalBytes > 0 ? `${progress}%` : (status === 'parsing' ? '100%' : '33%') }}
+              className="h-full bg-fd-primary transition-all duration-300 ease-out"
+              style={{ width: `${displayProgress}%` }}
             />
           </div>
           <p className="text-xs text-fd-muted-foreground">
