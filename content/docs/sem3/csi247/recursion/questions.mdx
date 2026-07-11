@@ -1,29 +1,22 @@
 ---
-title: Practice Questions
-description: Practical questions on Recursion, Backtracking, Divide & Conquer, and Dynamic Programming.
+title: Recursion Practice Questions
+description: Exam-style questions on Recursion, Backtracking, and Dynamic Programming.
 ---
 
 # Practice Questions: Recursion & Paradigms
 
-<ExamQuestion title="Question 1: Constrained String Generation (Backtracking) [10 Marks]">
-  <SubQuestion part="a" prompt={<>Define the base case and recursive state for generating N pairs of parentheses with a max consecutive constraint. [4]</>} solution={<>State: (current_string, open_count, close_count, consecutive_open, consecutive_close). Base: length == 2N.</>} />
-  <SubQuestion part="b" prompt={<>Write the recursive logic showing how to prune invalid branches. [6]</>} solution={<>Only add '(' if open &lt; N and consecutive_open &lt; max. Only add ')' if close &lt; open. Reset consecutive counters appropriately.</>} />
+<ExamQuestion title="Question 1: Call Stack & Space Complexity [10 Marks]">
+  <SubQuestion part="a" prompt={<>Draw the call stack for a recursive function computing the factorial of 4. What is the maximum depth and space complexity? [5]</>} solution={<>The stack builds up: fact(4) then fact(3) then fact(2) then fact(1). Maximum depth is 4. Space complexity is O(N) due to the call stack frames.</>} />
+  <SubQuestion part="b" prompt={<>Explain why a missing base case results in a StackOverflowError. [5]</>} solution={<>Without a base case, the function infinitely calls itself. Each call allocates a new frame on the call stack. Eventually, the stack exceeds its allocated memory limit, crashing the program.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 2: Divide and Conquer (Majority Element) [12 Marks]">
-  <SubQuestion part="a" prompt={<>Design a D&C algorithm to find the majority element in O(N log N) time without extra space. [6]</>} solution={<>Split array in half. Recursively find majority in left and right. If both return the same element, that's the candidate. Otherwise, count occurrences of both candidates in the full range.</>} />
-  <SubQuestion part="b" prompt={<>Explain the merge step if left returns X and right returns Y. [4]</>} solution={<>Scan the combined array to count exact occurrences of X and Y. Return whichever exceeds N/2, or null if neither does.</>} />
-  <SubQuestion part="c" prompt={<>Write the recurrence relation. [2]</>} solution={<>T(n) = 2T(n/2) + O(n), which solves to O(n log n).</>} />
+<ExamQuestion title="Question 2: Backtracking & Pruning [12 Marks]">
+  <SubQuestion part="a" prompt={<>Explain the concept of 'pruning' in a backtracking algorithm like N-Queens. [4]</>} solution={<>Pruning is the act of abandoning a recursive branch early because it violates a constraint, preventing the algorithm from exploring an entire invalid subtree.</>} />
+  <SubQuestion part="b" prompt={<>If generating all permutations of a string of length N, what is the time complexity? Why? [4]</>} solution={<>O(N * N!). There are N! permutations, and copying or building each string takes O(N) time.</>} />
+  <SubQuestion part="c" prompt={<>How does backtracking differ from standard Divide and Conquer? [4]</>} solution={<>Divide and Conquer breaks problems into independent subproblems and combines them. Backtracking explores a state-space tree, making choices, and undoing them if they lead to dead ends.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 3: Grid Traversal with Constraints (Memoization) [15 Marks]">
-  <SubQuestion part="a" prompt={<>Write a top-down recursive method with memoization for max battery level on an M x N grid with magnets and prime-number recharges. [10]</>} solution={<>State: (r, c, current_battery). Memoize based on (r, c). Return -infinity if magnet or battery &lt; 0. Add +2 if (r+c) is prime.</>} />
-  <SubQuestion part="b" prompt={<>What are the dimensions of the memo table? [3]</>} solution={<>M x N. We only need to memoize the maximum battery possible when reaching cell (r, c), assuming we arrived with sufficient battery.</>} />
-  <SubQuestion part="c" prompt={<>Why might pure recursion fail on a 1000x1000 grid? [2]</>} solution={<>StackOverflowError due to depth, and Time Limit Exceeded due to overlapping subproblems (2^(M+N) paths without memoization).</>} />
-</ExamQuestion>
-
-<ExamQuestion title="Question 4: The Greedy vs DP Trap [10 Marks]">
-  <SubQuestion part="a" prompt={<>Trace Greedy for coins [1, 3, 4] and target 6. [3]</>} solution={<>Greedy picks 4, then 1, then 1. Total = 3 coins.</>} />
-  <SubQuestion part="b" prompt={<>Trace DP for the same. What is the actual minimum? [4]</>} solution={<>DP finds 3 + 3 = 6. Total = 2 coins.</>} />
-  <SubQuestion part="c" prompt={<>Explain mathematically why Greedy fails here. What property must a coin system possess for Greedy to work? [3]</>} solution={<>Greedy fails because the larger coin (4) is not a multiple or clean sum of the smaller coins that leads to optimal packing. The system must be "canonical" (e.g., standard currency) where the greedy choice always leaves a subproblem that is optimally solved by the remaining coins.</>} />
+<ExamQuestion title="Question 3: Dynamic Programming vs Memoization [10 Marks]">
+  <SubQuestion part="a" prompt={<>What are the two required properties for a problem to be solvable with Dynamic Programming? [4]</>} solution={<>1. Overlapping Subproblems (the same subproblems are solved multiple times). 2. Optimal Substructure (the optimal solution contains optimal solutions to subproblems).</>} />
+  <SubQuestion part="b" prompt={<>Compare Top-Down Memoization and Bottom-Up Tabulation in terms of space and time complexity. [6]</>} solution={<>Both have the same time complexity. Top-Down uses recursion and the call stack (O(N) space overhead). Bottom-Up uses iteration and an array, avoiding call stack overhead and often allowing space optimization.</>} />
 </ExamQuestion>
