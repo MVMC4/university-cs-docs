@@ -3,21 +3,20 @@
   "pages": [
     "index",
     "time-complexity",
+    "recursion",
     "arrays-and-arraylists",
+    "collections",
     "sorting-and-searching",
     "linked-lists-traversals",
     "stacks-and-queues",
     "trees-and-bsts",
     "heaps-and-priority-queues",
+    "hash-tables",
+    "graphs",
     "resources"
   ],
   "_hidden_pages": [
     "java-foundations",
-    "recursion",
-    "hash-tables",
-    "linear-structures",
-    "collections-sorting-searching",
-    "collections",
-    "graphs"
+    "linear-structures"
   ]
 }
