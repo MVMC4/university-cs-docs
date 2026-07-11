@@ -1,0 +1,16 @@
+---
+title: Heaps Practice Questions
+description: Exam-style questions on Heaps and Priority Queues.
+---
+
+# Practice Questions: Heaps
+
+<ExamQuestion title="Question 1: Heap Array Representation [8 Marks]">
+  <SubQuestion part="a" prompt={<>Given a 0-indexed array representing a Min-Heap, write the formulas to find the parent, left child, and right child of an element at index <code>i</code>. [3]</>} solution={<>Parent: (i-1)/2. Left Child: 2i+1. Right Child: 2i+2.</>} />
+  <SubQuestion part="b" prompt={<>Why is the time complexity of <code>buildHeap</code> (heapifying an entire array) O(N) and not O(N log N)? [5]</>} solution={<>Most nodes are at the bottom of the tree and require 0 or 1 swaps. The mathematical sum of the heights of all nodes in a complete binary tree converges to O(N), not N * log(N).</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 2: Top-K Elements [10 Marks]">
+  <SubQuestion part="a" prompt={<>Write an algorithm to find the K largest elements in a stream of N numbers. What data structure do you use and what is the time complexity? [6]</>} solution={<>Use a Min-Heap of size K. Iterate through the N numbers. If the heap size < K, push. If the number is greater than the heap's root (min), pop the root and push the new number. Time: O(N log K).</>} />
+  <SubQuestion part="b" prompt={<>Why use a Min-Heap of size K instead of a Max-Heap of size N to find the K largest elements? [4]</>} solution={<>A Min-Heap of size K keeps the smallest of the 'top K' elements at the root, allowing O(1) comparisons and O(log K) evictions. A Max-Heap of size N would require O(N) to build and O(K log N) to extract, which is much slower for large N and small K.</>} />
+</ExamQuestion>

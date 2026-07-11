@@ -1,0 +1,16 @@
+---
+title: Collections Practice Questions
+description: Exam-style questions on the Java Collections Framework.
+---
+
+# Practice Questions: Collections
+
+<ExamQuestion title="Question 1: HashMap Internals [10 Marks]">
+  <SubQuestion part="a" prompt={<>Explain how <code>HashMap</code> handles collisions in Java 8+. What is the threshold for treeification? [5]</>} solution={<>It uses separate chaining with linked lists. If a bucket exceeds 8 nodes (and total capacity >= 64), it converts the list to a Red-Black Tree to improve worst-case lookup from O(N) to O(log N).</>} />
+  <SubQuestion part="b" prompt={<>What happens if you use a mutable object as a key in a HashMap, and then mutate it after insertion? [5]</>} solution={<>The object's hashCode changes. When you try to retrieve it, the HashMap looks in the wrong bucket, and the entry is effectively lost (memory leak).</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 2: ArrayList vs LinkedList [8 Marks]">
+  <SubQuestion part="a" prompt={<>You need to implement a queue that frequently adds to the tail and removes from the head. Which is better: ArrayList or LinkedList? Justify with Big-O. [4]</>} solution={<>LinkedList is better. Adding to tail is O(1) (if tail pointer is maintained) and removing from head is O(1). ArrayList requires O(N) to shift elements when removing from the head.</>} />
+  <SubQuestion part="b" prompt={<>Why does ArrayList generally outperform LinkedList in real-world iteration, despite both being O(N)? [4]</>} solution={<>CPU Cache Locality. ArrayList uses a contiguous backing array, which is highly cache-friendly. LinkedList nodes are scattered in heap memory, causing frequent cache misses.</>} />
+</ExamQuestion>
