@@ -4,13 +4,11 @@
     "index",
     "time-complexity",
     "arrays-and-arraylists",
+    "sorting-and-searching",
     "linked-lists-traversals",
     "stacks-and-queues",
-    "collections",
-    "sorting-and-searching",
     "trees-and-bsts",
     "heaps-and-priority-queues",
-    "graphs",
     "resources"
   ],
   "_hidden_pages": [
@@ -18,6 +16,8 @@
     "recursion",
     "hash-tables",
     "linear-structures",
-    "collections-sorting-searching"
+    "collections-sorting-searching",
+    "collections",
+    "graphs"
   ]
 }
