@@ -54,3 +54,4 @@ bun.lockb
 *.pem
 ehthumbs.db
 project-context.txt
+*.bak

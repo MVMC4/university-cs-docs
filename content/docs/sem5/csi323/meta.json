@@ -1,0 +1,11 @@
+{
+  "title": "CSI323: Algorithms",
+  "pages": [
+    "index",
+    "trees-and-bsts",
+    "heaps-and-priority-queues",
+    "hash-tables",
+    "graphs",
+    "resources"
+  ]
+}
