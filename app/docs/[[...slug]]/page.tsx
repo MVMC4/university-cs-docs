@@ -13,6 +13,7 @@ import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
 import { Quiz } from '@/components/interactive/quiz';
+import { siteConfig } from '@/lib/site';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -21,9 +22,33 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  const canonicalUrl = new URL(page.url, siteConfig.url).toString();
+  const imageUrl = new URL(getPageImage(page).url, siteConfig.url).toString();
+  const learningResourceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: page.data.title,
+    description: page.data.description,
+    url: canonicalUrl,
+    image: imageUrl,
+    inLanguage: siteConfig.language,
+    isAccessibleForFree: true,
+    educationalLevel: 'University',
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+  };
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(learningResourceJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
@@ -55,11 +80,35 @@ export async function generateMetadata(props: PageProps<'/docs/[[...slug]]'>): P
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  const canonicalUrl = new URL(page.url, siteConfig.url).toString();
+  const imageUrl = new URL(getPageImage(page).url, siteConfig.url).toString();
+  const socialImage = {
+    url: imageUrl,
+    width: 1200,
+    height: 630,
+    alt: `${page.data.title} - ${siteConfig.name}`,
+  };
+
   return {
     title: page.data.title,
     description: page.data.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      images: getPageImage(page).url,
+      title: page.data.title,
+      description: page.data.description,
+      url: canonicalUrl,
+      siteName: siteConfig.name,
+      locale: siteConfig.locale,
+      type: 'article',
+      images: [socialImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: page.data.title,
+      description: page.data.description,
+      images: [socialImage],
     },
   };
 }
