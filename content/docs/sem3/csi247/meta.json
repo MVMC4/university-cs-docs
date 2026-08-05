@@ -2,17 +2,17 @@
   "title": "CSI247: Data Structures",
   "pages": [
     "index",
-    "time-complexity",
+    "java-fundamentals",
     "recursion",
+    "time-complexity",
+    "sorting-and-searching",
     "arrays-and-arraylists",
     "collections",
-    "sorting-and-searching",
     "linked-lists-traversals",
     "stacks-and-queues",
     "resources"
   ],
   "_hidden_pages": [
-    "java-foundations",
     "linear-structures"
   ]
 }
