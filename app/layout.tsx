@@ -4,30 +4,88 @@ import './global.css';
 import 'katex/dist/katex.css';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { siteConfig } from '@/lib/site';
+
+const socialImage = {
+  url: siteConfig.socialImage,
+  width: 1200,
+  height: 630,
+  alt: siteConfig.socialImageAlt,
+  type: 'image/png',
+};
 
 export const metadata: Metadata = {
   title: {
-    default: 'University Docs',
-    template: '%s | University Docs', // Automatically appends this to individual page titles
+    default: 'University CS Docs | University of Botswana Study Hub',
+    template: `%s | ${siteConfig.name}`,
   },
-  description: 'A centralized hub for university course notes, study guides, and resources.',
-  
-  // Required for Open Graph images to resolve correctly
-  metadataBase: new URL('https://university-cs-docs.vercel.app'), // Change this to your Vercel/custom domain
-  
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
+  authors: [{ name: 'MVMC4', url: 'https://github.com/MVMC4' }],
+  creator: 'MVMC4',
+  publisher: siteConfig.name,
+  category: 'education',
+  keywords: [
+    'University of Botswana',
+    'computer science notes',
+    'data structures',
+    'Java programming',
+    'functional programming',
+    'calculus',
+    'study guides',
+    'computer science quizzes',
+  ],
+  alternates: {
+    canonical: '/',
+  },
+  manifest: '/manifest.webmanifest',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  formatDetection: {
+    address: false,
+    email: false,
+    telephone: false,
+  },
   openGraph: {
-    title: 'University Docs',
-    description: 'Comprehensive notes, study guides, and resources for university courses.',
-    images: ['/og-image.png'], // Make sure to put this image in your `public` folder!
-    siteName: 'University Docs',
-    locale: 'en_US',
+    title: 'University CS Docs | University of Botswana Study Hub',
+    description: siteConfig.description,
+    url: '/',
+    images: [socialImage],
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
     type: 'website',
   },
   twitter: {
-    
-    title: 'University Docs',
-    description: 'Comprehensive notes, study guides, and resources for university courses.',
-    images: ['/og-image.png'],
+    card: 'summary_large_image',
+    title: 'University CS Docs | University of Botswana Study Hub',
+    description: siteConfig.description,
+    images: [socialImage],
+  },
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteConfig.name,
+  alternateName: siteConfig.shortName,
+  url: siteConfig.url,
+  description: siteConfig.description,
+  inLanguage: siteConfig.language,
+  isAccessibleForFree: true,
+  audience: {
+    '@type': 'EducationalAudience',
+    educationalRole: 'student',
   },
 };
 
@@ -35,8 +93,15 @@ export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen font-sans">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd).replace(/</g, '\\u003c'),
+          }}
+        />
         <RootProvider>{children}</RootProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

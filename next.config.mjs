@@ -5,6 +5,7 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  poweredByHeader: false,
   // Allow cross-origin dev requests from your network IP
   allowedDevOrigins: ['100.124.114.119'],
 };

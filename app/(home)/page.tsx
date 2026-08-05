@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
   const [screenWidth, setScreenWidth] = useState(0);
 
   useEffect(() => {
@@ -36,7 +35,6 @@ export default function HomePage() {
   const c4y = useTransform(mouseY, [-parallaxIntensity, parallaxIntensity], [-parallaxIntensity, parallaxIntensity]);
 
   useEffect(() => {
-    setMounted(true);
     if (isMobile) return;
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth - 0.5) * parallaxIntensity;
@@ -47,8 +45,6 @@ export default function HomePage() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY, isMobile, parallaxIntensity]);
-
-  if (!mounted) return null;
 
   return (
     <div
