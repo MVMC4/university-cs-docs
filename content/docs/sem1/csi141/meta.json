@@ -1,4 +1,4 @@
 {
   "title": "CSI141: Programming Principles",
-  "pages": ["index", "resources"]
+  "pages": ["index", "01-programming-process", "02-java-basics-io", "03-control-flow", "04-arrays-collections", "05-methods-classes", "06-files-debugging", "resources"]
 }

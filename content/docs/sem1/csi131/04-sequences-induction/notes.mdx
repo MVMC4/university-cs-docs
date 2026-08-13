@@ -1,0 +1,78 @@
+---
+title: "Notes"
+description: "Detailed notes on sequences, recurrences, sigma notation, and recursive definitions."
+---
+
+<TopicNotesFlow course="CSI131" topic="Sequences, Summations, and Recursion" summary="Detailed notes on sequences, recurrences, sigma notation, and recursive definitions.">
+
+
+## Sequences, Summations, and Recursion
+
+A sequence is a function whose domain is usually the non-negative or positive integers. We write its terms as $a_1,a_2,\ldots$.
+
+## Common sequences
+
+An arithmetic sequence has constant difference $d$:
+$$
+a_n=a_1+(n-1)d.
+$$
+An arithmetic sum is
+$$
+\sum_{i=1}^n a_i=\frac n2\bigl(2a_1+(n-1)d\bigr).
+$$
+For a geometric sequence with ratio $r\ne1$,
+$$
+a_n=a_1r^{n-1},\qquad \sum_{i=0}^{n-1}a_1r^i=a_1\frac{1-r^n}{1-r}.
+$$
+
+## Recurrence relations
+
+A recurrence defines a term from earlier terms. The initial conditions are part of the definition. For example, $a_n=a_{n-1}+3$ with $a_1=2$ generates $2,5,8,11,\ldots$.
+
+When solving a recurrence, calculate the first few terms, identify the pattern, and verify the proposed closed form against both the initial condition and the recurrence.
+
+## Sigma notation
+
+Sigma notation compresses repeated addition. Useful laws include:
+$$
+\sum_{i=1}^n(ca_i+db_i)=c\sum_{i=1}^na_i+d\sum_{i=1}^nb_i,
+$$
+$$
+\sum_{i=1}^n i=\frac{n(n+1)}2,\qquad
+\sum_{i=1}^n i^2=\frac{n(n+1)(2n+1)}6.
+$$
+
+Be careful when shifting an index: changing $i$ to $i+1$ also changes the bounds and the expression.
+
+## Recursion
+
+A recursive definition has a **base case** and a **recursive case**. A recursive algorithm must make progress toward the base case.
+
+<StepByStep>
+  <StepByStepTitle>Tracing factorial recursion</StepByStepTitle>
+  <Step number={1}>
+    <StepTitle>Base case</StepTitle>
+    $0!=1$ stops the recursion.
+  </Step>
+  <Step number={2}>
+    <StepTitle>Recursive case</StepTitle>
+    For $n>0$, $n!=n(n-1)!$.
+  </Step>
+  <Step number={3}>
+    <StepTitle>Expand a call</StepTitle>
+    $4!=4\cdot3!=4\cdot3\cdot2\cdot1\cdot0!=24$.
+  </Step>
+</StepByStep>
+
+## Inductive reasoning for sequences
+
+Induction is often the proof companion to recursion. Prove the base case, assume the formula at $k$, and show the recursive rule turns it into the formula at $k+1$.
+
+## Common mistakes
+
+- Giving a recurrence without enough initial conditions.
+- Including the wrong endpoint in a sigma sum.
+- Writing a recursive case that does not move toward the base case.
+- Treating a pattern in the first few terms as a proof.
+
+</TopicNotesFlow>

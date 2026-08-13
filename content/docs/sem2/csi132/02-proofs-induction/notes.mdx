@@ -1,0 +1,37 @@
+---
+title: "Notes"
+description: "Notes on proof strategies, quantified statements, induction, and counterexamples."
+---
+
+<TopicNotesFlow course="CSI132" topic="Proofs and Induction" summary="Notes on proof strategies, quantified statements, induction, and counterexamples.">
+
+
+## Proofs and Induction
+
+Start a proof by identifying the hypothesis and the exact conclusion. Definitions are tools: expand the definition of even, divisible, subset, injective, or continuous before choosing a strategy.
+
+## Main strategies
+
+In a direct proof, assume the hypothesis and transform it through justified steps to the conclusion. To prove $P\to Q$ by contrapositive, prove the equivalent statement $\neg Q\to\neg P$. To prove a universal statement false, one counterexample is enough. A contradiction proof assumes the negation of the desired conclusion and derives an impossibility.
+
+Proof by cases is useful when an object naturally splits into alternatives, such as an integer being even or odd. In every case, state why the cases are exhaustive.
+
+## Mathematical induction
+
+To prove $P(n)$ for all integers $n\ge n_0$, verify the base case, assume $P(k)$ for an arbitrary $k\ge n_0$, use it to prove $P(k+1)$, and then state the quantified conclusion. For $1+2+\cdots+n=n(n+1)/2$, the step separates the first $k$ terms, applies the hypothesis, and simplifies to $(k+1)(k+2)/2$.
+
+Strong induction allows the inductive step to use all earlier cases $P(n_0),\ldots,P(k)$. It is useful when a new object is built from several smaller objects, such as a factorisation or recurrence.
+
+## Quantifiers and precision
+
+The order of quantifiers matters. “For every $x$ there exists $y$” does not mean the same as “there exists $y$ for every $x$.” State domains explicitly and avoid using an example as if it proved a universal claim.
+
+## Proof checklist
+
+- Are all variables introduced and in the correct domain?
+- Did I use the hypothesis, or silently assume the conclusion?
+- Is each implication reversible when I claim equivalence?
+- Are cases exhaustive and non-overlapping where needed?
+- Does the final sentence match the quantified claim?
+
+</TopicNotesFlow>

@@ -3,8 +3,11 @@
   "root": true,
   "pages": [
     "index",
+    "---Study Flow---",
+    "study-tools",
     "---Semesters---",
     "sem1",
+    "sem2",
     "sem3",
     "sem5"
   ]

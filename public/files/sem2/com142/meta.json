@@ -1,0 +1,11 @@
+[
+  {"id":"study-interface","title":"Complete Study Interface","category":"Lectures","type":"pdf","url":"/files/sem2/com142/COM142-Complete-Study-Interface.pdf","description":"Compiled COM142 study material from the Semester 2 vault.","isNew":true},
+  {"id":"assignments","title":"Group Project Source Pack","category":"Practice","type":"folder","description":"Source material for the caffeine research project.","children":[
+    {"id":"caffeine-guide","title":"Caffeine Cardiovascular Guide","category":"Practice","type":"pdf","url":"/files/sem2/com142/assignments/Caffeine_Cardiovascular_Guide(1).pdf","description":"Research source for the group project."},
+    {"id":"caffeine-guide-simple","title":"Caffeine Cardiovascular Guide - Simplified","category":"Practice","type":"pdf","url":"/files/sem2/com142/assignments/Caffeine_Cardiovascular_Guide_Simlified_English.pdf","description":"Simplified research source."},
+    {"id":"caffeine-essay","title":"Caffeine Essay Sample","category":"Practice","type":"pdf","url":"/files/sem2/com142/assignments/Caffeine_Essay_Sample.pdf","description":"Sample academic essay."},
+    {"id":"caffeine-sources","title":"Caffeine Research Sources","category":"Practice","type":"pdf","url":"/files/sem2/com142/assignments/Caffeine_Research_Sources.pdf","description":"Research sources for the group project."},
+    {"id":"caffeine-sources-simple","title":"Caffeine Research Sources - Simplified","category":"Practice","type":"pdf","url":"/files/sem2/com142/assignments/Caffeine_Research_Sources_Simlified_English.pdf","description":"Simplified research sources."}
+  ]},
+  {"id":"essay","title":"Essay Sample","category":"Books","type":"pdf","url":"/files/sem2/com142/reading/Essay sample.pdf","description":"Additional essay sample for structural analysis."}
+]

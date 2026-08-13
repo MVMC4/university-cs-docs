@@ -1,0 +1,36 @@
+---
+title: "Notes"
+description: "Notes on probability axioms, complements, unions, counting, and expected reasoning."
+---
+
+<TopicNotesFlow course="STA122" topic="Probability Foundations" summary="Notes on probability axioms, complements, unions, counting, and expected reasoning.">
+
+
+## Probability Foundations
+
+A probability measure assigns numbers from 0 to 1 to events. The axioms are $P(\Omega)=1$, $P(A)\ge0$, and countable additivity for disjoint events. In a finite equally likely sample space, $P(A)=|A|/|\Omega|$.
+
+## Core rules
+
+The complement rule is $P(A^c)=1-P(A)$. For any events,
+
+$$P(A\cup B)=P(A)+P(B)-P(A\cap B).$$
+
+If $A$ and $B$ are disjoint, the intersection is zero and probabilities add. For “at least one” questions, the complement is often simpler: $P(\text{at least one success})=1-P(\text{no successes})$.
+
+## Counting probability
+
+Use the product rule for sequential choices and combinations when order does not matter. State whether sampling is with or without replacement; that decision changes both the sample space and the probability.
+
+## Reasonableness checks
+
+Every probability must lie in $[0,1]$. The probability of a union cannot exceed the sum of its parts. If two events are disjoint, their total cannot exceed 1. Estimate the direction of an answer before calculating so a misplaced complement is easier to detect.
+
+## Common mistakes
+
+- Adding overlapping events without subtracting the intersection.
+- Using a combination when order is part of an outcome.
+- Treating dependent draws as independent.
+- Reporting a percentage as a decimal without stating the form.
+
+</TopicNotesFlow>

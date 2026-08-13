@@ -1,0 +1,41 @@
+---
+title: "Notes"
+description: "Notes on indexed data, arrays, two-dimensional arrays, and ArrayList operations."
+---
+
+<TopicNotesFlow course="CSI142" topic="Arrays and ArrayLists" summary="Notes on indexed data, arrays, two-dimensional arrays, and ArrayList operations.">
+
+
+## Arrays and ArrayLists
+
+An array stores a fixed number of values of one declared type. If `a` has length `n`, valid indices are `0` through `n - 1`. The expression `a.length` is a field, not a method call.
+
+## Traversal patterns
+
+Use an index loop when the position matters and an enhanced `for` loop when only the values matter. A linear search checks each item until it finds the target or reaches the end. For a maximum, initialise from the first valid element rather than from zero when values may be negative.
+
+```java
+int maximum = values[0];
+for (int i = 1; i < values.length; i++) {
+    if (values[i] > maximum) maximum = values[i];
+}
+```
+
+Two-dimensional arrays are arrays of row arrays. Use `matrix.length` for the number of rows and `matrix[row].length` for the length of a particular row; this also handles ragged arrays.
+
+## ArrayList
+
+`ArrayList<Integer> scores = new ArrayList<>();` creates a resizable list. Common operations are `add`, `get`, `set`, `remove`, `size`, and `contains`. Indices remain zero-based. Removing by an integer can be confusing because `remove(2)` removes index 2, while `remove(Integer.valueOf(2))` removes the value 2.
+
+## Aliasing and copying
+
+An array variable stores a reference. Assigning `b = a` gives two names for the same array; changing one changes the other. Use `Arrays.copyOf` when an independent copy is required. The same aliasing idea applies to lists and objects.
+
+## Common mistakes
+
+- Using `i <= array.length` instead of `i < array.length`.
+- Confusing `size()` with `length`.
+- Removing list elements while iterating without controlling the index.
+- Assuming a shallow copy duplicates nested objects.
+
+</TopicNotesFlow>

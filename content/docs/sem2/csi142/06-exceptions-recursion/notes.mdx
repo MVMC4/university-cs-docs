@@ -1,0 +1,35 @@
+---
+title: "Notes"
+description: "Notes on Java exception handling, recursive methods, defensive programming, and tests."
+---
+
+<TopicNotesFlow course="CSI142" topic="Exceptions, Recursion, and Testing" summary="Notes on Java exception handling, recursive methods, defensive programming, and tests.">
+
+
+## Exceptions, Recursion, and Testing
+
+An exception represents an unusual condition that interrupts normal control flow. Use exceptions for conditions a caller can handle or report, not as a replacement for ordinary branching.
+
+## Handling exceptions
+
+`try` contains risky code, `catch` handles a compatible exception, and `finally` performs cleanup when needed. Catch the narrowest useful type and provide a meaningful response. Do not catch `Exception` only to hide the failure. Use try-with-resources for files and other `AutoCloseable` resources.
+
+Checked exceptions are part of a method’s compile-time contract; unchecked exceptions generally represent programming errors or invalid arguments. Validate at the boundary and document what callers should expect.
+
+## Recursion
+
+Every recursive method needs a base case and a recursive case that moves closer to it. For factorial, `factorial(0)` returns 1 and `factorial(n)` returns `n * factorial(n - 1)` for positive `n`. Trace the call stack for a small input. If the input does not progress, the method may never terminate; deep recursion may exhaust the stack.
+
+## Tests and debugging
+
+A unit test isolates a method and checks an observable result. Include normal, boundary, empty, invalid, and error-path cases. When a test fails, reduce the input to the smallest failing case, inspect the first incorrect state, and fix the cause rather than the symptom.
+
+## Common mistakes
+
+- Catching an exception and continuing with invalid state.
+- Returning from `finally` and masking an exception.
+- Omitting a recursive base case.
+- Testing only the happy path.
+- Depending on printed output when a method should return a value.
+
+</TopicNotesFlow>

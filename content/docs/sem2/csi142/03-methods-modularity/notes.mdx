@@ -1,0 +1,41 @@
+---
+title: "Notes"
+description: "Notes on Java method signatures, parameters, return values, scope, and modular design."
+---
+
+<TopicNotesFlow course="CSI142" topic="Methods and Modularity" summary="Notes on Java method signatures, parameters, return values, scope, and modular design.">
+
+
+## Methods and Modularity
+
+A method packages a responsibility behind a name. A method declaration has an access modifier, return type, name, parameter list, and body. The signature is the method name plus parameter types; changing only the return type does not overload a method.
+
+## Contracts
+
+Write a method contract before its implementation: state the inputs, the returned result, side effects, and assumptions. A method that calculates a result should usually return it rather than printing it, because callers can test and reuse the value.
+
+```java
+static int countPositive(int[] values) {
+    int count = 0;
+    for (int value : values) {
+        if (value > 0) count++;
+    }
+    return count;
+}
+```
+
+Java passes arguments by value. For a primitive, the method receives a copy of the value. For an array or object, the copied value is a reference to the same object, so the method can mutate that object but cannot replace the caller’s reference by reassigning its parameter.
+
+## Scope and overloading
+
+Local variables exist only within their method or block. Parameters shadow fields or outer names only when the language scope allows it; use `this.field` to make a field reference explicit. Overloaded methods share a name but have distinct parameter lists, and Java chooses a compatible method at compile time.
+
+## Modular design
+
+Keep each method cohesive, minimise hidden state, validate inputs at a clear boundary, and avoid duplicating logic. Small methods are useful when their names express a meaningful operation, not when a program is split into arbitrary fragments.
+
+## Testing methods
+
+Test normal, boundary, empty, and invalid cases. For `countPositive`, include all-positive, all-negative, zero, and an empty array if the contract permits it. A test should state the expected result, not merely exercise the method.
+
+</TopicNotesFlow>

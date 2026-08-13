@@ -1,0 +1,34 @@
+---
+title: "Notes"
+description: "Notes on relations, equivalence classes, directed graphs, paths, and connectivity."
+---
+
+<TopicNotesFlow course="CSI132" topic="Relations and Graphs" summary="Notes on relations, equivalence classes, directed graphs, paths, and connectivity.">
+
+
+## Relations and Graphs
+
+A relation on a set $A$ is a subset of $A\times A$. Its properties—reflexive, symmetric, antisymmetric, and transitive—describe how pairs behave and can often be checked from a table or directed diagram.
+
+## Equivalence relations
+
+An equivalence relation is reflexive, symmetric, and transitive. It partitions a set into disjoint equivalence classes. The class of $a$ is $[a]=\{x\in A:x\sim a\}$. Two classes are either equal or disjoint, so choosing a representative gives a way to describe the partition.
+
+## Graph models
+
+A graph has vertices and edges. In a directed graph an edge has a source and target; in an undirected graph it represents a mutual connection. The degree of a vertex counts incident edges, while indegree and outdegree count incoming and outgoing directed edges.
+
+A walk may repeat vertices and edges; a trail does not repeat edges; a path does not repeat vertices. A cycle begins and ends at the same vertex. A graph is connected if every pair of vertices has a path between them. In a directed graph, distinguish reachability in one direction from mutual strong connectivity.
+
+## Representations and algorithms
+
+An adjacency matrix uses a row and column for each vertex; entry $(i,j)$ records whether an edge from $i$ to $j$ exists. An adjacency list stores each vertex’s neighbours and is efficient for sparse graphs. Breadth-first search explores level by level and can find shortest paths in an unweighted graph; depth-first search follows a branch before backtracking and supports cycle and component analysis.
+
+## Common mistakes
+
+- Counting a loop twice in a directed or undirected degree calculation without checking the convention.
+- Confusing a walk with a path.
+- Assuming connected means every pair has a direct edge.
+- Treating an adjacency matrix as symmetric for a directed graph.
+
+</TopicNotesFlow>

@@ -1,0 +1,32 @@
+---
+title: "Notes"
+description: "Notes on divisibility, greatest common divisors, modular arithmetic, and prime factorisation."
+---
+
+<TopicNotesFlow course="CSI132" topic="Number Theory" summary="Notes on divisibility, greatest common divisors, modular arithmetic, and prime factorisation.">
+
+
+## Number Theory
+
+For integers $a$ and $b$, $a\mid b$ means there is an integer $k$ such that $b=ak$. Divisibility is transitive: if $a\mid b$ and $b\mid c$, then $a\mid c$.
+
+## Division algorithm and gcd
+
+For $a\in\mathbb Z$ and positive $b$, there are unique integers $q,r$ with $a=bq+r$ and $0\le r<b$. The Euclidean algorithm repeatedly replaces $(a,b)$ with $(b,a\bmod b)$ until the remainder is zero. The last non-zero remainder is $\gcd(a,b)$.
+
+For example, $252=2(105)+42$, $105=2(42)+21$, and $42=2(21)+0$, so $\gcd(252,105)=21$. Back-substitution expresses the gcd as an integer combination of the original numbers, which supports modular inverses.
+
+## Congruence
+
+The statement $a\equiv b\pmod m$ means $m\mid(a-b)$. Congruences can be added and multiplied, so reduce large values before calculating. Division is not automatically valid: to cancel $c$ modulo $m$, require conditions such as $\gcd(c,m)=1$.
+
+The prime factorisation of every integer greater than one is unique apart from order. It gives divisors, gcds, and lcms: take minimum prime exponents for a gcd and maximum exponents for an lcm.
+
+## Common mistakes
+
+- Allowing a negative or too-large remainder in the division algorithm.
+- Treating congruence as ordinary equality.
+- Cancelling a factor modulo $m$ without checking invertibility.
+- Forgetting that $1$ is not prime.
+
+</TopicNotesFlow>

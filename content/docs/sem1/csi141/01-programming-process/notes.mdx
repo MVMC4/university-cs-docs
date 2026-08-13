@@ -1,0 +1,66 @@
+---
+title: "Notes"
+description: "Detailed notes on problem solving, algorithms, compilation, execution, and debugging."
+---
+
+<TopicNotesFlow course="CSI141" topic="Programming Process and Java Setup" summary="Detailed notes on problem solving, algorithms, compilation, execution, and debugging.">
+
+
+## Programming Process and Java Setup
+
+Programming is the disciplined process of turning a problem into instructions a computer can execute. The language is only one part of the process; understanding the problem, choosing a representation, and testing the result are equally important.
+
+## From problem to program
+
+Start by identifying the input, output, constraints, and assumptions. Write a small example and solve it by hand. The hand solution exposes the state that the program must store and the decisions it must make.
+
+An algorithm should be:
+
+- **Finite:** it terminates after a finite number of steps.
+- **Definite:** each step has one unambiguous meaning.
+- **Effective:** each step can actually be carried out.
+- **Correct:** it produces the required output for every valid input.
+
+## The Java workflow
+
+A `.java` file contains source code. `javac` compiles it into bytecode, and the Java Virtual Machine runs that bytecode. The practical loop is:
+
+```text
+understand -> design -> implement -> compile -> run -> test -> debug -> repeat
+```
+
+Compilation errors are syntax or type problems found before execution. Runtime errors occur while the program runs. Logical errors allow execution but produce the wrong result.
+
+## A minimal program
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}
+```
+
+The public class name must match the file name. The `main` method is the entry point. Braces define blocks and semicolons terminate statements.
+
+## Tracing and tests
+
+Before running a program, trace variables in a table. Test at least one normal case, a boundary case, an empty or zero case, and invalid input when the specification allows it. A test is valuable only when you know the expected result before seeing the program's result.
+
+<Card title="Debugging questions">
+
+1. What did I expect this line to do?
+2. What value does each variable actually have?
+3. Is the wrong value created here or inherited from earlier code?
+4. What is the smallest input that reproduces the problem?
+
+</Card>
+
+## Common mistakes
+
+- Writing code before clarifying input and output.
+- Treating a successful compilation as proof of correctness.
+- Fixing the symptom at the end instead of tracing the first incorrect value.
+- Using unclear names that make the algorithm impossible to read.
+
+</TopicNotesFlow>

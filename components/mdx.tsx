@@ -32,6 +32,12 @@ import { FlashcardDeck } from './interactive/flashcard-deck';
 import { ExcalidrawCanvas } from './interactive/excalidraw-canvas';
 
 import { ResourceCard, ResourceGrid } from './interactive/resource-card';
+import { TopicNotesFlow } from './learning/topic-notes-flow';
+import { StudyGoals, PomodoroTimer } from './learning/study-tools';
+import { DocsWelcome, StudyWorkspaceHeader } from './learning/docs-entry-panels';
+import { SemesterWorkInProgress } from './learning/semester-status';
+import { ChapterExam, ChapterQuestions, ChapterReview } from './learning/chapter-study-pages';
+import { CourseChapterIndex } from './learning/course-chapter-index';
 
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -78,6 +84,16 @@ export function getMDXComponents(components?: MDXComponents) {
     ExcalidrawCanvas,
     ResourceCard, 
     ResourceGrid,
+    TopicNotesFlow,
+    StudyGoals,
+    PomodoroTimer,
+    DocsWelcome,
+    StudyWorkspaceHeader,
+    SemesterWorkInProgress,
+    ChapterReview,
+    ChapterQuestions,
+    ChapterExam,
+    CourseChapterIndex,
     
     // Allow any other passed components to override
     ...components,

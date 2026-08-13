@@ -1,0 +1,40 @@
+---
+title: "Notes"
+description: "Detailed notes on set operations, Cartesian products, relations, and functions."
+---
+
+<TopicNotesFlow course="CSI132" topic="Sets and Functions" summary="Detailed notes on set operations, Cartesian products, relations, and functions.">
+
+
+## Sets and Functions
+
+A set is a collection of distinct objects. The statement $x \in A$ means that $x$ is an element of $A$; $A \subseteq B$ means every element of $A$ is also in $B$.
+
+## Operations
+
+$$A \cup B=\{x:x\in A\text{ or }x\in B\},\qquad A\cap B=\{x:x\in A\text{ and }x\in B\}$$
+
+The difference $A-B$ contains elements in $A$ but not $B$, and the complement $A^c$ is taken relative to a stated universal set. De Morgan's laws are $(A\cup B)^c=A^c\cap B^c$ and $(A\cap B)^c=A^c\cup B^c$.
+
+## Products and relations
+
+The Cartesian product $A\times B$ is the set of ordered pairs $(a,b)$ with $a\in A$ and $b\in B$. Order matters: $(a,b)$ is generally not $(b,a)$. A relation from $A$ to $B$ is a subset of $A\times B$. A relation on $A$ is reflexive when every $(a,a)$ occurs, symmetric when $(a,b)$ implies $(b,a)$, and transitive when $(a,b)$ and $(b,c)$ imply $(a,c)$.
+
+## Functions
+
+A function $f:A\to B$ assigns exactly one output in $B$ to every input in $A$. The domain is $A$, the codomain is $B$, and the range is the set of outputs actually reached. A function is injective if equal outputs force equal inputs, surjective if every codomain element is reached, and bijective if it is both.
+
+For $f:A\to B$ and $g:B\to C$, composition is $(g\circ f)(x)=g(f(x))$. An inverse function exists exactly when the function is bijective between its stated domain and codomain. Check the domain before manipulating a formula: a formula can define different functions when the domain changes.
+
+## Worked example
+
+Let $f:\mathbb R\to\mathbb R$ be $f(x)=2x+3$. If $f(a)=f(b)$, then $2a+3=2b+3$, so $a=b$; it is injective. Given $y\in\mathbb R$, choose $x=(y-3)/2$; then $f(x)=y$, so it is surjective. Therefore $f$ is bijective and $f^{-1}(y)=(y-3)/2$.
+
+## Common mistakes
+
+- Treating a subset as an element.
+- Forgetting the universal set when taking complements.
+- Claiming a function is onto without checking its codomain.
+- Reversing the order in a Cartesian pair.
+
+</TopicNotesFlow>

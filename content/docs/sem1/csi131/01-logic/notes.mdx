@@ -1,0 +1,86 @@
+---
+title: "Notes"
+description: "Detailed notes on propositions, truth tables, equivalence, quantifiers, and inference."
+---
+
+<TopicNotesFlow course="CSI131" topic="Logic and Inference" summary="Detailed notes on propositions, truth tables, equivalence, quantifiers, and inference.">
+
+
+## Logic and Inference
+
+Logic gives us a precise language for conditions. A **proposition** is a declarative statement that is either true or false, but not both. We use letters such as $p$, $q$, and $r$ to represent propositions.
+
+## Connectives
+
+| Symbol | Name | Meaning |
+| --- | --- | --- |
+| $\neg p$ | negation | not $p$ |
+| $p \land q$ | conjunction | $p$ and $q$ |
+| $p \lor q$ | disjunction | $p$ or $q$, possibly both |
+| $p \oplus q$ | exclusive or | exactly one of $p$ and $q$ |
+| $p \to q$ | implication | if $p$, then $q$ |
+| $p \leftrightarrow q$ | biconditional | $p$ if and only if $q$ |
+
+An implication is false only when its hypothesis is true and its conclusion is false. This is why “if $p$, then $q$” does not say that $p$ causes $q$; it states a condition that must be preserved.
+
+## Truth tables and equivalence
+
+With $n$ variables there are $2^n$ rows. Build a compound table from the inside out, adding one column for each intermediate expression.
+
+Two propositions are **logically equivalent**, written $p \equiv q$, when their truth values agree on every row. Important laws include:
+
+$$
+\neg(p \land q) \equiv \neg p \lor \neg q, \qquad
+\neg(p \lor q) \equiv \neg p \land \neg q
+$$
+
+These are De Morgan's laws. A proposition true on every row is a **tautology**; one false on every row is a **contradiction**.
+
+<StepByStep>
+  <StepByStepTitle>Translating and testing a condition</StepByStepTitle>
+  <Step number={1}>
+    <StepTitle>Name the atomic statements</StepTitle>
+    Let $p$ mean “the input is valid” and $q$ mean “the user is authenticated.”
+  </Step>
+  <Step number={2}>
+    <StepTitle>Translate the sentence</StepTitle>
+    “The request is accepted only when the input is valid and the user is authenticated” becomes $(p \land q) \to a$, where $a$ means “the request is accepted.”
+  </Step>
+  <Step number={3}>
+    <StepTitle>Check the dangerous row</StepTitle>
+    The implication fails only when $p \land q$ is true but $a$ is false. That row describes the exact condition the system must prevent.
+  </Step>
+</StepByStep>
+
+## Predicates and quantifiers
+
+A **predicate** $P(x)$ becomes a proposition when a value is supplied for $x$. The universal statement $\forall x\,P(x)$ says every value in the domain satisfies $P$; the existential statement $\exists x\,P(x)$ says at least one does.
+
+Negating quantifiers changes both the quantifier and the predicate:
+
+$$
+\neg(\forall x\,P(x)) \equiv \exists x\,\neg P(x), \qquad
+\neg(\exists x\,P(x)) \equiv \forall x\,\neg P(x).
+$$
+
+Always state the domain. “Every student submitted” and “every integer submitted” are different mathematical claims.
+
+## Rules of inference
+
+An argument is valid when the conclusion follows from its premises. Common valid forms are:
+
+- **Modus ponens:** $p \to q$ and $p$, therefore $q$.
+- **Modus tollens:** $p \to q$ and $\neg q$, therefore $\neg p$.
+- **Hypothetical syllogism:** $p \to q$ and $q \to r$, therefore $p \to r$.
+- **Disjunctive syllogism:** $p \lor q$ and $\neg p$, therefore $q$.
+
+Do not confuse a valid form with the converse. From $p \to q$ and $q$ you cannot conclude $p$; this is the fallacy of affirming the consequent.
+
+## Common mistakes
+
+- Treating “or” as exclusive when the problem allows both outcomes.
+- Negating $p \to q$ as $\neg p \to \neg q$ instead of $p \land \neg q$.
+- Omitting the domain when translating a quantified sentence.
+- Assuming a statement is equivalent because it “sounds similar” without testing all rows or applying a law.
+
+</TopicNotesFlow>

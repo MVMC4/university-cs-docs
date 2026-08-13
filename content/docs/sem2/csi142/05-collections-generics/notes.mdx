@@ -1,0 +1,34 @@
+---
+title: "Notes"
+description: "Notes on Java collection interfaces, type parameters, iteration, and choosing data structures."
+---
+
+<TopicNotesFlow course="CSI142" topic="Collections and Generics" summary="Notes on Java collection interfaces, type parameters, iteration, and choosing data structures.">
+
+
+## Collections and Generics
+
+Collections model groups of objects with different performance and ordering properties. Program to an interface when possible: declare a `List` when the client needs ordered elements, a `Set` when duplicates are not allowed, and a `Map` when values are looked up by keys.
+
+| Type | Main property | Typical implementation |
+| --- | --- | --- |
+| `List<E>` | Ordered, indexed, duplicates allowed | `ArrayList<E>` |
+| `Set<E>` | Unique elements | `HashSet<E>` |
+| `Map<K,V>` | Key-value association | `HashMap<K,V>` |
+| `Queue<E>` | First-in-first-out processing | `ArrayDeque<E>` |
+
+Generics provide compile-time type safety: `List<String>` communicates that the list contains strings. Primitive types use wrapper classes such as `Integer`; Java can autobox between `int` and `Integer`, but be aware that unboxing `null` causes an exception.
+
+## Iteration
+
+Use an enhanced `for` loop for read-only traversal. Use an `Iterator` when elements must be removed safely during traversal, or collect changes and apply them afterward. Modifying most collections structurally during an enhanced loop can cause a concurrent modification error.
+
+## Maps and keys
+
+`map.put(key, value)` associates a value and `map.get(key)` retrieves it. Check `containsKey` when a missing key must be distinguished from a key mapped to `null`. Keys should have stable equality and hash behaviour while stored in a hash map.
+
+## Choosing well
+
+Choose based on required operations, not habit. An `ArrayList` gives fast indexed access; a linked structure may help with specific insertion patterns; a hash set offers fast average membership but no sorted order. State whether ordering and duplicates matter in the method contract.
+
+</TopicNotesFlow>

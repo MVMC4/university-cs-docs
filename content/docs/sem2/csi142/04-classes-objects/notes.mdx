@@ -1,0 +1,50 @@
+---
+title: "Notes"
+description: "Notes on object state, constructors, encapsulation, methods, and class design."
+---
+
+<TopicNotesFlow course="CSI142" topic="Classes and Objects" summary="Notes on object state, constructors, encapsulation, methods, and class design.">
+
+
+## Classes and Objects
+
+A class defines a type: fields represent state and methods represent behaviour. An object is an instance created from that class. A reference variable stores a way to reach the object, not the object’s complete value.
+
+## Encapsulation
+
+Keep fields private and expose controlled operations. A setter should preserve the class invariant rather than blindly accepting every value. For a bank account, a balance should not become negative if the contract disallows overdrafts; the class should reject or report an invalid withdrawal.
+
+```java
+public final class BankAccount {
+    private double balance;
+
+    public BankAccount(double openingBalance) {
+        if (openingBalance < 0) throw new IllegalArgumentException();
+        balance = openingBalance;
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount < 0 || amount > balance) return false;
+        balance -= amount;
+        return true;
+    }
+}
+```
+
+## Constructors and `this`
+
+A constructor has the class name and no return type. It establishes a valid initial state. `this` refers to the current object and distinguishes a field from a parameter with the same name. If no constructor is declared, Java may provide a default no-argument constructor; once a constructor is declared, that automatic constructor is no longer supplied.
+
+## Identity and equality
+
+Two references can point to the same object. `==` checks reference identity for objects; `.equals()` should express logical equality when a class implements it appropriately. When overriding `equals`, also consider the `hashCode` contract before using objects in hash-based collections.
+
+## Class checklist
+
+- What invariant must always hold?
+- Which state should be private?
+- Which operations are part of the public interface?
+- What should happen for invalid input?
+- Can each public method be tested independently?
+
+</TopicNotesFlow>

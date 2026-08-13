@@ -1,0 +1,35 @@
+---
+title: "Notes"
+description: "Notes on sequence notation, recurrence relations, arithmetic and geometric sums."
+---
+
+<TopicNotesFlow course="CSI132" topic="Sequences and Summations" summary="Notes on sequence notation, recurrence relations, arithmetic and geometric sums.">
+
+
+## Sequences and Summations
+
+A sequence is a function from a set of integers, usually $\mathbb N$, into a target set. The notation $(a_n)$ describes the term indexed by $n$; it does not mean that the terms form a set, since order and repetition matter.
+
+## Common forms
+
+An arithmetic sequence has constant difference $d$: $a_n=a_1+(n-1)d$. A geometric sequence has constant ratio $r$: $a_n=a_1r^{n-1}$. Their finite sums are
+
+$$\sum_{i=1}^{n}a_i=\frac n2(2a_1+(n-1)d),\qquad \sum_{i=0}^{n-1}ar^i=a\frac{1-r^n}{1-r}\quad(r\ne1).$$
+
+Sigma notation is manipulated by splitting sums, pulling out constants, and shifting indices carefully. For example, $\sum_{i=1}^n(ca_i+db_i)=c\sum_{i=1}^na_i+d\sum_{i=1}^nb_i$.
+
+## Recurrences and recursion
+
+A recurrence defines a term using earlier terms. Initial conditions are part of the definition. For $a_n=a_{n-1}+d$, repeated expansion gives the arithmetic formula. For $a_n=ra_{n-1}$, expansion gives $a_n=r^{n-1}a_1$. Verification by induction is essential.
+
+A recursive algorithm needs a base case and a step that moves toward it. For factorial, $0!=1$ is the base and $n!=n(n-1)!$ is the step. Trace both the calls and the returns; the value is produced while recursion unwinds.
+
+## Common mistakes
+
+- Mixing zero-based and one-based indices.
+- Dropping a boundary term while shifting a sum.
+- Using the finite geometric formula when $r=1$ without handling that case.
+- Giving a recurrence without initial values.
+- Assuming a pattern continues without proof.
+
+</TopicNotesFlow>

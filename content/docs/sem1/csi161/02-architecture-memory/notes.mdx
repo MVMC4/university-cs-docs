@@ -1,0 +1,38 @@
+---
+title: "Notes"
+description: "Detailed notes on CPU components, instruction cycles, buses, and memory hierarchy."
+---
+
+<TopicNotesFlow course="CSI161" topic="Architecture, Organisation, and Memory" summary="Detailed notes on CPU components, instruction cycles, buses, and memory hierarchy.">
+
+
+## Architecture, Organisation, and Memory
+
+Computer architecture describes programmer-visible behaviour and instruction sets. Computer organisation describes the hardware arrangements that implement it.
+
+## CPU components
+
+The control unit coordinates instruction execution. The arithmetic and logic unit performs arithmetic and boolean operations. Registers hold small, fast values used immediately by the CPU. Cache stores recently used data closer to the processor than main memory.
+
+## Instruction cycle
+
+1. **Fetch:** obtain the next instruction from memory.
+2. **Decode:** interpret the operation and operands.
+3. **Execute:** perform the operation.
+4. **Store:** write the result and update the program counter.
+
+The cycle repeats until a halt or system interruption occurs. The processor's speed is not the only performance factor; memory latency, cache hits, and bus bandwidth matter too.
+
+## Memory hierarchy
+
+Registers are smallest and fastest, followed by cache, RAM, solid-state or hard-disk storage, and archival storage. Higher levels are faster but more expensive per byte. RAM is volatile; ROM and secondary storage retain data without power.
+
+## Buses
+
+The data bus carries values, the address bus identifies a memory location, and the control bus carries signals such as read, write, and clock coordination. Bus width affects how many bits move in one transfer; bandwidth combines width and transfer rate.
+
+## Checkpoint
+
+Explain why a program can be slowed by a cache miss even when the CPU is operating at the same clock speed. Then trace an instruction through fetch, decode, execute, and store.
+
+</TopicNotesFlow>

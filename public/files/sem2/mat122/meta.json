@@ -1,0 +1,33 @@
+[
+  {"id":"outline","title":"MAT122 Course Outline","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/MAT122-Course-Outline.pdf","description":"Course information, learning outcomes, assessment, and scheme of work.","isNew":true},
+  {"id":"scheme","title":"MAT122 Course Scheme","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/MAT122-Course-Scheme.pdf","description":"Official Semester 2 sequence from limits through coordinate geometry."},
+  {"id":"lectures","title":"Lecture Notes","category":"Lectures","type":"folder","description":"Weekly lecture notes and review packs.","children":[
+    {"id":"w1","title":"Week 1","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week1.pdf","description":"Limits and continuity."},
+    {"id":"w2","title":"Week 2","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week2.pdf","description":"Continuity and calculus foundations."},
+    {"id":"w3","title":"Week 3","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week3.pdf","description":"The derivative."},
+    {"id":"w4","title":"Week 4","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week4.pdf","description":"Differentiation rules."},
+    {"id":"w5","title":"Week 5","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week5.pdf","description":"Logarithmic, exponential, and implicit differentiation."},
+    {"id":"w6","title":"Week 6","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week6.pdf","description":"Parametric curves and differentiation applications."},
+    {"id":"w7","title":"Week 7","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week7.pdf","description":"Derivative tests and curve analysis."},
+    {"id":"w9","title":"Week 9","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week 9.pdf","description":"Curve analysis and integration introduction."},
+    {"id":"w9-review","title":"Week 9 Student Review","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/MAT122 Week 9 Students version.pdf","description":"Student review material."},
+    {"id":"w10","title":"Week 10","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week 10.pdf","description":"Definite integrals and substitution."},
+    {"id":"w11","title":"Week 11","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week 11.pdf","description":"Logarithmic and exponential integration."},
+    {"id":"w12","title":"Week 12","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week 12.pdf","description":"Integration by parts."},
+    {"id":"w13","title":"Week 13","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week 13.pdf","description":"Partial fractions and applications."},
+    {"id":"w14","title":"Week 14","category":"Lectures","type":"pdf","url":"/files/sem2/mat122/lectures/Week 14.pdf","description":"Areas, volumes, and coordinate geometry."}
+  ]},
+  {"id":"assignments","title":"Tutorial Assignments","category":"Practice","type":"folder","description":"Tutorials from the Semester 2 vault.","children":[
+    {"id":"tut4","title":"Tutorial 4","category":"Practice","type":"pdf","url":"/files/sem2/mat122/assignments/Mat_122_Tutorial_4_2026.pdf","description":"Differentiation practice."},
+    {"id":"tut5","title":"Tutorial 5","category":"Practice","type":"pdf","url":"/files/sem2/mat122/assignments/MAT_122_Tutorial_5.pdf","description":"Applications practice."},
+    {"id":"tut6","title":"Tutorial 6","category":"Practice","type":"pdf","url":"/files/sem2/mat122/assignments/MAT_122_Tutorial_6.pdf","description":"Integration practice."}
+  ]},
+  {"id":"pastpapers","title":"Past Papers and Review","category":"Past Papers","type":"folder","description":"Tutorial papers, marking keys, and exam material.","children":[
+    {"id":"exam","title":"MAT122 Past Exams","category":"Past Papers","type":"pdf","url":"/files/sem2/mat122/pastpapers/MAT122-PAST-EXAMS.pdf","description":"Past examination material."},
+    {"id":"tut1","title":"Tutorial 1","category":"Past Papers","type":"pdf","url":"/files/sem2/mat122/pastpapers/Tutorial_1_Mat_122.pdf","description":"Early calculus practice."},
+    {"id":"tut2","title":"Tutorial 2","category":"Past Papers","type":"pdf","url":"/files/sem2/mat122/pastpapers/Mat_122_Tutorial_2_2026-1.pdf","description":"Limits and differentiation practice."},
+    {"id":"tut3","title":"Tutorial 3","category":"Past Papers","type":"pdf","url":"/files/sem2/mat122/pastpapers/Mat_122_Tutorial_3_2026.pdf","description":"Differentiation practice."},
+    {"id":"key3","title":"Tutorial 3 Marking Key","category":"Past Papers","type":"pdf","url":"/files/sem2/mat122/pastpapers/Tutorial 3 – Differentiation_ Marking Key.pdf","description":"Worked differentiation solutions."}
+  ]},
+  {"id":"reference","title":"Reference Material","category":"Books","type":"pdf","url":"/files/sem2/mat122/reference/Advanced Calculus and Mathematics Complete Reference.pdf","description":"Supplementary calculus and mathematics reference."}
+]

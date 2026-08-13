@@ -1,0 +1,27 @@
+---
+title: "Notes"
+description: "Notes on the product and sum rules, permutations, combinations, and counting with restrictions."
+---
+
+<TopicNotesFlow course="CSI132" topic="Counting" summary="Notes on the product and sum rules, permutations, combinations, and counting with restrictions.">
+
+
+## Counting
+
+Counting arguments determine how many outcomes are possible without listing them all. First decide whether choices are sequential, alternative, ordered, or subject to repetition.
+
+## Fundamental rules
+
+If a process has $m$ choices followed by $n$ choices, the product rule gives $mn$ outcomes. If outcomes belong to disjoint alternatives with $m$ and $n$ possibilities, the sum rule gives $m+n$. Verify that alternatives do not overlap before adding.
+
+The number of ordered arrangements of $r$ objects chosen from $n$ distinct objects is $P(n,r)=n!/(n-r)!$. The number of unordered selections is $\binom nr=n!/[r!(n-r)!]$. “Choose a committee” is usually a combination; “assign president, secretary, and treasurer” is a permutation.
+
+With repetition allowed, an ordered string of length $r$ from $n$ symbols has $n^r$ possibilities. Use complementary counting when a restriction is easier to describe by its opposite. For a password of four digits with at least one zero, count all $10^4$ strings and subtract the $9^4$ strings with no zero.
+
+For two overlapping sets, $|A\cup B|=|A|+|B|-|A\cap B|$. The intersection is subtracted because it was counted twice. Draw a Venn diagram before applying the formula.
+
+## Decision process
+
+Ask: What is one outcome? Does order matter? Is repetition allowed? Are there separate cases? Do cases overlap? Can the answer be checked by a smaller instance? These questions prevent applying a memorised formula to the wrong model.
+
+</TopicNotesFlow>

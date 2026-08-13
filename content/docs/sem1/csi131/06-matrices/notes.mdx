@@ -1,0 +1,61 @@
+---
+title: "Notes"
+description: "Detailed notes on integer arithmetic, matrix operations, and zero-one matrix representations."
+---
+
+<TopicNotesFlow course="CSI131" topic="Integers and Matrices" summary="Detailed notes on integer arithmetic, matrix operations, and zero-one matrix representations.">
+
+
+## Integers and Matrices
+
+Discrete mathematics uses integers because many computer-science objects are counted, indexed, or represented by finite bit patterns.
+
+## Integer notation
+
+The integers are $\mathbb Z=\{\ldots,-2,-1,0,1,2,\ldots\}$. We say $a$ divides $b$, written $a\mid b$, when $b=ak$ for some $k\in\mathbb Z$. Divisibility is transitive: if $a\mid b$ and $b\mid c$, then $a\mid c$.
+
+## Matrix basics
+
+An $m\times n$ matrix has $m$ rows and $n$ columns. Matrix equality requires equal dimensions and equal corresponding entries. Addition is entrywise and is defined only for matrices of the same size.
+
+If $A$ is $m\times n$ and $B$ is $n\times p$, then $AB$ is $m\times p$ with
+$$
+(AB)_{ij}=\sum_{k=1}^n a_{ik}b_{kj}.
+$$
+The inner dimensions must match. Matrix multiplication is generally not commutative: $AB$ may exist while $BA$ does not.
+
+## Zero-one matrices
+
+A zero-one matrix contains only 0 and 1. It can represent a relation: $m_{ij}=1$ means that the relation holds between object $i$ and object $j$. An adjacency matrix represents graph edges in the same way.
+
+<HighlightCard
+  variant="neutral"
+  title="Interpret the entry before calculating"
+  description="The multiplication formula is useful only when rows and columns have a clear meaning in the model."
+>
+
+If row $i$ records outgoing edges from vertex $i$ and column $j$ records incoming edges to vertex $j$, then a 1 in position $(i,j)$ means there is a direct edge from $i$ to $j$.
+
+</HighlightCard>
+
+## Worked multiplication
+
+For
+$$
+A=\begin{bmatrix}1&2\\3&4\end{bmatrix},\quad
+B=\begin{bmatrix}5&6\\7&8\end{bmatrix},
+$$
+the top-left entry of $AB$ is the first row of $A$ dotted with the first column of $B$:
+$$
+(AB)_{11}=1(5)+2(7)=19.
+$$
+Compute every entry with the same row-column rule.
+
+## Common mistakes
+
+- Reversing the dimensions of a matrix.
+- Multiplying entries pairwise instead of using row-column dot products.
+- Assuming $AB=BA$.
+- Forgetting what a 1 means when using a matrix to model a relation or graph.
+
+</TopicNotesFlow>

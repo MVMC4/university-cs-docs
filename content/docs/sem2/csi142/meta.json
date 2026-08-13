@@ -1,0 +1,4 @@
+{
+  "title": "CSI142: Object-Oriented Programming",
+  "pages": ["index", "01-java-control-flow", "02-arrays-arraylists", "03-methods-modularity", "04-classes-objects", "05-collections-generics", "06-exceptions-recursion", "resources"]
+}
