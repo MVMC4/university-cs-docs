@@ -1,0 +1,10 @@
+# The lead maintainer reviews repository-wide changes.
+* @MVMC4
+
+# Explicitly call attention to contribution policy, automation, and security changes.
+/.github/ @MVMC4
+/SECURITY.md @MVMC4
+/CODE_OF_CONDUCT.md @MVMC4
+/GOVERNANCE.md @MVMC4
+/CONTENT_POLICY.md @MVMC4
+/LICENSE @MVMC4

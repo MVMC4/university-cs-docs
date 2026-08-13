@@ -2,10 +2,25 @@
   "name": "university-docs",
   "version": "0.0.0",
   "private": true,
+  "description": "An open, interactive Computer Science study hub for University of Botswana courses.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MVMC4/university-cs-docs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MVMC4/university-cs-docs/issues"
+  },
+  "homepage": "https://university-cs-docs.vercel.app",
+  "engines": {
+    "node": ">=22 <23",
+    "npm": ">=10"
+  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
+    "check": "npm run types:check && npm run build",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx"
   },
