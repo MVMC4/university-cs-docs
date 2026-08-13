@@ -1,8 +1,28 @@
 # University CS Docs
 
-A comprehensive, interactive documentation platform for Computer Science courses at the University of Botswana. This project provides structured notes, runnable code examples, and interactive quizzes for various modules, including Functional Programming, Data Structures, Discrete Mathematics, and Calculus.
+[![CI](https://github.com/MVMC4/university-cs-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/MVMC4/university-cs-docs/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/MVMC4/university-cs-docs/actions/workflows/codeql.yml/badge.svg)](https://github.com/MVMC4/university-cs-docs/actions/workflows/codeql.yml)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## IMPORTANT: Memory Warning for Large MDX Files
+An open, interactive documentation platform for Computer Science courses at the University of Botswana. The project combines structured notes, active-recall review, guided questions, advanced mock exams, interactive components, and course resource hubs.
+
+> [!IMPORTANT]
+> This is a community-maintained study resource, not an official University of Botswana publication. Confirm course requirements, assessment rules, and administrative information through official university channels.
+
+## Contributing
+
+Contributions are welcome—from a one-line correction to a complete course topic. Start with the [contribution guide](CONTRIBUTING.md), follow the [Code of Conduct](CODE_OF_CONDUCT.md), and review the [educational content and resource policy](CONTENT_POLICY.md).
+
+- [Report a bug](https://github.com/MVMC4/university-cs-docs/issues/new?template=bug.yml)
+- [Report a content correction](https://github.com/MVMC4/university-cs-docs/issues/new?template=content.yml)
+- [Propose a feature or course topic](https://github.com/MVMC4/university-cs-docs/issues/new?template=feature.yml)
+- [Ask a question or discuss an idea](https://github.com/MVMC4/university-cs-docs/discussions)
+- [Report a vulnerability privately](https://github.com/MVMC4/university-cs-docs/security/advisories/new)
+
+Project decisions and roles are documented in [GOVERNANCE.md](GOVERNANCE.md). General help routes are listed in [SUPPORT.md](SUPPORT.md).
+
+## Memory warning for large MDX builds
 If you experience out-of-memory errors or crashes while running the development server with large MDX files, you may need to increase Node.js memory limits. For systems with 16GB of RAM, it is highly recommended to allocate up to 12GB to Node.js during intensive builds or development to prevent V8 heap exhaustion.
 
 Run the development server with increased memory:
@@ -17,19 +37,19 @@ NODE_OPTIONS="--max-old-space-size=12288" npm run build
 ## Installation and Setup
 
 ### Prerequisites
-- Node.js (v18.17 or higher recommended)
-- npm or yarn
+- Node.js 22
+- npm 10 or later
 - Git
 
 ### Setup Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/MVMC4/university-docs.git
-   cd university-docs
+   git clone https://github.com/MVMC4/university-cs-docs.git
+   cd university-cs-docs
    ```
 2. Install Node.js dependencies:
    ```bash
-   npm install
+   npm ci
    ```
 
 ## Development Workflow
@@ -56,7 +76,7 @@ npm start
 
 This project is built on modern web technologies to ensure a fast, searchable, and interactive learning experience.
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Documentation Engine**: Fumadocs
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
@@ -210,25 +230,20 @@ The MDX compiler parses JSX before KaTeX processes LaTeX. Violating these rules 
 2. **Never Use Raw `<` or `>` Inside JSX**: The JSX parser interprets `<` and `>` as tag boundaries. Always use LaTeX commands (`\lt`, `\gt`) or HTML entities (`&lt;`, `&gt;`).
 3. **Prevent Grid/Flex Blowout**: Math formulas do not wrap. All layout components already include `min-w-0` and `overflow-x-auto`. Do not override these classes.
 
-## Contributing Guidelines
+## Contribution checks
 
-Contributions are welcome and encouraged. To contribute:
+Before opening a pull request, run:
 
-1. Fork the repository.
-2. Create a new feature branch (`git checkout -b feature/AmazingFeature`).
-3. Ensure your code adheres to the existing styling and architectural patterns.
-4. If adding new content, ensure MDX files are properly formatted and quiz data strictly follows the TypeScript interfaces.
-5. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-6. Push to the branch (`git push origin feature/AmazingFeature`).
-7. Open a Pull Request.
+```bash
+npm run check
+```
 
-### Content Guidelines
-- **MDX Files**: Must include frontmatter (title, description), use proper heading hierarchy, and include code examples with syntax highlighting.
-- **Quiz Questions**: Must have exactly 4 options per question, a 0-indexed `correctIndex`, and detailed explanations.
-- **Images**: Must use descriptive filenames, include captions, and be optimized for the web.
+GitHub Actions repeats the type check and production build and also runs CodeQL and dependency review where applicable. See [CONTRIBUTING.md](CONTRIBUTING.md) for content structure, quality requirements, source provenance, accessibility, and pull-request expectations.
 
 ## License
 
 Distributed under the MIT License. See the `LICENSE` file for full text.
+
+The MIT License applies to original repository code and content. Third-party educational resources retain their respective rights and must comply with [CONTENT_POLICY.md](CONTENT_POLICY.md).
 
 Copyright (c) 2026 MVMC4

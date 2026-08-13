@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/MVMC4/university-cs-docs/security/advisories/new
+    about: Report vulnerabilities privately; never disclose them in a public issue.
+  - name: Questions and open-ended ideas
+    url: https://github.com/MVMC4/university-cs-docs/discussions
+    about: Ask setup questions or discuss ideas that are not yet actionable issues.
+  - name: University of Botswana
+    url: https://www.ub.bw/
+    about: Use official university channels for enrolment, grades, course administration, and institutional support.

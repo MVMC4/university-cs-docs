@@ -1,0 +1,68 @@
+name: Bug report
+description: Report a reproducible problem with the website or an interactive component.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Do not include private student data, credentials, or security vulnerabilities here. Report vulnerabilities through the repository Security tab.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: This is not a security vulnerability or a private-data report.
+          required: true
+  - type: input
+    id: route
+    attributes:
+      label: Affected route or component
+      description: Provide the page URL, documentation route, or component name.
+      placeholder: /docs/sem2/csi142/04-classes-objects/notes
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem
+      description: Explain what went wrong and why it matters.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, device, operating system, Node.js version, or commit SHA where relevant.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or logs
+      description: Remove credentials and personal information before attaching evidence.
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - "Yes"
+        - "No"
+        - "Maybe, with guidance"

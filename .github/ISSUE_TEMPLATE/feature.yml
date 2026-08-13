@@ -1,0 +1,52 @@
+name: Feature or course proposal
+description: Propose a new feature, course, topic, component, or contributor-tooling improvement.
+title: "proposal: "
+labels:
+  - enhancement
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and discussions for this proposal.
+          required: true
+        - label: I have read the contribution and educational-content policies.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: Describe the contributor or student need, not only the proposed implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+      description: Explain the desired behavior, content scope, or user experience.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Explain existing components or approaches you considered.
+  - type: textarea
+    id: sources
+    attributes:
+      label: Course-outline or source basis
+      description: Required for new courses/topics. Include provenance and redistribution rights for files.
+  - type: textarea
+    id: scope
+    attributes:
+      label: Suggested scope
+      description: List likely routes, components, files, and validation.
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you willing to implement this?
+      options:
+        - "Yes"
+        - "No"
+        - "Maybe, with guidance"

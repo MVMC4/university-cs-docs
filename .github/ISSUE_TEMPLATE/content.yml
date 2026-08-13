@@ -1,0 +1,75 @@
+name: Content correction
+description: Report an inaccurate, incomplete, unclear, or inaccessible course page.
+title: "content: "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Educational accuracy matters. Please give enough detail and evidence for another contributor to verify the correction. Do not upload restricted course material or personal student data.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for this correction.
+          required: true
+        - label: Any attached resource may legally be shared with this open-source project.
+          required: true
+  - type: input
+    id: course
+    attributes:
+      label: Course and topic
+      placeholder: MAT111 — Exponential and Logarithmic Functions
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Page or route
+      placeholder: /docs/sem1/mat111/03-exponential-logarithmic/notes
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type of content issue
+      options:
+        - Factual or mathematical error
+        - Incorrect answer or marking guidance
+        - Missing explanation or syllabus topic
+        - Unclear writing or terminology
+        - Broken citation or resource
+        - Accessibility issue
+        - Typographical error
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current content or problem
+      description: Quote only the smallest relevant portion.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Proposed correction
+      description: Include complete reasoning when correcting mathematics, code, or an answer key.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Supporting sources
+      description: Prefer official outlines, primary documentation, or established textbooks. Include edition/page or a direct URL.
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Would you like to submit a pull request?
+      options:
+        - "Yes"
+        - "No"
+        - "Maybe, with guidance"
