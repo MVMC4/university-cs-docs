@@ -1,0 +1,72 @@
+---
+title: "Notes"
+description: "Detailed notes on algorithm design, pseudocode, searching, sorting, and counting."
+---
+
+<TopicNotesFlow course="CSI131" topic="Algorithms and Counting" summary="Detailed notes on algorithm design, pseudocode, searching, sorting, and counting.">
+
+
+## Algorithms and Counting
+
+An algorithm is a finite, unambiguous sequence of effective steps that maps input to output. A good specification states the precondition, postcondition, and termination behaviour.
+
+## Algorithm design
+
+Start with the problem rather than code:
+
+1. Identify inputs, outputs, constraints, and edge cases.
+2. Write a small example by hand.
+3. Choose a representation and decompose the work into steps.
+4. Express the steps as pseudocode.
+5. Test normal, boundary, and invalid inputs.
+
+Correctness has two parts: the algorithm gives the right result when it stops, and it does stop for every permitted input.
+
+## Searching and sorting
+
+Linear search examines items in order and has worst-case time $O(n)$. Binary search requires sorted data and repeatedly halves the search interval, giving $O(\log n)$ time.
+
+Selection sort repeatedly selects the next smallest item and places it in position; it is simple but $O(n^2)$. Merge sort divides, recursively sorts, and merges; its typical running time is $O(n\log n)$ and it needs extra storage.
+
+## Counting principles
+
+If a task has disjoint alternatives with $a$ and $b$ possibilities, the addition principle gives $a+b$. If a task has successive stages with $a$ choices followed by $b$ choices, the multiplication principle gives $ab$.
+
+For $n$ distinct objects:
+$$
+P(n,r)=\frac{n!}{(n-r)!}
+$$
+counts ordered selections of $r$, while
+$$
+\binom nr=\frac{n!}{r!(n-r)!}
+$$
+counts unordered selections.
+
+<StepByStep>
+  <StepByStepTitle>Choosing a counting model</StepByStepTitle>
+  <Step number={1}>
+    <StepTitle>Define the outcome</StepTitle>
+    A password uses 3 distinct letters from 8 available letters. An outcome is an ordered 3-letter string.
+  </Step>
+  <Step number={2}>
+    <StepTitle>Decide whether order matters</StepTitle>
+    ABC and BAC are different passwords, so order matters.
+  </Step>
+  <Step number={3}>
+    <StepTitle>Apply the permutation rule</StepTitle>
+    The count is $P(8,3)=8\cdot7\cdot6=336$.
+  </Step>
+</StepByStep>
+
+## Complexity intuition
+
+Asymptotic notation describes growth while ignoring constants and lower-order terms. Nested loops often produce a product of ranges; sequential blocks add their costs, with the largest growth term dominating.
+
+## Common mistakes
+
+- Applying binary search to unsorted data.
+- Counting an outcome more than once through overlapping cases.
+- Using combinations when the positions or order are meaningful.
+- Proving an algorithm works on one example instead of an arbitrary input.
+
+</TopicNotesFlow>

@@ -1,0 +1,63 @@
+---
+title: "Notes"
+description: "Detailed notes on method contracts, scope, libraries, classes, constructors, and encapsulation."
+---
+
+<TopicNotesFlow course="CSI141" topic="Methods, Libraries, and Classes" summary="Detailed notes on method contracts, scope, libraries, classes, constructors, and encapsulation.">
+
+
+## Methods, Libraries, and Classes
+
+Methods isolate a responsibility behind a name. A method signature gives its access modifier, return type, name, and parameter types.
+
+```java
+public static double average(int total, int count) {
+    return (double) total / count;
+}
+```
+
+The method contract should state the preconditions, postconditions, and side effects. A `void` method performs an action but does not return a value.
+
+## Parameters and scope
+
+Java passes arguments by value. For primitives, the method receives a copy of the value. For references, the method receives a copy of the reference, so it can mutate the referenced object but cannot replace the caller's reference itself.
+
+Local variables exist only inside their block. Avoid shadowing a field or parameter with a local variable of the same name unless the distinction is intentional and clear.
+
+## Libraries
+
+The standard library provides tested abstractions. Read API documentation for the method's parameters, return value, exceptions, and mutation behaviour instead of guessing from its name.
+
+## Classes and objects
+
+A class defines a type. Fields represent state, constructors establish valid initial state, and methods provide behaviour.
+
+```java
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double openingBalance) {
+        if (openingBalance < 0) throw new IllegalArgumentException();
+        balance = openingBalance;
+    }
+
+    public void deposit(double amount) {
+        if (amount <= 0) throw new IllegalArgumentException();
+        balance += amount;
+    }
+
+    public double getBalance() { return balance; }
+}
+```
+
+`private` protects the representation. Public methods enforce the class invariant and expose only the operations clients need.
+
+## Common mistakes
+
+- Forgetting to return a value on every branch of a non-void method.
+- Confusing a parameter with an argument.
+- Mutating a shared object accidentally.
+- Making every field public and losing control over valid state.
+- Giving a class many unrelated responsibilities.
+
+</TopicNotesFlow>

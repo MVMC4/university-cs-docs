@@ -1,0 +1,63 @@
+---
+title: "Notes"
+description: "Detailed notes on fixed arrays, two-dimensional arrays, ArrayList operations, and bounds safety."
+---
+
+<TopicNotesFlow course="CSI141" topic="Arrays and ArrayLists" summary="Detailed notes on fixed arrays, two-dimensional arrays, ArrayList operations, and bounds safety.">
+
+
+## Arrays and ArrayLists
+
+An array stores a fixed number of values of one type. Its valid indices are `0` through `length - 1`.
+
+```java
+int[] scores = new int[4];
+scores[0] = 72;
+for (int i = 0; i < scores.length; i++) {
+    System.out.println(scores[i]);
+}
+```
+
+The enhanced loop is convenient when the index is not needed:
+
+```java
+for (int score : scores) {
+    total += score;
+}
+```
+
+## Two-dimensional arrays
+
+An `int[][]` is an array of rows, and rows may have different lengths. Use `matrix.length` for the number of rows and `matrix[row].length` for a particular row.
+
+## ArrayList
+
+`ArrayList<T>` grows dynamically and stores reference types, so use wrapper types such as `Integer` instead of `int` as the type parameter.
+
+```java
+ArrayList<String> names = new ArrayList<>();
+names.add("Ada");
+String first = names.get(0);
+names.set(0, "Grace");
+names.remove(0);
+int n = names.size();
+```
+
+`remove(0)` removes an element by index; `remove(Integer.valueOf(0))` removes the value `0` from an integer list. This overload distinction matters.
+
+## Choosing a collection
+
+Use an array when the size is fixed and indexed access is central. Use `ArrayList` when the number of elements changes. Use a set when uniqueness matters and a map when values are retrieved by keys; these are introduced as the collection ideas grow.
+
+## Bounds and aliasing
+
+An index error means the program asked for an element outside the valid range. Check empty collections before accessing index 0. Two variables can refer to the same array, so a mutation through one name is visible through the other.
+
+## Common mistakes
+
+- Looping while `i <= array.length` instead of `i < array.length`.
+- Using `.length` on an `ArrayList`; use `.size()`.
+- Removing items while moving forward through a list and skipping the next item.
+- Assuming a two-dimensional array is always rectangular.
+
+</TopicNotesFlow>

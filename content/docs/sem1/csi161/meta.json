@@ -1,4 +1,4 @@
 {
   "title": "CSI161: Introduction to Computing",
-  "pages": ["index", "resources"]
+  "pages": ["index", "01-systems-overview", "02-architecture-memory", "03-software-operating-systems", "04-data-representation", "05-networks", "06-emerging-technologies", "resources"]
 }

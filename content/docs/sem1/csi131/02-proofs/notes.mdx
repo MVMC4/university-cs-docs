@@ -1,0 +1,82 @@
+---
+title: "Notes"
+description: "Detailed notes on direct proof, contraposition, contradiction, induction, and proof structure."
+---
+
+<TopicNotesFlow course="CSI131" topic="Proof Techniques" summary="Detailed notes on direct proof, contraposition, contradiction, induction, and proof structure.">
+
+
+## Proof Techniques
+
+A proof is a logically connected explanation that starts from accepted definitions, hypotheses, and theorems and arrives at the desired conclusion. It is not a list of examples and it is not a diagram without an argument.
+
+## Direct proof
+
+To prove $P \to Q$ directly, assume $P$ and use definitions and known results to derive $Q$. For an even integer, write $n=2k$ for some $k\in\mathbb Z$; for an odd integer, write $n=2k+1$.
+
+<StepByStep>
+  <StepByStepTitle>Example: the sum of two odd integers is even</StepByStepTitle>
+  <Step number={1}>
+    <StepTitle>Use the definition</StepTitle>
+    Let $a$ and $b$ be odd. Then $a=2m+1$ and $b=2n+1$ for integers $m,n$.
+  </Step>
+  <Step number={2}>
+    <StepTitle>Add and factor</StepTitle>
+    $a+b=(2m+1)+(2n+1)=2(m+n+1)$.
+  </Step>
+  <Step number={3}>
+    <StepTitle>Return to the definition</StepTitle>
+    Since $m+n+1$ is an integer, $a+b$ has the form $2k$. Therefore it is even.
+  </Step>
+</StepByStep>
+
+## Contrapositive and contradiction
+
+The implication $P\to Q$ is equivalent to its contrapositive $\neg Q\to\neg P$. Use the contrapositive when the conclusion is easier to negate than the original hypothesis.
+
+To prove by contradiction, assume the claim is false and derive a statement that cannot be true. A contradiction can be $r\land\neg r$, an impossible inequality, or a conflict with a previously established fact. State exactly where the contradiction occurs.
+
+## Proof by cases
+
+If the domain naturally splits into exhaustive cases, prove the claim in each case. For an integer, parity gives the cases $n=2k$ and $n=2k+1$. For an absolute value, the cases $x\ge0$ and $x<0$ are usually appropriate.
+
+## Mathematical induction
+
+Induction proves a family of statements $P(n)$ for all integers $n\ge n_0$.
+
+1. **Base case:** prove $P(n_0)$.
+2. **Inductive hypothesis:** assume $P(k)$ is true for an arbitrary $k\ge n_0$.
+3. **Inductive step:** use that assumption to prove $P(k+1)$.
+4. **Conclusion:** state that the result holds for every $n\ge n_0$.
+
+<HighlightCard
+  variant="neutral"
+  title="Induction is a chain, not circular reasoning"
+  description="The base case starts the chain; the inductive step proves that truth passes from one integer to the next."
+>
+
+For example,
+$$
+1+2+\cdots+n=\frac{n(n+1)}2.
+$$
+Assuming the formula for $k$, add $k+1$ to both sides:
+$$
+\frac{k(k+1)}2+(k+1)=\frac{(k+1)(k+2)}2.
+$$
+That establishes the next case.
+
+</HighlightCard>
+
+## Strong induction
+
+In strong induction, assume $P(n_0),P(n_0+1),\ldots,P(k)$ and use any of these facts to prove $P(k+1)$. It is useful when the next case depends on several earlier cases, as in recursive decompositions or factorisation arguments.
+
+## Proof checklist
+
+- Did you state the domain and hypotheses?
+- Did you use definitions rather than an unexplained intuition?
+- Is every variable introduced before it is used?
+- Did you prove the exact claim, including both directions of an “if and only if”?
+- Is the conclusion clearly connected to the original statement?
+
+</TopicNotesFlow>

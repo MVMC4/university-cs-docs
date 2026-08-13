@@ -1,0 +1,34 @@
+---
+title: "Notes"
+description: "Notes on discrete and continuous random variables, expectation, variance, and transformations."
+---
+
+<TopicNotesFlow course="STA122" topic="Random Variables" summary="Notes on discrete and continuous random variables, expectation, variance, and transformations.">
+
+
+## Random Variables
+
+A random variable $X$ assigns a numerical value to each outcome. A discrete random variable has countable possible values and a probability mass function (pmf) $p(x)=P(X=x)$. The pmf must satisfy $p(x)\ge0$ and $\sum_xp(x)=1$.
+
+The cumulative distribution function is $F(x)=P(X\le x)$. It is non-decreasing, approaches 0 on the far left, and approaches 1 on the far right. For a discrete variable, jumps in $F$ equal point probabilities.
+
+## Mean and variance
+
+The expected value is $E[X]=\sum_x xp(x)$. Variance measures spread:
+
+$$\operatorname{Var}(X)=E[(X-\mu)^2]=E[X^2]-\mu^2.$$
+
+For constants $a,b$, $E[aX+b]=aE[X]+b$ and $\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X)$. Adding a constant shifts the distribution but does not change its spread.
+
+## Modelling
+
+Define what one trial means and what $X$ counts. “Number of successes” differs from “trial on which the first success occurs.” Check the support, total probability, and whether outcomes are independent before selecting a distribution.
+
+## Common mistakes
+
+- Forgetting to include every support value.
+- Confusing standard deviation with variance.
+- Applying linearity of variance as though it were linear without independence or covariance information.
+- Treating a random variable as the same thing as an outcome.
+
+</TopicNotesFlow>

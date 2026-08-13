@@ -1,0 +1,55 @@
+---
+title: "Notes"
+description: "Detailed notes on text files, streams, exceptions, testing, and reliable submissions."
+---
+
+<TopicNotesFlow course="CSI141" topic="Files, Streams, and Tested Programs" summary="Detailed notes on text files, streams, exceptions, testing, and reliable submissions.">
+
+
+## Files, Streams, and Tested Programs
+
+File input/output lets a program work with data beyond one console session. Treat file access as a failure-prone boundary: paths can be wrong, files can be missing, and contents can be malformed.
+
+## Reading a text file
+
+```java
+try (Scanner in = new Scanner(Path.of("scores.txt"))) {
+    while (in.hasNextInt()) {
+        int score = in.nextInt();
+        // process score
+    }
+} catch (IOException ex) {
+    System.err.println("Could not read scores.txt");
+}
+```
+
+The try-with-resources statement closes the scanner automatically. The path should be explicit about the program's working directory, especially in an IDE.
+
+## Exceptions
+
+An exception represents an abnormal condition. Catch only exceptions that you can handle meaningfully; do not hide errors with an empty `catch` block. Validate input at the boundary so the rest of the program can rely on its assumptions.
+
+## Testing strategy
+
+Test equivalence classes rather than a random handful of values:
+
+- a normal valid input;
+- the smallest and largest valid inputs;
+- an empty input or zero;
+- malformed or missing input;
+- repeated values and duplicate records.
+
+For each test, record the input, expected output, actual output, and diagnosis. A regression test prevents a fixed bug from returning later.
+
+## Lab-quality programs
+
+A good submission has meaningful names, small methods, clear output, no unexplained magic numbers, and tests that demonstrate the specification. Follow the course collaboration and submission rules; learning to explain your own code is part of the assessment.
+
+## Common mistakes
+
+- Assuming a relative path points to the source folder.
+- Catching an exception and continuing with invalid state.
+- Testing only a successful file and not the missing-file case.
+- Mixing file parsing, business logic, and presentation in one large method.
+
+</TopicNotesFlow>

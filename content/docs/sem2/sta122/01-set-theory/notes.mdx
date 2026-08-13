@@ -1,0 +1,30 @@
+---
+title: "Notes"
+description: "Notes on sample spaces, events, set operations, and probability diagrams."
+---
+
+<TopicNotesFlow course="STA122" topic="Set Theory and Events" summary="Notes on sample spaces, events, set operations, and probability diagrams.">
+
+
+## Set Theory and Events
+
+Probability begins with a sample space $\Omega$, the set of possible outcomes. An event $A$ is a subset of $\Omega$. The complement $A^c$ means that $A$ does not occur, $A\cup B$ means at least one occurs, and $A\cap B$ means both occur.
+
+## Modelling outcomes
+
+Define the outcome precisely before counting. For two coin tosses, $\Omega=\{HH,HT,TH,TT\}$ if order matters. The event “exactly one head” is $\{HT,TH\}$. A single physical situation can have different valid sample spaces, but probabilities must be assigned consistently within the chosen model.
+
+Disjoint events satisfy $A\cap B=\varnothing$. De Morgan's laws help translate complements: $(A\cup B)^c=A^c\cap B^c$ and $(A\cap B)^c=A^c\cup B^c$.
+
+## Counting diagrams
+
+Use a Venn diagram for overlapping events and a tree diagram for sequential experiments. Label branches with conditional probabilities when later choices depend on earlier outcomes. Check that all terminal branches are mutually exclusive and exhaustive.
+
+## Common mistakes
+
+- Confusing an outcome with an event.
+- Assuming all outcomes are equally likely without justification.
+- Adding probabilities of events that overlap.
+- Leaving the sample space vague or inconsistent with the question.
+
+</TopicNotesFlow>

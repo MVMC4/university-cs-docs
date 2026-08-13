@@ -1,4 +1,4 @@
 {
   "title": "CSI131: Discrete Structures I",
-  "pages": ["index", "resources"]
+  "pages": ["index", "01-logic", "02-proofs", "03-sets-functions", "04-sequences-induction", "05-algorithms-counting", "06-matrices", "resources"]
 }

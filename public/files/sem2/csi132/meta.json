@@ -1,0 +1,32 @@
+[
+  {"id":"lectures","title":"Lecture Packs","category":"Lectures","type":"folder","description":"Semester 2 lecture packs from sets through number theory.","children":[
+    {"id":"lec-sets","title":"Week 1: Sets","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week1-Sets.pdf","description":"Set definitions, operations, and identities."},
+    {"id":"lec-functions","title":"Week 3: Functions","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week3-Functions.pdf","description":"Functions, mappings, and related notation."},
+    {"id":"lec-proofs","title":"Week 4: Proofs","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week4-Proofs.pdf","description":"Proof methods and mathematical reasoning."},
+    {"id":"lec-sums","title":"Week 5: Sequences and Summations","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week5-SequencesAndSummations.pdf","description":"Sequences, recurrences, and sigma notation."},
+    {"id":"lec-induction","title":"Week 6: Mathematical Induction","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week6-MathematicalInduction.pdf","description":"Inductive proof structure and applications."},
+    {"id":"lec-counting","title":"Weeks 7 and 9: Counting","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week7&9-Counting.pdf","description":"Counting principles, permutations, and combinations."},
+    {"id":"lec-graphs","title":"Weeks 10 and 11: Relations and Graphs","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week10&11-Relations&Graphs.pdf","description":"Relations and graph structures."},
+    {"id":"lec-number-theory","title":"Week 12: Number Theory","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week12-NumberTheory.pdf","description":"Divisibility and integer techniques."},
+    {"id":"lec-primes","title":"Week 13: Primes and GCD","category":"Lectures","type":"pdf","url":"/files/sem2/csi132/lectures/Week13-PrimesAndGCD.pdf","description":"Prime factorisation and greatest common divisors."}
+  ]},
+  {"id":"tutorials","title":"Tutorials and Assignments","category":"Practice","type":"folder","description":"Tutorial problem sets for the major topic blocks.","children":[
+    {"id":"tut-sets","title":"Sets Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/Sets-Tutorial.pdf","description":"Practice with set operations."},
+    {"id":"tut-functions","title":"Functions Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/Tutorial - Functions.pdf","description":"Function exercises."},
+    {"id":"tut-proofs","title":"Proof Methods Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/Tutorial 2 - proof methods.pdf","description":"Proof-writing exercises."},
+    {"id":"tut-induction","title":"Mathematical Induction Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/Tutorial-5-Mathematical Induction.pdf","description":"Induction exercises."},
+    {"id":"tut-summations","title":"Summations Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/CSI132 Tutorial_Summations.pdf","description":"Sequences and summations exercises."},
+    {"id":"tut-counting","title":"Counting Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/combinations_permutations_tutorial.pdf","description":"Permutations and combinations."},
+    {"id":"tut-graphs","title":"Relations and Graphs Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/CSI132tutorial-relations and graphs.pdf","description":"Relations and graph exercises."},
+    {"id":"tut-number-theory","title":"Number Theory Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/Week 12 Tutorial Number Theory 2026.pdf","description":"Number theory exercises."},
+    {"id":"tut-primes","title":"Primes and GCD Tutorial","category":"Practice","type":"pdf","url":"/files/sem2/csi132/assignments/Tutorial 13 - Primes and GCD.pdf","description":"Primes and gcd exercises."}
+  ]},
+  {"id":"solutions","title":"Marking Keys","category":"Practice","type":"folder","description":"Available marking keys and worked solutions.","children":[
+    {"id":"key-full","title":"Full Marking Key","category":"Practice","type":"pdf","url":"/files/sem2/csi132/solutions/CSI132 — Full Marking Key.pdf","description":"Compiled CSI132 marking key."},
+    {"id":"key-proofs","title":"Proof Methods Marking Key","category":"Practice","type":"pdf","url":"/files/sem2/csi132/solutions/CSI132 Tutorial 1 – Proof Methods_ Marking Key.pdf","description":"Proof tutorial solutions."},
+    {"id":"key-functions","title":"Functions Tutorial Solutions","category":"Practice","type":"pdf","url":"/files/sem2/csi132/solutions/CSI132_Functions_Tutorial_Solutions.pdf","description":"Worked functions solutions."},
+    {"id":"key-sums","title":"Summation Solutions","category":"Practice","type":"pdf","url":"/files/sem2/csi132/solutions/summation_solutions.pdf","description":"Worked summation solutions."},
+    {"id":"key-counting","title":"Permutation and Sum Solutions","category":"Practice","type":"pdf","url":"/files/sem2/csi132/solutions/perm&sum.pdf","description":"Worked counting solutions."},
+    {"id":"key-induction","title":"Induction Marking Key","category":"Practice","type":"pdf","url":"/files/sem2/csi132/solutions/Tutorial 4 – Mathematical Induction_ Marking Key.pdf","description":"Worked induction solutions."}
+  ]}
+]

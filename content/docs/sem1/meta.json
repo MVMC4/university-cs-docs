@@ -1,10 +1,11 @@
 {
-  "title": "Semester I",
+  "title": "Semester I (WIP)",
   "pages": [
     "index",
     "csi131",
     "csi141",
     "csi161",
-    "mat111"
+    "mat111",
+    "com141"
   ]
 }

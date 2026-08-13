@@ -1,0 +1,37 @@
+---
+title: "Notes"
+description: "Notes on Java syntax, conditions, loops, tracing, and reliable control flow."
+---
+
+<TopicNotesFlow course="CSI142" topic="Java Recap and Control Flow" summary="Notes on Java syntax, conditions, loops, tracing, and reliable control flow.">
+
+
+## Java Recap and Control Flow
+
+A Java program is evaluated from expressions into values and from statements into state changes. Trace variables after every assignment rather than guessing from the final output.
+
+## Expressions and conditions
+
+Use `==` for primitive value comparison and `.equals()` for the contents of objects such as `String`. A boolean expression combines comparisons with `&&`, `||`, and `!`. Short-circuit evaluation means the right side of `&&` is skipped when the left side is false, and the right side of `||` is skipped when the left side is true.
+
+An `if` statement selects between branches. Use braces even for one statement so later edits cannot change the intended scope. A `switch` is useful when one expression is compared with several discrete cases; include `break` or use the modern arrow form to avoid accidental fall-through.
+
+## Loops
+
+Use a `for` loop when the iteration structure is known, a `while` loop when continuation depends on a condition, and a `do-while` loop when the body must execute once. Every loop needs an initial state, a continuation condition, and progress toward termination.
+
+For a loop summing values, maintain an invariant: after processing the first $k$ items, `sum` equals their total. Test zero iterations, one iteration, and a boundary value. These cases expose off-by-one errors.
+
+## Scope and tracing
+
+A variable declared inside a block is unavailable outside it. For nested conditions, indent code and trace the branch predicate. When debugging, print or inspect the smallest set of state values that distinguishes the expected path from the actual path.
+
+## Common mistakes
+
+- Using assignment `=` where comparison `==` is intended.
+- Comparing strings with `==`.
+- Writing a loop whose counter never changes.
+- Treating the upper bound of a Java array as inclusive.
+- Forgetting a `break` in a classic `switch`.
+
+</TopicNotesFlow>

@@ -1,0 +1,34 @@
+---
+title: "Notes"
+description: "Notes on Bernoulli, binomial, geometric, and Poisson models."
+---
+
+<TopicNotesFlow course="STA122" topic="Discrete Probability Distributions" summary="Notes on Bernoulli, binomial, geometric, and Poisson models.">
+
+
+## Discrete Probability Distributions
+
+Choose a distribution by matching its experiment, not by recognising a keyword. Identify the trial, success definition, number of trials, replacement rule, and independence assumption.
+
+## Bernoulli and binomial
+
+A Bernoulli variable records one success with probability $p$ and failure with probability $1-p$. If $X$ counts successes in $n$ independent Bernoulli trials, then $X\sim\operatorname{Bin}(n,p)$ and
+
+$$P(X=k)=\binom nkp^k(1-p)^{n-k},\quad E[X]=np,\quad \operatorname{Var}(X)=np(1-p).$$
+
+## Geometric
+
+If $X$ is the trial number of the first success, then $P(X=k)=(1-p)^{k-1}p$ for $k\ge1$, and $E[X]=1/p$. If instead $X$ counts failures before the first success, the support starts at zero; define the convention explicitly.
+
+## Poisson
+
+For a count of events in a fixed interval with mean rate $\lambda$, $X\sim\operatorname{Pois}(\lambda)$ has $P(X=k)=e^{-\lambda}\lambda^k/k!$ and mean and variance $\lambda$. The model assumes a stable rate and appropriate independence over disjoint intervals.
+
+## Common mistakes
+
+- Using binomial probability when trials are dependent.
+- Mixing the geometric zero-based and one-based definitions.
+- Treating a rate $\lambda$ as a probability.
+- Forgetting the coefficient $\binom nk$ in a binomial calculation.
+
+</TopicNotesFlow>

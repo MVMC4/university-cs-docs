@@ -24,6 +24,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const markdownUrl = getPageMarkdownUrl(page).url;
   const canonicalUrl = new URL(page.url, siteConfig.url).toString();
   const imageUrl = new URL(getPageImage(page).url, siteConfig.url).toString();
+  const hasCustomEntryHeader = page.url === '/docs' || page.url === '/docs/study-tools';
   const learningResourceJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LearningResource',
@@ -49,15 +50,17 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           __html: JSON.stringify(learningResourceJsonLd).replace(/</g, '\\u003c'),
         }}
       />
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
-      <div className="flex flex-row gap-2 items-center border-b pb-6">
-        <MarkdownCopyButton markdownUrl={markdownUrl} />
-        <ViewOptionsPopover
-          markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/docs/${page.path}`}
-        />
-      </div>
+      {!hasCustomEntryHeader && <>
+        <DocsTitle>{page.data.title}</DocsTitle>
+        <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
+        <div className="flex flex-row gap-2 items-center border-b pb-6">
+          <MarkdownCopyButton markdownUrl={markdownUrl} />
+          <ViewOptionsPopover
+            markdownUrl={markdownUrl}
+            githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/docs/${page.path}`}
+          />
+        </div>
+      </>}
       <DocsBody>
         <MDX
           components={getMDXComponents({

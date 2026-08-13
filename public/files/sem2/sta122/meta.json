@@ -1,0 +1,25 @@
+[
+  {"id":"outline","title":"STA122 Course Outline","category":"Lectures","type":"pdf","url":"/files/sem2/sta122/STA122-Course-Outline.pdf","description":"Official course outline, topic blocks, reading list, and assessment structure.","isNew":true},
+  {"id":"lectures","title":"Chapter Lecture Notes","category":"Lectures","type":"folder","description":"Chapter notes from set theory through discrete distributions.","children":[
+    {"id":"ch1","title":"Chapter 1: Set Theory","category":"Lectures","type":"pdf","url":"/files/sem2/sta122/lectures/Chap1SetTheory.pdf","description":"Sets, operations, and Venn diagrams."},
+    {"id":"ch2","title":"Chapter 2: Probability Concepts","category":"Lectures","type":"pdf","url":"/files/sem2/sta122/lectures/Chap2ProbabilityConcepts.pdf","description":"Sample spaces, events, and axioms."},
+    {"id":"ch3","title":"Chapter 3: Conditional Probability","category":"Lectures","type":"pdf","url":"/files/sem2/sta122/lectures/Chap3ConditionalProbability.pdf","description":"Conditional probability, Bayes, and independence."},
+    {"id":"ch4","title":"Chapter 4: Random Variables","category":"Lectures","type":"pdf","url":"/files/sem2/sta122/lectures/Chap4RandomVariables.pdf","description":"Random variables, expectation, and variance."},
+    {"id":"ch5","title":"Chapter 5: Discrete Distributions","category":"Lectures","type":"pdf","url":"/files/sem2/sta122/lectures/Chap5DiscreteProbDistributions.pdf","description":"Discrete probability models."}
+  ]},
+  {"id":"assignments","title":"Problem Sheets","category":"Practice","type":"folder","description":"Assignments, problem sheets, and marking keys.","children":[
+    {"id":"sheets","title":"Full Problem Sheets","category":"Practice","type":"pdf","url":"/files/sem2/sta122/assignments/STA122 – Full Problem Sheets _ University of Botswana.pdf","description":"Complete problem-sheet collection."},
+    {"id":"sheets2","title":"Problem Sheets Collection","category":"Practice","type":"pdf","url":"/files/sem2/sta122/assignments/STA122_Problem_Sheets.pdf","description":"Additional practice problems."},
+    {"id":"key5","title":"Problem Sheet 5 Marking Key","category":"Practice","type":"pdf","url":"/files/sem2/sta122/assignments/STA122 — Problem Sheet 5 _ Full Marking Key.pdf","description":"Worked solutions for problem sheet 5."}
+  ]},
+  {"id":"past","title":"Past Problem Sheets","category":"Past Papers","type":"folder","description":"Additional past sheets for timed practice.","children":[
+    {"id":"past1","title":"Problem Sheets 6 and 7","category":"Past Papers","type":"pdf","url":"/files/sem2/sta122/pastpapers/STA122 — Problem Sheets 6 & 7.pdf","description":"Later-topic problem sheets."},
+    {"id":"past2","title":"STA122 Problem Sheets","category":"Past Papers","type":"pdf","url":"/files/sem2/sta122/pastpapers/STA122_Problem_Sheets.pdf","description":"Practice collection."}
+  ]},
+  {"id":"guides","title":"Study Guides and Formula Sheets","category":"Books","type":"folder","description":"Supplementary explanations and probability formula references.","children":[
+    {"id":"guide","title":"Distributions Guide","category":"Books","type":"pdf","url":"/files/sem2/sta122/reading/DistributionsGuide.pdf","description":"Distribution-focused reference."},
+    {"id":"explain","title":"Explanatory Notes: Chapters 1 to 5","category":"Books","type":"pdf","url":"/files/sem2/sta122/reading/Explainatory Notes (Chapters 1–5).pdf","description":"Supplementary explanations."},
+    {"id":"formula","title":"Formula Sheet and Problems","category":"Books","type":"pdf","url":"/files/sem2/sta122/reading/STA122 — Introductory Probability_ Formula Sheet & Problems (Chapters 1–5).pdf","description":"Formula reference with practice."},
+    {"id":"formula-short","title":"Introductory Probability Formula Sheet","category":"Books","type":"pdf","url":"/files/sem2/sta122/reading/STA122 — Introductory Probability_ Formula Sheet & Problems.pdf","description":"Compact formula and problem reference."}
+  ]}
+]

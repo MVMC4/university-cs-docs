@@ -1,0 +1,67 @@
+---
+title: "Notes"
+description: "Detailed notes on conditions, selection, loops, invariants, and systematic debugging."
+---
+
+<TopicNotesFlow course="CSI141" topic="Control Flow and Debugging" summary="Detailed notes on conditions, selection, loops, invariants, and systematic debugging.">
+
+
+## Control Flow and Debugging
+
+Control flow determines which statements execute and how often. A reliable program makes each decision and stopping condition visible.
+
+## Conditions
+
+Comparison operators produce booleans: `<`, `<=`, `>`, `>=`, `==`, and `!=`. Combine them with `&&` for “and,” `||` for “or,” and `!` for negation. Use parentheses when a condition has more than one operator.
+
+```java
+if (mark >= 50) {
+    result = "pass";
+} else if (mark >= 40) {
+    result = "supplementary";
+} else {
+    result = "fail";
+}
+```
+
+The branches are tested from top to bottom; the first true branch runs.
+
+## Loops
+
+Use `while` when the number of repetitions is not known in advance, `for` for counter-controlled repetition, and `do-while` when the body must run at least once.
+
+Every loop needs an initial state, a condition, and an update that moves toward termination. A useful invariant is a statement that remains true after every iteration.
+
+<StepByStep>
+  <StepByStepTitle>Designing a safe sum loop</StepByStepTitle>
+  <Step number={1}>
+    <StepTitle>Initialise</StepTitle>
+    Set `sum = 0` before reading values. The invariant is that `sum` equals the total of values already processed.
+  </Step>
+  <Step number={2}>
+    <StepTitle>Process</StepTitle>
+    Add the current value, then advance the counter or read the next value.
+  </Step>
+  <Step number={3}>
+    <StepTitle>Stop</StepTitle>
+    Exit when the count reaches the limit or when a sentinel is read. The invariant then describes the required result.
+  </Step>
+</StepByStep>
+
+## `switch` and input validation
+
+`switch` is useful for discrete choices. Include `break` where fall-through is not intended and provide a `default` branch. A validation loop should reject bad input before the value is used.
+
+## Debugging
+
+Separate syntax, runtime, and logic errors. Use a trace table for loops, inspect the first wrong variable value, and reduce the failing input until the cause is obvious.
+
+## Common mistakes
+
+- Writing `=` instead of `==` in a condition.
+- Creating an infinite loop by forgetting the update.
+- Using `||` where both conditions are required.
+- Testing only the happy path.
+- Placing a broad condition before a more specific condition.
+
+</TopicNotesFlow>

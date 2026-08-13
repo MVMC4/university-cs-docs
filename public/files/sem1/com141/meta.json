@@ -1,0 +1,19 @@
+[
+  {
+    "id": "outline",
+    "title": "COM141 Teaching Plan",
+    "category": "Lectures",
+    "type": "pdf",
+    "url": "/files/sem1/com141/COM141-Teaching-Plan.pdf",
+    "description": "Official teaching plan with learning outcomes, weekly modules, activities, and assessment tasks.",
+    "isNew": true
+  },
+  {
+    "id": "topic-one-slides",
+    "title": "Topic 1 Lecture Slides",
+    "category": "Lectures",
+    "type": "link",
+    "url": "/files/sem1/com141/lectures/COM 141 Lecture slides for topic 1.pptx",
+    "description": "Lecture slides for the opening communication and academic literacy topic."
+  }
+]

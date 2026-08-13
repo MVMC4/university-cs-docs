@@ -1,0 +1,36 @@
+---
+title: "Notes"
+description: "Notes on density functions, continuous probabilities, uniform and normal distributions."
+---
+
+<TopicNotesFlow course="STA122" topic="Continuous Probability Distributions" summary="Notes on density functions, continuous probabilities, uniform and normal distributions.">
+
+
+## Continuous Probability Distributions
+
+A continuous random variable is described by a probability density function (pdf) $f(x)$ with $f(x)\ge0$ and $\int_{-\infty}^{\infty}f(x)dx=1$. Probabilities are areas:
+
+$$P(a\le X\le b)=\int_a^b f(x)dx.$$
+
+For a continuous variable, $P(X=a)=0$, so endpoints do not change interval probabilities.
+
+## Uniform distribution
+
+For $X\sim U(a,b)$, the density is $1/(b-a)$ on $[a,b]$, and $P(c\le X\le d)=(d-c)/(b-a)$ for an interval inside the support. The mean is $(a+b)/2$ and variance is $(b-a)^2/12$.
+
+## Normal distribution
+
+The normal distribution is symmetric around its mean $\mu$ with standard deviation $\sigma$. Standardise with $Z=(X-\mu)/\sigma$, then use the standard normal cumulative distribution function. The empirical 68-95-99.7 rule gives approximate proportions within one, two, and three standard deviations for a normal model.
+
+## Density versus probability
+
+The height $f(x)$ is not itself a probability and can exceed 1 when the support is narrow. Probability is the area over an interval. The CDF $F(x)=P(X\le x)$ is obtained by integrating the pdf from the left.
+
+## Common mistakes
+
+- Assigning positive probability to one exact continuous value.
+- Forgetting to standardise with the correct $\sigma$.
+- Using a pdf height as an interval probability.
+- Ignoring the support where the density is zero.
+
+</TopicNotesFlow>

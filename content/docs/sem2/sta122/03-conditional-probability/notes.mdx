@@ -1,0 +1,36 @@
+---
+title: "Notes"
+description: "Notes on conditional probability, multiplication rules, Bayes' theorem, and independence."
+---
+
+<TopicNotesFlow course="STA122" topic="Conditional Probability and Independence" summary="Notes on conditional probability, multiplication rules, Bayes' theorem, and independence.">
+
+
+## Conditional Probability and Independence
+
+Conditional probability updates the chance of $A$ after learning that $B$ occurred:
+
+$$P(A\mid B)=\frac{P(A\cap B)}{P(B)},\qquad P(B)>0.$$
+
+The multiplication rule is $P(A\cap B)=P(A\mid B)P(B)$. For a sequence, multiply along a branch of a tree diagram and add probabilities for disjoint branches.
+
+## Independence
+
+Events $A$ and $B$ are independent when $P(A\mid B)=P(A)$, equivalently $P(A\cap B)=P(A)P(B)$ when probabilities are defined. Disjoint events with positive probability are not independent: if one occurs, the other cannot occur.
+
+## Total probability and Bayes
+
+If $B_1,\ldots,B_k$ partition the sample space, then $P(A)=\sum_iP(A\mid B_i)P(B_i)$. Bayes' theorem reverses conditioning:
+
+$$P(B_j\mid A)=\frac{P(A\mid B_j)P(B_j)}{P(A)}.$$
+
+The denominator matters. A positive test result must be interpreted using the base rate of the condition, not only the test's sensitivity.
+
+## Common mistakes
+
+- Reversing $P(A\mid B)$ and $P(B\mid A)$.
+- Calling events independent because they are unrelated in wording.
+- Forgetting to condition the second draw when sampling without replacement.
+- Using a probability from a branch without multiplying by that branch's prior probability.
+
+</TopicNotesFlow>

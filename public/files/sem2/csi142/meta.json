@@ -1,0 +1,13 @@
+[
+  {"id":"lectures","title":"Lecture Recaps","category":"Lectures","type":"folder","description":"Weeks 1 to 3 covering Java recap, arrays, and methods.","children":[
+    {"id":"lec1","title":"Lecture 1: Course Introduction and Java Recap","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_1.pdf","description":"Course transition from CSI141 to object-oriented Java."},
+    {"id":"lec2","title":"Lecture 2: Java Architecture, I/O, and Control Flow","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_2.pdf","description":"Java workflow, input, output, and control flow."},
+    {"id":"lec3","title":"Lecture 3: switch, do-while, and OOP Preview","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_3.pdf","description":"Knowledge check and bridge to objects."},
+    {"id":"lec4","title":"Lecture 4: Advanced Control Structures","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_4.pdf","description":"switch, precedence, do-while, and arguments."},
+    {"id":"lec5","title":"Lecture 5: Arrays and ArrayList in Practice","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_5.pdf","description":"Iteration, collections, and common errors."},
+    {"id":"lec6","title":"Lecture 6: Consolidation and Methods","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_6.pdf","description":"Control-flow consolidation and modularity bridge."},
+    {"id":"lec7","title":"Lecture 7: Methods and Modularity I","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_7.pdf","description":"Parameters, returns, pass-by-value, and scope."},
+    {"id":"lec8","title":"Lecture 8: Methods and Modularity II","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_8.pdf","description":"Overloading, shadowing, and static context."},
+    {"id":"lec9","title":"Lecture 9: Refactoring and Method Design","category":"Lectures","type":"pdf","url":"/files/sem2/csi142/lectures/Lec_9.pdf","description":"Refactoring and the bridge to classes."}
+  ]}
+]

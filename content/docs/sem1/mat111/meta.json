@@ -1,4 +1,4 @@
 {
   "title": "MAT111: Introductory Mathematics I",
-  "pages": ["index", "resources"]
+  "pages": ["index", "01-functions", "02-polynomials-rational", "03-exponential-logarithmic", "04-trigonometry", "05-complex-numbers", "resources"]
 }

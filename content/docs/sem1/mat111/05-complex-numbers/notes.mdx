@@ -1,0 +1,53 @@
+---
+title: "Notes"
+description: "Detailed notes on complex arithmetic, Argand diagrams, polar form, De Moivre, and roots."
+---
+
+<TopicNotesFlow course="MAT111" topic="Complex Numbers" summary="Detailed notes on complex arithmetic, Argand diagrams, polar form, De Moivre, and roots.">
+
+
+## Complex Numbers
+
+A complex number has the form $z=a+bi$, where $a,b\in\mathbb R$ and $i^2=-1$. The real part is $a$ and the imaginary part is $b$.
+
+## Arithmetic and conjugates
+
+Add and subtract componentwise. Multiply using $i^2=-1$. The conjugate of $z=a+bi$ is $\bar z=a-bi$, and
+$$
+z\bar z=a^2+b^2=|z|^2.
+$$
+To divide, multiply numerator and denominator by the denominator's conjugate.
+
+## Argand and polar form
+
+Plot $a+bi$ as $(a,b)$. The modulus is $r=\sqrt{a^2+b^2}$ and an argument $\theta$ satisfies $\tan\theta=b/a$ with the correct quadrant. Then
+$$
+z=r(\cos\theta+i\sin\theta).
+$$
+
+## De Moivre's theorem
+
+$$
+[r(\cos\theta+i\sin\theta)]^n=r^n(\cos n\theta+i\sin n\theta).
+$$
+$$
+\text{cis}(\theta)=\cos\theta+i\sin\theta
+$$
+is a convenient shorthand for polar calculations.
+
+## Roots
+
+If $z=r\,\text{cis}(\theta)$, its $n$ distinct roots are
+$$
+w_k=\sqrt[n]{r}\,\text{cis}\left(\frac{\theta+2\pi k}{n}\right),\qquad k=0,1,\ldots,n-1.
+$$
+They are equally spaced around a circle in the Argand plane.
+
+## Common mistakes
+
+- Losing the quadrant when finding an argument.
+- Listing only one root.
+- Treating $i^2$ as $1$.
+- Forgetting that arguments differ by multiples of $2\pi$.
+
+</TopicNotesFlow>

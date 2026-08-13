@@ -1,0 +1,73 @@
+---
+title: "Notes"
+description: "Detailed notes on Java values, variables, strings, expressions, Scanner input, and output."
+---
+
+<TopicNotesFlow course="CSI141" topic="Java Basics, Types, and I/O" summary="Detailed notes on Java values, variables, strings, expressions, Scanner input, and output.">
+
+
+## Java Basics, Types, and I/O
+
+Java is statically typed: every variable has a declared type, and the compiler checks that operations are compatible with that type.
+
+## Values and variables
+
+Common primitive types include `int`, `long`, `double`, `boolean`, and `char`. A variable declaration reserves a name and type; assignment stores a value:
+
+```java
+int count = 3;
+double average = 12.5;
+boolean ready = false;
+```
+
+`String` is a reference type. Use `.equals` to compare string contents, not `==`, which compares references.
+
+## Expressions and conversions
+
+Arithmetic follows precedence: multiplication, division, and remainder before addition and subtraction. Integer division discards the fractional part:
+
+```java
+System.out.println(5 / 2);       // 2
+System.out.println(5 / 2.0);     // 2.5
+```
+
+Widening conversions such as `int` to `double` are usually safe. Narrowing conversions need an explicit cast and may lose information:
+
+```java
+double price = 19.95;
+int whole = (int) price; // 19
+```
+
+## Strings
+
+Useful operations include `length()`, `charAt(i)`, `substring(a,b)`, and `toUpperCase()`. The upper bound of `substring` is exclusive, and valid character indices run from `0` to `length()-1`.
+
+## Console input
+
+```java
+Scanner in = new Scanner(System.in);
+int age = in.nextInt();
+String name = in.next();
+in.nextLine();
+String sentence = in.nextLine();
+```
+
+`nextInt()` leaves the line-ending character in the input buffer. Call `nextLine()` once to consume it before reading a complete line. For robust programs, validate that the next token has the expected type before reading it.
+
+## Output
+
+`System.out.println` adds a newline; `System.out.print` does not. `printf` formats values:
+
+```java
+System.out.printf("Average: %.2f%n", average);
+```
+
+## Common mistakes
+
+- Using `==` for string content.
+- Comparing a `double` for exact equality after arithmetic.
+- Forgetting integer division.
+- Reading a line immediately after `nextInt()` without consuming the newline.
+- Accessing `charAt(length())`, which is outside the valid range.
+
+</TopicNotesFlow>

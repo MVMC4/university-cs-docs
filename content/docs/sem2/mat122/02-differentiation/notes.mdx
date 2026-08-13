@@ -1,0 +1,38 @@
+---
+title: "Notes"
+description: "Notes on derivatives from first principles, standard rules, implicit differentiation, and related rates."
+---
+
+<TopicNotesFlow course="MAT122" topic="Differentiation" summary="Notes on derivatives from first principles, standard rules, implicit differentiation, and related rates.">
+
+
+## Differentiation
+
+The derivative $f'(a)$ is the instantaneous rate of change at $a$ and the slope of the tangent line. From first principles,
+
+$$f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}h.$$
+
+For $f(x)=x^2$, expansion gives $[(a+h)^2-a^2]/h=2a+h$, whose limit is $2a$.
+
+## Rules
+
+The power rule is $\frac d{dx}x^n=nx^{n-1}$. Use linearity for sums and constants, the product rule $(fg)'=f'g+fg'$, and the quotient rule $(f/g)'=(f'g-fg')/g^2$. The chain rule differentiates a composition: $\frac d{dx}f(g(x))=f'(g(x))g'(x)$.
+
+Standard derivatives include $(e^x)'=e^x$, $(\ln x)'=1/x$, $(\sin x)'=\cos x$, and $(\cos x)'=-\sin x$. Apply the chain rule to functions such as $\ln(3x+1)$.
+
+## Implicit differentiation
+
+When $y$ is defined indirectly by an equation, differentiate both sides with respect to $x$ and treat $y$ as a function of $x$. Thus $d(y^2)/dx=2y\,dy/dx$. Collect derivative terms and solve for $dy/dx$.
+
+## Tangents and rates
+
+At $x=a$, the tangent line is $y-f(a)=f'(a)(x-a)$. In a related-rates problem, write an equation linking quantities, differentiate with respect to time, substitute known values only after differentiating, and check units.
+
+## Common mistakes
+
+- Forgetting the inner derivative in a chain rule.
+- Applying the product rule as $(fg)'=f'g'$.
+- Substituting numerical values before differentiating a related-rates equation.
+- Confusing derivative notation with division, such as cancelling `dy/dx` without justification.
+
+</TopicNotesFlow>
