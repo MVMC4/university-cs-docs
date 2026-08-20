@@ -1,0 +1,44 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice with worked solutions for GHCi, expressions, literals, identifiers, basic types, text, and function application."
+---
+
+## Question 1: Reading a GHCi interaction
+
+<ExamQuestion title="Question 1: Prompt, expression, evaluation, and value [10 marks]">
+  <SubQuestion part="a" prompt={<>In <code>ghci&gt; 12 - 5</code> followed by <code>7</code>, identify the prompt, the entered expression, and the resulting value. [3]</>} solution={<>The prompt is <code>ghci&gt;</code>, which shows that GHCi is ready. The entered expression is <code>12 - 5</code>. Evaluation reduces that expression to the value <code>7</code>, which GHCi displays.</>} />
+  <SubQuestion part="b" prompt={<>Explain the difference between an expression, evaluation, and a value using the same interaction. [3]</>} solution={<>An expression is code that denotes a result, here <code>12 - 5</code>. Evaluation is the process of working out that result. A value is the resulting data, here <code>7</code>.</>} />
+  <SubQuestion part="c" prompt={<>What would <code>:type (12 - 5)</code> ask GHCi to report, and why is the colon important? [4]</>} solution={<>It asks GHCi to report the inferred type of <code>12 - 5</code>. A leading colon marks <code>:type</code> as a GHCi command rather than an ordinary Haskell function application.</>} />
+</ExamQuestion>
+
+## Question 2: Literals and identifiers
+
+<ExamQuestion title="Question 2: Names are not text [12 marks]">
+  <SubQuestion part="a" prompt={<>Classify each item as a literal or an identifier: <code>42</code>, <code>score</code>, <code>True</code>, <code>'T'</code>, and <code>&quot;True&quot;</code>. [5]</>} solution={<><code>42</code>, <code>True</code>, <code>'T'</code>, and <code>&quot;True&quot;</code> are literals that directly write values. <code>score</code> is an identifier that must refer to a definition. <code>True</code> is a built-in Bool constructor used as a literal value; its lack of quotes does not turn it into ordinary text.</>} />
+  <SubQuestion part="b" prompt={<>Explain why <code>print Hello World</code> does not supply one sentence to <code>print</code>. Include how spaces affect parsing. [4]</>} solution={<>Without double quotes, <code>Hello</code> and <code>World</code> are parsed as names. Spaces form function applications, so the expression groups as <code>(print Hello) World</code>, not as one String argument.</>} />
+  <SubQuestion part="c" prompt={<>Correct the expression so that the intended sentence is passed as one String value. [3]</>} solution={<>Write <code>print &quot;Hello World&quot;</code>. The double quotes make all characters between them one String literal, including the space.</>} />
+</ExamQuestion>
+
+## Question 3: Basic types and text
+
+<ExamQuestion title="Question 3: Distinguishing values by type [14 marks]">
+  <SubQuestion part="a" prompt={<>Give the type of each literal: <code>False</code>, <code>'7'</code>, <code>&quot;7&quot;</code>, and <code>2.5</code>. Where more than one numeric type is possible, say so. [6]</>} solution={<><code>False</code> has type <code>Bool</code>; <code>'7'</code> has type <code>Char</code>; and <code>&quot;7&quot;</code> has type <code>String</code>. The fractional literal <code>2.5</code> is polymorphic over a suitable fractional type until context selects one; common concrete choices are <code>Float</code> and <code>Double</code>.</>} />
+  <SubQuestion part="b" prompt={<>Why is <code>'7' + 1</code> rejected even though the character looks like a digit? [3]</>} solution={<><code>'7'</code> is a Char value, not a numeric value. Its appearance does not change its type, and arithmetic addition requires numeric operands.</>} />
+  <SubQuestion part="c" prompt={<>Compare <code>Int</code> and <code>Integer</code>, then give one reason a beginner might choose <code>Integer</code> for a factorial. [5]</>} solution={<>Both are whole-number types. <code>Int</code> has a fixed range, while <code>Integer</code> supports arbitrary-precision whole numbers subject to memory. Factorials grow quickly, so <code>Integer</code> avoids overflowing the much smaller fixed <code>Int</code> range.</>} />
+</ExamQuestion>
+
+## Question 4: Function application and grouping
+
+<ExamQuestion title="Question 4: Parentheses change the argument [12 marks]">
+  <SubQuestion part="a" prompt={<>Assume <code>square x = x * x</code>. Add parentheses to show how Haskell groups <code>square 3 + 4</code>, then calculate its value. [4]</>} solution={<>Function application binds more tightly than addition, so the grouping is <code>(square 3) + 4</code>. It evaluates to <code>9 + 4</code>, then <code>13</code>.</>} />
+  <SubQuestion part="b" prompt={<>Write an expression that squares the result of <code>3 + 4</code>, and calculate its value. [4]</>} solution={<>Write <code>square (3 + 4)</code>. The parenthesized expression evaluates to <code>7</code>, which is passed to <code>square</code>, producing <code>49</code>.</>} />
+  <SubQuestion part="c" prompt={<>Explain why spaces in <code>square 3</code> are meaningful rather than decorative. [4]</>} solution={<>Haskell uses juxtaposition separated by spaces for function application. The function is written first and its argument follows, so <code>square 3</code> means “apply <code>square</code> to <code>3</code>.”</>} />
+</ExamQuestion>
+
+## Question 5: Type checking before evaluation
+
+<ExamQuestion title="Question 5: Trace or reject [12 marks]">
+  <SubQuestion part="a" prompt={<>Trace <code>not (4 &lt; 9)</code> by giving the type and value of the inner comparison, followed by the final value. [4]</>} solution={<><code>4 &lt; 9</code> has type <code>Bool</code> and evaluates to <code>True</code>. The function <code>not</code> accepts that Bool and produces <code>False</code>.</>} />
+  <SubQuestion part="b" prompt={<>Explain why <code>not 4</code> is rejected before it can produce a value. [3]</>} solution={<><code>not</code> requires a <code>Bool</code> argument, but <code>4</code> is numeric. The types conflict, so Haskell rejects the expression rather than evaluating it.</>} />
+  <SubQuestion part="c" prompt={<>For <code>'A' == &quot;A&quot;</code>, identify the smallest type conflict and give two separately valid comparisons. [5]</>} solution={<>The left operand is <code>Char</code> and the right operand is <code>String</code>, so equality cannot compare them directly. Valid alternatives include <code>'A' == 'A'</code> and <code>&quot;A&quot; == &quot;A&quot;</code>.</>} />
+</ExamQuestion>

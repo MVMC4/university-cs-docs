@@ -1,0 +1,90 @@
+---
+title: "4.2 Standard List Recursion"
+description: "Applying the 5-Part Framework to implement fundamental list operations like length, lastElement, and revList."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/04-recursion-complexity/list-recursion-quiz';
+
+## 4.2 Standard List Recursion
+
+Lists are the most fundamental data structure in Haskell. Processing them recursively involves pattern matching on the empty list `[]` (base case) and the cons cell `x:xs` (recursive case).
+
+<StepByStep>
+  <StepByStepTitle>Example: The 5-Part Framework for `lastElement`</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>1. Signature</StepTitle>
+    `lastElement :: [a] -> a`
+    *(Note: This is a partial function. A total version would return `Maybe a`.)*
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>2. Specification</StepTitle>
+    - `lastElement [x] = x` (Base case: a singleton list)
+    - `lastElement (x:xs) = lastElement xs` (Recursive case: ignore head, find last of tail)
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>3. Dry Run</StepTitle>
+    Evaluate `lastElement [1, 2, 3]`:
+    `= lastElement (1:[2, 3])`
+    `= lastElement [2, 3]`
+    `= lastElement (2:[3])`
+    `= lastElement [3]`
+    `= 3` (Base case matched)
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>4. Implementation</StepTitle>
+    ```haskell
+    lastElement :: [a] -> a
+    lastElement [x]    = x
+    lastElement (_:xs) = lastElement xs
+    ```
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>5. Test</StepTitle>
+    ```haskell
+    ghci> lastElement [1, 2, 3]
+    3
+    ```
+  </Step>
+</StepByStep>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 4.2.1: Naive List Reversal (`revList`)"
+  description="Reversing a list by recursively reversing the tail and appending the head at the end."
+>
+
+**Specification:**
+- `revList [] = []`
+- `revList (x:xs) = revList xs ++ [x]`
+
+**Implementation:**
+```haskell
+revList :: [a] -> [a]
+revList []     = []
+revList (x:xs) = revList xs ++ [x]
+```
+
+*Note: While logically correct, this implementation has severe performance implications, as analyzed in Section 4.3.*
+
+</HighlightCard>
+
+<Card>
+
+### Definition 4.2.1 (Common List Recursion Patterns)
+
+- **Aggregation (e.g., `listLength`, `sum`):** Base case returns an identity value (e.g., `0`). Recursive step combines the head with the recursive result (e.g., `1 + listLength xs`).
+- **Transformation (e.g., `map`):** Base case returns `[]`. Recursive step applies a function to the head and conses it to the recursive result (e.g., `f x : map f xs`).
+- **Filtering (e.g., `filter`):** Base case returns `[]`. Recursive step conditionally conses the head or skips it (e.g., `if p x then x : filter p xs else filter p xs`).
+
+</Card>
+
+---
+
+## Topic Assessment
+
+<Quiz title="List Recursion Assessment" questions={quizData} />

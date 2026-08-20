@@ -1,0 +1,134 @@
+---
+title: "3.3 Local Bindings: let ... in vs where"
+description: "Scoping rules for local bindings, diagnosing indentation errors, and advanced theory on currying and equational reasoning."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/03-data-deconstruction/local-bindings-quiz';
+
+## 3.3 Local Bindings: let ... in vs where
+
+Haskell provides two scoping constructs for intermediate bindings. They are **not** interchangeable.
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 3.3.1: `where` Clauses"
+  description="Scoped to the entire function definition, including all guards. Ideal for factoring out common calculations."
+>
+
+```haskell
+bmi :: Double -> Double -> String
+bmi weight height
+  | val <= 18.5 = "Underweight"
+  | val <= 25.0 = "Normal"
+  | otherwise   = "Overweight"
+  where
+    val = weight / height ^ 2  -- Visible to all guards above
+```
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 3.3.2: `let ... in` Expressions"
+  description="An *expression* that produces a value. Valid anywhere an expression is valid, including inside `case` blocks and list comprehensions."
+>
+
+```haskell
+pythTriples :: Int -> [(Int, Int, Int)]
+pythTriples n =
+  [ (a, b, c)
+  | c <- [1..n]
+  , b <- [1..c]
+  , let a_sq = c*c - b*b   -- let binds here, visible in filter
+  , a_sq > 0
+  , let a = floor (sqrt (fromIntegral a_sq :: Double))
+  , a*a == a_sq
+  ]
+```
+
+</HighlightCard>
+
+<Card>
+
+### Definition 3.3.1 (Diagnosing Scope and Indentation Errors)
+
+Mixing `let ... in` and guards causes parse errors because `let ... in` expects an `in expr` after the binding, not a guard.
+
+❌ **WRONG:**
+```haskell
+classify n = let label = n * 2
+  | label > 10 = "Big"     -- ERROR: parse error on input '|'
+```
+
+✅ **CORRECT:**
+```haskell
+classify n
+  | label > 10 = "Big"
+  | otherwise  = "Small"
+  where
+    label = n * 2
+```
+
+</Card>
+
+---
+
+### 3.4 Advanced Theory: Currying, Closures, and Equational Reasoning
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 3.4.1: Currying and Closure Formation"
+  description="Every Haskell function takes exactly one argument. Multi-argument functions are chains of single-argument functions returning closures."
+>
+
+For `add :: Int -> Int -> Int` (which is `Int -> (Int -> Int)`):
+1. `add` waits for its first argument.
+2. `add 3` returns a **closure**: a heap object containing the code `(x + y)` and the captured environment `x = 3`.
+3. `(add 3) 4` applies the closure to `4`, evaluating `3 + 4` to yield `7`.
+
+*Note: Closures capture immutable values, eliminating aliasing hazards present in Python/JS.*
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Theorem 3.4.2: Point-Free Style via Eta-Reduction"
+  description="If `f x = g x` for all `x`, then `f = g`. This allows mechanical derivation of point-free style."
+>
+
+**Goal:** Show `\x -> filter (> 5) (map (* 2) x)` equals `filter (> 5) . map (* 2)`.
+
+1. Recognize inner application: `\x -> filter (> 5) ((map (* 2)) x)`
+2. Apply composition definition `(f . g) x = f (g x)`: `\x -> (filter (> 5) . map (* 2)) x`
+3. Eta-reduce (remove `\x ->` and trailing `x`): `filter (> 5) . map (* 2)`
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Proof: Equational Reasoning (`length . map f = length`)</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Base Case (empty list)</StepTitle>
+    `(length . map f) []`
+    `= length (map f [])`        -- Definition of `.`
+    `= length []`                -- Definition of `map`
+    `= 0`                        -- Definition of `length`
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Inductive Step (list `x:xs`)</StepTitle>
+    `(length . map f) (x:xs)`
+    `= length (map f (x:xs))`        -- Definition of `.`
+    `= length (f x : map f xs)`      -- Definition of `map`
+    `= 1 + length (map f xs)`        -- Definition of `length`
+    `= 1 + (length . map f) xs`      -- Definition of `.`
+    `= 1 + length xs`                -- Induction Hypothesis
+    `= length (x:xs)`                -- Definition of `length`
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Local Bindings Assessment" questions={quizData} />

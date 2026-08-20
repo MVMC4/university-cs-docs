@@ -1,0 +1,102 @@
+---
+title: "Lab 01: Input, Process, Output"
+description: "Build and explain a first interactive Haskell program using only concepts taught in the foundation path."
+---
+
+## Goal
+
+Build one small interactive program without copying unexplained syntax. Identify its **input**, **pure processing**, and **output** stages.
+
+## Part A — Understand GHCi
+
+Predict the value and type before running each expression:
+
+```haskell
+-- Multiplication is evaluated before addition.
+5 + 2 * 3
+
+-- Parentheses change the order.
+(5 + 2) * 3
+
+-- Double quotes create a String.
+"CSI243"
+
+-- Single quotes create one Char.
+'C'
+```
+
+Use `:type` to verify each type. Separate the prompt, your input, and GHCi's output in your submission.
+
+## Part B — Compare output actions
+
+Run each action and copy its exact output:
+
+```haskell
+-- Write raw String contents without adding a newline.
+putStr "Hello"
+
+-- Write raw String contents and add a newline.
+putStrLn "Hello"
+
+-- Convert the String to display form, including quotes, and add a newline.
+print "Hello"
+
+-- Convert the number to display form and add a newline.
+print 42
+```
+
+Explain why the String outputs differ.
+
+## Part C — Diagnose instead of guessing
+
+For each invalid attempt, state how Haskell parses it and repair it:
+
+```haskell
+-- Hello and World are parsed as names because quotation marks are missing.
+print Hello World
+
+-- Haskell is case-sensitive; Print and print are different names.
+Print "Hello World"
+
+-- putStrLn requires String, not a number.
+putStrLn 42
+```
+
+## Part D — Build the pipeline
+
+Complete the starter file. The program must:
+
+1. Ask for a name and read it as a `String`.
+2. Build and display a greeting.
+3. Ask for a whole number and read the keyboard text.
+4. Convert that text to `Integer`.
+5. Double it with a pure function.
+6. Display the result.
+
+Expected interaction for `Naledi` and `21`:
+
+```text
+What is your name?
+Naledi
+Hello, Naledi!
+Enter a whole number:
+21
+Twice that number is 42
+```
+
+## Part E — Explain every line
+
+Identify the input lines, output lines, pure functions, immutable bindings, conversion, and processing. Explain why `getLine` produces text and what can go wrong when `read` receives invalid numeric text.
+
+## Downloads
+
+- [Lab 01 starter file](/files/sem3/csi243/downloads/starter-code/Lab01Starter.hs)
+- [Completed solution — only after attempting the lab](/files/sem3/csi243/downloads/completed-examples/Lab01Solution.hs)
+- [First output-only program](/files/sem3/csi243/downloads/completed-examples/FirstProgram.hs)
+
+## Submission requirements
+
+- The source loads without errors.
+- The interaction matches the expected output.
+- Every function has a type signature and purpose comment.
+- The explanation identifies every input, processing, binding, conversion, and output line.

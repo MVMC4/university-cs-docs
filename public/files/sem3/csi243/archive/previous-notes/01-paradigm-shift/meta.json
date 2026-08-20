@@ -1,0 +1,11 @@
+{
+  "title": "1. The Paradigm Shift & FP Principles",
+  "pages": [
+    "index",
+    "paradigms",
+    "fp-principles",
+    "lambda-calculus",
+    "haskell-toolchain",
+    "basic-io"
+  ]
+}

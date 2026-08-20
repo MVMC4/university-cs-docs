@@ -1,0 +1,38 @@
+---
+title: "Practice Questions"
+description: "Exam-style Haskell questions on pure functions, types, input, processing, and output, with worked solutions."
+---
+
+Attempt every subquestion before revealing its solution. Marks indicate the expected depth: a one-mark response states a fact, while larger questions require explanation, tracing, or a complete definition.
+
+<ExamQuestion title="Question 1: Pure Functions and Type Signatures [10 Marks]">
+  <SubQuestion part="a" prompt={<>Explain what makes a Haskell function pure. [2]</>} solution={<>A pure function performs no observable input/output effect, and its result depends only on its arguments. Repeating a call with the same arguments produces the same result.</>} />
+  <SubQuestion part="b" prompt={<>Read <code>larger :: Integer -&gt; Integer -&gt; Integer</code> in words. [2]</>} solution={<>larger accepts two Integer arguments and produces an Integer result.</>} />
+  <SubQuestion part="c" prompt={<>Define <code>larger</code> using an <code>if</code> expression. Include its type signature. [3]</>} solution={<><code>larger :: Integer -&gt; Integer -&gt; Integer<br/>larger first second =<br/>  if first &gt;= second<br/>    then first<br/>    else second</code></>} />
+  <SubQuestion part="d" prompt={<>Trace <code>larger 7 12</code> to its result and identify whether the evaluation performs IO. [3]</>} solution={<>The comparison <code>7 &gt;= 12</code> evaluates to <code>False</code>, so the else branch produces <code>12</code>. The function is pure and performs no IO.</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 2: Displaying Values [10 Marks]">
+  <SubQuestion part="a" prompt={<>State the output of <code>putStrLn "Hello"</code> and <code>print "Hello"</code>, including whether quotation marks are visible. [3]</>} solution={<><code>putStrLn "Hello"</code> displays <code>Hello</code> without quotes. <code>print "Hello"</code> displays <code>"Hello"</code> with quotes. Both finish with a newline.</>} />
+  <SubQuestion part="b" prompt={<>Explain the distinct jobs of <code>show</code> and <code>print</code>. [3]</>} solution={<><code>show</code> is a pure function that creates a String representation of a value. <code>print</code> is an IO action that displays a value using its show representation.</>} />
+  <SubQuestion part="c" prompt={<>Correct <code>putStrLn ("Total: " ++ 42)</code> and explain the type error. [4]</>} solution={<><code>putStrLn ("Total: " ++ show 42)</code>. The <code>++</code> operator joins two lists of the same element type; here both operands must be Strings. The number <code>42</code> must first be converted to <code>"42"</code>.</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 3: main, IO and Sequencing [11 Marks]">
+  <SubQuestion part="a" prompt={<>Explain each part of <code>main :: IO ()</code>. [4]</>} solution={<><code>main</code> names the program's entry action. <code>::</code> means “has type.” <code>IO</code> marks an action that may interact with the outside world, and <code>()</code> is the unit result produced when the action finishes without returning useful data.</>} />
+  <SubQuestion part="b" prompt={<>What does <code>do</code> contribute to an IO definition? [2]</>} solution={<>A do block sequences actions from top to bottom and permits later lines to use results obtained by earlier actions.</>} />
+  <SubQuestion part="c" prompt={<>Write a complete <code>main</code> that prints <code>The cube of 4 is:</code> and then prints the result of <code>cube 4</code>. Assume <code>cube</code> is already defined. Add comments that explain the two output actions. [5]</>} solution={<><code>main :: IO ()<br/>main = do<br/>  -- Output the label as text, then move to a new line.<br/>  putStrLn "The cube of 4 is:"<br/>  -- Evaluate cube 4, then display the resulting Integer.<br/>  print (cube 4)</code></>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 4: Input and Bindings [12 Marks]">
+  <SubQuestion part="a" prompt={<>State the type of <code>getLine</code> and explain why it is not simply <code>String</code>. [3]</>} solution={<><code>getLine :: IO String</code>. Reading the keyboard is an external action; the String becomes available only when that action is performed.</>} />
+  <SubQuestion part="b" prompt={<>Contrast <code>raw &lt;- getLine</code> with <code>let raw = getLine</code>. [4]</>} solution={<><code>raw &lt;- getLine</code> performs the action and binds its produced String. <code>let raw = getLine</code> does not perform input; it gives the IO String action itself the name raw.</>} />
+  <SubQuestion part="c" prompt={<>After <code>raw &lt;- getLine</code>, write a line that binds its parsed Integer to <code>number</code>. State the risk. [5]</>} solution={<><code>let number = read raw :: Integer</code>. The annotation makes the target type explicit. If raw is not valid Integer text, read raises a runtime exception.</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 5: Input–Process–Output Program [17 Marks]">
+  <SubQuestion part="a" prompt={<>Write a pure function <code>cube :: Integer -&gt; Integer</code>. [3]</>} solution={<><code>cube :: Integer -&gt; Integer<br/>cube number = number * number * number</code></>} />
+  <SubQuestion part="b" prompt={<>Write <code>main</code> so it asks for an integer, reads the line, parses it, calculates the cube with <code>cube</code>, and outputs <code>Cube: RESULT</code>. [8]</>} solution={<><code>main :: IO ()<br/>main = do<br/>  putStrLn "Enter an integer:"<br/>  raw &lt;- getLine<br/>  let number = read raw :: Integer<br/>  let result = cube number<br/>  putStrLn ("Cube: " ++ show result)</code></>} />
+  <SubQuestion part="c" prompt={<>Classify each stage in part b as input, pure processing, or output. [3]</>} solution={<>The prompt and final putStrLn calls are output. getLine is input. read, cube, show, and String concatenation are pure processing, although read can fail on malformed text.</>} />
+  <SubQuestion part="d" prompt={<>Explain one failure that compilation cannot prevent in this program and how later material should address it. [3]</>} solution={<>The user may enter text that cannot be parsed as an Integer, causing read to fail at runtime. Later validation should use a safe parser and handle success and failure explicitly.</>} />
+</ExamQuestion>

@@ -1,0 +1,58 @@
+---
+title: "2. Values, Names, Types, and Text"
+description: "Learn literals, identifiers, types, characters, strings, quotation marks, and function application before printing."
+---
+
+
+
+A **literal** is a value written directly in source text. An **identifier** is a program name.
+
+| Literal | Type | Meaning |
+|---|---|---|
+| `42` | numeric | A number |
+| `True` | `Bool` | A truth value |
+| `'A'` | `Char` | One character |
+| `"Hello"` | `String` | A sequence of characters |
+
+## Names are not text
+
+<ComparisonTable columns={['Source', 'Meaning', 'Why']} rows={[
+  ['Hello', 'A program name', 'No quotation marks'],
+  ['\"Hello\"', 'A String value', 'Double quotes mark text'],
+  ["'H'", 'One Char value', 'Single quotes mark one character']
+]} />
+
+Quotation marks instruct the parser to treat the enclosed characters as data.
+
+```text
+ghci> :type 'A'
+'A' :: Char
+ghci> :type "A"
+"A" :: String
+```
+
+`'AB'` is invalid because a `Char` contains exactly one character. `"AB"` is a valid two-character `String`.
+
+## Spaces apply functions
+
+```haskell
+-- Apply the already-defined function square to the value 4.
+square 4
+```
+
+This is **function application**. Multiple applications group left:
+
+```text
+f x y = (f x) y
+```
+
+Therefore `print Hello World` is not one message. Haskell sees applications involving three program names because no quotation marks identify `Hello World` as text.
+
+## Common mistakes
+
+| Attempt | Cause | Correction |
+|---|---|---|
+| `hello` | Identifier, not text | `"hello"` |
+| `'hello'` | More than one character inside single quotes | `"hello"` |
+| `"A" == 'A'` | String and Char are different types | Compare like with like |
+| `true` | Haskell is case-sensitive | `True` |

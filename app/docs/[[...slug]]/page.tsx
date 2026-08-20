@@ -14,6 +14,24 @@ import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
 import { Quiz } from '@/components/interactive/quiz';
 import { siteConfig } from '@/lib/site';
+import { flattenTree } from 'fumadocs-core/page-tree';
+
+function getCourseFooterItems(pageUrl: string) {
+  const segments = pageUrl.split('/').filter(Boolean);
+  if (segments.length < 3 || segments[0] !== 'docs') return undefined;
+
+  const courseUrl = `/${segments.slice(0, 3).join('/')}`;
+  const pages = flattenTree(source.getPageTree().children).filter(
+    (item) => item.url === courseUrl || item.url.startsWith(`${courseUrl}/`),
+  );
+  const currentIndex = pages.findIndex((item) => item.url === pageUrl);
+  if (currentIndex === -1) return undefined;
+
+  return {
+    previous: pages[currentIndex - 1],
+    next: pages[currentIndex + 1],
+  };
+}
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -43,7 +61,11 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   };
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage
+      toc={page.data.toc}
+      full={page.data.full}
+      footer={{ items: getCourseFooterItems(page.url) }}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

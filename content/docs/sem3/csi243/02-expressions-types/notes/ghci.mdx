@@ -1,0 +1,75 @@
+---
+title: "1. GHCi from the Beginning"
+description: "Learn the prompt, expressions, evaluation, values, commands, and type inspection without assuming terminal experience."
+---
+
+
+
+**Haskell** is the language. **GHC** checks and compiles Haskell. **GHCi** is the interactive environment; its final `i` means *interactive*.
+
+```text
+expression you enter  ->  GHCi evaluates it  ->  resulting value
+       2 + 3          ->       add           ->        5
+```
+
+## The prompt
+
+```text
+ghci>
+```
+
+The prompt is produced by GHCi. Do not type `ghci>` yourself. It means “I am ready for your next expression or command.”
+
+```text
+ghci> 2 + 3
+5
+```
+
+The first line contains the prompt and your expression. The second line is GHCi's answer.
+
+## Three essential words
+
+- An **expression** describes a computation: `2 + 3`.
+- **Evaluation** is Haskell applying its rules.
+- A **value** is the finished result: `5`.
+
+```text
+ghci> 1 + 2 * 3
+7
+```
+
+`2 * 3` becomes `6` first because multiplication has higher precedence. Then `1 + 6` becomes `7`.
+
+```text
+ghci> (1 + 2) * 3
+9
+```
+
+Parentheses require `1 + 2` to happen first.
+
+## Commands versus expressions
+
+Commands begin with a colon; ordinary expressions do not.
+
+| Command | Purpose |
+|---|---|
+| `:help` | Show help |
+| `:type expression` | Ask for a type |
+| `:load File.hs` | Check and load a saved file |
+| `:reload` | Reload the current file |
+| `:quit` | Leave GHCi |
+
+```text
+ghci> :type True
+True :: Bool
+```
+
+Read this as: “`True` **has type** `Bool`.” The symbol `::` is read “has type.” A type describes the kind of value and which operations make sense for it.
+
+<StepByStep>
+  <Step number={1} title="Predict">Write the value you expect.</Step>
+  <Step number={2} title="Enter">Type only the expression after the prompt.</Step>
+  <Step number={3} title="Observe">Copy the exact result.</Step>
+  <Step number={4} title="Explain">Name the rule that produced it.</Step>
+  <Step number={5} title="Inspect">Use `:type` and read the answer aloud.</Step>
+</StepByStep>

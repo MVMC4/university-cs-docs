@@ -1,0 +1,9 @@
+{
+  "title": "7. Higher-Order Functions & Mathematical Reasoning",
+  "pages": [
+    "index",
+    "currying-closures",
+    "hofs-comprehensions",
+    "mathematical-reasoning"
+  ]
+}

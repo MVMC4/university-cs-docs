@@ -1,0 +1,84 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on programming paradigms, expressions, pure functions, immutability, composition, and controlled effects."
+---
+
+## Programming paradigms and expressions
+
+<ExamQuestion title="Question 1: Describing a solution [10 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Define the term <em>programming paradigm</em> and name the two paradigms compared in this chapter. [3]</>}
+    solution={<>A programming paradigm is a general approach to structuring programs and expressing solutions. This chapter compares functional programming with imperative programming. [3]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Explain the difference between an expression and an imperative statement. [3]</>}
+    solution={<>An expression evaluates to a value. An imperative statement primarily instructs the machine to perform an operation or change program state. [3]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Classify <code>if score &gt;= 50 then "Pass" else "Fail"</code> as an expression or statement. State its result when <code>score</code> is 64 and explain why both branches are required. [4]</>}
+    solution={<>It is an expression and its result is <code>"Pass"</code>. A Haskell <code>if</code> must produce a value whether its condition is <code>True</code> or <code>False</code>, so it requires both a <code>then</code> and an <code>else</code> result. [4]</>}
+  />
+</ExamQuestion>
+
+## Pure functions and referential transparency
+
+<ExamQuestion title="Question 2: Analysing function behaviour [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>State the two conditions a function must satisfy to be pure. [4]</>}
+    solution={<>Its result must depend only on its declared arguments, so the same arguments produce the same result; evaluating it must not cause an observable side effect. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Consider <code>square number = number * number</code>. Explain why <code>square</code> is pure and evaluate <code>square 6</code>. [4]</>}
+    solution={<>The result is calculated only from <code>number</code>, and evaluation does not read input, print, modify a file, or otherwise interact with external state. <code>square 6</code> evaluates to <code>36</code>. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Define referential transparency and apply it to the expression <code>square 6</code>. [4]</>}
+    solution={<>Referential transparency means an expression can be replaced by its value without changing observable program behaviour. Any occurrence of <code>square 6</code> can therefore be replaced by <code>36</code>, provided <code>square</code> retains this definition. [4]</>}
+  />
+</ExamQuestion>
+
+## Immutability and program state
+
+<ExamQuestion title="Question 3: Reasoning about bindings [10 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain what the definition <code>taxRate = 0.14</code> means. Contrast the binding with assigning a new value to a mutable variable. [4]</>}
+    solution={<>The definition binds the name <code>taxRate</code> to the value <code>0.14</code> within its scope. It does not create a mutable box that is later updated through assignment. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Give two ways immutability can make a program easier to reason about or test. [4]</>}
+    solution={<>Any two well-explained points earn the marks: a name cannot silently refer to a later assigned value; results depend on explicit inputs rather than mutation history; tests require less hidden setup; and independent computations share fewer changing objects. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Does immutability guarantee that an algorithm is efficient? Justify your answer. [2]</>}
+    solution={<>No. Immutability concerns whether bindings are updated. A program can be immutable and pure while still using an inefficient algorithm. [2]</>}
+  />
+</ExamQuestion>
+
+## Pure transformations and effect boundaries
+
+<ExamQuestion title="Question 4: Designing an input–process–output boundary [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Classify each operation as pure or effectful: converting a supplied Celsius value to Fahrenheit; asking the user for a temperature; testing whether a supplied value is below zero; and saving a result to a file. [4]</>}
+    solution={<>Conversion is pure; asking for input is effectful; testing a supplied value is pure; saving to a file is effectful. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Design the boundary of a temperature-conversion program. Identify what its IO layer must do and what should remain pure. [6]</>}
+    solution={<>The IO layer obtains the user's text, converts or validates that external input as necessary, and displays or saves the final result. The temperature conversion and any classification of the supplied numeric value should remain pure functions. Keeping these calculations pure allows them to be tested without keyboard or file interaction. [6]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why effects are not considered inherently bad in functional programming. [4]</>}
+    solution={<>Useful programs must interact with users, files, clocks, networks, and other external systems. Functional design makes those effects explicit and keeps them at controlled boundaries so that the rest of the program remains predictable. [4]</>}
+  />
+</ExamQuestion>
