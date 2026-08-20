@@ -6,10 +6,10 @@
   "summary": {
     "files": 25,
     "bytes": 39335696,
-    "migrated": 23,
+    "migrated": 20,
     "pendingMigration": 0,
     "pendingEvaluation": 0,
-    "rejected": 2
+    "rejected": 5
   },
   "assets": [
     {
@@ -35,24 +35,27 @@
       "bytes": 58556,
       "sha256": "843ec6359a951511f49a94b37e16ef6260b8d2a304ab68b53c3f9aa3f6541f6b",
       "kind": "video-poster",
-      "decision": "migrate",
-      "target": "public/images/sem3/mat221/video-posters/mat221-foundations-poster.png"
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination by explicit user request with the Foundations narrated review."
     },
     {
       "source": "public/videos/mat221-foundations-review.mp4",
       "bytes": 14642193,
       "sha256": "297e181dd03153a12a63a3486a45b650a809c765fc9d2c156d5841aed282c9c4",
       "kind": "video",
-      "decision": "migrate",
-      "target": "public/videos/sem3/mat221/mat221-foundations-review.mp4"
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination by explicit user request."
     },
     {
       "source": "public/videos/mat221-foundations-review.vtt",
       "bytes": 2187,
       "sha256": "782b6e5236ac0b5481000158b5f1598ae846dd2d5f8b1edb76707ae82a1eb4fd",
       "kind": "captions",
-      "decision": "migrate",
-      "target": "public/videos/sem3/mat221/mat221-foundations-review.vtt"
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination with its Foundations narrated review."
     },
     {
       "source": "public/videos/mat221-lesson5-poster.png",

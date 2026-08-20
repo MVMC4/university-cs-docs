@@ -82,15 +82,12 @@ const config = {
   },
   async rewrites() {
     const mat221VideoFiles = [
-      'mat221-foundations-review.mp4',
-      'mat221-foundations-review.vtt',
       'mat221-lesson5-review.mp4',
       'mat221-lesson5-review.vtt',
       'mat221-lesson67-review.mp4',
       'mat221-lesson67-review.vtt',
     ];
     const mat221PosterFiles = [
-      'mat221-foundations-poster.png',
       'mat221-lesson5-poster.png',
       'mat221-lesson67-poster.png',
     ];

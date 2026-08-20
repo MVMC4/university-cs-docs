@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import ExamPractice from '../source/components/ExamPractice';
 import Flashcards from '../source/components/Flashcards';
-import FoundationsReviewVideo from '../source/components/FoundationsReviewVideo';
 import LectureReviewVideo from '../source/components/LectureReviewVideo';
 import Quiz from '../source/components/Quiz';
 import WrittenQuestionBank from '../source/components/WrittenQuestionBank';
@@ -45,7 +44,6 @@ export function Mat221SourceReviewPage({ slug }: { slug: string }) {
     <p className="eyebrow">Topic {topic.num} · {topic.week} · review</p>
     <h1>{topic.title} — <span className="it">review</span></h1>
     <p className="lead">A retrieval session for definitions, formulas, choices of method, and exam traps. Use Questions for written working and Quiz for timed recognition.</p>
-    {slug === 'foundations' ? <FoundationsReviewVideo /> : null}
     <LectureReviewVideo slug={slug} />
     <section id="cards"><h2>Flashcards ({topic.cards.length})</h2><Flashcards cards={topic.cards} worked={worked} storageKey={`mat221-flashcards-${slug}`} /></section>
     <section id="traps"><h2>Exam traps</h2>{topic.traps.map((trap, index) => <div className="trap" key={index}><span className="chip bad">Trap {index + 1}</span><strong>{trap.title}. </strong>{trap.text}</div>)}</section>

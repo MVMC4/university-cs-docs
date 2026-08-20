@@ -23,7 +23,7 @@ This amendment changes the migration contract:
 3. All 16 source components, 19 source library files, seven CSS partials, 15 MDX lessons, and the source App Router files are retained unchanged under `features/courses/mat221/source/` as a reviewable frozen snapshot.
 4. Active MAT221 pages use the copied source primitives and interactive components. Thin compatibility wrappers may change only route paths, host shell placement, asset paths, theme ownership, and timer ownership.
 5. The source chapter route contract is retained: Notes, Questions, Quiz, Review, and Exam Practice for every chapter.
-6. The dedicated MAT221 sidebar is retained inside the course surface, with links translated to the host `/docs/sem3/mat221/...` paths.
+6. MAT221 uses the university/Fumadocs sidebar. The standalone custom sidebar remains reference-only and is not mounted.
 7. Source CSS is composed in source order and scoped to `.mat221-source`; its light palette remains source-faithful. A dark-mode adapter maps the same roles to the host dark palette.
 8. Source MathJax behavior is retained only inside the MAT221 course shell because prop-string mathematics in the copied components is not fully covered by the host static KaTeX pipeline. The host KaTeX pipeline remains active for ordinary MDX math.
 9. The source Pomodoro and Goals UI remain in the frozen snapshot for fidelity evidence but are not mounted. The course planner uses the university singleton timer and contains no goal UI.
@@ -52,7 +52,7 @@ This amendment changes the migration contract:
 6. Substitute only the shared Pomodoro and omit Goals from the mounted planner.
 7. At the end, run hash parity, route/content inventory, type checking, production build, and rendered desktop/mobile light/dark checks; apply fixes only from those results.
 
-The remainder of this document is retained as historical design rationale. Where it conflicts with this amendment—especially the progressive publication gate, prohibition on a MAT221 sidebar, KaTeX-only rule, five-page-without-quiz contract, and no-copy infrastructure rule—this amendment controls.
+The remainder of this document is retained as historical design rationale. Where it conflicts with this amendment—especially the progressive publication gate, KaTeX-only rule, five-page-without-quiz contract, and no-copy infrastructure rule—this amendment controls.
 
 ---
 

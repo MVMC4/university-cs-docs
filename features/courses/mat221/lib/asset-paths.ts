@@ -1,16 +1,13 @@
 export const mat221AssetPaths = {
   videos: {
-    foundations: '/videos/sem3/mat221/mat221-foundations-review.mp4',
     reductionFormulas: '/videos/sem3/mat221/mat221-lesson5-review.mp4',
     trigonometricMethods: '/videos/sem3/mat221/mat221-lesson67-review.mp4',
   },
   captions: {
-    foundations: '/videos/sem3/mat221/mat221-foundations-review.vtt',
     reductionFormulas: '/videos/sem3/mat221/mat221-lesson5-review.vtt',
     trigonometricMethods: '/videos/sem3/mat221/mat221-lesson67-review.vtt',
   },
   posters: {
-    foundations: '/images/sem3/mat221/video-posters/mat221-foundations-poster.png',
     reductionFormulas: '/images/sem3/mat221/video-posters/mat221-lesson5-poster.png',
     trigonometricMethods: '/images/sem3/mat221/video-posters/mat221-lesson67-poster.png',
   },

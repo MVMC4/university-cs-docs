@@ -126,14 +126,6 @@ article h4,
   color: var(--color-fd-accent-foreground);
 }
 
-body.mat221-course-active #nd-docs-layout {
-  --fd-sidebar-width: 0px !important;
-}
-
-body.mat221-course-active #nd-sidebar {
-  display: none;
-}
-
 /* Pomodoro workspace */
 .pomodoro-workspace {
   --study-accent: var(--university-focus);

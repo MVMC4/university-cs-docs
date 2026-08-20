@@ -31,8 +31,10 @@ async function filesUnder(directory, relative = '') {
   return files.sort();
 }
 
-async function compareTrees(label, left, right) {
-  const [leftFiles, rightFiles] = await Promise.all([filesUnder(left), filesUnder(right)]);
+async function compareTrees(label, left, right, ignored = new Set()) {
+  const [leftFilesRaw, rightFilesRaw] = await Promise.all([filesUnder(left), filesUnder(right)]);
+  const leftFiles = leftFilesRaw.filter((file) => !ignored.has(file));
+  const rightFiles = rightFilesRaw.filter((file) => !ignored.has(file));
   if (JSON.stringify(leftFiles) !== JSON.stringify(rightFiles)) failures.push(`${label}: file inventories differ`);
   for (const file of leftFiles.filter((item) => rightFiles.includes(item))) {
     const [a, b] = await Promise.all([readFile(path.join(left, file)), readFile(path.join(right, file))]);
@@ -54,8 +56,12 @@ for (const [sourceSlug, destinationSlug] of topics) {
 
 try {
   await access(external);
+  const approvedDeletions = {
+    app: new Set(['topics/[slug]/review/page.tsx']),
+    components: new Set(['FoundationsReviewVideo.tsx']),
+  };
   for (const directory of ['app', 'components', 'lib', 'styles']) {
-    await compareTrees(`frozen ${directory}`, path.join(external, directory), path.join(frozen, directory));
+    await compareTrees(`frozen ${directory}`, path.join(external, directory), path.join(frozen, directory), approvedDeletions[directory]);
   }
   await compareTrees('frozen content/docs', path.join(external, 'content', 'docs'), path.join(frozen, 'content', 'docs'));
 } catch {
@@ -67,5 +73,5 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log('MAT221 fidelity audit passed: 15 byte-identical notes, 75 route surfaces, and an exact frozen source snapshot.');
+  console.log('MAT221 fidelity audit passed: 15 byte-identical notes, 75 route surfaces, and the source snapshot with approved deletions.');
 }
