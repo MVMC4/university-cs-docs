@@ -1,0 +1,189 @@
+---
+title: "2. Functional Thinking"
+description: "Understand expressions, pure functions, immutability, side effects, composition, and the practical difference between functional and imperative problem solving."
+---
+
+Functional programming is not “ordinary programming with strange syntax.” It changes how we describe a solution. Instead of listing commands that repeatedly alter program state, we define values and transformations between values.
+
+## The central idea
+
+A mathematical function maps an input to an output. If the function is pure, the same input always produces the same output and evaluating it does not secretly change the outside world.
+
+```haskell
+-- A pure function: the result depends only on radius.
+circleArea :: Double -> Double
+circleArea radius = pi * radius * radius
+```
+
+Calling `circleArea 2` produces the same result wherever it appears. It does not modify `radius`, print a message, change a file, or read the clock.
+
+## What, why, when, and how
+
+| Question | Answer |
+|---|---|
+| **What?** | A style of programming built around expressions, functions, immutable values, and composition |
+| **Why?** | It makes individual computations easier to test, reuse, combine, and reason about |
+| **When?** | Data transformations, validation, parsers, compilers, calculations, concurrent systems, and any problem that benefits from predictable components |
+| **When not alone?** | Real applications still need input, output, storage, time, randomness, and networking; Haskell represents these effects explicitly rather than pretending they do not exist |
+| **How?** | Define small transformations, give them types, combine them, and keep effects at a controlled boundary |
+
+## Expression versus statement
+
+An expression has a value. For example:
+
+```haskell
+2 + 3
+if score >= 50 then "Pass" else "Fail"
+```
+
+Both produce values. That is why Haskell's `if` requires an `else`: the entire expression must have a result whichever branch is chosen.
+
+An imperative statement commonly tells the machine to perform an action such as updating a variable. Haskell can perform actions, but pure calculations remain separate from them.
+
+## Functional and imperative comparison
+
+Consider doubling every number in a list.
+
+### Imperative description
+
+```text
+create an empty result
+for every number in the input
+  calculate number * 2
+  append it to the result
+return the result
+```
+
+This explains the sequence of state changes.
+
+### Functional description
+
+```haskell
+-- Apply the doubling function independently to every element.
+doubleAll :: [Integer] -> [Integer]
+doubleAll numbers = map double numbers
+  where
+    double number = number * 2
+```
+
+Test:
+
+```text
+ghci> doubleAll [1, 2, 3, 4]
+[2,4,6,8]
+```
+
+Line by line:
+
+1. `[Integer] -> [Integer]` says the function transforms a list of integers into another list of integers.
+2. `map` captures the reusable pattern “apply one function to every element.”
+3. `double` states only the element-level rule.
+4. No loop counter or changing result variable is required.
+
+## Immutability
+
+Binding a name does not create a box whose contents are repeatedly replaced.
+
+```haskell
+taxRate :: Double
+taxRate = 0.14
+```
+
+Within the same scope, `taxRate` means `0.14`. A second equation attempting to make it a different constant is not an assignment in the imperative sense.
+
+Why this matters:
+
+- reading `taxRate` cannot secretly return a different value later;
+- functions can be evaluated independently when their inputs are known;
+- tests do not depend on hidden mutation;
+- concurrent computations share fewer changing objects.
+
+## Pure functions and side effects
+
+| Pure calculation | Effectful action |
+|---|---|
+| `square 5` | Read a line from the keyboard |
+| `length names` | Write to a file |
+| `filter even numbers` | Print to the terminal |
+| `maximum scores` | Read the current time |
+
+Effects are not bad. Hidden and uncontrolled effects are difficult to reason about. Haskell marks an action with a type such as `IO ()` or `IO String`.
+
+```haskell
+-- Pure: creates the message as a String.
+greeting :: String -> String
+greeting name = "Hello, " ++ name
+
+-- Effectful: sends the pure message to the terminal.
+main :: IO ()
+main = do
+  putStrLn (greeting "Naledi")
+```
+
+Expected output:
+
+```text
+Hello, Naledi
+```
+
+The design keeps the reusable rule `greeting` independent of the terminal. It can be tested without performing input or output.
+
+## Function composition
+
+Composition connects the output of one function to the input of another.
+
+```haskell
+-- Remove surrounding spaces and then convert to uppercase.
+normaliseName :: String -> String
+normaliseName = map toUpper . trim
+```
+
+Read `f . g` from right to left: first apply `g`, then apply `f`. The example needs suitable imports and a `trim` definition, but the important idea is a pipeline of transformations.
+
+At this stage, prefer the clearer explicit version when composition feels mysterious:
+
+```haskell
+normaliseName name = map toUpper (trim name)
+```
+
+Point-free notation is not automatically better. Clarity comes before cleverness.
+
+## Common misconceptions
+
+### “Haskell has no state or input/output”
+
+False. Haskell represents effectful computations explicitly. Later lessons explain `IO` in detail.
+
+### “Pure means the function is fast”
+
+False. Purity makes behavior predictable; it does not guarantee an efficient algorithm.
+
+### “Functional code means using `map` everywhere”
+
+False. Functional design is about values, types, transformations, and controlled effects. `map` is one reusable pattern.
+
+### “Shorter code is always more functional”
+
+False. A readable named function can be better than a dense chain of operators.
+
+## Practice
+
+For each item, decide whether it is a pure calculation or an effectful action and explain why:
+
+1. Convert a list of Celsius temperatures to Fahrenheit.
+2. Ask the user to enter a temperature.
+3. Sort a list already supplied as an argument.
+4. Save the sorted list to a file.
+5. Check whether a password string contains at least eight characters.
+
+Then design a program boundary: which parts can be pure, and which smallest part must perform `IO`?
+
+## Mastery check
+
+You are ready to continue when you can:
+
+- explain functional programming without saying only “it uses functions”;
+- distinguish a value-producing expression from an effectful action;
+- explain why pure functions are easier to test;
+- describe immutability and composition;
+- separate a calculation from the `IO` code that obtains or displays its data.

@@ -1,0 +1,251 @@
+---
+title: "1. Defining Functions"
+description: "Use a repeatable specification, examples, dry run, signature, implementation, and testing process to build reliable Haskell functions."
+---
+
+A function is not complete merely because it compiles. You must know what it promises, which inputs it accepts, how it computes its result, and whether evidence supports the promise.
+
+## The six-part construction process
+
+Use this process for every beginner laboratory function:
+
+1. **Purpose:** say what the function represents in one sentence.
+2. **Examples:** write concrete input-output pairs before implementation.
+3. **Domain and edge cases:** identify valid, boundary, and invalid inputs.
+4. **Signature:** write the type contract.
+5. **Implementation and dry run:** write the equation and manually trace an example.
+6. **Verification:** load the file and test normal, boundary, and invalid cases.
+
+The older five-part framework is preserved inside this version, but examples and domain analysis are made explicit because they prevent many incorrect solutions.
+
+## Worked example: digit recognition
+
+### 1. Purpose
+
+`isDigitChar` determines whether a character is one of the decimal digits `'0'` through `'9'`.
+
+### 2. Examples
+
+```text
+isDigitChar '0' = True
+isDigitChar '7' = True
+isDigitChar 'A' = False
+isDigitChar ' ' = False
+```
+
+### 3. Domain and edge cases
+
+The input is any `Char`. The important boundaries are `'0'` and `'9'`. Characters immediately outside the range should be rejected.
+
+### 4. Signature
+
+```haskell
+isDigitChar :: Char -> Bool
+```
+
+### 5. Implementation
+
+```haskell
+-- Return True when character is between '0' and '9', inclusive.
+isDigitChar :: Char -> Bool
+isDigitChar character =
+  character >= '0' && character <= '9'
+```
+
+Dry run for `'7'`:
+
+```text
+isDigitChar '7'
+= '7' >= '0' && '7' <= '9'
+= True && True
+= True
+```
+
+### 6. Verification
+
+```text
+ghci> isDigitChar '0'
+True
+ghci> isDigitChar '9'
+True
+ghci> isDigitChar '/'
+False
+ghci> isDigitChar ':'
+False
+```
+
+The tests immediately outside the boundaries are valuable because a mistaken strict comparison can pass ordinary examples while rejecting `'0'` or `'9'`.
+
+## Anatomy of a definition
+
+```haskell
+rectangleArea :: Double -> Double -> Double
+rectangleArea lengthValue widthValue = lengthValue * widthValue
+```
+
+| Part | Meaning |
+|---|---|
+| `rectangleArea` | Function name; ordinary function names begin with lowercase letters |
+| `Double -> Double -> Double` | Two `Double` inputs followed by a `Double` result |
+| `lengthValue widthValue` | Parameter names used inside the definition |
+| `=` | Separates the function pattern from its result expression |
+| `lengthValue * widthValue` | The expression returned for those inputs |
+
+Haskell application uses spaces:
+
+```haskell
+rectangleArea 5.0 3.0
+```
+
+It does not use Java-style commas and parentheses:
+
+```text
+rectangleArea(5.0, 3.0)   -- not a two-argument Haskell call
+```
+
+Parentheses in Haskell group one expression. `(5.0, 3.0)` is a tuple, so it would suit a different signature:
+
+```haskell
+rectangleAreaPair :: (Double, Double) -> Double
+rectangleAreaPair (lengthValue, widthValue) = lengthValue * widthValue
+```
+
+## Curried input versus tuple input
+
+| Form | Signature | Call | Use case |
+|---|---|---|---|
+| Curried | `Double -> Double -> Double` | `rectangleArea 5 3` | Normal Haskell style; supports partial application |
+| Tupled | `(Double, Double) -> Double` | `rectangleAreaPair (5, 3)` | Input naturally arrives as one paired record |
+
+These are not the same type. Choose the representation that matches the problem.
+
+## Purpose comments and useful comments
+
+Good comments explain the contract, a non-obvious decision, or an important constraint.
+
+```haskell
+-- Convert Celsius to Fahrenheit using the linear conversion formula.
+celsiusToFahrenheit :: Double -> Double
+celsiusToFahrenheit celsius = celsius * 9 / 5 + 32
+```
+
+A comment such as `-- multiply celsius by 9` merely repeats the code and adds little value.
+
+## Multiple definitions in a module
+
+Create `FunctionPractice.hs`:
+
+```haskell
+module FunctionPractice where
+
+-- Return the cube of a whole number.
+cube :: Integer -> Integer
+cube number = number * number * number
+
+-- Return True exactly when number is below zero.
+isNegative :: Integer -> Bool
+isNegative number = number < 0
+
+-- Return the reciprocal of a non-zero fractional value.
+-- Calling this with zero produces Infinity for floating-point types.
+reciprocalValue :: Double -> Double
+reciprocalValue number = 1 / number
+
+-- Convert a percentage to a pass/fail label.
+resultLabel :: Double -> String
+resultLabel mark =
+  if mark >= 50
+    then "Pass"
+    else "Fail"
+```
+
+Load it:
+
+```text
+ghci> :load FunctionPractice.hs
+[1 of 1] Compiling FunctionPractice ( FunctionPractice.hs, interpreted )
+Ok, one module loaded.
+ghci> cube 4
+64
+ghci> isNegative 0
+False
+ghci> reciprocalValue 4
+0.25
+ghci> resultLabel 49.5
+"Fail"
+ghci> resultLabel 50
+"Pass"
+```
+
+## Why `else` is mandatory
+
+`if` is an expression that must produce one value.
+
+```haskell
+absoluteValue :: Integer -> Integer
+absoluteValue number =
+  if number < 0
+    then -number
+    else number
+```
+
+Both branches return `Integer`, matching the declared result type. Without `else`, the expression would have no result when the condition is false.
+
+## Testing strategy
+
+For `absoluteValue`, a weak test suite checks only `absoluteValue (-5)`. A stronger suite includes:
+
+```text
+ghci> absoluteValue (-5)
+5
+ghci> absoluteValue 0
+0
+ghci> absoluteValue 5
+5
+```
+
+Use three categories:
+
+- **Normal:** an ordinary representative input.
+- **Boundary:** zero, an empty structure, the minimum accepted mark, or another decision edge.
+- **Invalid or exceptional:** input outside the mathematical domain, when the signature permits it.
+
+## Diagnosing failures
+
+### “Variable not in scope”
+
+Check spelling and case. `score`, `Score`, and `scores` are different names.
+
+### “Couldn't match expected type”
+
+Compare the expected type with the actual type. Find the smallest subexpression producing the wrong kind of value.
+
+### Parse error
+
+Check incomplete expressions, missing `else`, unmatched parentheses, and indentation.
+
+### The code runs but the answer is wrong
+
+Return to the examples and dry run. A compiler proves type consistency, not that your formula matches the problem.
+
+## Independent practice
+
+Develop each function using all six parts:
+
+1. `isOddValue`, which reports whether an integral value is odd.
+2. `larger`, which returns the larger of two integers.
+3. `addAndDifference`, which returns the sum and absolute difference as a tuple.
+4. `finalPrice`, which applies a percentage discount to a non-negative price.
+5. `power`, which raises an integer base to a non-negative integer exponent.
+
+For every function, include at least three tests and explain why each test was selected.
+
+## Mastery check
+
+You are ready for choices and pattern matching when you can:
+
+- turn a prose problem into purpose, examples, domain, signature, implementation, dry run, and tests;
+- read multi-argument signatures from left to right;
+- distinguish curried and tuple inputs;
+- explain why compilation is necessary but not sufficient evidence;
+- diagnose a type error by isolating the smallest conflicting expression.

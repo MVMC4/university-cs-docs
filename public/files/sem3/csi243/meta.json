@@ -1,137 +1,112 @@
 [
   {
-    "id": "course-content",
-    "title": "Course Content & Syllabus",
-    "category": "Lectures",
-    "type": "pdf",
-    "url": "/files/sem3/csi243/Course Content.pdf",
-    "description": "Official module outline and assessment details."
-  },
-  {
-    "id": "lec-notes",
-    "title": "Core Lecture Notes",
+    "id": "current-lectures",
+    "title": "Current Course Material",
     "category": "Lectures",
     "type": "folder",
-    "description": "Detailed notes covering functions, Haskell programs, and recursion.",
+    "description": "The supplied lecture material for the active course offering, organized by learning sequence.",
     "children": [
-      { 
-        "id": "lec-intro", 
-        "title": "Lecture 1: Intro to Functional Programming", 
-        "category": "Lectures", 
-        "type": "pdf", 
-        "url": "/files/sem3/csi243/lectures/Lecture 1 Intro to FP (1).pdf", 
-        "description": "Introduction to the FP paradigm, immutability, and pure functions.",
-        "isNew": true 
-      },
-      { "id": "lec2", "title": "Lecture 2: Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Lecture 2 Functions  (1).pdf", "description": "Defining functions, basic syntax, and evaluation." },
-      { "id": "lec3", "title": "Lecture 3: A Haskell Program", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Lecture 3  A Haskell Program (1).pdf", "description": "Structuring a complete Haskell script and basic IO." },
-      { "id": "lec-rec", "title": "Recursion Concepts", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/lectures/Recursion.pdf", "description": "Theoretical foundation of recursive definitions." }
+      { "id": "current-functions-programs", "title": "Functions and Haskell Programs", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/01-foundations-functions/functions-and-haskell-programs.pdf", "description": "Functions, program structure, modules, Prelude, GHCi, and basic types.", "isNew": true },
+      { "id": "current-defining-guards", "title": "Defining Functions and Guards", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/01-foundations-functions/defining-functions-and-guards.pdf", "description": "Specifications, implementations, conditional expressions, and guarded equations.", "isNew": true },
+      { "id": "current-types", "title": "Definitions and Data Types", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/02-types-definitions/definitions-and-data-types.pdf", "description": "Definitions, syntax and type analysis, primitive types, lists, tuples, and functions.", "isNew": true },
+      { "id": "current-choices", "title": "Recursion and Making Choices", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/03-choices-recursion/recursion-and-making-choices.pdf", "description": "Recursion, dry runs, if expressions, pattern matching, guards, cases, and errors.", "isNew": true },
+      { "id": "current-patterns-lambdas", "title": "Patterns, Lambdas, and Sections", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/03-choices-recursion/patterns-lambdas-and-sections.pdf", "description": "Type synonyms, local definitions, recursion, patterns, lambda expressions, currying, and operator sections.", "isNew": true },
+      { "id": "current-modules-collections", "title": "Modules, Lists, Tuples, and Comprehensions", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/04-modules-collections/modules-lists-tuples-comprehensions.pdf", "description": "Module organization, imports, collection operations, tuples, and list comprehensions.", "isNew": true },
+      { "id": "current-hofs", "title": "Higher-Order Functions", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/05-higher-order-functions/higher-order-functions.pdf", "description": "Map, filter, folds, take/drop while, zipWith, iterate, and scans.", "isNew": true }
     ]
   },
   {
-    "id": "haskell-code",
-    "title": "Labs",
+    "id": "current-labs",
+    "title": "Current Labs",
     "category": "Labs",
     "type": "folder",
-    "description": "Starter code (.hs) and lab instructions for Labs 1 through 6.",
+    "description": "Lecturer-supplied laboratory instructions currently available.",
     "children": [
+      { "id": "current-lab01", "title": "Lab 01: Introduction to GHCi", "category": "Current", "type": "docx", "url": "/files/sem3/csi243/current/labs/lab-01-ghci-introduction.docx", "description": "Starting GHCi, commands, expressions, basic functions, and Hello World.", "isNew": true },
+      { "id": "current-lab03", "title": "Lab 03: Recursion and Lists", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/labs/lab-03-recursion-and-lists.pdf", "description": "Recursive list operations and positional lookup.", "isNew": true }
+    ]
+  },
+  {
+    "id": "archived-material",
+    "title": "Archived Material",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Previous site notes, lecture PDFs, and labs retained for reference. These are not the default current route.",
+    "children": [
+      { "id": "archive-outline", "title": "Archived Course Content and Syllabus", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/course-materials/Course Content.pdf", "description": "Earlier course outline and assessment information." },
+      { "id": "archive-lecture-1", "title": "Archived Lecture 1: Introduction to FP", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Lecture 1 Intro to FP (1).pdf", "description": "Earlier introductory lecture." },
+      { "id": "archive-lecture-2", "title": "Archived Lecture 2: Functions", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Lecture 2 Functions  (1).pdf", "description": "Earlier functions lecture." },
+      { "id": "archive-lecture-3", "title": "Archived Lecture 3: A Haskell Program", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Lecture 3  A Haskell Program (1).pdf", "description": "Earlier complete-program lecture." },
+      { "id": "archive-recursion", "title": "Archived Recursion Lecture", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Recursion.pdf", "description": "Earlier recursion material." },
       {
-        "id": "lab1-code", "title": "Lab 1: Recursion", "category": "Labs", "type": "folder", "description": "Lab 1 materials.",
+        "id": "archive-legacy-labs",
+        "title": "Previous Labs and Starter Files",
+        "category": "Archive",
+        "type": "folder",
+        "description": "Earlier Lab 1-6 instructions and code retained for reference.",
         "children": [
-          { "id": "lab1-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab 1/Recursion.pdf", "description": "Lab 1 PDF instructions." }
+          { "id": "legacy-lab1", "title": "Legacy Lab 1: Recursion", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/labs/Haskell/Lab 1/Recursion.pdf", "description": "Earlier Lab 1 instructions." },
+          { "id": "legacy-lab2", "title": "Legacy Lab 2: Recursion", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/labs/Haskell/Lab2/Lab 2 Recursion.pdf", "description": "Earlier Lab 2 instructions." },
+          { "id": "legacy-lab3", "title": "Legacy Lab 3: Recursion Continued", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/labs/Haskell/Lab3/Lab 3 Recursion Continued.pdf", "description": "Earlier Lab 3 instructions." },
+          { "id": "legacy-lab4", "title": "Legacy Lab 4: Pattern Matching", "category": "Archive", "type": "docx", "url": "/files/sem3/csi243/archive/labs/Haskell/Lab4/Lab 4 Pattern Matching.docx", "description": "Earlier Lab 4 instructions." },
+          { "id": "legacy-lab5", "title": "Legacy Lab 5: List Comprehensions", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/labs/Haskell/Lab5/Lab 5 List Comprehensions.pdf", "description": "Earlier Lab 5 instructions." },
+          { "id": "legacy-lab6", "title": "Legacy Lab 6: Polymorphism", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/labs/Haskell/Lab6/Lab 6 Polymorphism and Overloading.pdf", "description": "Earlier Lab 6 instructions." }
         ]
       },
       {
-        "id": "lab2-code", "title": "Lab 2: Functions", "category": "Labs", "type": "folder", "description": "Lab 2 materials.",
+        "id": "archive-legacy-notes",
+        "title": "Previous Site Notes (Raw Archive)",
+        "category": "Archive",
+        "type": "folder",
+        "description": "The complete previous MDX course was preserved before the redemption rewrite.",
         "children": [
-          { "id": "lab2-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab2/Lab 2 Recursion.pdf", "description": "Lab 2 PDF instructions." },
-          { "id": "lab2-hs1", "title": "Functions.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab2/Functions.hs", "description": "Starter code for functions." },
-          { "id": "lab2-hs2", "title": "ListFunctions.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab2/ListFunctions (1).hs", "description": "List processing starter code." }
-        ]
-      },
-      {
-        "id": "lab3-code", "title": "Lab 3: Recursion Continued", "category": "Labs", "type": "folder", "description": "Lab 3 materials.",
-        "children": [
-          { "id": "lab3-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab3/Lab 3 Recursion Continued.pdf", "description": "Lab 3 PDF instructions." },
-          { "id": "lab3-hs", "title": "lab3.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab3/lab3 (1).hs", "description": "Starter code for Lab 3." }
-        ]
-      },
-      {
-        "id": "lab4-code", "title": "Lab 4: Pattern Matching", "category": "Labs", "type": "folder", "description": "Lab 4 materials.",
-        "children": [
-          { "id": "lab4-docx2", "title": "Instructions", "category": "Labs", "type": "docx", "url": "/files/sem3/csi243/Haskell/Lab4/Lab 4 Pattern Matching.docx", "description": "Lab 4 instructions." },
-          { "id": "lab4-hs1", "title": "lab4.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab4/lab4 (1).hs", "description": "Starter code." },
-          { "id": "lab4-hs2", "title": "Lab44.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab4/Lab44.hs", "description": "Additional code file." }
-        ]
-      },
-      {
-        "id": "lab5-code", "title": "Lab 5: List Comprehensions", "category": "Labs", "type": "folder", "description": "Lab 5 materials.",
-        "children": [
-          { "id": "lab5-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab5/Lab 5 List Comprehensions.pdf", "description": "Lab 5 PDF instructions." },
-          { "id": "lab5-hs1", "title": "Lab5.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab5/Lab5.hs", "description": "Starter code." },
-          { "id": "lab5-hs2", "title": "ListComprehension.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab5/ListComprehension.hs", "description": "Additional code file." }
-        ]
-      },
-      {
-        "id": "lab6-code", "title": "Lab 6: Polymorphism", "category": "Labs", "type": "folder", "description": "Lab 6 materials.",
-        "children": [
-          { "id": "lab6-pdf2", "title": "Instructions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi243/Haskell/Lab6/Lab 6 Polymorphism and Overloading.pdf", "description": "Lab 6 PDF instructions." },
-          { "id": "lab6-hs", "title": "Lab6.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/Haskell/Lab6/Lab6.hs", "description": "Starter code." }
+          { "id": "legacy-course-index", "title": "Legacy Course Index", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-1", "title": "Legacy Unit 1: Paradigm Shift", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/01-paradigm-shift/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-2", "title": "Legacy Unit 2: Syntax and Types", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/02-syntax-types/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-3", "title": "Legacy Unit 3: Data Deconstruction", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/03-data-deconstruction/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-4", "title": "Legacy Unit 4: Recursion and Complexity", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/04-recursion-complexity/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-5", "title": "Legacy Unit 5: ADTs and Modules", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/05-adts-modules/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-6", "title": "Legacy Unit 6: Polymorphism", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/06-polymorphism-typeclasses/index.mdx", "description": "Raw archived MDX source." },
+          { "id": "legacy-unit-7", "title": "Legacy Unit 7: Higher-Order Functions", "category": "Archive", "type": "code", "url": "/files/sem3/csi243/archive/previous-notes/07-hofs-reasoning/index.mdx", "description": "Raw archived MDX source." }
         ]
       }
     ]
   },
   {
-    "id": "textbooks",
-    "title": "Reading & Resources",
-    "category": "Books",
+    "id": "redemption-downloads",
+    "title": "Redemption Labs and Examples",
+    "category": "Labs",
     "type": "folder",
-    "description": "Core textbooks, official support, and reference books listed in the course syllabus.",
+    "description": "Editable starter files and verified completed examples for the rebuilt course.",
     "children": [
-      { "id": "book-thompson", "title": "Haskell: The Craft of Functional Programming", "category": "Books", "type": "link", "url": "https://www.amazon.com/Haskell-Functional-Programming-International-Computer/dp/0201342758", "description": "Simon Thompson - The official course textbook (3rd Ed)." },
-      { "id": "book-haskell-org", "title": "Haskell Support & Documentation", "category": "Books", "type": "link", "url": "https://www.haskell.org/", "description": "Official Haskell support, downloads, and documentation." },
-      { "id": "book-lyah", "title": "Learn You a Haskell for Great Good!", "category": "Books", "type": "link", "url": "http://learnyouahaskell.com/", "description": "Miran Lipovaca - A fun, illustrated beginner's guide (Free online)." },
-      { "id": "book-fernandez", "title": "Models of Computation", "category": "Books", "type": "link", "url": "https://www.amazon.com/Models-Computation-Introduction-Computability/dp/1848824343", "description": "Fernandez M - Introduction to computability theory." },
-      { "id": "book-enderton", "title": "A Mathematical Introduction to Logic", "category": "Books", "type": "link", "url": "https://www.amazon.com/Mathematical-Introduction-Logic-Second-Edition/dp/0122384520", "description": "Enderton H B - For the mathematical reasoning and proofs aspect." }
+      { "id": "download-lab01-starter", "title": "Lab 01 Starter", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/downloads/starter-code/Lab01Starter.hs", "description": "Starter file with signatures, tests, and TODO implementations." },
+      { "id": "download-lab01-solution", "title": "Lab 01 Completed Solution", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/downloads/completed-examples/Lab01Solution.hs", "description": "Completed version for review after attempting the lab." },
+      { "id": "download-first-program", "title": "FirstProgram.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/downloads/completed-examples/FirstProgram.hs", "description": "The first saved program from Unit 00." },
+      { "id": "download-function-practice", "title": "FunctionPractice.hs", "category": "Labs", "type": "code", "url": "/files/sem3/csi243/downloads/completed-examples/FunctionPractice.hs", "description": "Worked definitions from Unit 03." }
     ]
   },
   {
-    "id": "videos-haskell",
-    "title": "Video Lectures & Playlists",
-    "category": "Videos",
-    "type": "folder",
-    "description": "Curated YouTube playlists and video courses for Haskell.",
-    "children": [
-      { "id": "vid-lyah", "title": "Learn You a Haskell (Audio/Video)", "category": "Videos", "type": "link", "url": "http://learnyouahaskell.com/", "description": "Companion site to the famous beginner's book." },
-      { "id": "vid-monads", "title": "Monads in 10 Minutes", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=t1e8CqSI53w", "description": "A quick, visual intuition for the IO Monad." },
-      { "id": "vid-fold", "title": "foldr and foldl Explained", "category": "Videos", "type": "video", "url": "https://www.youtube.com/watch?v=e21IbFVBmoI", "description": "Deep dive into right and left folds with visual traces." },
-      { "id": "vid-tsoding", "title": "Tsoding - Haskell Fridays", "category": "Videos", "type": "video", "url": "https://www.youtube.com/playlist?list=PLguYJK7ydFE4aS8fq4D6DmoS2X4SV22S8", "description": "Excellent live-coding and deep dives into Haskell concepts." }
-    ]
-  },
-  {
-    "id": "practice-haskell",
-    "title": "Practice Platforms",
-    "category": "Practice",
-    "type": "folder",
-    "description": "Online platforms to practice Haskell syntax and FP concepts.",
-    "children": [
-      { "id": "pr-hr-haskell", "title": "HackerRank - Haskell Track", "category": "Practice", "type": "link", "url": "https://www.hackerrank.com/domains/haskell", "description": "Practice basic syntax, functional structures, and recursion." },
-      { "id": "pr-exercism", "title": "Exercism - Haskell Track", "category": "Practice", "type": "link", "url": "https://exercism.org/tracks/haskell", "description": "Mentored practice with community code reviews." },
-      { "id": "pr-codewars", "title": "Codewars - Haskell", "category": "Practice", "type": "link", "url": "https://www.codewars.com/kata/search/haskell", "description": "Gamified coding challenges to test your FP skills." },
-      { "id": "pr-tryhaskell", "title": "Try Haskell (Online REPL)", "category": "Practice", "type": "link", "url": "https://tryhaskell.org/", "description": "Interactive in-browser tutorial and REPL." }
-    ]
-  },
-  {
-    "id": "tools-haskell",
-    "title": "Development Tools",
+    "id": "haskell-tools",
+    "title": "Haskell Tools",
     "category": "Tools",
     "type": "folder",
-    "description": "Software and extensions for Haskell development.",
+    "description": "Official installation, browser execution, and API-search tools.",
     "children": [
-      { "id": "tool-ghcup", "title": "GHCup", "category": "Tools", "type": "link", "url": "https://www.haskell.org/ghcup/", "description": "The official installer for GHC, Cabal, Stack, and HLS." },
-      { "id": "tool-vscode", "title": "VS Code Haskell Extension", "category": "Tools", "type": "link", "url": "https://marketplace.visualstudio.com/items?itemName=haskell.haskell", "description": "LSP support, type info on hover, and formatting." },
-      { "id": "tool-hlint", "title": "HLint", "category": "Tools", "type": "link", "url": "https://github.com/ndmitchell/hlint", "description": "The standard linter for suggesting Haskell code improvements." },
-      { "id": "tool-hoogle", "title": "Hoogle", "category": "Tools", "type": "link", "url": "https://hoogle.haskell.org/", "description": "Haskell API search engine. Search by type signature!" }
+      { "id": "tool-ghcup", "title": "GHCup", "category": "Tools", "type": "link", "url": "https://www.haskell.org/ghcup/", "description": "Official installer and version manager for the Haskell toolchain." },
+      { "id": "tool-playground", "title": "Haskell Playground", "category": "Tools", "type": "link", "url": "https://play.haskell.org/", "description": "Official browser playground for compiling and running single-file Haskell programs." },
+      { "id": "tool-hoogle", "title": "Hoogle", "category": "Tools", "type": "link", "url": "https://hoogle.haskell.org/", "description": "Search Haskell libraries by name or type signature." }
+    ]
+  },
+  {
+    "id": "reading",
+    "title": "Reading and Practice",
+    "category": "Books",
+    "type": "folder",
+    "description": "Supporting explanations and independent practice.",
+    "children": [
+      { "id": "reading-haskell-start", "title": "Official Haskell: Get Started", "category": "Reading", "type": "link", "url": "https://www.haskell.org/get-started/", "description": "Official environment and first-program guide." },
+      { "id": "reading-lyah", "title": "Learn You a Haskell", "category": "Reading", "type": "link", "url": "https://learnyouahaskell.com/", "description": "Beginner-oriented supplementary explanations." },
+      { "id": "practice-exercism", "title": "Exercism Haskell Track", "category": "Reading", "type": "link", "url": "https://exercism.org/tracks/haskell", "description": "Independent Haskell exercises and community feedback." }
     ]
   }
 ]

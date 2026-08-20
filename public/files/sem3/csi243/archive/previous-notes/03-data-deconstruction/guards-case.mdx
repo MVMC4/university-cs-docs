@@ -1,0 +1,82 @@
+---
+title: "3.2 Guards and case ... of"
+description: "Boolean branching using guards, inline pattern matching with case expressions, and translating complex logic."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/03-data-deconstruction/guards-case-quiz';
+
+## 3.2 Guards and case ... of
+
+Guards and `case` expressions provide clean, declarative alternatives to imperative `if/else` ladders and `switch` statements.
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 3.2.1: Guards"
+  description="Boolean branching attached to function definitions, evaluated top-to-bottom."
+>
+
+```haskell
+gps :: Int -> Float
+gps score
+  | score >= 80 = 5.0
+  | score >= 75 = 4.5
+  | score >= 50 = 2.0
+  | otherwise   = 0.0  -- Catch-all (predefined as True)
+```
+*Note: `otherwise` is not a keyword; it is a Prelude constant equal to `True`. It **must** be the last guard to ensure exhaustiveness.*
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Example: Translating Complex Logic to `case ... of`</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>The Problem</StepTitle>
+    Guards are excellent for ranges, but `case` is ideal for discrete value matching.
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>The `case` Implementation</StepTitle>
+    We can collapse a percentage into discrete tens using `div`, allowing discrete matching:
+    ```haskell
+    reccCase :: Int -> String
+    reccCase score = case div score 10 of
+        10 -> "First Class"
+        9  -> "First Class"
+        8  -> "First Class"
+        7  -> "Upper Second Class"
+        6  -> "Lower Second Class"
+        5  -> "Pass"
+        4  -> "Supplement"
+        _  -> "Fail"  -- Wildcard catches 0-39 and invalid inputs
+    ```
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Why This is Powerful</StepTitle>
+    `case ... of` is an *expression*, meaning it can be used inline anywhere a value is expected, unlike top-level guards.
+  </Step>
+</StepByStep>
+
+<Card>
+
+### Definition 3.2.1 (`case ... of` Expressions)
+
+`case` is the underlying mechanism for *all* pattern matching in Haskell. Function definitions with multiple clauses are syntactic sugar for a `case` expression.
+
+```haskell
+describeList :: [a] -> String
+describeList xs = case xs of
+    []      -> "Empty list"
+    [x]     -> "Singleton list with " ++ show x
+    x:y:_   -> "List starts with " ++ show x ++ " and " ++ show y
+    _       -> "Longer list"
+```
+
+</Card>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Guards and Case Assessment" questions={quizData} />

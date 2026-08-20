@@ -1,0 +1,86 @@
+---
+title: "5.3 The Module System"
+description: "Defining modules, selective exports, qualified imports, and Smart Constructors."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/05-adts-modules/module-system-quiz';
+
+## 5.3 The Module System
+
+Haskell programs are organized into modules. A module controls **encapsulation**: what is visible to the outside world and what remains hidden.
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 5.3.1: Defining and Exporting a Module"
+  description="The module declaration must be the first line of the file, followed by an explicit export list."
+>
+
+```haskell
+module Geometry 
+  ( Shape(..)   -- Exports the type AND all constructors (Circle, Rect)
+  , area        -- Exports the function
+  ) where
+```
+- `Shape` (without `..`): Exports the type name, but **hides** the constructors. External code cannot pattern match or construct `Shape` values directly.
+- `Shape(..)`: Exports the type and all constructors.
+- `Shape(Circle)`: Exports the type and only the `Circle` constructor.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 5.3.2: Importing Modules"
+  description="Controlling how external names enter your namespace to avoid clashes."
+>
+
+```haskell
+-- 1. Selective Import: Brings only specific names into scope
+import Data.List (nub, sort)
+
+-- 2. Qualified Import: Requires a prefix, preventing name clashes
+import qualified Data.Map as Map
+
+main :: IO ()
+main = do
+    print (sort (nub [3, 1, 2, 1]))
+    let myMap = Map.fromList [("Alice", 25)]
+    print (Map.lookup "Alice" myMap)
+```
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Example: Smart Constructors via Module Encapsulation</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Define the Module (Age.hs)</StepTitle>
+    ```haskell
+    module Age (Age, mkAge, getAge) where
+    
+    newtype Age = Age Int  -- Constructor is HIDDEN
+    
+    mkAge :: Int -> Either String Age
+    mkAge i | i >= 0    = Right (Age i)
+            | otherwise = Left "Age cannot be negative"
+    
+    getAge :: Age -> Int
+    getAge (Age i) = i
+    ```
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>The Enforcement</StepTitle>
+    External code *cannot* write `Age (-5)` because the `Age` constructor is not exported. They *must* use `mkAge`, which enforces the non-negative invariant.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>The Zero-Overhead Guarantee</StepTitle>
+    Because `Age` is defined with `newtype`, the constructor is erased at compile time. At runtime, `Age 42` is indistinguishable from the bare `Int` value `42`, providing safety with zero performance penalty.
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Module System Assessment" questions={quizData} />

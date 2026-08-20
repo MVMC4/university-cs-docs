@@ -50,6 +50,17 @@ npm run build
 
 ## Contribution workflow
 
+### Branch naming
+
+Use conventional, lowercase branch names in the form `<type>/<kebab-case-description>`.
+
+- `feat/` for new features, courses, lessons, or substantial content expansions.
+- `fix/` for defects and factual corrections.
+- `docs/` for repository documentation that does not change the learning experience.
+- `chore/` for maintenance, tooling, and dependency work.
+
+Do not prefix branches with an author, tool, or agent name. For example, use `feat/csi243-redemption`, not `codex/feat-csi243-redemption`.
+
 1. Fork the repository on GitHub.
 2. Clone your fork and add the main repository as `upstream`:
 
@@ -64,7 +75,7 @@ npm run build
    ```bash
    git checkout main
    git pull --ff-only upstream main
-   git checkout -b docs/csi132-correct-induction-example
+   git checkout -b feat/csi243-redemption
    ```
 
 4. Make one coherent change. Avoid unrelated formatting or file moves.
