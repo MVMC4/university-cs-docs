@@ -29,7 +29,10 @@ const adapters = `
   --accent: #e0a0aa;
   --ok: #5f9187;
   --bad: #bd7784;
+  background-color: var(--color-fd-background);
+  background-image: none !important;
 }
+.dark .mat221-source .maincol { background: var(--color-fd-background); }
 .mat221-source { min-width: 0; color: var(--ink); font: 15.5px/1.7 var(--sans); }
 .mat221-source .shell { display: block; min-height: calc(100vh - var(--fd-nav-height, 0px)); }
 .dark .mat221-source :is(.lead, .summary-points li span) { color: #c6c6c6; }
