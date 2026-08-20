@@ -1,0 +1,110 @@
+---
+title: Improper Integrals
+description: Replace infinite endpoints and singularities with limits, then determine convergence rather than applying the FTC blindly.
+---
+
+<LessonIntro topic="improper" />
+
+<Concept title="Improper integral" what="A definite integral with an infinite interval or an unbounded integrand, defined through one or more limits." why="The ordinary FTC cannot substitute infinity or cross a singularity directly." when="Use a one-sided limit at every infinite endpoint, endpoint blow-up, or interior singularity." />
+
+<Theorem title="Convergence through limits" statement={"\\(\\int_a^\\infty f(x)\\,dx=\\lim_{t\\to\\infty}\\int_a^t f(x)\\,dx\\)"} conditions="Every required one-sided piece must exist as a finite limit; an interior singularity requires splitting the interval." meaning="An improper integral is shorthand for limits of proper integrals." consequences="If any required piece diverges, the entire integral diverges; cancellation across two divergent pieces is not allowed." />
+
+## Sources of impropriety
+
+An integral is improper when its interval is infinite or its integrand becomes unbounded. The integral is defined by a limit; the infinity symbol is never substituted like a number.
+
+## Recognition checklist
+
+Use a limit for:
+
+- an infinite endpoint, such as $\int_1^\infty f(x)dx$;
+- a vertical asymptote at an endpoint;
+- a vertical asymptote inside the interval;
+- a doubly infinite interval.
+
+The integral converges only when every required limit is finite.
+
+## Definitions and splitting properties
+
+$$
+\int_a^\infty f(x)dx=\lim_{t\to\infty}\int_a^t f(x)dx.
+$$
+
+If $f$ blows up at $c\in(a,b)$, split it:
+
+$$
+\int_a^bf(x)dx
+=\lim_{t\to c^-}\int_a^t f(x)dx
++\lim_{s\to c^+}\int_s^b f(x)dx.
+$$
+
+Both limits must converge independently. Opposite infinities do not cancel.
+
+## The benchmark p-integrals
+
+$$
+\boxed{\int_1^\infty\frac{dx}{x^p}\text{ converges iff }p>1}
+$$
+
+but
+
+$$
+\boxed{\int_0^1\frac{dx}{x^p}\text{ converges iff }p<1}.
+$$
+
+The conditions differ because the first tests decay at infinity, while the second tests the strength of a blow-up at zero.
+
+## Worked example 1: infinite endpoint
+
+$$
+\begin{aligned}
+\int_1^\infty\frac{dx}{x^2}
+&=\lim_{t\to\infty}\int_1^tx^{-2}dx\\
+&=\lim_{t\to\infty}\left[-\frac1x\right]_1^t\\
+&=\lim_{t\to\infty}\left(1-\frac1t\right)\\
+&=\boxed{1}.
+\end{aligned}
+$$
+
+The interval has infinite width, but the function decays fast enough to give finite area.
+
+## Worked example 2: interior singularity
+
+Consider $\int_0^2dx/(x-1)$. The integrand blows up at $x=1$, so split before integrating:
+
+$$
+\int_0^2\frac{dx}{x-1}
+=\int_0^1\frac{dx}{x-1}+\int_1^2\frac{dx}{x-1}.
+$$
+
+The left side is
+
+$$
+\lim_{t\to1^-}[\ln|x-1|]_0^t
+=\lim_{t\to1^-}\ln|t-1|=-\infty.
+$$
+
+Therefore the original improper integral diverges. A symmetric calculation giving zero would be a principal value, not ordinary convergence.
+
+## Comparison property
+
+For nonnegative functions:
+
+- if $0\le f\le g$ and $\int g$ converges, then $\int f$ converges;
+- if $0\le g\le f$ and $\int g$ diverges, then $\int f$ diverges.
+
+The reverse directions give no conclusion.
+
+## Common errors
+
+- Writing $F(\infty)$ instead of a limit.
+- Failing to scan the interval for singularities.
+- Not splitting at every singularity.
+- Cancelling two divergent pieces.
+- Reversing the two p-test conditions.
+
+## Worked examples 3–8: convergence at every boundary
+
+<WorkedExampleSet topic="improper" count={6} numberStart={3} />
+
+<CheckpointQuiz topic="improper" from={0} count={4} />

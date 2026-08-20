@@ -1,0 +1,119 @@
+---
+title: Notes
+description: Find the centre, radius, and interval of convergence, then differentiate and integrate term by term inside the radius.
+---
+
+<LessonIntro topic="power-series" />
+
+<Concept title="Power series" what="An infinite polynomial Σc_n(x-a)^n whose convergence depends on the distance from its centre a." why="Inside its convergence interval it represents functions and supports term-by-term calculus." when="Use ratio or root tests to find the radius, then test each finite endpoint in the original series." />
+
+<Theorem title="Radius of convergence" statement={"\\(\\sum c_n(x-a)^n\\text{ converges for }|x-a|<R\\text{ and diverges for }|x-a|>R\\)"} conditions="Endpoint behaviour is not determined by R and must be tested separately; term-by-term calculus is valid inside the radius." meaning="Convergence is organised symmetrically around the centre before endpoint decisions." consequences="Differentiation and integration preserve R, although endpoint inclusion may change." />
+
+## Form and centre
+
+A power series centred at $a$ is
+
+$$
+\sum_{n=0}^{\infty}c_n(x-a)^n.
+$$
+
+It is an infinite polynomial whose convergence depends on $x$. There is a radius $R$ such that the series converges for $|x-a|<R$ and diverges for $|x-a|>R$.
+
+## Why and when they are useful
+
+Power series represent functions using polynomials. Inside the interval of convergence, they can be differentiated and integrated term by term, which creates new representations and approximations.
+
+## Complete radius-and-interval method
+
+1. Identify the centre $a$.
+2. Apply the ratio or root test to the absolute value of the general term.
+3. Solve the inequality $L<1$ to obtain $|x-a|<R$.
+4. Convert it to an open interval.
+5. Substitute each endpoint into the original series.
+6. Test the two numerical endpoint series separately.
+7. State both $R$ and the interval of convergence.
+
+## Fully worked example
+
+Find the interval of convergence of
+
+$$
+\sum_{n=1}^{\infty}\frac{x^n}{n}.
+$$
+
+Let $a_n=x^n/n$. The ratio test gives
+
+$$
+\begin{aligned}
+L
+&=\lim_{n\to\infty}\left|\frac{x^{n+1}/(n+1)}{x^n/n}\right|\\
+&=|x|\lim_{n\to\infty}\frac{n}{n+1}\\
+&=|x|.
+\end{aligned}
+$$
+
+Convergence requires $|x|<1$, so $R=1$ and the provisional interval is $(-1,1)$.
+
+At $x=1$:
+
+$$
+\sum\frac1n
+$$
+
+is harmonic and diverges.
+
+At $x=-1$:
+
+$$
+\sum\frac{(-1)^n}{n}
+$$
+
+converges by the alternating-series test. Therefore
+
+$$
+\boxed{R=1,\qquad\text{interval }[-1,1)}.
+$$
+
+## Term-by-term calculus
+
+Inside $|x-a|<R$,
+
+$$
+\frac{d}{dx}\sum_{n=0}^{\infty}c_n(x-a)^n
+=\sum_{n=1}^{\infty}nc_n(x-a)^{n-1},
+$$
+
+and
+
+$$
+\int\sum_{n=0}^{\infty}c_n(x-a)^n dx
+=C+\sum_{n=0}^{\infty}\frac{c_n}{n+1}(x-a)^{n+1}.
+$$
+
+The radius remains the same, but endpoint behaviour may change and must be retested.
+
+Starting from the geometric property
+
+$$
+\frac1{1-x}=\sum_{n=0}^{\infty}x^n,\qquad |x|<1,
+$$
+
+differentiate both sides:
+
+$$
+\boxed{\frac1{(1-x)^2}=\sum_{n=1}^{\infty}nx^{n-1}},\qquad |x|<1.
+$$
+
+## Common errors
+
+- Reporting only $R$ and omitting endpoints.
+- Testing endpoints with the ratio test, which is inconclusive there.
+- Forgetting the centre $a$ in $|x-a|<R$.
+- Assuming differentiation preserves endpoint inclusion.
+- Using a derived series outside its interval of convergence.
+
+## Worked examples 2–8: radius, endpoints, and calculus
+
+<WorkedExampleSet topic="power-series" count={7} numberStart={2} />
+
+<CheckpointQuiz topic="power-series" from={0} count={4} />

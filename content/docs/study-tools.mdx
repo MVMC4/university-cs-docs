@@ -1,6 +1,6 @@
 ---
-title: "Pomodoro Timer and Goals"
-description: "Choose a concrete study goal and complete it one protected focus block at a time."
+title: "Pomodoro Focus Timer"
+description: "Protect focused study time with a persistent Pomodoro cycle."
 full: true
 ---
 
@@ -8,5 +8,14 @@ full: true
 
 <div className="pomodoro-workspace">
   <PomodoroTimer />
-  <StudyGoals />
+  <TimerSummary />
 </div>
+
+## How to use a focus block
+
+1. Choose one concrete task before starting.
+2. Work only on that task during the focus phase.
+3. Step away during the break instead of opening another study task.
+4. Use the longer break after completing the configured cycle.
+
+The navbar control and this workspace share one timer. Moving between pages does not create a second countdown.

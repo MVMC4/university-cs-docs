@@ -1,0 +1,119 @@
+---
+title: Notes
+description: Choose identities from the parity of sine-cosine and secant-tangent powers.
+---
+
+<LessonIntro topic="trig" />
+
+<Concept title="Trigonometric integration by structure" what="Rewriting powers and products with identities until a standard antiderivative or substitution appears." why="Powers such as sine squared cannot be integrated with the ordinary power rule." when="Classify exponent parity and angle structure before selecting a Pythagorean, power-reduction, or product-to-sum identity." />
+
+<Theorem title="Power-reduction identities" statement={"\\(\\sin^2x=\\frac{1-\\cos2x}{2},\\quad\\cos^2x=\\frac{1+\\cos2x}{2}\\)"} conditions="Most useful when both sine and cosine powers are even and no single derivative factor can be saved." meaning="The double angle replaces a squared trig function with a constant plus a first power that can be integrated directly." />
+
+## Identities used in this chapter
+
+Pythagorean identities:
+
+$$
+\sin^2x+\cos^2x=1,
+\qquad
+1+\tan^2x=\sec^2x.
+$$
+
+Double-angle identities:
+
+$$
+\cos2x=1-2\sin^2x=2\cos^2x-1.
+$$
+
+Solving them for the squares gives the half-angle, or power-reduction, identities:
+
+$$
+\boxed{\sin^2x=\frac{1-\cos2x}{2}},
+\qquad
+\boxed{\cos^2x=\frac{1+\cos2x}{2}}.
+$$
+
+They are used when both sine and cosine powers are even because no single sine or cosine factor is available as a substitution differential.
+
+## Powers of sine and cosine
+
+For $\int\sin^m x\cos^n x\,dx$:
+
+- If $m$ is odd, save one $\sin x$, convert the remaining sine powers using $\sin^2x=1-\cos^2x$, then use $u=\cos x$.
+- If $n$ is odd, save one $\cos x$, convert the remaining cosine powers using $\cos^2x=1-\sin^2x$, then use $u=\sin x$.
+- If both powers are even, use the half-angle identities.
+
+## Worked example: odd sine power
+
+$$
+\begin{aligned}
+\int\sin^3x\cos^2x\,dx
+&=\int(1-\cos^2x)\cos^2x\sin x\,dx.
+\end{aligned}
+$$
+
+Let $u=\cos x$, so $du=-\sin x\,dx$:
+
+$$
+-\int(u^2-u^4)\,du
+=\boxed{\frac15\cos^5x-\frac13\cos^3x+C}.
+$$
+
+## Worked example: both powers even
+
+For $\int\sin^2x\,dx$, use
+
+$$
+\sin^2x=\frac{1-\cos2x}{2}.
+$$
+
+Therefore
+
+$$
+\boxed{\int\sin^2x\,dx=\frac{x}{2}-\frac{\sin2x}{4}+C}.
+$$
+
+<Callout label="Why not use 1-cos²x?">When the sine power is even, replacing $\sin^2x$ by $1-\cos^2x$ usually leaves no $\sin x\,dx$ for $u=\cos x$. The half-angle identity changes the frequency and makes the integral elementary.</Callout>
+
+## Powers of secant and tangent
+
+For $\int\sec^m x\tan^n x\,dx$:
+
+- If the secant power is positive and even, save $\sec^2x\,dx$, convert the rest with $\sec^2x=1+\tan^2x$, and use $u=\tan x$.
+- If the tangent power is positive and odd, save $\sec x\tan x\,dx$, convert the remaining tangents with $\tan^2x=\sec^2x-1$, and use $u=\sec x$.
+- For a pure even power of tangent, repeatedly use $\tan^2x=\sec^2x-1$.
+- For an odd power of secant alone, use integration by parts.
+
+For example,
+
+$$
+\boxed{\int\tan^2x\,dx=\int(\sec^2x-1)\,dx=\tan x-x+C}.
+$$
+
+## Products with different angles
+
+When the integrand contains products such as $\sin5x\cos4x$, use product-to-sum identities:
+
+$$
+\sin A\cos B=\frac12[\sin(A+B)+\sin(A-B)].
+$$
+
+Thus
+
+$$
+\int\sin5x\cos4x\,dx
+=-\frac12\cos x-\frac1{18}\cos9x+C.
+$$
+
+## Common mistakes
+
+- Applying the ordinary power rule directly to a trigonometric power.
+- Converting the saved odd factor instead of the even remainder.
+- Forgetting the chain factor after a multiple-angle identity.
+- Using product-to-sum when a shorter parity substitution is available.
+
+## Worked examples 3–8: choosing by structure
+
+<WorkedExampleSet topic="trig" count={6} numberStart={3} />
+
+<CheckpointQuiz topic="trig" from={0} count={4} />

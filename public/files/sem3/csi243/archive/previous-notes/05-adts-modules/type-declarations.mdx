@@ -1,0 +1,97 @@
+---
+title: "5.1 Type Synonyms and Data Declarations"
+description: "Type aliases, Sum Types, Product Types, and deriving typeclass instances."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/05-adts-modules/type-declarations-quiz';
+
+## 5.1 Type Synonyms and Data Declarations
+
+Algebraic Data Types (ADTs) allow you to define custom data structures by combining types using **Sum** (OR) and **Product** (AND) logic.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.1.1: Type Synonyms"
+  description="Type aliases that improve readability without creating a new, distinct type."
+>
+
+```haskell
+type Name = String
+type Age = Int
+```
+*Note: The compiler treats `Name` and `String` as completely interchangeable. It provides no additional type safety.*
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.1.2: Sum Types (OR Logic)"
+  description="A type that can be one of several distinct variants."
+>
+
+```haskell
+data TrafficLight = Red | Yellow | Green
+```
+A `TrafficLight` is `Red` **OR** `Yellow` **OR** `Green`. The cardinality (number of possible values) is the sum of the cardinalities of its variants (1 + 1 + 1 = 3).
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.1.3: Product Types (AND Logic)"
+  description="A type that bundles multiple values together simultaneously."
+>
+
+```haskell
+data Person = Person String Int
+```
+A `Person` contains a `String` **AND** an `Int`. The cardinality is the product of the cardinalities of its fields.
+
+</HighlightCard>
+
+<Card>
+
+### Definition 5.1.4 (The `deriving` Clause)
+
+Haskell can automatically generate instances for common typeclasses based on the structure of the ADT.
+
+```haskell
+data Shape = Circle Float | Rect Float Float
+  deriving (Show, Eq, Ord)
+```
+- **`Show`**: Converts the value to a `String` (e.g., for `print`).
+- **`Eq`**: Allows equality testing (`==`, `/=`).
+- **`Ord`**: Allows ordering (`<`, `>`, `compare`). *Note: `Eq` must be derived before `Ord`.*
+
+</Card>
+
+<StepByStep>
+  <StepByStepTitle>Example: Pattern Matching on Custom ADTs</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Define the Type</StepTitle>
+    ```haskell
+    data Shape = Circle Float | Rect Float Float
+    ```
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Implement the Function</StepTitle>
+    ```haskell
+    area :: Shape -> Float
+    area (Circle r) = pi * r * r
+    area (Rect w h) = w * h
+    ```
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Evaluate</StepTitle>
+    `area (Circle 5.0)` matches the `Circle` constructor, binding `r = 5.0`, and evaluates to `pi * 5.0 * 5.0`.
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Type Declarations Assessment" questions={quizData} />

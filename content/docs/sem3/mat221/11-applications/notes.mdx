@@ -1,0 +1,149 @@
+---
+title: Notes
+description: Build area, volume, length, surface-area, and centroid integrals from labelled geometry.
+---
+
+<LessonIntro topic="applications" />
+
+<Concept title="Geometric applications of integration" what="A limit of sums of small areas, volumes, lengths, or moments represented by a definite integral." why="Integration adds continuously varying geometric contributions that a single elementary formula cannot capture." when="Use it after sketching the region, choosing a slice, labelling its dimensions, and fixing the bounds." />
+
+<Theorem title="Representative-slice principle" statement={"\\(\\text{total}=\\lim_{n\\to\\infty}\\sum (\\text{contribution of one slice})=\\int_a^b(\\text{slice density})\\,dx\\)"} conditions="Slice dimensions must be nonnegative lengths, bounds must cover the region once, and the differential must match the slice orientation." meaning="Every application formula comes from adding a correctly modelled small contribution." consequences="Units reveal missing radii or powers, and a sketch determines top/bottom, outer/inner, radius, and height." />
+
+## Modelling with a slice
+
+An application integral adds infinitely many small geometric contributions. The main difficulty is usually not integration; it is describing one correct slice.
+
+Always sketch first, mark the bounds, identify the axis, and label distances as positive lengths.
+
+## Area between curves
+
+For vertical slices where $f$ is above $g$,
+
+$$
+\boxed{A=\int_a^b[f(x)-g(x)]dx}.
+$$
+
+The property “top minus bottom” makes every slice height nonnegative. With horizontal slices, use “right minus left” and integrate with respect to $y$.
+
+## Volumes: when to use each method
+
+- Disks/washers use slices perpendicular to the axis of rotation.
+- Shells use slices parallel to the axis.
+
+Disk and washer formulas:
+
+$$
+V=\pi\int_a^bR^2dx,
+\qquad
+\boxed{V=\pi\int_a^b(R^2-r^2)dx}.
+$$
+
+Here $R$ is the distance from the axis to the farther boundary and $r$ to the nearer boundary.
+
+Shell formula:
+
+$$
+\boxed{V=2\pi\int_a^b(\text{radius})(\text{height})dx}.
+$$
+
+The shell radius is distance to the axis; shell height is top minus bottom.
+
+## Worked example: washers
+
+The curves $y=2x$ and $y=x^2$ meet where $2x=x^2$, so $x=0$ or $x=2$. On $[0,2]$, $2x$ is above $x^2$.
+
+Rotate the region about the $x$-axis. Vertical slices are perpendicular to the axis and create washers:
+
+$$
+R=2x,\qquad r=x^2.
+$$
+
+Therefore
+
+$$
+\begin{aligned}
+V
+&=\pi\int_0^2[(2x)^2-(x^2)^2]dx\\
+&=\pi\int_0^2(4x^2-x^4)dx\\
+&=\pi\left[\frac43x^3-\frac15x^5\right]_0^2\\
+&=\pi\left(\frac{32}{3}-\frac{32}{5}\right)\\
+&=\boxed{\frac{64\pi}{15}}.
+\end{aligned}
+$$
+
+## Worked example: shells
+
+Rotate the same region about the $y$-axis. Vertical slices are parallel to the axis, so shells avoid solving for $x$ in terms of $y$:
+
+$$
+\text{radius}=x,\qquad\text{height}=2x-x^2.
+$$
+
+Thus
+
+$$
+\begin{aligned}
+V
+&=2\pi\int_0^2x(2x-x^2)dx\\
+&=2\pi\int_0^2(2x^2-x^3)dx\\
+&=2\pi\left[\frac23x^3-\frac14x^4\right]_0^2\\
+&=\boxed{\frac{8\pi}{3}}.
+\end{aligned}
+$$
+
+## Arc length and surface area
+
+For $y=f(x)$, the differential Pythagorean property is
+
+$$
+ds=\sqrt{dx^2+dy^2}=\sqrt{1+(y')^2}\,dx.
+$$
+
+Therefore
+
+$$
+\boxed{L=\int_a^b\sqrt{1+(y')^2}dx}.
+$$
+
+Rotating that small arc about the $x$-axis sweeps circumference $2\pi y$, so
+
+$$
+\boxed{S=2\pi\int_a^by\sqrt{1+(y')^2}dx}.
+$$
+
+About another axis, replace $y$ with the appropriate distance to that axis.
+
+## Centre of mass and centroid
+
+For a uniform region between $f$ and $g$,
+
+$$
+A=\int_a^b(f-g)dx,
+$$
+
+$$
+\boxed{\bar x=\frac1A\int_a^bx(f-g)dx},
+$$
+
+and
+
+$$
+\boxed{\bar y=\frac1A\int_a^b\frac12(f^2-g^2)dx}.
+$$
+
+The $\bar y$ integrand comes from strip midpoint $\frac12(f+g)$ multiplied by strip area $(f-g)dx$; their product is $\frac12(f^2-g^2)dx$.
+
+## Common errors
+
+- Writing a formula before sketching the region.
+- Using $R-r$ instead of $R^2-r^2$.
+- Treating a coordinate as a radius without measuring from the axis.
+- Mixing $dx$ with functions written in $y$.
+- Forgetting the derivative inside arc length.
+- Using $(f-g)^2/2$ for $\bar y$ instead of $(f^2-g^2)/2$.
+
+## Worked examples 3–8: selecting the geometric model
+
+<WorkedExampleSet topic="applications" count={6} numberStart={3} />
+
+<CheckpointQuiz topic="applications" from={0} count={4} />

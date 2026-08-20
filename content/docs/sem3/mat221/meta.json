@@ -1,7 +1,25 @@
 {
-  "title": "MAT221: Calculus I",
+  "title": "MAT221: Calculus II",
   "pages": [
-    "index", 
-    "resources"
+    "index",
+    "---Course tools---",
+    "formula-sheet",
+    "resources",
+    "---Chapters---",
+    "01-foundations",
+    "02-substitution",
+    "03-partial-fractions",
+    "04-integration-by-parts",
+    "05-reduction-formulas",
+    "06-trigonometric-integrals",
+    "07-trigonometric-substitution",
+    "08-weierstrass-substitution",
+    "09-improper-integrals",
+    "10-numerical-integration",
+    "11-applications",
+    "12-lhopital",
+    "13-sequences-and-series",
+    "14-power-series",
+    "15-taylor-series"
   ]
 }

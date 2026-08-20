@@ -1,0 +1,422 @@
+---
+title: "4. Input, Bindings, and Processing"
+description: "Read text with getLine, bind an input using <-, create immutable local names with let, convert text with read, process a value, and display the result."
+---
+
+
+
+This lesson starts with a complete beginner's question: **How does information enter a Haskell program, how does the program work with it, and how does a result leave the program?**
+
+The short answer is:
+
+1. **Input:** perform an action such as `getLine`.
+2. **Bind:** give the obtained value a local name using `<-`.
+3. **Process:** create new values with pure expressions and `let`.
+4. **Output:** perform an action such as `putStrLn`.
+
+By the end, you will be able to explain every symbol in this program rather than merely copying it.
+
+```haskell
+-- This type signature says that main is an input/output action.
+main :: IO ()
+main = do
+  -- Display a prompt so the user knows what to enter.
+  putStrLn "Enter a whole number:"
+
+  -- Perform getLine, then call the resulting String inputText.
+  inputText <- getLine
+
+  -- Parse the String as an Integer and give that number a local name.
+  let number = read inputText :: Integer
+
+  -- Calculate a new Integer without changing number.
+  let doubled = number * 2
+
+  -- Convert doubled to text, join the text pieces, and display the result.
+  putStrLn ("Double: " ++ show doubled)
+```
+
+Do not worry if this still looks dense. The rest of the lesson introduces each piece before rebuilding the program.
+
+## Prerequisites: three tools already introduced
+
+Review [Haskell Basics](/docs/sem3/csi243/02-expressions-types) if these ideas are unfamiliar.
+
+| Tool | Meaning | Small example | Result |
+|---|---|---|---|
+| A string literal | Text written between double quotation marks | `"Hello"` | The `String` value containing the characters `Hello` |
+| `putStrLn` | Perform an output action that displays a `String`, then moves to a new line | `putStrLn "Hello"` | The terminal displays `Hello` |
+| `show` | Convert a displayable value into a `String`; it does **not** print | `show 8` | The `String` value `"8"` |
+| `++` | Join two lists; when both lists are strings, join their characters | `"Age: " ++ "18"` | The `String` value `"Age: 18"` |
+
+Read `++` aloud as **append** or **join**. Both sides of `++` in this lesson must be strings. That is why `show doubled` is needed: `doubled` is a number, but `show doubled` is text.
+
+<ComparisonTable
+  columns={['Expression', 'What it produces', 'Does it display anything?']}
+  rows={[
+    ['show 8', 'The String "8"', 'No'],
+    ['"Result: " ++ show 8', 'The String "Result: 8"', 'No'],
+    ['putStrLn ("Result: " ++ show 8)', 'An IO output action', 'Yes, when the action is performed']
+  ]}
+/>
+
+## First new idea: an input action
+
+The keyboard and terminal are outside a pure Haskell expression. The user may enter different text every time, so receiving input is an **effect**. Haskell marks effectful work with the `IO` type.
+
+```haskell
+getLine :: IO String
+```
+
+Read this aloud as:
+
+> “`getLine` has type `IO String`.”
+
+Now unpack every part:
+
+| Part | Name | Meaning |
+|---|---|---|
+| `getLine` | Function/action name | Wait for the user to enter characters and press Enter |
+| `::` | Type-annotation symbol | Read as “has type” |
+| `IO` | Input/output type | Marks an action that interacts with the world |
+| `String` | Text type | The kind of value the action can obtain |
+| `IO String` | Complete action type | An input/output action that can produce a `String` result |
+
+`getLine` is not the text itself. It is an action that can obtain text. The text becomes available only when the action is performed as part of `main` or another `IO` action.
+
+## Getting the result with `<-`
+
+Inside a `do` block, this line performs `getLine` and gives its resulting text a name:
+
+```haskell
+-- Perform the input action and bind its result to inputText.
+inputText <- getLine
+```
+
+Read the line aloud as:
+
+> “`inputText` is bound from `getLine`.”
+
+Or, in full:
+
+> “Perform `getLine`, take the `String` it produces, and call that string `inputText`.”
+
+| Part | Meaning |
+|---|---|
+| `inputText` | A new local name chosen by the programmer |
+| `<-` | Bind-from arrow: perform the action on the right and bind its result to the name on the left |
+| `getLine` | The `IO String` action to perform |
+
+The arrow points toward the name that receives the result. It does **not** mean “change a variable,” “save permanently,” or “copy characters into the source file.”
+
+<Callout type="warn" title="Where can <- appear?">
+The `<-` statement used here belongs inside a `do` block. Its right side must be an `IO` action. A pure calculation such as `number * 2` is not an IO action, so write `let doubled = number * 2`, not `doubled <- number * 2`.
+</Callout>
+
+## Pure local names with `let`
+
+After input, the program needs to process the text. `let` introduces a local **binding**: a name connected to the result of an expression.
+
+```haskell
+-- Multiply number by 2, then bind that result to doubled.
+let doubled = number * 2
+```
+
+Read it aloud as:
+
+> “Let `doubled` equal `number` multiplied by two.”
+
+| Part | Meaning |
+|---|---|
+| `let` | Keyword that introduces a local pure binding |
+| `doubled` | The new local name |
+| `=` | Defines what the name means; read as “is defined as” |
+| `number * 2` | The pure expression evaluated to obtain the value |
+
+There is no `in` after this form of `let` because this `let` is being used inside a `do` block. The binding remains available to the later indented lines of that block.
+
+### Why “immutable” matters
+
+The binding does not create a box whose contents are repeatedly changed. If `number` is `4`, then `doubled` means `8` in that scope. Processing creates a new value and gives it a new name; it does not modify the original number.
+
+```haskell
+-- number still refers to 4.
+let number = 4
+
+-- doubled refers to a new value, 8.
+let doubled = number * 2
+```
+
+<ComparisonTable
+  columns={['Form', 'Right side', 'Purpose', 'Example']}
+  rows={[
+    ['name <- action', 'An IO action', 'Perform the action and bind its result', 'inputText <- getLine'],
+    ['let name = expression', 'A pure expression', 'Give the calculated value a local name', 'let doubled = number * 2']
+  ]}
+/>
+
+## Converting entered text with `read`
+
+`getLine` always obtains a `String`, even if the user types digits. Typing `4` produces the two-stage idea “the text `"4"`,” not automatically the numeric value `4`.
+
+To perform arithmetic, the program must **parse** the string: interpret its characters as a value of a requested type.
+
+```haskell
+-- Parse inputText as a whole number and bind the result to number.
+let number = read inputText :: Integer
+```
+
+Read this as:
+
+> “Let `number` be `inputText` read as an `Integer`.”
+
+| Part | Meaning |
+|---|---|
+| `read` | A function that parses a `String` as another readable type |
+| `read inputText` | Apply `read` to the string called `inputText` |
+| `::` | “Has type” or “use this as the following type” |
+| `Integer` | A whole-number type with no fixed small upper or lower bound |
+| `read inputText :: Integer` | Parse `inputText`, requiring the result to be an `Integer` |
+
+The type annotation is essential for a beginner-facing example because the same text could represent different types. The annotation makes the intention explicit.
+
+```text
+ghci> read "4" :: Integer
+4
+ghci> read "4" :: Double
+4.0
+```
+
+<Callout type="warn" title="read is unsafe for untrusted input">
+`read "four" :: Integer` cannot produce an `Integer`, so the program stops with a runtime error similar to `Prelude.read: no parse`. This first program uses `read` so that the input pipeline is visible. Input validation is introduced later, after the required types have been taught.
+</Callout>
+
+## Rebuild the complete program
+
+Save the following as `DoubleNumber.hs`. The comments beginning with `--` explain the code; Haskell ignores everything after `--` on that line.
+
+```haskell
+-- PURPOSE: Ask for a whole number, double it, and display the result.
+-- INPUT:   One line containing a valid whole number, such as 4 or -7.
+-- OUTPUT:  A line showing twice the entered number.
+
+-- main is the program's starting action.
+-- IO means that main can interact with the outside world.
+-- () means that main's useful purpose is its effects, not a returned data value.
+main :: IO ()
+main = do
+  -- Output: display instructions and move to a new line.
+  putStrLn "Enter a whole number:"
+
+  -- Input: wait for one line, then bind its String result to inputText.
+  inputText <- getLine
+
+  -- Conversion: parse the input String as an Integer.
+  -- This is a pure calculation, so it uses let, not <-.
+  let number = read inputText :: Integer
+
+  -- Processing: calculate a new value without changing number.
+  let doubled = number * 2
+
+  -- Preparation: show converts doubled from Integer to String.
+  -- The ++ operator joins "Double: " and the converted number.
+  -- Output: putStrLn displays the completed String and adds a newline.
+  putStrLn ("Double: " ++ show doubled)
+```
+
+### Every structural symbol in the program
+
+| Symbol or word | Read aloud | Job in this program |
+|---|---|---|
+| `--` | “comment” | Makes the rest of that line explanatory text ignored by Haskell |
+| `main` | “main” | Names the action at which the program starts |
+| `::` | “has type” | Separates a name or expression from its type |
+| `IO ()` | “I O unit” | An action that may perform effects and returns no meaningful data result |
+| `=` | “is defined as” | Defines `main` or a local binding |
+| `do` | “do” | Begins a sequence of `IO` statements and local bindings |
+| Indentation | — | Shows which statements belong to the `do` block |
+| `"..."` | “string literal” | Creates a `String` containing the enclosed characters |
+| `<-` | “bind from” | Performs an action and binds the action's result |
+| `let` | “let” | Introduces a pure local binding |
+| `*` | “multiply” | Multiplies two numeric values |
+| `++` | “append” | Joins the characters of two strings |
+| `( ... )` | “parentheses” | Makes the joined string the one argument passed to `putStrLn` |
+
+## Trace: input → processing → output
+
+Suppose the user enters `4`.
+
+<InteractiveStepper>
+  <StepperStep title="1. Display the prompt">
+    `putStrLn "Enter a whole number:"` performs an output action. The user sees the prompt followed by a newline.
+  </StepperStep>
+  <StepperStep title="2. Obtain text input">
+    `getLine` waits. The user types the character `4` and presses Enter. The action produces the `String` value `"4"`.
+  </StepperStep>
+  <StepperStep title="3. Bind the input result">
+    `<-` binds the produced string to `inputText`. At this point, `inputText` refers to `"4"`.
+  </StepperStep>
+  <StepperStep title="4. Parse the text">
+    `read inputText :: Integer` parses `"4"`. `number` becomes a binding for the numeric `Integer` value `4`.
+  </StepperStep>
+  <StepperStep title="5. Process the value">
+    `number * 2` evaluates to `8`. `doubled` becomes a binding for `8`. The original binding `number` still refers to `4`.
+  </StepperStep>
+  <StepperStep title="6. Build output text">
+    `show doubled` produces `"8"`. Then `"Double: " ++ "8"` produces the single string `"Double: 8"`.
+  </StepperStep>
+  <StepperStep title="7. Display the result">
+    `putStrLn` performs the final output action. The terminal displays `Double: 8` and moves to a new line.
+  </StepperStep>
+</InteractiveStepper>
+
+### Expected interaction
+
+The program prints the prompt. The user types `4`; the terminal normally echoes those typed characters. The program then prints the result.
+
+```text
+Enter a whole number:
+4
+Double: 8
+```
+
+The middle line is **user input**, not a line printed by the Haskell program.
+
+## Four meanings of “store”
+
+“Store the number” is not precise enough. Ask which of these operations is intended:
+
+<ComparisonTable
+  columns={['Meaning', 'What it actually does', 'Example', 'Does it survive after the program ends?']}
+  rows={[
+    ['Immutable binding', 'Gives a value a name in a scope', 'let doubled = number * 2', 'No'],
+    ['Data structure', 'Groups values in a list, tuple, or another structure in memory', '[4, 8, 12]', 'No, unless later written elsewhere'],
+    ['Source file', 'Saves Haskell instructions as text', 'DoubleNumber.hs', 'Yes, because the editor saves the file'],
+    ['Persistent external storage', 'Uses IO to write data outside the running process', 'Writing results to a data file', 'Yes, when the write succeeds']
+  ]}
+/>
+
+This lesson implements the first meaning and uses an already saved source file. Lists and tuples teach the second meaning. File-input/output lessons will teach the fourth meaning explicitly.
+
+## Common errors and why they happen
+
+### Error 1: trying to use the action as if it were the result
+
+```haskell
+-- Incorrect: getLine is an IO String action, not a String value.
+let inputText = getLine
+```
+
+Here `inputText` would refer to the action itself. Use `<-` when you need the string produced by the action:
+
+```haskell
+-- Correct: perform the action and bind its String result.
+inputText <- getLine
+```
+
+### Error 2: using `<-` for a pure calculation
+
+```haskell
+-- Incorrect: number * 2 is an Integer calculation, not an IO action.
+doubled <- number * 2
+```
+
+Use `let` for the pure result:
+
+```haskell
+-- Correct: introduce a local pure binding.
+let doubled = number * 2
+```
+
+### Error 3: doing arithmetic directly on entered text
+
+```haskell
+-- Incorrect: inputText is a String, but 2 is a number.
+let doubled = inputText * 2
+```
+
+Parse the string first:
+
+```haskell
+-- Correct: convert the String to an Integer before multiplication.
+let number = read inputText :: Integer
+let doubled = number * 2
+```
+
+### Error 4: joining text and a number directly
+
+```haskell
+-- Incorrect: ++ needs compatible lists; here the left side is text and doubled is a number.
+putStrLn ("Double: " ++ doubled)
+```
+
+Convert the number to text with `show`:
+
+```haskell
+-- Correct: both sides of ++ are now strings.
+putStrLn ("Double: " ++ show doubled)
+```
+
+### Error 5: entering text that `read` cannot parse
+
+```text
+Enter a whole number:
+four
+*** Exception: Prelude.read: no parse
+```
+
+The precise exception wording can vary. The important fact is that `read` does not recover from invalid text. For now, enter a valid integer representation such as `4`, `0`, or `-7`.
+
+### Error 6: breaking the `do` indentation
+
+```haskell
+-- Incorrect: the last line is no longer aligned as part of the do block.
+main = do
+  inputText <- getLine
+putStrLn inputText
+```
+
+Keep statements belonging to the same `do` block consistently indented:
+
+```haskell
+-- Correct: both statements belong to main's do block.
+main = do
+  inputText <- getLine
+  putStrLn inputText
+```
+
+## Guided practice
+
+Modify only the pure processing step so the program triples the entered number.
+
+```haskell
+-- TODO: replace the missing expression so tripled is three times number.
+main :: IO ()
+main = do
+  -- Ask for and obtain one line of text.
+  putStrLn "Enter a whole number:"
+  inputText <- getLine
+
+  -- Convert the text into a number.
+  let number = read inputText :: Integer
+
+  -- Process the number without changing the original binding.
+  let tripled = {- replace this comment with an expression -}
+
+  -- Convert the result to text and display it.
+  putStrLn ("Triple: " ++ show tripled)
+```
+
+For input `5`, the expected interaction is:
+
+```text
+Enter a whole number:
+5
+Triple: 15
+```
+
+<Accordions>
+  <Accordion title="Reveal the processing expression">
+  Use `number * 3`. The completed line is `let tripled = number * 3`. It is a pure calculation, so it uses `let`, not `<-`.
+  </Accordion>
+</Accordions>

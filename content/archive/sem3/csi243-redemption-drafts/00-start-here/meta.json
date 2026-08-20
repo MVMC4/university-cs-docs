@@ -1,0 +1,13 @@
+{
+  "title": "0. Start Here",
+  "pages": [
+    "index",
+    "01-programming-functional-model",
+    "02-ghci-first-steps",
+    "03-values-names-text",
+    "04-output-printing",
+    "05-complete-program",
+    "06-input-bindings-processing",
+    "lab-01"
+  ]
+}

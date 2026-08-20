@@ -1,0 +1,78 @@
+---
+title: "2.4 The 5-Part Lab Framework"
+description: "The mandatory methodology for writing, documenting, and testing functions in this course."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/02-syntax-types/lab-framework-quiz';
+
+## 2.4 The 5-Part Lab Framework
+
+Every function written in this course must strictly adhere to the following 5-part documentation and testing framework. This ensures rigorous specification, verifiable logic, and reproducible results.
+
+<HighlightCard
+  variant="neutral"
+  title="The 5-Part Framework"
+  description="The mandatory structure for all function implementations."
+>
+
+1. **Signature:** Define the function name, argument types, and return type (e.g., `revList :: [a] -> [a]`).
+2. **Specification:** A piecewise mathematical definition describing the function's behavior for all inputs.
+3. **Dry Run:** A step-by-step substitution trace using sample inputs to prove the logic before coding.
+4. **Implementation:** The actual, executable Haskell code.
+5. **Test:** GHCi execution proof (copy-pasting the terminal output) demonstrating the function works as specified.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Example: The 5-Part Framework in Action</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>1. Signature</StepTitle>
+    `isEven :: Int -> Bool`
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>2. Specification</StepTitle>
+    - `isEven n = True` if `n` is divisible by 2.
+    - `isEven n = False` otherwise.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>3. Dry Run</StepTitle>
+    Evaluate `isEven 4`:
+    - `4 mod 2 == 0` evaluates to `True`.
+    - Result: `True`.
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>4. Implementation</StepTitle>
+    ```haskell
+    isEven :: Int -> Bool
+    isEven n = n `mod` 2 == 0
+    ```
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>5. Test (GHCi Output)</StepTitle>
+    ```haskell
+    ghci> isEven 4
+    True
+    ghci> isEven 5
+    False
+    ```
+  </Step>
+</StepByStep>
+
+<Card>
+
+### Definition 2.4.1 (Why the Dry Run Matters)
+
+The Dry Run is not optional. It forces you to trace the evaluation model (β-reduction and pattern matching) on paper. If the dry run fails, the implementation will fail. It is the primary tool for debugging logical errors before compilation.
+
+</Card>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Lab Framework Assessment" questions={quizData} />

@@ -1,0 +1,25 @@
+WEBVTT
+
+00:00.000 --> 00:23.000
+A reduction formula turns I n into a simpler member of the same integral family. Build the recurrence, find a base case, and step down.
+
+00:23.000 --> 00:46.000
+Choose integration-by-parts terms that lower the index, then rewrite the remaining integral as I n minus one or I n minus two.
+
+00:46.000 --> 01:11.000
+For I n equal to the integral of x to the n e to the x, integration by parts gives I n equals x to the n e to the x minus n I n minus one.
+
+01:11.000 --> 01:35.000
+Repeated reduction gives I three equal to e to the x times x cubed minus three x squared plus six x minus six, plus C.
+
+01:35.000 --> 02:01.000
+For cosine powers, the reduction formula lowers the exponent by two and is valid for n at least two.
+
+02:01.000 --> 02:24.000
+Reduce I five to I three and then I one, whose base case is sine x.
+
+02:24.000 --> 02:54.000
+For definite families, evaluate the boundary contribution before recognizing the smaller integral.
+
+02:54.000 --> 03:18.000
+Name the family, choose parts, reduce the index, stop at a base case, and verify.

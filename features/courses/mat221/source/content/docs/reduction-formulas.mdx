@@ -1,0 +1,167 @@
+---
+title: Reduction Formulas
+description: Derive recurrences from integration by parts and use the correct base case to evaluate a chosen member.
+---
+
+<LessonIntro topic="reduction-formulas" />
+
+<Concept title="Reduction formula" what="A recurrence that expresses an integral I_n using easier members such as I_(n-1) or I_(n-2)." why="One derivation solves an entire family and replaces repeated integration with a controlled step-down process." when="Use it when an integer power varies and integration by parts or an identity reliably lowers that power." />
+
+<Theorem title="A recurrence is not a final value" statement={"\\(I_n=F(n,x)+c_nI_{n-k}\\)"} conditions="The step k must be positive, the valid n-range must be stated, and the appropriate base case must be known." meaning="Derivation and evaluation are separate: first prove the recurrence, then iterate it to a base case." />
+
+## Complete method
+
+1. Define the family $I_n$.
+2. Apply integration by parts so the power decreases.
+3. Rewrite the remaining integral as $I_{n-1}$ or $I_{n-2}$.
+4. Isolate $I_n$ and state the valid values of $n$.
+5. Evaluate the necessary base case.
+6. Step down until the base case is reached.
+
+<Callout label="Key idea">A formula is only a reduction formula if the new index is smaller. A relation involving $I_{n+1}$ has not simplified the problem.</Callout>
+
+## Example 1: $I_n=\int x^ne^x\,dx$
+
+Choose $u=x^n$ and $dv=e^x\,dx$. Then
+
+$$
+du=nx^{n-1}\,dx,\qquad v=e^x.
+$$
+
+Integration by parts gives
+
+$$
+\begin{aligned}
+I_n
+&=x^ne^x-n\int x^{n-1}e^x\,dx\\
+&=\boxed{x^ne^x-nI_{n-1}},\qquad n\ge1.
+\end{aligned}
+$$
+
+The reduction is by one, so the base case is
+
+$$
+I_0=\int e^x\,dx=e^x+C.
+$$
+
+To evaluate $I_3$, keep the chain visible:
+
+$$
+\begin{aligned}
+I_3&=x^3e^x-3I_2\\
+&=x^3e^x-3(x^2e^x-2I_1)\\
+&=x^3e^x-3x^2e^x+6(xe^x-I_0)\\
+&=\boxed{e^x(x^3-3x^2+6x-6)+C}.
+\end{aligned}
+$$
+
+Differentiate the boxed answer. All lower-power terms cancel, leaving $x^3e^x$.
+
+## Example 2: a recurrence that lowers by two
+
+Let
+
+$$
+I_n=\int\cos^n x\,dx.
+$$
+
+Write $\cos^n x=\cos^{n-1}x\cos x$ and choose
+
+$$
+u=\cos^{n-1}x,\qquad dv=\cos x\,dx.
+$$
+
+Then
+
+$$
+du=-(n-1)\cos^{n-2}x\sin x\,dx,\qquad v=\sin x.
+$$
+
+After parts and $\sin^2x=1-\cos^2x$,
+
+$$
+I_n=\sin x\cos^{n-1}x+(n-1)I_{n-2}-(n-1)I_n.
+$$
+
+Collect the $I_n$ terms:
+
+$$
+\boxed{I_n=\frac1n\sin x\cos^{n-1}x+\frac{n-1}{n}I_{n-2}},\qquad n\ge2.
+$$
+
+For $I_5$, the odd chain stops at $I_1=\sin x$:
+
+$$
+\boxed{I_5=\frac15\sin x\cos^4x+\frac4{15}\sin x\cos^2x+\frac8{15}\sin x+C}.
+$$
+
+## Example 3: definite sine powers
+
+Define
+
+$$
+J_n=\int_0^{\pi/2}\sin^n x\,dx.
+$$
+
+Integration by parts gives
+
+$$
+\boxed{J_n=\frac{n-1}{n}J_{n-2}},\qquad n\ge2.
+$$
+
+There are two base cases because the recurrence steps down by two:
+
+$$
+J_0=\frac{\pi}{2},\qquad J_1=1.
+$$
+
+Even powers reach $J_0$, while odd powers reach $J_1$. Thus
+
+$$
+J_6=\frac56J_4=\frac56\cdot\frac34J_2
+=\frac56\cdot\frac34\cdot\frac12J_0
+=\boxed{\frac{5\pi}{32}}.
+$$
+
+Now evaluate the lecture application:
+
+$$
+\begin{aligned}
+\int_0^{\pi/2}\sin^6x(1+\cos^2x)\,dx
+&=\int_0^{\pi/2}(2\sin^6x-\sin^8x)\,dx\\
+&=2J_6-J_8\\
+&=2\left(\frac{5\pi}{32}\right)-\frac78\left(\frac{5\pi}{32}\right)\\
+&=\boxed{\frac{45\pi}{256}}.
+\end{aligned}
+$$
+
+<Callout label="Base-case rule" tone="check">If the recurrence lowers by one, expect one base case. If it lowers by two, parity matters and you may need both $I_0$ and $I_1$.</Callout>
+
+## Definite boundary terms
+
+For $I_n=\int_1^e x(\ln x)^n\,dx$, take $u=(\ln x)^n$ and $dv=x\,dx$. The boundary term is
+
+$$
+\left[\frac{x^2}{2}(\ln x)^n\right]_1^e=\frac{e^2}{2}\qquad(n\ge1),
+$$
+
+so
+
+$$
+\boxed{2I_n=e^2-nI_{n-1}}.
+$$
+
+Do not reuse that boundary value at $n=0$: the lower endpoint is then nonzero. Evaluate $I_0=(e^2-1)/2$ directly.
+
+## Common mistakes
+
+- Reporting a recurrence without its valid range or base case.
+- Reducing in the wrong direction so the index increases.
+- Mixing the even and odd base-case chains.
+- Reusing a boundary term at an index where its endpoint value changes.
+
+## Worked examples 4–8: recurrence fluency
+
+<WorkedExampleSet topic="reduction-formulas" count={5} numberStart={4} />
+
+<CheckpointQuiz topic="reduction-formulas" from={0} count={3} />

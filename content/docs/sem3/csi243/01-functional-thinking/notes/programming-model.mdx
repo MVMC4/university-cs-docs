@@ -1,0 +1,503 @@
+---
+title: "1. Programming and the Functional Model"
+description: "Build a zero-assumption mental model of programming, input, processing, output, storage, values, expressions, pure functions, immutability, and controlled effects."
+---
+
+
+
+This is the real starting point. You do **not** need to know Haskell, programming, functions, or computer science vocabulary before reading it.
+
+By the end, you should be able to explain what a program does, trace information through input–process–output–storage, and describe why Haskell separates pure calculations from interactions with the outside world.
+
+A program receives information, transforms it according to precise rules, and makes the result useful:
+
+> **information enters → rules transform it → a result is produced → the result may be displayed or saved**
+
+## 1. What is programming?
+
+A **computer** is a machine that can follow precise instructions. It is fast, but it does not guess what you meant. A **program** is a set of instructions or definitions written precisely enough for the computer to follow.
+
+**Programming** is the work of:
+
+1. understanding a problem;
+2. deciding what information is needed;
+3. designing rules that transform that information;
+4. expressing those rules in a programming language;
+5. testing whether the result is correct.
+
+A **programming language** is a language with strict rules for communicating programs to a computer. Haskell is the programming language used in CSI243.
+
+### A problem before any Haskell
+
+Suppose a shop needs to calculate the total price of three notebooks at R20 each.
+
+- The known information is **3 notebooks** and **R20 per notebook**.
+- The rule is **quantity multiplied by price**.
+- The result is **R60**.
+
+Haskell can express that calculation as an **expression**:
+
+```haskell
+-- Multiply the quantity, 3, by the price per notebook, 20.
+3 * 20
+```
+
+The exact result is:
+
+```text
+60
+```
+
+The symbol `*` means multiplication. The expression does not ask for input and does not print anything by itself. It simply describes a calculation whose value is `60`.
+
+## 2. Input, processing, output, and storage
+
+These four words help us separate the responsibilities inside a program.
+
+| Part | Plain meaning | Temperature-program example |
+|---|---|---|
+| **Input** | Information entering the program | A user supplies `25` degrees Celsius |
+| **Processing** | Rules that transform information | Convert Celsius to Fahrenheit |
+| **Output** | Information leaving the program in a useful form | Show `77` on the screen |
+| **Storage** | Keeping information so it can be used later | Save the conversion in a file or database |
+
+Not every program needs every stage. A calculator can produce an answer without saving it. A program can process information that was already placed in its source file. Storage is optional unless the information must survive for later use.
+
+<StepByStep>
+  <StepByStepTitle>Trace a temperature conversion</StepByStepTitle>
+
+  <Step number={1}>
+  **Input:** the number `25` enters the program. At this point it is data, not yet the answer.
+  </Step>
+
+  <Step number={2}>
+  **Processing:** the program applies the conversion rule: multiply by `9`, divide by `5`, then add `32`.
+  </Step>
+
+  <Step number={3}>
+  **Result:** the calculation produces the value `77`.
+  </Step>
+
+  <Step number={4}>
+  **Output:** the program can display `77°F`. If it also saves the result for tomorrow, that separate action is storage.
+  </Step>
+</StepByStep>
+
+Here is only the processing rule in Haskell:
+
+```haskell
+-- Convert the Celsius value 25 to Fahrenheit.
+-- The parentheses force Haskell to calculate 25 * 9 before dividing by 5.
+(25 * 9) / 5 + 32
+```
+
+The exact result is:
+
+```text
+77.0
+```
+
+The `.0` shows that the result is represented as a number that can contain a fractional part.
+
+### “Storage” can mean different things
+
+Beginners often hear the word *store* used too loosely. We will keep four meanings separate:
+
+| Meaning | What it actually means | Example |
+|---|---|---|
+| **Binding a name** | Give a value a stable name inside the program | Let `price` mean `20` |
+| **Data structure** | Group values so the program can work with them | A list of test scores |
+| **Source file** | Save program text in a `.hs` file | Save a function in `Main.hs` |
+| **Persistent storage** | Save data outside the running program | Write results to a file or database |
+
+Binding a name is **not** the same as saving information permanently. A name used during a calculation disappears when that program session ends unless the information is written somewhere external.
+
+## 3. What is a programming paradigm?
+
+A **paradigm** is a general style or model of thinking. A **programming paradigm** is a general way to organise a solution and describe computation.
+
+Different paradigms can solve the same problem while encouraging different questions.
+
+| Paradigm | Main question | Typical description |
+|---|---|---|
+| **Imperative** | “Which commands should change the program’s state, and in what order?” | Set a total, update it repeatedly, then display it |
+| **Object-oriented** | “Which objects own the data and behaviour?” | Ask a cart object to calculate its total |
+| **Logic** | “Which facts and rules must be true?” | State price facts and ask which total follows |
+| **Functional** | “Which values and transformations produce the result?” | Transform a list of prices into one total |
+
+A language can support more than one paradigm. The label describes a strong design style, not a prison.
+
+## 4. What is functional programming?
+
+**Functional programming** is a paradigm that models a program primarily as the evaluation of expressions and the application of functions to values.
+
+It emphasises:
+
+- **values** rather than changing boxes;
+- **expressions** that produce values;
+- **pure functions** that transform inputs into outputs predictably;
+- **immutability**, so an existing value is not silently changed;
+- **composition**, meaning small transformations can be connected;
+- **controlled effects**, so interaction with the outside world remains visible.
+
+Functional programming does not merely mean “uses functions.” Python, Java, and many other languages have functions. The functional model is distinguished by its emphasis on values, expressions, purity, immutability, composition, and explicit effects.
+
+### Why use functional programming?
+
+Functional programming is useful because predictable pieces are easier to:
+
+- test with known inputs and expected outputs;
+- understand without tracking many hidden changes;
+- reuse in other parts of a program;
+- combine into larger transformations;
+- run independently or concurrently when they do not share changing state;
+- refactor with confidence when their types and behaviour stay the same.
+
+It does not make every problem automatically easy or every program automatically fast. It gives us a disciplined way to separate stable reasoning from changing outside-world interactions.
+
+### When is it useful?
+
+The functional model works especially well for:
+
+- calculations;
+- validating information;
+- transforming collections of data;
+- compilers and parsers;
+- financial rules;
+- server-side data processing;
+- concurrent systems;
+- any problem that can be expressed as a pipeline of transformations.
+
+Real applications still need input, output, files, time, randomness, and networks. Haskell does not remove those operations. It marks them so that we can tell them apart from pure calculations.
+
+## 5. Values: the results we work with
+
+A **value** is a piece of data. These are four examples:
+
+```haskell
+-- A whole-number value.
+4
+
+-- A Boolean value, meaning true.
+True
+
+-- A single character value. A character uses single quotation marks.
+'H'
+
+-- A text value. Text uses double quotation marks.
+"Hello"
+```
+
+If entered one at a time in GHCi, the exact displayed results are:
+
+```text
+4
+True
+'H'
+"Hello"
+```
+
+The quotation marks are part of how Haskell represents characters and text in code. They tell Haskell that `"Hello"` is text rather than the name of something in the program.
+
+| Written form | Meaning | Kind of value |
+|---|---|---|
+| `4` | The whole number four | Number |
+| `True` | A logical true value | Boolean |
+| `'H'` | One character | Character |
+| `"Hello"` | Five characters of text | String |
+
+## 6. Expressions: code that produces values
+
+An **expression** is Haskell code that can be evaluated to produce a value.
+
+To **evaluate** means to follow the language’s rules until the resulting value is known.
+
+```haskell
+-- Add 2 and 3. The expression evaluates to 5.
+2 + 3
+
+-- Compare 10 with 4. The expression evaluates to True.
+10 > 4
+
+-- Choose one text value based on the Boolean condition 70 >= 50.
+if 70 >= 50 then "Pass" else "Fail"
+```
+
+Entered one at a time, the exact results are:
+
+```text
+5
+True
+"Pass"
+```
+
+The last example is read as: “if 70 is greater than or equal to 50, produce the text `Pass`; otherwise produce the text `Fail`.” Both possible paths produce a value.
+
+### Expression versus action
+
+| Expression that calculates a value | Action that interacts with the outside world |
+|---|---|
+| `2 + 3` produces `5` | Printing `5` makes information appear on a terminal |
+| `10 > 4` produces `True` | Reading a key obtains information from a user |
+| A conversion produces `77.0` | Saving `77.0` changes a file or database |
+
+This distinction becomes essential in Haskell: **calculating a result and displaying a result are two different jobs**.
+
+## 7. Functions: reusable transformations
+
+A **function** receives an input and produces an output. The rule can be reused with different inputs.
+
+Consider a function that cubes a number. To **cube** a number means to multiply it by itself three times.
+
+```haskell
+-- The type signature is the function's contract.
+-- Read it as: "cube receives an Integer and produces an Integer."
+cube :: Integer -> Integer
+
+-- x is the name given to the input for this calculation.
+-- The expression on the right produces the output.
+cube x = x * x * x
+```
+
+New notation introduced here:
+
+| Part | Read it as | Meaning |
+|---|---|---|
+| `cube` | “cube” | The function’s name |
+| `::` | “has type” | Separates a name from its type |
+| `Integer` | “integer” | A whole-number type |
+| `->` | “to” or “produces” | Separates input type from output type |
+| `x` | “x” | A local name for the supplied input |
+| `=` | “is defined as” | Separates the function pattern from its result expression |
+
+Testing the function in GHCi:
+
+```haskell
+-- Apply cube to the input 4.
+cube 4
+```
+
+The exact result is:
+
+```text
+64
+```
+
+<StepByStep>
+  <StepByStepTitle>How Haskell evaluates cube 4</StepByStepTitle>
+
+  <Step number={1}>
+  Find the definition `cube x = x * x * x`.
+  </Step>
+
+  <Step number={2}>
+  The supplied input is `4`, so the local name `x` means `4` during this evaluation.
+  </Step>
+
+  <Step number={3}>
+  Replace `x` with `4`, producing `4 * 4 * 4`.
+  </Step>
+
+  <Step number={4}>
+  Evaluate the multiplication, producing the final value `64`.
+  </Step>
+</StepByStep>
+
+The space in `cube 4` means **apply the function `cube` to the value `4`**. Haskell commonly writes function application with a space rather than parentheses and commas.
+
+## 8. Pure functions
+
+A function is **pure** when both statements are true:
+
+1. Its result depends only on the inputs supplied to it.
+2. Evaluating it does not cause an outside-world effect.
+
+The `cube` function is pure. `cube 4` always produces `64`. It does not read the keyboard, print a message, change a file, or ask the clock for the current time.
+
+Another pure function:
+
+```haskell
+-- Calculate a final price after subtracting a discount.
+-- Both the price and discount are explicit inputs.
+finalPrice :: Double -> Double -> Double
+finalPrice price discount = price - discount
+```
+
+New notation: `Double` is a numeric type that can represent fractional values. The signature contains two input types followed by the output type.
+
+```haskell
+-- Supply the price 100.0 and the discount 15.0.
+finalPrice 100.0 15.0
+```
+
+The exact result is:
+
+```text
+85.0
+```
+
+### Why purity helps
+
+If a function’s inputs are visible, you have everything needed to predict and test its result. There is no hidden changing variable, file, clock, or user action that silently changes the answer.
+
+| Pure-function property | Practical benefit |
+|---|---|
+| Same inputs, same output | Tests are repeatable |
+| No hidden outside interaction | Behaviour is easier to explain |
+| Does not mutate shared data | Independent work is safer |
+| Produces a reusable value | It can be combined with other functions |
+
+## 9. Immutability and bindings
+
+To **bind** a name means to give a value a name. In beginner Haskell, think of the name as a stable label for a value, not a storage box whose contents are repeatedly replaced.
+
+```haskell
+-- Bind the name taxRate to the value 0.15.
+taxRate :: Double
+taxRate = 0.15
+```
+
+The name `taxRate` means `0.15` in its scope. Haskell’s `=` is read here as **“is defined as”**, not “take an existing box and overwrite it.”
+
+This is different from a changing-variable story:
+
+| Immutable binding | Mutable variable |
+|---|---|
+| A name has a stable meaning in its scope | A storage location may contain different values over time |
+| Reason from the definition and inputs | Track every operation that might update the location |
+| Favoured by Haskell’s pure code | Common in imperative programming |
+
+A Haskell program can still receive a new score from a user or read an updated file. Immutability means that an existing pure value is not secretly changed in place; new information becomes a new value.
+
+## 10. Effects: interaction with the outside world
+
+An **effect** is an interaction beyond simply returning a value. Common effects include:
+
+- reading keyboard input;
+- printing to a terminal;
+- reading or writing a file;
+- obtaining the current time;
+- generating randomness;
+- communicating over a network.
+
+Effects are necessary. A useful application must eventually interact with something. The difficulty is that the outside world can change: users type different input, files are edited, and networks fail.
+
+Haskell therefore keeps this distinction visible:
+
+| Pure centre | Effectful boundary |
+|---|---|
+| Transform already supplied values | Obtain values from outside the program |
+| Predictable from inputs | May depend on a changing environment |
+| Easy to test directly | Often needs a controlled test environment |
+| Produces a value | Performs or describes an outside interaction |
+
+### The boundary comes before its syntax
+
+A complete application usually has an effectful boundary that obtains input and displays or saves output. Its pure centre transforms the supplied values. At this point, you only need that distinction; the exact Haskell output functions and program structure are introduced later, one component at a time.
+
+## 11. Functional and imperative mental models
+
+Imagine calculating the total of three prices.
+
+### Imperative-style story
+
+1. Create a changing variable called `total` with the value zero.
+2. Add the first price into `total`.
+3. Replace `total` with the new value.
+4. Repeat for the remaining prices.
+5. Read the final value from `total`.
+
+### Functional-style story
+
+1. Begin with the three price values.
+2. Apply a reusable summing transformation.
+3. Use the value produced by that transformation.
+
+| Question | Imperative emphasis | Functional emphasis |
+|---|---|---|
+| What is central? | Commands and changing state | Values and transformations |
+| How is progress described? | Update locations step by step | Evaluate expressions and connect functions |
+| What must the reader track? | Current state after each command | Inputs, transformations, and resulting values |
+| Where are effects? | May be mixed through the instructions | Kept visible and separated where practical |
+
+Neither comparison means that computers stop using memory or executing instructions. It describes the **programmer’s model for expressing and reasoning about the solution**.
+
+## 12. The functional program shape
+
+Use this model whenever you meet a new program:
+
+<StepByStep>
+  <StepByStepTitle>Input → transform → result → effect</StepByStepTitle>
+
+  <Step number={1}>
+  **Find the input.** Ask where each starting value comes from: a literal in the program, a function argument, a user, or a file.
+  </Step>
+
+  <Step number={2}>
+  **Find the pure transformation.** Ask which functions calculate new values without interacting with the outside world.
+  </Step>
+
+  <Step number={3}>
+  **Find the result.** State the exact value and its meaning.
+  </Step>
+
+  <Step number={4}>
+  **Find the effect.** Ask whether the result is printed, saved, transmitted, or otherwise used outside the pure calculation.
+  </Step>
+</StepByStep>
+
+### Worked classification
+
+A marks program receives `70`, decides that scores of at least `50` pass, displays `Pass`, and saves the result.
+
+| Stage | Program responsibility | Pure or effectful? |
+|---|---|---|
+| Input | Receive `70` from the user | Effectful |
+| Processing | Compare `70` with `50` | Pure |
+| Result | Produce the text value `"Pass"` | Pure value |
+| Output | Display `Pass` | Effectful |
+| Storage | Save the result to a file | Effectful |
+
+This separation is one of the most important habits in CSI243.
+
+## 13. Common misconceptions
+
+| Misconception | Correction |
+|---|---|
+| “Functional programming just means using functions.” | Many paradigms use functions. Functional programming specifically emphasises values, expressions, purity, immutability, composition, and controlled effects. |
+| “Pure means clean-looking code.” | Purity has a precise meaning: the output depends only on inputs, and evaluation causes no outside-world effect. |
+| “Effects are bad.” | Effects are necessary for interaction. Haskell makes them explicit so that they do not become hidden dependencies. |
+| “Immutable means the program cannot handle change.” | The world can supply new values. Immutability prevents an existing pure binding from being silently overwritten. |
+| “An expression automatically prints its value.” | An expression calculates a value. GHCi may show it for convenience, but a saved program needs an output action to display it. |
+| “Binding a name saves data permanently.” | A binding gives a value a name inside a scope. Persistent storage requires an external file, database, or similar system. |
+
+## 14. Guided practice
+
+Classify each responsibility as **input**, **processing**, **output**, or **storage**:
+
+1. A user types a radius.
+2. The program calculates the circle’s area.
+3. The area appears on the terminal.
+4. The program writes the area to a report file.
+
+Then classify each item as a **pure calculation** or an **effect**:
+
+1. Multiply an already supplied radius by itself.
+2. Read the radius from the keyboard.
+3. Decide whether an already supplied score is at least 50.
+4. Print `Pass` on the terminal.
+
+<Accordions>
+<Accordion title="Check your classifications">
+
+- Radius from a user: input and an effect.
+- Area calculation: processing and pure.
+- Terminal display: output and an effect.
+- Report file: storage and an effect.
+- Multiplication: pure.
+- Keyboard read: effectful.
+- Pass comparison: pure.
+- Terminal print: effectful.
+
+</Accordion>
+</Accordions>

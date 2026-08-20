@@ -1,0 +1,253 @@
+---
+title: Integration by Substitution
+description: Understand substitution as the reverse chain rule, recognise when it applies, and transform every part of an integral without skipping steps.
+---
+
+<LessonIntro topic="substitution" />
+
+<Concept title="Integration by substitution" what="A change of variable that replaces a composite expression and its differential with u and du." why="It reverses the chain rule and turns a composite integral into a basic antiderivative." when="Use it when an inner function appears together with its derivative, possibly differing by a constant factor." />
+
+<Theorem title="Substitution rule" statement={"\\(\\int f(g(x))g'(x)\\,dx=\\int f(u)\\,du,\\quad u=g(x)\\)"} conditions="g must be differentiable, and the entire integral must be rewritten in one variable." meaning="The inner function can be renamed u because its derivative supplies the differential du." />
+
+## Why the rule works
+
+The chain rule says
+
+$$
+\frac{d}{dx}F(g(x))=F'(g(x))g'(x).
+$$
+
+Reading this backwards gives the substitution rule:
+
+$$
+\boxed{\int F'(g(x))g'(x)\,dx=F(g(x))+C}.
+$$
+
+If $u=g(x)$, then $du=g'(x)\,dx$, so the same rule is written
+
+$$
+\boxed{\int f(g(x))g'(x)\,dx=\int f(u)\,du}.
+$$
+
+## Recognition strategy
+
+Look for these signals:
+
+- a function inside another function, such as $\cos(x^2)$ or $\sqrt{4-x^2}$;
+- a denominator together with its derivative, such as $x/(1+x^2)$;
+- an exponent together with its derivative, such as $xe^{x^2}$;
+- a trigonometric function together with its derivative, such as $\sin^3x\cos x$;
+- a repeated expression that would make the integral simpler if renamed.
+
+<Callout label="Method test">After choosing $u$, you must be able to rewrite the entire integral using only $u$ and $du$. If an $x$ remains, either rewrite it in terms of $u$ or reconsider the substitution.</Callout>
+
+## Properties used by substitution
+
+Substitution relies on:
+
+1. the chain rule;
+2. the differential relation $du=g'(x)\,dx$;
+3. linearity, which allows constant factors to move outside an integral;
+4. the power, logarithmic, exponential, and trigonometric antiderivative rules after the transformation.
+
+For example, if $du=2x\,dx$ but the integral contains only $x\,dx$, then
+
+$$
+x\,dx=\frac12du.
+$$
+
+The factor $1/2$ is required by linearity; it cannot be ignored.
+
+## The complete method
+
+1. Choose the inner expression $u=g(x)$.
+2. Differentiate it: $du=g'(x)\,dx$.
+3. Solve for the exact factor that appears in the integral.
+4. Rewrite every part of the integral in $u$.
+5. Integrate with respect to $u$.
+6. For an indefinite integral, substitute $u=g(x)$ back.
+7. For a definite integral, change the bounds and remain in $u$.
+8. Check by differentiating or estimating the definite answer.
+
+## Worked example 1: exact derivative match
+
+Evaluate
+
+$$
+\int2x\cos(x^2)\,dx.
+$$
+
+The inner function is $x^2$, and its derivative $2x$ is present. Let
+
+$$
+u=x^2.
+$$
+
+Differentiate:
+
+$$
+du=2x\,dx.
+$$
+
+Now replace both the inner expression and its differential:
+
+$$
+\int2x\cos(x^2)\,dx=\int\cos u\,du.
+$$
+
+Use the basic rule $\int\cos u\,du=\sin u+C$:
+
+$$
+\int\cos u\,du=\sin u+C.
+$$
+
+Return to $x$:
+
+$$
+\boxed{\sin(x^2)+C}.
+$$
+
+Check using the chain rule:
+
+$$
+\frac{d}{dx}\sin(x^2)=\cos(x^2)(2x),
+$$
+
+which is the original integrand.
+
+## Worked example 2: a missing constant factor
+
+Evaluate
+
+$$
+\int xe^{x^2}\,dx.
+$$
+
+Let $u=x^2$, so
+
+$$
+du=2x\,dx\qquad\Longrightarrow\qquad x\,dx=\frac12du.
+$$
+
+Therefore
+
+$$
+\begin{aligned}
+\int xe^{x^2}\,dx
+&=\frac12\int e^u\,du\\
+&=\frac12e^u+C\\
+&=\boxed{\frac12e^{x^2}+C}.
+\end{aligned}
+$$
+
+<Callout label="Why the half matters" tone="check">Differentiating $e^{x^2}$ produces $2xe^{x^2}$. Multiplying by $1/2$ cancels that extra $2$.</Callout>
+
+## Worked example 3: rewriting a leftover $x$
+
+Evaluate
+
+$$
+\int x\sqrt{x+1}\,dx.
+$$
+
+Choose $u=x+1$. Then
+
+$$
+du=dx,\qquad x=u-1.
+$$
+
+The second relation is necessary because the original integral still contains $x$. Rewrite everything:
+
+$$
+\begin{aligned}
+\int x\sqrt{x+1}\,dx
+&=\int(u-1)u^{1/2}\,du\\
+&=\int(u^{3/2}-u^{1/2})\,du\\
+&=\frac{2}{5}u^{5/2}-\frac{2}{3}u^{3/2}+C.
+\end{aligned}
+$$
+
+Return to $x$:
+
+$$
+\boxed{\frac25(x+1)^{5/2}-\frac23(x+1)^{3/2}+C}.
+$$
+
+## Worked example 4: logarithmic structure
+
+Evaluate
+
+$$
+\int\frac{dx}{x\ln x}.
+$$
+
+The expression $\ln x$ is inside the denominator, and its derivative $1/x$ is present. Let
+
+$$
+u=\ln x,\qquad du=\frac{dx}{x}.
+$$
+
+Then
+
+$$
+\int\frac{dx}{x\ln x}=\int\frac{du}{u}=\ln|u|+C.
+$$
+
+Therefore
+
+$$
+\boxed{\ln|\ln x|+C}.
+$$
+
+The absolute value belongs to the outer logarithm because the standard property is $\int du/u=\ln|u|+C$.
+
+## Worked example 5: definite substitution
+
+Evaluate
+
+$$
+\int_0^1\frac{x}{1+x^2}\,dx.
+$$
+
+Let
+
+$$
+u=1+x^2,\qquad du=2x\,dx,\qquad x\,dx=\frac12du.
+$$
+
+Change the bounds immediately:
+
+$$
+x=0\Rightarrow u=1,\qquad x=1\Rightarrow u=2.
+$$
+
+Now the entire calculation stays in $u$:
+
+$$
+\begin{aligned}
+\int_0^1\frac{x}{1+x^2}\,dx
+&=\frac12\int_1^2\frac{du}{u}\\
+&=\frac12[\ln|u|]_1^2\\
+&=\frac12(\ln2-\ln1)\\
+&=\boxed{\frac12\ln2}.
+\end{aligned}
+$$
+
+Because the integrand is positive on $[0,1]$, a positive answer is reasonable.
+
+## Common errors
+
+- Choosing $u$ but never computing $du$.
+- Dropping a constant factor such as $1/2$.
+- Mixing $x$ and $u$ in the transformed integral.
+- Using old $x$-bounds on a $u$-antiderivative.
+- Back-substituting in a definite integral after already changing the bounds.
+- Forgetting $+C$ in an indefinite integral.
+
+## Worked examples 6–8: extending the method
+
+These final examples deliberately change the surface form. In each one, identify the inner function, account for its derivative, finish in one variable, and verify the result.
+
+<WorkedExampleSet topic="substitution" count={3} numberStart={6} />
+
+<CheckpointQuiz topic="substitution" from={0} count={4} />

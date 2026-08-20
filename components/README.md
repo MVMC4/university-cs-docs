@@ -106,7 +106,7 @@ Highlights canonical formulas with a copy-to-clipboard button.
   $$ \beta_1 = \frac{n(\sum xy) - (\sum x)(\sum y)}{n(\sum x^2) - (\sum x)^2} $$
 </FormulaBlock>
 ```
-**⚠️ Critical Rule:** The `latex` prop is **only** for the copy button. The actual rendered math **must** be passed as `children` so MathJax/KaTeX can parse it natively.
+**⚠️ Critical Rule:** The `latex` prop is **only** for the copy button. The actual rendered math **must** be passed as `children` so the host KaTeX pipeline can parse it natively.
 
 ### 2.6 Interactive Stepper (`<InteractiveStepper>` & `<StepperStep>`)
 Guides students through multi-stage proofs or algorithms. Prevents cognitive overload by revealing one step at a time.
@@ -167,10 +167,10 @@ These are globally available and require zero configuration.
 
 ## 🛡️ Phase 3: MDX + Math Syntax Guardrails
 
-The MDX compiler parses JSX **before** MathJax/KaTeX processes LaTeX. Violating these rules will cause build crashes or hydration mismatches.
+The MDX compiler parses JSX **before** KaTeX processes LaTeX. Violating these rules will cause build crashes or hydration mismatches.
 
 ### Rule 1: Never Put Math Inside Component Props
-Props are evaluated as raw JavaScript strings. MathJax will not render inside them.
+Props are evaluated as raw JavaScript strings. KaTeX will not render inside them.
 * ❌ **Wrong:** `<StepperStep title="Step 1" content="$x^2$" />`
 * ✅ **Right:** Use children.
   ```mdx

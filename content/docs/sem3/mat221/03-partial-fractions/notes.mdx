@@ -1,0 +1,96 @@
+---
+title: Notes
+description: Turn a rational function into standard integrable pieces by classifying every denominator factor.
+---
+
+<LessonIntro topic="partials" />
+
+<Concept title="Partial-fraction decomposition" what="A rewrite of one proper rational function as a sum of simpler rational terms." why="The simpler pieces have standard logarithmic, power, or arctangent antiderivatives." when="Use it for a rational function after polynomial division and complete real factorisation of the denominator." prerequisites="Polynomial division, factorisation, and coefficient comparison." />
+
+<Theorem title="Decomposition by denominator factors" statement={"\\(\\frac{P(x)}{Q(x)}=\\sum \\frac{A_{jk}}{(x-a_j)^k}+\\sum\\frac{B_{jk}x+C_{jk}}{q_j(x)^k}\\)"} conditions="P/Q is proper and Q is factored into linear and irreducible quadratic factors, including every repeated power." meaning="Each denominator factor determines the complete template before any coefficients are solved." consequences="Missing a repeated power or a linear numerator over a quadratic makes the identity impossible." />
+
+## The decision process
+
+1. If $\deg P\ge\deg Q$, perform polynomial division first.
+2. Factor $Q(x)$ completely over the real numbers.
+3. Write the correct template for every factor and every repeated power.
+4. Clear denominators and solve for the constants.
+5. Integrate each term.
+
+## The four templates
+
+| Denominator factor | Terms to include |
+| --- | --- |
+| distinct linear $(x-a)$ | $\dfrac{A}{x-a}$ |
+| repeated linear $(x-a)^m$ | $\dfrac{A_1}{x-a}+\dfrac{A_2}{(x-a)^2}+\cdots+\dfrac{A_m}{(x-a)^m}$ |
+| irreducible quadratic $q(x)$ | $\dfrac{Bx+C}{q(x)}$ |
+| repeated quadratic $q(x)^m$ | one linear numerator over every power $q,q^2,\ldots,q^m$ |
+
+<Callout label="Why Bx+C?">The numerator over a quadratic must have degree less than $2$, so it is the most general linear expression.</Callout>
+
+## Worked example: repeated linear factor
+
+Evaluate
+
+$$
+\int\frac{x+3}{x(x-1)^2}\,dx.
+$$
+
+The denominator has $x$ and the repeated factor $(x-1)^2$, so write
+
+$$
+\frac{x+3}{x(x-1)^2}=\frac{A}{x}+\frac{B}{x-1}+\frac{C}{(x-1)^2}.
+$$
+
+Clear denominators:
+
+$$
+x+3=A(x-1)^2+Bx(x-1)+Cx.
+$$
+
+Use convenient values first:
+
+$$
+x=0:\ A=3,\qquad x=1:\ C=4.
+$$
+
+Comparing the $x^2$ coefficients gives $A+B=0$, so $B=-3$. Hence
+
+$$
+\begin{aligned}
+\int\frac{x+3}{x(x-1)^2}\,dx
+&=\int\left(\frac3x-\frac3{x-1}+\frac4{(x-1)^2}\right)dx\\
+&=\boxed{3\ln|x|-3\ln|x-1|-\frac4{x-1}+C}.
+\end{aligned}
+$$
+
+Check the decomposition before integrating by recombining the fractions.
+
+## Irreducible quadratics
+
+For $\int dx/(x^2+2x+5)$, complete the square:
+
+$$
+x^2+2x+5=(x+1)^2+4.
+$$
+
+Using the arctangent form,
+
+$$
+\boxed{\int\frac{dx}{x^2+2x+5}=\frac12\tan^{-1}\left(\frac{x+1}{2}\right)+C}.
+$$
+
+<Callout label="Common error" tone="trap">For $(x-a)^3$, include denominators $(x-a)$, $(x-a)^2$, and $(x-a)^3$. A missing power makes the decomposition wrong.</Callout>
+
+## Common mistakes
+
+- Decomposing before making an improper rational function proper.
+- Omitting intermediate powers of a repeated factor.
+- Using a constant numerator over an irreducible quadratic.
+- Solving coefficients correctly but forgetting to integrate every term.
+
+## Worked examples 2–8: all denominator cases
+
+<WorkedExampleSet topic="partials" count={7} numberStart={2} />
+
+<CheckpointQuiz topic="partials" from={0} count={4} />

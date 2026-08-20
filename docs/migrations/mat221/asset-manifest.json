@@ -1,0 +1,221 @@
+{
+  "version": 2,
+  "auditedAt": "2026-08-20",
+  "migratedAt": "2026-08-20",
+  "sourceCommit": "6f4dd6b48dafb2b0378dd265c2dac8bba799f815",
+  "summary": {
+    "files": 25,
+    "bytes": 39335696,
+    "migrated": 20,
+    "pendingMigration": 0,
+    "pendingEvaluation": 0,
+    "rejected": 5
+  },
+  "assets": [
+    {
+      "source": "public/icon.svg",
+      "bytes": 408,
+      "sha256": "886f5b07c9941229ee24a34f3816fc0503bd57a69b649b6df2505b75431be823",
+      "kind": "site-icon",
+      "decision": "reject",
+      "target": null,
+      "reason": "Do not replace the university site icon by default."
+    },
+    {
+      "source": "public/og.png",
+      "bytes": 1468410,
+      "sha256": "b300140e8537751a36b5c0032324d66a38b60b8690cc6ad7ecdb69689a1ea21c",
+      "kind": "open-graph-image",
+      "decision": "reject",
+      "target": null,
+      "reason": "The host owns global social metadata and generates per-document Open Graph images through app/og/docs; a standalone course image would duplicate that system."
+    },
+    {
+      "source": "public/videos/mat221-foundations-poster.png",
+      "bytes": 58556,
+      "sha256": "843ec6359a951511f49a94b37e16ef6260b8d2a304ab68b53c3f9aa3f6541f6b",
+      "kind": "video-poster",
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination by explicit user request with the Foundations narrated review."
+    },
+    {
+      "source": "public/videos/mat221-foundations-review.mp4",
+      "bytes": 14642193,
+      "sha256": "297e181dd03153a12a63a3486a45b650a809c765fc9d2c156d5841aed282c9c4",
+      "kind": "video",
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination by explicit user request."
+    },
+    {
+      "source": "public/videos/mat221-foundations-review.vtt",
+      "bytes": 2187,
+      "sha256": "782b6e5236ac0b5481000158b5f1598ae846dd2d5f8b1edb76707ae82a1eb4fd",
+      "kind": "captions",
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination with its Foundations narrated review."
+    },
+    {
+      "source": "public/videos/mat221-lesson5-poster.png",
+      "bytes": 36849,
+      "sha256": "67ca32e81e3c529a7fa5cbc886dc4bd762cd295b3300ee404ef83732f6d50471",
+      "kind": "video-poster",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/video-posters/mat221-lesson5-poster.png"
+    },
+    {
+      "source": "public/videos/mat221-lesson5-review.mp4",
+      "bytes": 10011514,
+      "sha256": "e6299ee4237fd5d132c6cd38275c96b84ed86cd796e160f9c23972f7f6d29a98",
+      "kind": "video",
+      "decision": "migrate",
+      "target": "public/videos/sem3/mat221/mat221-lesson5-review.mp4"
+    },
+    {
+      "source": "public/videos/mat221-lesson5-review.vtt",
+      "bytes": 1103,
+      "sha256": "f60d9df040a72bd45701aebf7e7b980d94225831630c93cd901256b136b9e7ba",
+      "kind": "captions",
+      "decision": "migrate",
+      "target": "public/videos/sem3/mat221/mat221-lesson5-review.vtt"
+    },
+    {
+      "source": "public/videos/mat221-lesson67-poster.png",
+      "bytes": 45573,
+      "sha256": "13db5846c76535a253ba448cc2fcb5e9819d822578c92df01e8df3206ae7b6d3",
+      "kind": "video-poster",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/video-posters/mat221-lesson67-poster.png"
+    },
+    {
+      "source": "public/videos/mat221-lesson67-review.mp4",
+      "bytes": 13027656,
+      "sha256": "f9531a9b39f462d3331de2d906c66ccc28154ca7f5cf8c99160b5855a8c64c21",
+      "kind": "video",
+      "decision": "migrate",
+      "target": "public/videos/sem3/mat221/mat221-lesson67-review.mp4"
+    },
+    {
+      "source": "public/videos/mat221-lesson67-review.vtt",
+      "bytes": 1232,
+      "sha256": "8b3ad003034896d0a3d7275a7d00346c03429dac34a594571b18114f0c0171a5",
+      "kind": "captions",
+      "decision": "migrate",
+      "target": "public/videos/sem3/mat221/mat221-lesson67-review.vtt"
+    },
+    {
+      "source": "public/visuals/applications-washer.svg",
+      "bytes": 2308,
+      "sha256": "192ef9afd505e17b194d29894d342e835b996ec52d22142bd3df2ec12dd545e8",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/applications-washer.svg"
+    },
+    {
+      "source": "public/visuals/foundations-area.svg",
+      "bytes": 2851,
+      "sha256": "077b2fb3ee0a0a1dea95226cef1f1d0898dc866a373c4c1afd4daa282c0c9f6b",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/foundations-area.svg"
+    },
+    {
+      "source": "public/visuals/ftc-flow.svg",
+      "bytes": 2755,
+      "sha256": "1c91a5b69ee34cda35bd1a40dd78bdfeecfa5dbb8bb9e8944f46db9393f2b35e",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/ftc-flow.svg"
+    },
+    {
+      "source": "public/visuals/improper-limit.svg",
+      "bytes": 2412,
+      "sha256": "6574c9b106b98e76fe389c691224c2422c87951a052c3e5d9f08d555cafbd152",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/improper-limit.svg"
+    },
+    {
+      "source": "public/visuals/lhopital-rates.svg",
+      "bytes": 2529,
+      "sha256": "4dce649ec8a3c06d4f3b15b4fdec39ddab57ef85c6ecff584d226a2cec39dbed",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/lhopital-rates.svg"
+    },
+    {
+      "source": "public/visuals/liate-ladder.svg",
+      "bytes": 3176,
+      "sha256": "bd3d78aa158b5207f76f8558af106036bcd523b0da8b1b4ec07825cdec6c8bd5",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/liate-ladder.svg"
+    },
+    {
+      "source": "public/visuals/numerical-rules.svg",
+      "bytes": 2767,
+      "sha256": "de68dcec5f04f4ac345e6d467545bcfff5a7e1d6c1db610ed34e87d3d05a0ec4",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/numerical-rules.svg"
+    },
+    {
+      "source": "public/visuals/partials-split.svg",
+      "bytes": 3199,
+      "sha256": "7c2a118ee0157deff7c31cfd89803a9231709ccdcfe98f079feb41876312c96e",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/partials-split.svg"
+    },
+    {
+      "source": "public/visuals/parts-tabular.svg",
+      "bytes": 3790,
+      "sha256": "b75dec008cbae360fd74f680dbedc399c0d440a193ebcfd1cdb2d65672ea001c",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/parts-tabular.svg"
+    },
+    {
+      "source": "public/visuals/power-interval.svg",
+      "bytes": 2486,
+      "sha256": "66833474bab0733e9bb762301d0626ceef8f5c4dbcc693460d35d584e88ca304",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/power-interval.svg"
+    },
+    {
+      "source": "public/visuals/series-tests.svg",
+      "bytes": 3751,
+      "sha256": "2616d52674d51f37015405d7feba4b6c8c32d6b730b31d22cb52ce4a99adf5cb",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/series-tests.svg"
+    },
+    {
+      "source": "public/visuals/substitution-u.svg",
+      "bytes": 2843,
+      "sha256": "924c02583cfaad768b14b75c8bb86d078c2c5306c12e0a9cfc1a2045e12ba465",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/substitution-u.svg"
+    },
+    {
+      "source": "public/visuals/taylor-fit.svg",
+      "bytes": 2582,
+      "sha256": "75196f103436fa4c43c556b7423d14d5a1c92681c499c311608272cc4790bf59",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/taylor-fit.svg"
+    },
+    {
+      "source": "public/visuals/trig-triangle.svg",
+      "bytes": 2566,
+      "sha256": "88d65b5ba98a54a6f3020f77a4cb95eed7d5f19e0d1a761ba2f0c2f2e70ca8b9",
+      "kind": "course-diagram",
+      "decision": "migrate",
+      "target": "public/images/sem3/mat221/diagrams/trig-triangle.svg"
+    }
+  ]
+}

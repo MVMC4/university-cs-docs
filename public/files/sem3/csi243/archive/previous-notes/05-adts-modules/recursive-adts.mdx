@@ -1,0 +1,86 @@
+---
+title: "5.2 Recursive ADTs"
+description: "Defining self-referential structures like Binary Search Trees and custom Linked Lists."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/05-adts-modules/recursive-adts-quiz';
+
+## 5.2 Recursive ADTs
+
+ADTs can refer to themselves, enabling the definition of recursive data structures like linked lists and trees.
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 5.2.1: Recursive ADT Structure"
+  description="A recursive ADT requires at least one base case (non-recursive constructor) and one recursive case."
+>
+
+```haskell
+data Tree a = 
+    Leaf                  -- Base case
+  | Node (Tree a) a (Tree a)  -- Recursive case
+  deriving (Show, Eq)
+```
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Example: The 5-Part Framework for Recursive ADTs (BST Insertion)</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>1. Signature</StepTitle>
+    `insert :: Ord a => a -> Tree a -> Tree a`
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>2. Specification</StepTitle>
+    - `insert x Leaf = Node Leaf x Leaf`
+    - `insert x (Node left val right)`: If `x < val`, insert into `left`; if `x > val`, insert into `right`; if equal, return unchanged.
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>3. Dry Run</StepTitle>
+    `insert 3 (Node Leaf 5 Leaf)`
+    `3 < 5`, so recurse on left: `Node (insert 3 Leaf) 5 Leaf`
+    `= Node (Node Leaf 3 Leaf) 5 Leaf`
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>4. Implementation</StepTitle>
+    ```haskell
+    insert :: Ord a => a -> Tree a -> Tree a
+    insert x Leaf = Node Leaf x Leaf
+    insert x (Node left val right)
+        | x == val    = Node left val right
+        | x <  val    = Node (insert x left) val right
+        | otherwise   = Node left val (insert x right)
+    ```
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>5. Test</StepTitle>
+    ```haskell
+    ghci> insert 3 (Node Leaf 5 Leaf)
+    Node (Node Leaf 3 Leaf) 5 Leaf
+    ```
+  </Step>
+</StepByStep>
+
+<Card>
+
+### Definition 5.2.2 (Custom Linked List)
+
+Haskell's built-in list `[a]` is itself a recursive ADT, defined roughly as:
+
+```haskell
+data List a = Empty | Cons a (List a)
+```
+Where `Empty` is the base case (`[]`) and `Cons` is the recursive case (`:`).
+
+</Card>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Recursive ADTs Assessment" questions={quizData} />

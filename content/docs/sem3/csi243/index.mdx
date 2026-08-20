@@ -1,68 +1,40 @@
 ---
 title: "Course Overview"
-description: "Comprehensive overview of CSI243 Functional Programming topics, syllabus, and documentation structure."
+description: "CSI243 Functional Programming: a beginner-first Haskell course from core programming ideas to typed functional problem solving."
 ---
 
-# CSI243: Functional Programming - Course Index & Roadmap
+## CSI243 Functional Programming
 
-## Course Information
-- **Credits:** 3
-- **Pre-requisites:** CSI142
-- **Co-requisites:** None
+This course develops Haskell in dependency order: first the programming model, then the language basics, then functions and input/output. Later chapters extend the same foundation into choices, recursion, collections, higher-order functions, modules, and custom types.
 
-## Aims and Learning Objectives
-The course aims to introduce Functional Programming as one of the models in Computer Science. It introduces the main concepts behind the functional programming paradigm and problem solving using functional languages. It emphasizes important concepts such as recursive definitions, higher-order functions, and type inference. Programming exercises illustrate the utility of list-processing, pattern matching, abstraction of data/control, strong typing, and parameterized modules (functors). This course also emphasizes mathematical reasoning involved in the design of functional programs and techniques for proving properties about functions so defined.
+## Current chapters
 
-## Learning Outcomes
-Upon successful completion of the course, students should be able to:
-1. Explain the principles and techniques of programming with functions.
-2. Explain the main features of a modern functional language.
-3. Write non-trivial functional programs.
-4. Develop applications using functional programming languages.
+| Chapter | Focus | Study sequence |
+|---:|---|---|
+| 1 | [Programming & Functional Thinking](/docs/sem3/csi243/01-functional-thinking) | Notes → Practice Questions → Review |
+| 2 | [Haskell Basics](/docs/sem3/csi243/02-expressions-types) | Notes → Practice Questions → Review |
+| 3 | [Functions & Input/Output](/docs/sem3/csi243/03-defining-functions) | Notes → Lab 01 → Practice Questions → Review |
 
-## Documentation Index & Syllabus Mapping
-This index maps the official course topics to the specific chapters in the documentation.
+## Planned chapters
 
-### 1. Paradigm Shift
-- **Syllabus Topic:** Define functional programming, and compare to imperative programming languages.
-- **Documentation Focus:** Introduction to the FP mindset, immutability, pure functions, and the shift from imperative to declarative programming.
+4. Decisions and pattern matching
+5. Recursion
+6. Lists, tuples, and comprehensions
+7. Higher-order functions
+8. Modules and custom types
+9. Polymorphism and type classes
+10. Reasoning, testing, and examination preparation
 
-### 2. Haskell Basics, GHCi & Basic IO
-- **Syllabus Topic:** Design, implement, and test applications using Haskell.
-- **Documentation Focus:** Navigating GHCi, the Layout Rule, case sensitivity, if-then-else expressions, read/show with type annotations, and basic do-block IO.
+## Course outcomes
 
-### 3. Syntax, Pattern Matching & Choices
-- **Syllabus Topic:** List-processing, pattern matching, definitions of functions, abstraction of data/control.
-- **Documentation Focus:** Tuples, mechanical pattern matching, Guards, case expressions, local bindings (let...in vs where), currying, closures, and point-free style.
+By the end of the completed course, students should be able to:
 
-### 4. ADTs & Modules
-- **Syllabus Topic:** Abstract data types, strong typing, and parameterized modules.
-- **Documentation Focus:** Defining custom data types, type synonyms, recursive data types, and organizing code using Haskell's module system.
+- explain functional programming and compare it with imperative programming;
+- read and write typed Haskell expressions and functions;
+- separate pure transformations from input/output actions;
+- solve problems with pattern matching, recursion, collections, and higher-order functions;
+- organize programs with modules and custom data types;
+- interpret compiler feedback and test programs systematically;
+- reason about program behavior and basic complexity.
 
-### 5. Polymorphism & Typeclasses
-- **Syllabus Topic:** Define polymorphism, abstract data types, type checking, and type inference.
-- **Documentation Focus:** Parametric polymorphism, ad-hoc polymorphism (overloading), defining custom Typeclasses, standard hierarchies (Eq, Ord, Num, Show, Read), and Hindley-Milner unification.
-
-### 6. Recursion, Lists & Induction
-- **Syllabus Topic:** Recursive definitions, mathematical reasoning in the design of functional programs, overview of complexity of functions.
-- **Documentation Focus:** Anatomy of recursion, dry-running mechanics, structural induction proofs, and time/space complexity analysis of recursive functions.
-
-### 7. Higher-Order Functions & List Processing
-- **Syllabus Topic:** Higher-order functions, list-processing.
-- **Documentation Focus:** map, filter, foldr, foldl', list comprehensions, standard library functions, and GHC rewrite rules.
-
-### 0. Abstractions (Advanced/Bonus)
-- **Syllabus Topic:** Abstraction of data/control, parameterized modules (functors).
-- **Documentation Focus:** Functor laws, Applicative error accumulation, Monad laws, Kleisli composition, and do-notation desugaring. (Note: Considered bonus material not explicitly tested in standard labs).
-
-### 9. IO & The Monad (Advanced/Bonus)
-- **Syllabus Topic:** Develop applications using functional programming languages.
-- **Documentation Focus:** The Recipe pattern (IO as an AST), the State# RealWorld token, IORef for controlled mutable state, and exception handling. (Note: Considered bonus material not explicitly tested in standard labs).
-
-## Reading and Resources List
-1. Simon Thompson, *Haskell: The Craft of Functional Programming*, Pearson, 3rd ed, 2011.
-2. Haskell support: https://www.haskell.org
-3. Miran Lipovaca, *Learn You a Haskell for Great Good!: A Beginner's Guide*, 1st Edition. Online at learnyouahaskell.com
-4. Fernandez M, *Models of computation: An introduction to computability theory*, Springer, 2009.
-5. Ederton H B, *A mathematical introduction to logic*, Harcourt/Academic Press, 2nd ed, 2001.
-6. Other relevant reading material.
+Current lecture files, laboratories, archived notes, tools, and further reading are collected in [Course Resources](/docs/sem3/csi243/resources).

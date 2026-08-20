@@ -1,0 +1,145 @@
+---
+title: Notes
+description: Match a quadratic radical to a Pythagorean identity and return to x with a reference triangle.
+---
+
+<LessonIntro topic="trig-substitution" />
+
+<Concept title="Trigonometric substitution" what="A change of variable that converts a quadratic radical into a trigonometric square." why="Pythagorean identities collapse the radical and expose standard trigonometric integrals." when="Use it for powers of a²−x², a²+x², or x²−a² when an ordinary u-substitution does not remove the radical." />
+
+<Theorem title="Quadratic-radical matching" statement={"\\(a^2-x^2:\ x=a\\sin\\theta;\\quad a^2+x^2:\ x=a\\tan\\theta;\\quad x^2-a^2:\ x=a\\sec\\theta\\)"} conditions="Choose a domain where the resulting radical has the stated sign, transform dx, and return to x after integration." meaning="The sign pattern—not preference—selects the identity and substitution." consequences="A reference triangle converts remaining trigonometric functions back to algebraic expressions in x." />
+
+The required properties are
+
+$$
+1-\sin^2\theta=\cos^2\theta,
+\quad
+1+\tan^2\theta=\sec^2\theta,
+\quad
+\sec^2\theta-1=\tan^2\theta.
+$$
+
+| Radical | Substitute | Radical becomes |
+| --- | --- | --- |
+| $\sqrt{a^2-x^2}$ | $x=a\sin\theta$ | $a\cos\theta$ |
+| $\sqrt{a^2+x^2}$ | $x=a\tan\theta$ | $a\sec\theta$ |
+| $\sqrt{x^2-a^2}$ | $x=a\sec\theta$ | $a\tan\theta$ |
+
+## Complete transformation checklist
+
+After choosing the substitution, rewrite:
+
+1. every occurrence of $x$;
+2. the radical;
+3. $dx$;
+4. the bounds, if the integral is definite.
+
+## Worked example
+
+Evaluate
+
+$$
+\int\frac{dx}{x^2\sqrt{x^2+4}}.
+$$
+
+The pattern is $x^2+a^2$ with $a=2$, so let
+
+$$
+x=2\tan\theta,\qquad dx=2\sec^2\theta\,d\theta,
+$$
+
+and
+
+$$
+\sqrt{x^2+4}=\sqrt{4\tan^2\theta+4}=2\sec\theta.
+$$
+
+Then
+
+$$
+\begin{aligned}
+\int\frac{dx}{x^2\sqrt{x^2+4}}
+&=\int\frac{2\sec^2\theta}{(4\tan^2\theta)(2\sec\theta)}\,d\theta\\
+&=\frac14\int\frac{\cos\theta}{\sin^2\theta}\,d\theta\\
+&=-\frac1{4\sin\theta}+C.
+\end{aligned}
+$$
+
+From $\tan\theta=x/2$, draw a triangle with opposite side $x$, adjacent side $2$, and hypotenuse $\sqrt{x^2+4}$. Therefore
+
+$$
+\sin\theta=\frac{x}{\sqrt{x^2+4}},
+$$
+
+and the final answer is
+
+$$
+\boxed{-\frac{\sqrt{x^2+4}}{4x}+C}.
+$$
+
+## Second worked example: the $a^2-x^2$ pattern
+
+Evaluate
+
+$$
+\int\sqrt{9-x^2}\,dx.
+$$
+
+The radical has the form $\sqrt{a^2-x^2}$ with $a=3$, so state the matching identity
+
+$$
+1-\sin^2\theta=\cos^2\theta
+$$
+
+and choose
+
+$$
+x=3\sin\theta,\qquad dx=3\cos\theta\,d\theta.
+$$
+
+On $-\pi/2\le\theta\le\pi/2$, $\cos\theta\ge0$, so
+
+$$
+\sqrt{9-x^2}=\sqrt{9-9\sin^2\theta}=3\cos\theta.
+$$
+
+Therefore
+
+$$
+\int\sqrt{9-x^2}\,dx=9\int\cos^2\theta\,d\theta.
+$$
+
+Now state the half-angle identity before using it:
+
+$$
+\cos^2\theta=\frac{1+\cos2\theta}{2}.
+$$
+
+Thus
+
+$$
+9\int\cos^2\theta\,d\theta
+=\frac92\theta+\frac94\sin2\theta+C.
+$$
+
+Since $\theta=\sin^{-1}(x/3)$ and $\sin2\theta=2\sin\theta\cos\theta=2x\sqrt{9-x^2}/9$,
+
+$$
+\boxed{\int\sqrt{9-x^2}\,dx
+=\frac{x}{2}\sqrt{9-x^2}+\frac92\sin^{-1}\left(\frac{x}{3}\right)+C}.
+$$
+
+<Callout label="Common error" tone="trap">Do not stop in $\theta$. The original problem was in $x$, so use a reference triangle or an inverse-trig relation to return to $x$.</Callout>
+
+## Common mistakes
+
+- Matching the wrong sign pattern to sine, tangent, or secant.
+- Transforming the radical but forgetting to transform $dx$.
+- Dropping the absolute-value or domain condition when simplifying a square root.
+- Leaving the answer in $\theta$ when the original variable was $x$.
+
+## Worked examples 3–8: all three radical patterns
+
+<WorkedExampleSet topic="trig-substitution" count={6} numberStart={3} />
+
+<CheckpointQuiz topic="trig-substitution" from={0} count={2} />

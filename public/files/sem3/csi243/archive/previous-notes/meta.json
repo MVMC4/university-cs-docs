@@ -1,0 +1,14 @@
+{
+  "title": "CSI243: Functional Programming",
+  "pages": [
+    "index",
+    "01-paradigm-shift",
+    "02-syntax-types",
+    "03-data-deconstruction",
+    "04-recursion-complexity",
+    "05-adts-modules",
+    "06-polymorphism-typeclasses",
+    "07-hofs-reasoning",
+    "resources"
+  ]
+}

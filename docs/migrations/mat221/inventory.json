@@ -1,0 +1,124 @@
+{
+  "auditedAt": "2026-08-20",
+  "phase": 0,
+  "host": {
+    "repository": "C:/Users/Nido/Desktop/Projects/Active/university-cs-docs",
+    "branch": "feat/mat221-centralization",
+    "baselineCommit": "d6267f8c155c7f1ffefcb64699e5b51ca225aace",
+    "remoteBaselineCommit": "5e6d09c",
+    "aheadOfOriginMainAtBranchCreation": 2,
+    "trackedChangesAtBranchCreation": 0,
+    "untrackedAtBranchCreation": [
+      "docs/"
+    ],
+    "runtime": {
+      "declaredNode": ">=22 <23",
+      "declaredNpm": ">=10",
+      "observedNode": "v24.18.0",
+      "observedNpm": "11.16.0",
+      "engineDeviation": true
+    },
+    "mat221Content": {
+      "activeFiles": [
+        "content/docs/sem3/mat221/index.mdx",
+        "content/docs/sem3/mat221/limits.mdx",
+        "content/docs/sem3/mat221/derivatives.mdx",
+        "content/docs/sem3/mat221/resources.mdx",
+        "content/docs/sem3/mat221/meta.json"
+      ],
+      "listedPages": [
+        "index",
+        "resources"
+      ],
+      "hiddenPlaceholderPages": [
+        "limits",
+        "derivatives"
+      ],
+      "referencesToHiddenPlaceholderRoutes": 0,
+      "lecturePdfs": 26,
+      "lecturePdfBytes": 73456161,
+      "resourceMetadataFiles": 1,
+      "resourceTreeFiles": 27,
+      "resourceTreeBytes": 73456201
+    },
+    "timer": {
+      "implementation": "components/learning/study-tools.tsx",
+      "timerStorageKey": "university-docs-pomodoro-v2",
+      "goalStorageKeys": [
+        "university-docs-study-goals-v2",
+        "university-docs-active-goal-v2"
+      ],
+      "goalEvent": "university-docs-study-change",
+      "timerReadsGoalState": true
+    }
+  },
+  "source": {
+    "repository": "C:/Users/Nido/Desktop/Projects/Active/mat221-docs",
+    "branch": "main",
+    "baselineCommit": "6f4dd6b48dafb2b0378dd265c2dac8bba799f815",
+    "clean": true,
+    "topicSlugs": [
+      "foundations",
+      "substitution",
+      "partials",
+      "parts",
+      "reduction-formulas",
+      "trig",
+      "trig-substitution",
+      "weierstrass",
+      "improper",
+      "numerical",
+      "applications",
+      "lhopital",
+      "sequences-series",
+      "power-series",
+      "taylor"
+    ],
+    "narrativeMdxFiles": 15,
+    "topicOutputsPerRouteFamily": 15,
+    "topicRouteFamilies": [
+      "notes",
+      "questions",
+      "quiz",
+      "review",
+      "exam-practice"
+    ],
+    "standaloneToolRoutes": [
+      "/formula-sheet",
+      "/planner",
+      "/resources"
+    ],
+    "generatedStaticPages": 84,
+    "publicFiles": 25,
+    "publicBytes": 39335696,
+    "publicBreakdown": {
+      "videos": 3,
+      "captions": 3,
+      "posters": 3,
+      "courseDiagrams": 14,
+      "siteIcons": 1,
+      "openGraphImages": 1
+    },
+    "generatedContentRisks": [
+      "lib/content-model.ts pads example seeds to 10",
+      "lib/content-model.ts pads practice items to 18",
+      "lib/index.ts derives recall cards from Cornell cues",
+      "dynamic questions, review, and exam-practice routes consume getRepairTopic output"
+    ],
+    "storageKeys": [
+      "mat221-goals-v1",
+      "mat221-pomodoro-v2",
+      "mat221-flashcards-*",
+      "mat221-exam-practice-*"
+    ]
+  },
+  "phase0Artifacts": {
+    "routeMap": "docs/migrations/mat221/route-map.json",
+    "assetManifest": "docs/migrations/mat221/asset-manifest.json",
+    "contentLedger": "docs/migrations/mat221/content-ledger.md",
+    "visualBaselines": "docs/migrations/mat221/visual-baselines.md",
+    "validationResults": "docs/migrations/mat221/validation-results.md",
+    "cutoverChecklist": "docs/migrations/mat221/cutover-checklist.md",
+    "placeholderArchive": "docs/migrations/mat221/archive/2026-08-20"
+  }
+}

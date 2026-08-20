@@ -1,0 +1,10 @@
+@media print {
+  .mat221-formula-group,
+  .mat221-diagram {
+    box-shadow: none;
+  }
+
+  .mat221-planner li {
+    break-inside: avoid;
+  }
+}

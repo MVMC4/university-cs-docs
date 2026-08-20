@@ -1,0 +1,79 @@
+---
+title: "2.3 Tuples vs. Lists"
+description: "Fixed-size heterogeneous tuples vs. variable-size homogeneous lists, and Cons vs. Concatenation."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/02-syntax-types/tuples-lists-quiz';
+
+## 2.3 Tuples vs. Lists
+
+Haskell provides two primary data structures for grouping multiple values: Tuples and Lists. They are fundamentally different in their type constraints and use cases.
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 2.3.1: Tuples"
+  description="Fixed-size, heterogeneous collections of values."
+>
+
+- **Size:** Fixed at compile time. A 2-tuple (pair) is a fundamentally different type from a 3-tuple.
+- **Types:** Heterogeneous. Elements can be of different types (e.g., `(1, "Hello", True)`).
+- **Access:** For pairs only, use `fst` (first element) and `snd` (second element). There are no built-in accessors for tuples larger than 2; pattern matching is required.
+
+</HighlightCard>
+
+<HighlightCard
+  variant="neutral"
+  title="Rule 2.3.2: Lists"
+  description="Variable-size, strictly homogeneous collections of values."
+>
+
+- **Size:** Variable. Elements can be added or removed at runtime.
+- **Types:** Strictly homogeneous. All elements in a list must be of the exact same type. `[1, 2, 3]` is valid; `[1, "a"]` is a compile-time type error.
+- **Syntax:** Enclosed in square brackets `[]`, with elements separated by commas.
+
+</HighlightCard>
+
+<Card>
+
+### Definition 2.3.1 (Cons `:` vs. Concatenation `++`)
+
+- **Cons (`:`)**: The "construct" operator. It prepends a **single element** to the front of an **existing list**. 
+  - Type: `a -> [a] -> [a]`
+  - Example: `1 : [2, 3]` yields `[1, 2, 3]`.
+- **Concatenation (`++`)**: Joins **two lists** together.
+  - Type: `[a] -> [a] -> [a]`
+  - Example: `[1] ++ [2, 3]` yields `[1, 2, 3]`.
+
+*Trap:* `1 ++ [2, 3]` is a type error because `1` is not a list.
+
+</Card>
+
+<StepByStep>
+  <StepByStepTitle>Example: List Construction via Cons</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Initial State</StepTitle>
+    Start with an empty list: `[]`
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Prepend 3</StepTitle>
+    `3 : []` yields `[3]`
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Prepend 2</StepTitle>
+    `2 : [3]` yields `[2, 3]`
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Prepend 1</StepTitle>
+    `1 : [2, 3]` yields `[1, 2, 3]`
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Tuples and Lists Assessment" questions={quizData} />

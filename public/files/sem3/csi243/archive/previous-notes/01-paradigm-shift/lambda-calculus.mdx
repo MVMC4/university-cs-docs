@@ -1,0 +1,116 @@
+---
+title: "1.3 Lambda Calculus and β-Reduction"
+description: "The formal mathematical foundation of computation, Church encoding, and step-by-step β-reduction."
+---
+
+import { quizData } from '@/content/quiz-data/sem3/csi243/01-paradigm-shift/lambda-calculus-quiz';
+
+## 1.3 Lambda Calculus and β-Reduction
+
+Functional programming is rooted in Alonzo Church's λ-calculus, a formal system for expressing computation using nothing but function abstraction and application. It proves that computation can be captured without any notion of mutation, state, or hardware.
+
+<Card>
+
+### Definition 1.3.1 (Lambda Calculus)
+
+**Lambda Calculus** is a universal model of computation based entirely on:
+1. **Variables:** $x, y, z$
+2. **Abstraction:** $\lambda x. M$ (defining a function with parameter $x$ and body $M$)
+3. **Application:** $M N$ (applying function $M$ to argument $N$)
+
+Every Haskell expression is ultimately a lambda term, and the GHC runtime is an optimised β-reduction machine.
+
+</Card>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 1.3.2: Church Encoding of Booleans"
+  description="Encoding TRUE and FALSE purely as functions that select between two alternatives."
+>
+
+In lambda calculus, booleans are defined by their behaviour (choice):
+- **TRUE:** Picks the first alternative. $\text{true} = \lambda x. \lambda y. x$
+- **FALSE:** Picks the second alternative. $\text{false} = \lambda x. \lambda y. y$
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Example: Evaluating Church Booleans</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Define the AND Operator</StepTitle>
+
+    The logical AND can be defined as: $\text{and'} = \lambda p. \lambda q. p \, q \, p$
+    *(If $p$ is true, evaluate $q$; otherwise, the answer is already false, so return $p$.)*
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Evaluate `and' true false`</StepTitle>
+
+    Substitute $p := \text{true}$ and $q := \text{false}$:
+    $\text{true} \, \text{false} \, \text{true}$
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Apply TRUE</StepTitle>
+
+    Since $\text{true} = \lambda x. \lambda y. x$, applying it to $\text{false}$ and $\text{true}$ selects the first argument:
+    Result: $\text{false}$
+  </Step>
+</StepByStep>
+
+<HighlightCard
+  variant="neutral"
+  title="Definition 1.3.3: β-Reduction"
+  description="The mechanical substitution rule of lambda calculus: applying a function to an argument replaces the parameter with the argument in the function body."
+>
+
+**Rule:** $(\lambda x. M) N \rightarrow M[x := N]$
+Where $M[x := N]$ denotes the substitution of all free occurrences of $x$ in $M$ with $N$.
+
+</HighlightCard>
+
+<StepByStep>
+  <StepByStepTitle>Proof: Step-by-Step β-Reduction Trace</StepByStepTitle>
+
+  <Step number={1}>
+    <StepTitle>Initial Expression</StepTitle>
+
+    Evaluate: $(\lambda f. \lambda x. f (f x)) (\lambda y. y + 1) 0$
+    *(Read as: Apply 'apply f twice' to the successor function, then to 0.)*
+  </Step>
+
+  <Step number={2}>
+    <StepTitle>Apply outermost $\lambda f$ to $(\lambda y. y + 1)$</StepTitle>
+
+    Substitute $f := (\lambda y. y + 1)$ throughout the body $\lambda x. f (f x)$:
+    Result: $\lambda x. (\lambda y. y + 1) ((\lambda y. y + 1) x)$
+  </Step>
+
+  <Step number={3}>
+    <StepTitle>Apply $\lambda x$ to $0$</StepTitle>
+
+    Substitute $x := 0$ throughout the body:
+    Result: $(\lambda y. y + 1) ((\lambda y. y + 1) 0)$
+  </Step>
+
+  <Step number={4}>
+    <StepTitle>Reduce the inner application</StepTitle>
+
+    Substitute $y := 0$ in body $(y + 1)$:
+    Result: $(\lambda y. y + 1) (0 + 1)$
+  </Step>
+
+  <Step number={5}>
+    <StepTitle>Reduce arithmetic and outer application</StepTitle>
+
+    $0 + 1 = 1$. Apply $(\lambda y. y + 1)$ to $1$:
+    Result: $1 + 1 = 2$
+  </Step>
+</StepByStep>
+
+---
+
+## Topic Assessment
+
+<Quiz title="Lambda Calculus Assessment" questions={quizData} />

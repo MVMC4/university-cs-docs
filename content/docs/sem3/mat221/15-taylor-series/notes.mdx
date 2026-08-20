@@ -1,0 +1,141 @@
+---
+title: Notes
+description: Build derivative-matching polynomials, use known series efficiently, and control approximation error.
+---
+
+<LessonIntro topic="taylor" />
+
+<Concept title="Taylor and Maclaurin series" what="A polynomial or power series whose coefficients make its derivatives match a function at a chosen centre." why="It replaces a difficult function locally with computable powers and provides controlled approximations." when="Use it to construct local approximations, derive new series from known ones, or estimate values with an error bound." />
+
+<Theorem title="Taylor formula with Lagrange remainder" statement={"\\(f(x)=\\sum_{k=0}^{n}\\frac{f^{(k)}(a)}{k!}(x-a)^k+R_n(x),\\quad |R_n(x)|\\le\\frac{M|x-a|^{n+1}}{(n+1)!}\\)"} conditions="f has n+1 derivatives on an interval containing a and x, and |f^(n+1)|≤M there." meaning="The Taylor polynomial matches derivatives at a while the remainder measures the approximation error." consequences="A justified M and interval turn a decimal approximation into a guaranteed accuracy statement." />
+
+## Derivative matching
+
+A Taylor polynomial approximates $f$ near $x=a$ by matching its value and derivatives there:
+
+$$
+\boxed{T_n(x)=\sum_{k=0}^n\frac{f^{(k)}(a)}{k!}(x-a)^k}.
+$$
+
+A Maclaurin polynomial is the special case $a=0$.
+
+## Why it works
+
+The coefficients are chosen so that
+
+$$
+T_n^{(k)}(a)=f^{(k)}(a),\qquad k=0,1,\ldots,n.
+$$
+
+Thus the polynomial has the same local value, slope, curvature, and higher-order behaviour as $f$ up to order $n$.
+
+## How to build one
+
+1. Identify the centre $a$ and degree $n$.
+2. Calculate derivatives through $f^{(n)}$.
+3. Evaluate every derivative at $a$.
+4. Divide the $k$th value by $k!$.
+5. Multiply by $(x-a)^k$.
+6. Add terms and simplify.
+
+## Fully worked example: nonzero centre
+
+Find the quadratic Taylor polynomial for $f(x)=\sqrt{x}$ at $a=4$.
+
+$$
+f(x)=x^{1/2},\qquad f'(x)=\frac1{2\sqrt{x}},\qquad f''(x)=-\frac1{4x^{3/2}}.
+$$
+
+Evaluate at $4$:
+
+$$
+f(4)=2,\qquad f'(4)=\frac14,\qquad f''(4)=-\frac1{32}.
+$$
+
+Insert these into the formula:
+
+$$
+\begin{aligned}
+T_2(x)
+&=f(4)+f'(4)(x-4)+\frac{f''(4)}{2!}(x-4)^2\\
+&=\boxed{2+\frac14(x-4)-\frac1{64}(x-4)^2}.
+\end{aligned}
+$$
+
+The powers are $(x-4)^k$ because the centre is $4$, not zero.
+
+## Maclaurin series to know
+
+$$
+e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+\cdots,
+$$
+
+$$
+\sin x=x-\frac{x^3}{3!}+\frac{x^5}{5!}-\cdots,
+$$
+
+$$
+\cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}-\cdots,
+$$
+
+and, from the geometric series,
+
+$$
+\frac1{1-x}=1+x+x^2+x^3+\cdots\qquad(|x|<1).
+$$
+
+State the known series before substituting into it. For example, replacing $x$ by $x^2$ in the sine series gives
+
+$$
+\sin(x^2)=x^2-\frac{x^6}{3!}+\frac{x^{10}}{5!}-\cdots.
+$$
+
+## Remainder and error
+
+Taylor's theorem gives
+
+$$
+R_n(x)=\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}
+$$
+
+for some $c$ between $a$ and $x$. If $|f^{(n+1)}(t)|\le M$ throughout that interval, then
+
+$$
+\boxed{|R_n(x)|\le\frac{M|x-a|^{n+1}}{(n+1)!}}.
+$$
+
+The bound must cover the entire interval between the centre and the approximation point, not only one endpoint.
+
+## Worked approximation
+
+Using the cubic Maclaurin polynomial for $e^x$,
+
+$$
+T_3(x)=1+x+\frac{x^2}{2}+\frac{x^3}{6}.
+$$
+
+At $x=0.2$,
+
+$$
+T_3(0.2)=1+0.2+0.02+0.001333\ldots=\boxed{1.221333\ldots}.
+$$
+
+On $[0,0.2]$, $e^t<e^{0.2}<1.23$, so we may take $M=1.23$:
+
+$$
+|R_3(0.2)|\le\frac{1.23(0.2)^4}{4!}<0.000083.
+$$
+
+## Common errors
+
+- Forgetting the factorial.
+- Using $x^k$ instead of $(x-a)^k$ at a nonzero centre.
+- Mixing derivative order and polynomial degree.
+- Substituting into a known series without stating it.
+- Giving an error estimate without bounding the next derivative on the whole interval.
+
+## Worked examples 3–8: construction, transformation, and error
+
+<WorkedExampleSet topic="taylor" count={6} numberStart={3} />
+
+<CheckpointQuiz topic="taylor" from={0} count={4} />

@@ -1,0 +1,276 @@
+---
+title: "3. Expressions and Types"
+description: "Learn Haskell's basic types, type signatures, inference, operators, precedence, lists, tuples, and a mechanical method for predicting expression results."
+---
+
+Haskell checks whether an expression is meaningful before evaluating it. This catches many mistakes before the program runs.
+
+## The two questions to ask
+
+Whenever you see an expression, ask:
+
+1. **Is it well typed?** Do the function and operator inputs agree with the supplied values?
+2. **If it is well typed, what value does it produce?**
+
+Do not jump directly to arithmetic. A type error prevents evaluation.
+
+## Reading a type signature
+
+```haskell
+square :: Integer -> Integer
+square number = number * number
+```
+
+Read the signature as: “`square` has type integer to integer.” It accepts one `Integer` and returns one `Integer`.
+
+```text
+ghci> :type square
+square :: Integer -> Integer
+ghci> square 6
+36
+```
+
+The signature is a contract. GHC checks whether the implementation obeys it.
+
+## Basic types
+
+| Type | Meaning | Examples | Important distinction |
+|---|---|---|---|
+| `Int` | Fixed-width whole number | `0`, `42`, `-8` | Bounded; usually faster for machine-sized work |
+| `Integer` | Arbitrary-precision whole number | `0`, `42`, a very large factorial | Grows as needed until memory is exhausted |
+| `Float` | Single-precision floating point | `2.5` | Approximate, less precise than `Double` |
+| `Double` | Double-precision floating point | `2.5` | Common default for approximate real-number calculations |
+| `Bool` | Logical truth value | `True`, `False` | Constructors begin with capitals |
+| `Char` | One character | `'A'`, `'7'`, `' '` | Single quotes |
+| `String` | A list of characters | `"A"`, `"CSI243"` | Double quotes; equivalent to `[Char]` |
+
+## `Int` versus `Integer`
+
+Use `Int` when interoperability, indexes, or bounded machine integers are appropriate. Use `Integer` for beginner arithmetic where overflow should not silently limit the mathematical result.
+
+```haskell
+factorialResult :: Integer
+factorialResult = product [1..50]
+```
+
+The same annotation as `Int` can overflow because `Int` has a maximum and minimum value.
+
+## Whole-number division versus fractional division
+
+```text
+ghci> 7 `div` 2
+3
+ghci> 7 / 2
+3.5
+```
+
+`div` works with integral values. `/` requires a fractional type.
+
+```text
+ghci> :type div
+div :: Integral a => a -> a -> a
+ghci> :type (/)
+(/) :: Fractional a => a -> a -> a
+```
+
+The text before `=>` is a typeclass constraint. For now, read `Integral a =>` as “for any whole-number type `a`” and `Fractional a =>` as “for any fractional type `a`.”
+
+## Boolean expressions
+
+```haskell
+isTeenager :: Integer -> Bool
+isTeenager age = age >= 13 && age <= 19
+```
+
+Trace `isTeenager 16`:
+
+```text
+16 >= 13 && 16 <= 19
+= True && True
+= True
+```
+
+Useful operators:
+
+| Operator | Meaning |
+|---|---|
+| `==` | equal |
+| `/=` | not equal |
+| `<`, `<=`, `>`, `>=` | ordering comparisons |
+| `&&` | logical and |
+| <code>&#124;&#124;</code> | logical or |
+| `not` | logical negation |
+
+## Characters and strings
+
+```text
+ghci> :type 'A'
+'A' :: Char
+ghci> :type "A"
+"A" :: String
+ghci> 'A' == "A"
+```
+
+The final expression fails because `Char` and `[Char]` are different types. A character is one value; a string is a list, even when the list contains one character.
+
+Concatenate strings with `++`:
+
+```haskell
+courseLabel :: String -> String
+courseLabel code = "Course: " ++ code
+```
+
+```text
+ghci> courseLabel "CSI243"
+"Course: CSI243"
+```
+
+## Lists
+
+A list contains zero or more values of the same element type.
+
+```haskell
+scores :: [Integer]
+scores = [72, 68, 91]
+```
+
+Valid:
+
+```haskell
+[1, 2, 3]       -- [Integer]
+['a', 'b']      -- [Char]
+[True, False]   -- [Bool]
+```
+
+Invalid:
+
+```haskell
+[1, 'a', True]
+```
+
+Haskell cannot choose one element type that makes an integer, a character, and a Boolean the same kind of value.
+
+## Tuples
+
+A tuple has a fixed number of positions, and the positions may have different types.
+
+```haskell
+student :: (String, Integer, Bool)
+student = ("Kago", 2026001, True)
+```
+
+The tuple type records the type of each position. `(String, Integer)` and `(Integer, String)` are different types.
+
+### List versus tuple
+
+| Question | List | Tuple |
+|---|---|---|
+| Length | May vary | Fixed by its type |
+| Element types | One shared type | Each position can differ |
+| Typical use | A collection of similar items | One record-like group or multiple return values |
+| Delimiters | Square brackets | Parentheses |
+
+## Function application and precedence
+
+Function application uses spaces and binds more tightly than ordinary operators.
+
+```haskell
+square 3 + 4
+```
+
+This means:
+
+```haskell
+(square 3) + 4
+```
+
+It does not mean:
+
+```haskell
+square (3 + 4)
+```
+
+Parentheses communicate the second intention explicitly.
+
+## A mechanical type-checking method
+
+Consider:
+
+```haskell
+not (3 < 5)
+```
+
+1. `3` and `5` are compatible numeric values.
+2. `(<)` compares compatible ordered values and returns `Bool`.
+3. Therefore `3 < 5 :: Bool`.
+4. `not :: Bool -> Bool`, so it accepts that result.
+5. `3 < 5` evaluates to `True`.
+6. `not True` evaluates to `False`.
+
+Now consider:
+
+```haskell
+not 3
+```
+
+`not` requires `Bool`, but `3` is numeric. The expression is rejected before evaluation.
+
+## Type inference
+
+You do not need to annotate every expression. GHC infers types by collecting constraints from how values are used.
+
+```haskell
+add x y = x + y
+```
+
+Because `(+)` requires a numeric type, GHC infers a constrained numeric signature similar to:
+
+```haskell
+add :: Num a => a -> a -> a
+```
+
+For course work, write explicit signatures. They document intent and expose mistakes near their cause.
+
+## Common errors
+
+| Error pattern | Likely cause | Repair question |
+|---|---|---|
+| “Couldn't match expected type `Bool` with actual type `Int`” | A number was supplied where a condition was required | Which subexpression must produce `Bool`? |
+| “No instance for `Num Char`” | Arithmetic was attempted on a character | Should the input be parsed or compared instead? |
+| “Ambiguous type variable” | GHC lacks enough context to choose a concrete type | Would a signature or annotation express the intended type? |
+| Parse error near `-` | A negative literal follows an operator without grouping | Should the negative value be parenthesized? |
+
+## Practice
+
+Predict the type and result before using GHCi:
+
+```haskell
+3 + 4 * 2
+(3 + 4) * 2
+10 `div` 3
+10 / 4
+not (7 == 7)
+"CSI" ++ "243"
+head [10, 20, 30]
+("CSI243", 3, True)
+```
+
+For each rejected expression, identify the smallest conflicting subexpression:
+
+```haskell
+True + 1
+'4' == 4
+not "False"
+[1, 2, '3']
+```
+
+## Mastery check
+
+Continue when you can explain:
+
+- why Haskell checks types before evaluation;
+- `Int` versus `Integer` and `/` versus `div`;
+- `Char` versus `String`;
+- list homogeneity and tuple position types;
+- how function application groups;
+- how to derive the type and result of a small expression step by step.
