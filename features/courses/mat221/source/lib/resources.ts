@@ -32,7 +32,6 @@ export const RESOURCES: ResourceGroup[] = [
   ] },
   { group: "Inside this pack", blurb: "These tools are part of the study loop, not decoration.", cards: [
     { icon: "file", title: "Formula sheet", tag: "Tool", href: "/formula-sheet", desc: "One printable reference. Rewrite it from memory and use it to diagnose gaps." },
-    { icon: "calendar", title: "Planner & timers", tag: "Tool", href: "/planner", desc: "Assessment countdowns, a drift-proof Pomodoro, goals and a week-by-week timeline." },
     { icon: "cards", title: "Review deck", tag: "Tool", desc: "Every chapter's Review route: flashcards, a quiz and exam traps in one retrieval session." }
   ] }
 ];

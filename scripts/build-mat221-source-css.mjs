@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourceDir = path.join(root, 'features', 'courses', 'mat221', 'source', 'styles');
 const output = path.join(root, 'features', 'courses', 'mat221', 'compat', 'source-styles.css');
-const files = ['base.css', 'layout.css', 'flashcards.css', 'quiz.css', 'planner.css', 'video.css', 'print.css'];
+const files = ['base.css', 'layout.css', 'flashcards.css', 'quiz.css', 'video.css', 'print.css'];
 
 const chunks = await Promise.all(files.map(async (file) => `/* source/styles/${file} */\n${await readFile(path.join(sourceDir, file), 'utf8')}`));
 const scoped = chunks.join('\n\n')

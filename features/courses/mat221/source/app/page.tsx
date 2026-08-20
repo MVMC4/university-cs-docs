@@ -32,7 +32,6 @@ export default function Home() {
       <h2>Tools</h2>
       <div className="grid">
         <Link className="tcard" href="/formula-sheet"><span className="n">Tool</span><h3>Formula sheet</h3><p>Every formula of the course on one printable page, grouped by topic.</p></Link>
-        <Link className="tcard" href="/planner"><span className="n">Tool</span><h3>Planner, goals &amp; timers</h3><p>Week-by-week timeline, live exam countdowns, pomodoro and goal tracking.</p></Link>
         <Link className="tcard" href="/resources"><span className="n">Hub</span><h3>Resources hub</h3><p>Textbooks, free courses, visual intuition channels, computational tools and study science.</p></Link>
       </div>
       <h2>Chapters — notes &amp; review</h2>
@@ -65,7 +64,6 @@ export default function Home() {
         <li>Run the <strong>flashcards</strong> until every card is &ldquo;Got it&rdquo; twice (shuffle on).</li>
         <li>Take the <strong>quiz</strong> closed-book; retake until 100%.</li>
         <li>Memorize the <strong>formula sheet</strong> and the <strong>exam traps</strong> — protected free marks.</li>
-        <li>Plan sessions in the <strong>planner</strong> and run pomodoros while practising.</li>
       </ol>
     </>
   );

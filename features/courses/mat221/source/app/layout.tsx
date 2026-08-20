@@ -2,7 +2,6 @@ import "../styles/base.css";
 import "../styles/layout.css";
 import "../styles/flashcards.css";
 import "../styles/quiz.css";
-import "../styles/planner.css";
 import "../styles/print.css";
 import "../styles/video.css";
 import "katex/dist/katex.min.css";

@@ -1,4 +1,4 @@
-import { copyFile, mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,11 +34,13 @@ const routePages = [
 for (const [sourceSlug, destinationSlug, title] of topics) {
   const topicDir = path.join(destination, destinationSlug);
   await mkdir(topicDir, { recursive: true });
-  await copyFile(path.join(source, `${sourceSlug}.mdx`), path.join(topicDir, 'notes.mdx'));
-  await writeFile(path.join(topicDir, 'meta.json'), `${JSON.stringify({ title: `${destinationSlug.slice(0, 2)}. ${title}`, pages: ['notes', 'questions', 'quiz', 'review', 'exam-practice'] }, null, 2)}\n`, 'utf8');
+  const sourceNote = await readFile(path.join(source, `${sourceSlug}.mdx`), 'utf8');
+  const noteWithSidebarTitle = sourceNote.replace(/^title:.*$/m, 'title: Notes');
+  await writeFile(path.join(topicDir, 'notes.mdx'), noteWithSidebarTitle, 'utf8');
+  await writeFile(path.join(topicDir, 'meta.json'), `${JSON.stringify({ title: `${destinationSlug.slice(0, 2)}. ${title}`, pages: ['notes', 'questions', 'review', 'exam-practice'] }, null, 2)}\n`, 'utf8');
 
   for (const [file, label, component] of routePages) {
-    const body = `---\ntitle: ${title} — ${label}\ndescription: Source-faithful MAT221 ${label.toLowerCase()} for ${title}.\n---\n\n<${component} slug="${sourceSlug}" />\n`;
+    const body = `---\ntitle: ${label}\ndescription: Source-faithful MAT221 ${label.toLowerCase()} for ${title}.\n---\n\n<${component} slug="${sourceSlug}" />\n`;
     await writeFile(path.join(topicDir, `${file}.mdx`), body, 'utf8');
   }
 }
@@ -49,7 +51,6 @@ const courseMeta = {
     'index',
     '---Course tools---',
     'formula-sheet',
-    'planner',
     'resources',
     '---Chapters---',
     ...topics.map(([, destinationSlug]) => destinationSlug),
@@ -59,5 +60,4 @@ const courseMeta = {
 await writeFile(path.join(destination, 'meta.json'), `${JSON.stringify(courseMeta, null, 2)}\n`, 'utf8');
 await writeFile(path.join(destination, 'index.mdx'), `---\ntitle: MAT221 Course Overview\ndescription: A complete source-faithful MAT221 course companion with notes, review, quizzes, and exam practice.\n---\n\n<Mat221SourceCourseOverview />\n`, 'utf8');
 await writeFile(path.join(destination, 'formula-sheet.mdx'), `---\ntitle: Calculus I Formula Sheet\ndescription: A printable MAT221 formula sheet covering integration, applications, limits, series, and Taylor polynomials.\n---\n\n<Mat221SourceFormulaSheet />\n`, 'utf8');
-await writeFile(path.join(destination, 'planner.mdx'), `---\ntitle: MAT221 Study Planner\ndescription: The source MAT221 semester timeline and assessment countdowns with the shared study timer.\n---\n\n<Mat221SourcePlanner />\n`, 'utf8');
 await writeFile(path.join(destination, 'resources.mdx'), `---\ntitle: Calculus I Learning Resources\ndescription: Recommended textbooks, courses, visual tools, and study methods for MAT221.\n---\n\n<Mat221SourceResources />\n`, 'utf8');

@@ -9,7 +9,7 @@ import type { TopicLink } from "../lib/types";
 export default function Sidebar({ topics }: { topics: TopicLink[] }) {
   const path = usePathname();
   const activeTopic = path.split("/")[2] || "";
-  const toolActive = path === "/formula-sheet" || path === "/resources" || path === "/planner";
+  const toolActive = path === "/formula-sheet" || path === "/resources";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(toolActive);
   const [openChapter, setOpenChapter] = useState(activeTopic);
@@ -43,7 +43,6 @@ export default function Sidebar({ topics }: { topics: TopicLink[] }) {
           <div id="tool-links" className="section-links" hidden={!toolsOpen}>
             <Link aria-current={path === "/formula-sheet" ? "page" : undefined} className={"slink" + (path === "/formula-sheet" ? " on" : "")} href="/formula-sheet">Formula sheet</Link>
             <Link aria-current={path === "/resources" ? "page" : undefined} className={"slink" + (path === "/resources" ? " on" : "")} href="/resources">Resources hub</Link>
-            <Link aria-current={path === "/planner" ? "page" : undefined} className={"slink" + (path === "/planner" ? " on" : "")} href="/planner">Planner, goals &amp; timers</Link>
           </div>
         </div>
 

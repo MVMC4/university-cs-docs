@@ -26,7 +26,7 @@ This amendment changes the migration contract:
 6. MAT221 uses the university/Fumadocs sidebar. The standalone custom sidebar remains reference-only and is not mounted.
 7. Source CSS is composed in source order and scoped to `.mat221-source`; its light palette remains source-faithful. A dark-mode adapter maps the same roles to the host dark palette.
 8. Source MathJax behavior is retained only inside the MAT221 course shell because prop-string mathematics in the copied components is not fully covered by the host static KaTeX pipeline. The host KaTeX pipeline remains active for ordinary MDX math.
-9. The source Pomodoro and Goals UI remain in the frozen snapshot for fidelity evidence but are not mounted. The course planner uses the university singleton timer and contains no goal UI.
+9. The MAT221-specific planner, Pomodoro, countdown, timeline, and Goals files are removed. The university-wide timer remains available through the host shell only.
 10. Source-root asset URLs are handled by host rewrites so copied video and diagram components do not need editing or duplicated public files.
 11. The content-quality concerns identified in the first audit become a later editorial pass. They do not authorize replacing, shortening, or withholding the source during migration.
 12. Tests and fixes run only after the complete copy and integration stages, per the requested execution order.
@@ -48,8 +48,8 @@ This amendment changes the migration contract:
 2. Add host adapters for numbered routes, assets, MDX registration, course shell, and source sidebar.
 3. Copy all 15 MDX notes byte-for-byte and generate the five source route surfaces per topic.
 4. Compose the seven source CSS files under the course scope and add a dark-theme adapter.
-5. Mount the complete overview, formula sheet, planner, resources, notes, questions, quiz, review, and exam-practice surfaces.
-6. Substitute only the shared Pomodoro and omit Goals from the mounted planner.
+5. Mount the complete overview, formula sheet, resources, notes, questions, quiz, review, and exam-practice surfaces.
+6. Keep MAT221-specific planner, countdown, timer, and Goals surfaces out of the course.
 7. At the end, run hash parity, route/content inventory, type checking, production build, and rendered desktop/mobile light/dark checks; apply fixes only from those results.
 
 The remainder of this document is retained as historical design rationale. Where it conflicts with this amendment—especially the progressive publication gate, KaTeX-only rule, five-page-without-quiz contract, and no-copy infrastructure rule—this amendment controls.

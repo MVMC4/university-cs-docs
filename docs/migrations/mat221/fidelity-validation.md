@@ -19,7 +19,7 @@
 - MAT221 uses the university/Fumadocs docs sidebar; the custom course sidebar is not mounted.
 - Source CSS is composed in original file order under `.mat221-source`. Light mode retains source values; a course-scoped adapter supplies host-compatible dark values.
 - MAT221 retains course-only MathJax for component prop strings while ordinary MDX mathematics continues through the host KaTeX pipeline.
-- The source Pomodoro and Goals components remain untouched in the frozen snapshot but are not mounted. Planner renders the host singleton `TimerPanel`, source assessment countdown, and source timeline with no Goals UI.
+- The MAT221-specific planner route, planner component, countdown/timer/Goals components, planner data, and planner stylesheet were removed by request. The host-wide timer remains separate.
 
 ## Automated results
 
@@ -42,7 +42,7 @@ The first post-change production build attempt encountered `ENOTEMPTY` because t
 - The Substitution note renders the copied LessonIntro, Concept, Theorem, inline checkpoint, static KaTeX, and component-prop MathJax with no horizontal overflow.
 - Source question bank renders 18 items; source quiz renders six questions and reveals feedback; source review renders 17 flashcards; source exam practice renders 18 items.
 - Flashcard front/back height is identical at `417.59375px`, producing zero measured flip reflow.
-- Formula sheet renders 47 formula items. Resources renders 22 cards. Planner renders one assessment countdown, one shared timer panel, and zero Goals surfaces.
+- Before the later removal request, formula sheet rendered 47 formula items and Resources rendered 22 cards. The MAT221 planner is no longer part of the course.
 - The host docs sidebar remains the active MAT221 navigation surface.
 - Desktop and 390×844 mobile layouts have no horizontal overflow in light or dark mode.
 - The mobile course menu opens and closes, keeps its close control visible, locks page scrolling while open, and hides duplicated host controls inside the overlay.
@@ -50,6 +50,8 @@ The first post-change production build attempt encountered `ENOTEMPTY` because t
 - Browser console inspection reported no errors during the final mobile dark-mode check.
 
 ## Remaining external gates
+
+No tests were run after removing the MAT221 planner and simplifying chapter sidebar labels, as explicitly requested.
 
 - Run the declared Node 22 engine check in CI or preview; local validation used the documented Node 24 deviation.
 - Conduct academic/editorial review of the copied source material as a separate post-parity task. Editorial changes must not be confused with migration fidelity.

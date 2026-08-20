@@ -4,7 +4,7 @@ import { SITE_URL } from "../lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const fixed = ["", "/formula-sheet", "/planner", "/resources"].map(function (path) {
+  const fixed = ["", "/formula-sheet", "/resources"].map(function (path) {
     return { url: SITE_URL + path, lastModified: now, changeFrequency: "weekly" as const, priority: path === "" ? 1 : 0.7 };
   });
   const topicRoutes = TOPICS.flatMap(function (topic) {
