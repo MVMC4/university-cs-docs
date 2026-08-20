@@ -1,5 +1,7 @@
 # MAT221 implementation validation
 
+> Superseded for the active fidelity branch by `fidelity-validation.md`. This file remains as the validation record for the earlier `feat/mat221-centralization` implementation.
+
 **Validated:** 20 August 2026  
 **Branch:** `feat/mat221-centralization`  
 **Environment:** Node `v24.18.0`, npm `11.16.0`

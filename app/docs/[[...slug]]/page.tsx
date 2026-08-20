@@ -15,6 +15,16 @@ import { gitConfig } from '@/lib/shared';
 import { Quiz } from '@/components/interactive/quiz';
 import { siteConfig } from '@/lib/site';
 import { flattenTree } from 'fumadocs-core/page-tree';
+import { Mat221SourceShell } from '@/features/courses/mat221/compat/source-shell';
+import {
+  Callout as Mat221SourceCallout,
+  CheckpointQuiz as Mat221SourceCheckpointQuiz,
+  Concept as Mat221SourceConcept,
+  LessonIntro as Mat221SourceLessonIntro,
+  Theorem as Mat221SourceTheorem,
+  WorkedExample as Mat221SourceWorkedExample,
+  WorkedExampleSet as Mat221SourceWorkedExampleSet,
+} from '@/features/courses/mat221/source/components/MDXPrimitives';
 
 function getCourseFooterItems(pageUrl: string) {
   const segments = pageUrl.split('/').filter(Boolean);
@@ -42,7 +52,21 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const markdownUrl = getPageMarkdownUrl(page).url;
   const canonicalUrl = new URL(page.url, siteConfig.url).toString();
   const imageUrl = new URL(getPageImage(page).url, siteConfig.url).toString();
-  const hasCustomEntryHeader = page.url === '/docs' || page.url === '/docs/study-tools';
+  const isMat221 = page.url === '/docs/sem3/mat221' || page.url.startsWith('/docs/sem3/mat221/');
+  const hasCustomEntryHeader = page.url === '/docs' || page.url === '/docs/study-tools' || isMat221;
+  const mdxComponents = getMDXComponents({
+    Quiz,
+    a: createRelativeLink(source, page),
+    ...(isMat221 ? {
+      Callout: Mat221SourceCallout,
+      LessonIntro: Mat221SourceLessonIntro,
+      Concept: Mat221SourceConcept,
+      Theorem: Mat221SourceTheorem,
+      WorkedExample: Mat221SourceWorkedExample,
+      WorkedExampleSet: Mat221SourceWorkedExampleSet,
+      CheckpointQuiz: Mat221SourceCheckpointQuiz,
+    } : {}),
+  });
   const learningResourceJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LearningResource',
@@ -62,9 +86,9 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   return (
     <DocsPage
-      toc={page.data.toc}
-      full={page.data.full}
-      footer={{ items: getCourseFooterItems(page.url) }}
+      toc={isMat221 ? [] : page.data.toc}
+      full={isMat221 || page.data.full}
+      footer={isMat221 ? { enabled: false } : { items: getCourseFooterItems(page.url) }}
     >
       <script
         type="application/ld+json"
@@ -83,15 +107,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           />
         </div>
       </>}
-      <DocsBody>
-        <MDX
-          components={getMDXComponents({
-          Quiz,
-          // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-          })}
-        />
-      </DocsBody>
+      {isMat221 ? <Mat221SourceShell pageUrl={page.url}><MDX components={mdxComponents} /></Mat221SourceShell> : <DocsBody><MDX components={mdxComponents} /></DocsBody>}
     </DocsPage>
   );
 }

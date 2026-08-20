@@ -9,7 +9,30 @@ const config = {
   // Allow cross-origin dev requests from your network IP
   allowedDevOrigins: ['100.124.114.119'],
   async redirects() {
+    const mat221Topics = [
+      ['foundations', '01-foundations'],
+      ['substitution', '02-substitution'],
+      ['partials', '03-partial-fractions'],
+      ['parts', '04-integration-by-parts'],
+      ['reduction-formulas', '05-reduction-formulas'],
+      ['trig', '06-trigonometric-integrals'],
+      ['trig-substitution', '07-trigonometric-substitution'],
+      ['weierstrass', '08-weierstrass-substitution'],
+      ['improper', '09-improper-integrals'],
+      ['numerical', '10-numerical-integration'],
+      ['applications', '11-applications'],
+      ['lhopital', '12-lhopital'],
+      ['sequences-series', '13-sequences-and-series'],
+      ['power-series', '14-power-series'],
+      ['taylor', '15-taylor-series'],
+    ];
+    const mat221Pages = ['', '/questions', '/quiz', '/review', '/exam-practice'];
     return [
+      ...mat221Topics.flatMap(([sourceSlug, destinationSlug]) => mat221Pages.map((suffix) => ({
+        source: `/topics/${sourceSlug}${suffix}`,
+        destination: `/docs/sem3/mat221/${destinationSlug}/${suffix ? suffix.slice(1) : 'notes'}`,
+        permanent: true,
+      }))),
       {
         source: '/docs/sem3/csi243/01-functional-thinking/programming-model',
         destination: '/docs/sem3/csi243/01-functional-thinking/notes/programming-model',
@@ -55,6 +78,41 @@ const config = {
         destination: '/docs/sem3/csi243/03-defining-functions/notes/input-processing',
         permanent: true,
       },
+    ];
+  },
+  async rewrites() {
+    const mat221VideoFiles = [
+      'mat221-foundations-review.mp4',
+      'mat221-foundations-review.vtt',
+      'mat221-lesson5-review.mp4',
+      'mat221-lesson5-review.vtt',
+      'mat221-lesson67-review.mp4',
+      'mat221-lesson67-review.vtt',
+    ];
+    const mat221PosterFiles = [
+      'mat221-foundations-poster.png',
+      'mat221-lesson5-poster.png',
+      'mat221-lesson67-poster.png',
+    ];
+    const mat221VisualFiles = [
+      'applications-washer.svg',
+      'foundations-area.svg',
+      'improper-limit.svg',
+      'lhopital-rates.svg',
+      'numerical-rules.svg',
+      'partials-split.svg',
+      'parts-tabular.svg',
+      'power-interval.svg',
+      'series-tests.svg',
+      'substitution-u.svg',
+      'taylor-fit.svg',
+      'trig-triangle.svg',
+    ];
+
+    return [
+      ...mat221VideoFiles.map((file) => ({ source: `/videos/${file}`, destination: `/videos/sem3/mat221/${file}` })),
+      ...mat221PosterFiles.map((file) => ({ source: `/videos/${file}`, destination: `/images/sem3/mat221/video-posters/${file}` })),
+      ...mat221VisualFiles.map((file) => ({ source: `/visuals/${file}`, destination: `/images/sem3/mat221/diagrams/${file}` })),
     ];
   },
 };

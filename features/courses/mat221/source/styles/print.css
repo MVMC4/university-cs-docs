@@ -1,0 +1,2 @@
+/* print.css — last import wins for @media print overrides */
+@media print{.sidebar,.fc-controls,.btn,.tocchips,.noprint{display:none!important}.shell{grid-template-columns:1fr}body{background:#fff}.maincol{max-width:100%;padding:0}}

@@ -1,0 +1,113 @@
+---
+title: Weierstrass Substitution
+description: Convert a rational expression in sine and cosine into a rational integral in t.
+---
+
+<LessonIntro topic="weierstrass" />
+
+<Concept title="Weierstrass substitution" what="The tangent half-angle change t=tan(x/2), which rewrites sin x, cos x, and dx rationally in t." why="It converts every rational expression in sine and cosine into an ordinary rational integral." when="Use it when direct identities or a simple u-substitution do not expose a shorter route." />
+
+<Theorem title="Tangent half-angle identities" statement={"\\(\\sin x=\\frac{2t}{1+t^2},\\quad\\cos x=\\frac{1-t^2}{1+t^2},\\quad dx=\\frac{2\\,dt}{1+t^2},\\quad t=\\tan(x/2)\\)"} conditions="The calculation is performed on intervals where t is defined, with constants understood piecewise across singular points." meaning="Sine, cosine, and the differential become rational functions of one algebraic variable." consequences="The transformed integral can be handled by factoring, completing the square, or partial fractions." />
+
+## The substitution
+
+Let
+
+$$
+t=\tan\frac{x}{2}.
+$$
+
+Then
+
+$$
+\boxed{\sin x=\frac{2t}{1+t^2},\qquad
+\cos x=\frac{1-t^2}{1+t^2},\qquad
+dx=\frac{2\,dt}{1+t^2}}.
+$$
+
+These three replacements turn the trigonometric integrand into a rational function of $t$. Then factor, complete the square, or use partial fractions.
+
+## Worked example
+
+Evaluate
+
+$$
+\int\frac{dx}{1+\sin x}.
+$$
+
+Substitute $\sin x=2t/(1+t^2)$ and $dx=2dt/(1+t^2)$:
+
+$$
+\begin{aligned}
+\int\frac{dx}{1+\sin x}
+&=\int\frac{\frac{2\,dt}{1+t^2}}{1+\frac{2t}{1+t^2}}\\
+&=\int\frac{2\,dt}{t^2+2t+1}\\
+&=2\int(t+1)^{-2}\,dt\\
+&=-\frac2{t+1}+C.
+\end{aligned}
+$$
+
+Return to $x$:
+
+$$
+\boxed{-\frac{2}{1+\tan(x/2)}+C}.
+$$
+
+Different-looking antiderivatives may be equivalent up to a constant. Differentiate your result to verify it.
+
+## Second worked example: simplify to an arctangent
+
+Evaluate
+
+$$
+\int\frac{dx}{2+\cos x}.
+$$
+
+Using
+
+$$
+\cos x=\frac{1-t^2}{1+t^2},\qquad dx=\frac{2dt}{1+t^2},
+$$
+
+gives
+
+$$
+\begin{aligned}
+\int\frac{dx}{2+\cos x}
+&=\int\frac{2dt/(1+t^2)}{2+(1-t^2)/(1+t^2)}\\
+&=\int\frac{2dt}{2(1+t^2)+1-t^2}\\
+&=\int\frac{2dt}{t^2+3}.
+\end{aligned}
+$$
+
+State the standard property
+
+$$
+\int\frac{dt}{t^2+a^2}=\frac1a\tan^{-1}\left(\frac{t}{a}\right)+C.
+$$
+
+With $a=\sqrt3$,
+
+$$
+\boxed{\int\frac{dx}{2+\cos x}
+=\frac{2}{\sqrt3}\tan^{-1}\left(\frac{\tan(x/2)}{\sqrt3}\right)+C}.
+$$
+
+## When to use it
+
+Use Weierstrass when the integrand is rational in sine and cosine and simpler parity, Pythagorean, or product-to-sum identities do not give a short route.
+
+<Callout label="Common error" tone="trap">The factor $2$ in $dx=2dt/(1+t^2)$ comes from differentiating $x/2$. Losing it changes the entire answer.</Callout>
+
+## Common mistakes
+
+- Replacing sine and cosine but leaving $dx$ unchanged.
+- Cancelling factors before expressing the entire integrand in $t$.
+- Using the universal substitution when a one-line ordinary substitution is clearer.
+- Forgetting to replace $t$ by $\tan(x/2)$ in an indefinite answer.
+
+## Worked examples 3–8: rational forms and method selection
+
+<WorkedExampleSet topic="weierstrass" count={6} numberStart={3} />
+
+<CheckpointQuiz topic="weierstrass" from={0} count={2} />

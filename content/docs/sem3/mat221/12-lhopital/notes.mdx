@@ -1,0 +1,120 @@
+---
+title: Indeterminate Forms & L'Hopital's Rule
+description: Identify genuine indeterminate forms, rewrite other forms, and compare derivatives without using the quotient rule.
+---
+
+<LessonIntro topic="lhopital" />
+
+<Concept title="Indeterminate forms and L'Hopital's rule" what="A derivative-ratio method for limits whose quotient form is exactly 0/0 or infinity/infinity." why="The derivatives reveal relative local growth rates that the original quotient hides." when="Use it only after checking the form; rewrite products, differences, and powers into a suitable quotient first." />
+
+<Theorem title="L'Hopital's rule" statement={"\\(\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}\\)"} conditions="The original quotient has form 0/0 or ±∞/±∞, f and g are differentiable nearby, g' is nonzero nearby, and the derivative ratio has the relevant limit." meaning="For the allowed indeterminate quotients, the limiting ratio is governed by derivative growth rates." consequences="Differentiate numerator and denominator separately, recheck the form after every application, and never use the quotient rule." />
+
+## Indeterminate forms
+
+A form is indeterminate when it does not determine a unique limit. The direct-substitution forms $0/0$ and $\infty/\infty$ may produce many different answers depending on relative rates of change.
+
+## When L'Hopital applies
+
+If direct substitution gives exactly $0/0$ or $\pm\infty/\pm\infty$, and the derivative conditions hold near the limit point, then
+
+$$
+\boxed{\lim\frac{f(x)}{g(x)}=\lim\frac{f'(x)}{g'(x)}}
+$$
+
+provided the derivative ratio has a limit or diverges appropriately.
+
+Differentiate the numerator and denominator separately. Do not use the quotient rule.
+
+## Why the form must be checked first
+
+The form $1/0$ is not indeterminate: it normally signals an infinite or one-sided limit. Applying L'Hopital to a determinate form can change a correct conclusion into a false one.
+
+## Complete algorithm
+
+1. Substitute or analyse the original expression.
+2. State the resulting form.
+3. If it is $0/0$ or $\infty/\infty$, apply L'Hopital.
+4. Simplify before differentiating again.
+5. Recheck the new form.
+6. Repeat only while the form remains indeterminate.
+
+## Worked example 1: repeated use
+
+Evaluate
+
+$$
+\lim_{x\to0}\frac{e^x-1-x}{x^2}.
+$$
+
+Direct substitution gives $0/0$, so
+
+$$
+\lim_{x\to0}\frac{e^x-1}{2x}.
+$$
+
+Substitution still gives $0/0$, so apply the rule again:
+
+$$
+\lim_{x\to0}\frac{e^x}{2}=\boxed{\frac12}.
+$$
+
+## Rewriting other indeterminate forms
+
+L'Hopital does not apply directly to $0\cdot\infty$, $\infty-\infty$, or indeterminate powers.
+
+- Rewrite $0\cdot\infty$ as a quotient.
+- Combine $\infty-\infty$ into one fraction or rationalise.
+- For $0^0$, $1^\infty$, or $\infty^0$, take logarithms first.
+
+### Worked example 2: product form
+
+Evaluate $\lim_{x\to0^+}x\ln x$. The direct form is $0\cdot(-\infty)$, so rewrite:
+
+$$
+x\ln x=\frac{\ln x}{1/x}.
+$$
+
+This is $-\infty/\infty$, so
+
+$$
+\lim_{x\to0^+}\frac{1/x}{-1/x^2}
+=\lim_{x\to0^+}(-x)=\boxed{0}.
+$$
+
+### Worked example 3: power form
+
+Let
+
+$$
+L=\lim_{x\to\infty}\left(1+\frac1x\right)^x.
+$$
+
+The form is $1^\infty$. Take logarithms:
+
+$$
+\ln L=\lim_{x\to\infty}x\ln\left(1+\frac1x\right)
+=\lim_{x\to\infty}\frac{\ln(1+1/x)}{1/x}.
+$$
+
+This is $0/0$. Differentiate top and bottom:
+
+$$
+\ln L=\lim_{x\to\infty}\frac{-1/[x^2(1+1/x)]}{-1/x^2}
+=\lim_{x\to\infty}\frac1{1+1/x}=1.
+$$
+
+Exponentiate both sides: $L=e^1=\boxed e$.
+
+## Common errors
+
+- Applying the rule without stating the indeterminate form.
+- Using the quotient rule.
+- Applying it directly to a product, difference, or power form.
+- Stopping when the result is still indeterminate.
+- Forgetting to exponentiate after solving a logarithmic limit.
+
+## Worked examples 4–8: repeated and transformed forms
+
+<WorkedExampleSet topic="lhopital" count={5} numberStart={4} />
+
+<CheckpointQuiz topic="lhopital" from={0} count={4} />

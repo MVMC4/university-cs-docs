@@ -43,6 +43,8 @@ import { CommonMistake, ConceptBlock, RecognitionStrategy, TheoremBlock } from '
 import { WorkedExample, WorkedExampleSet } from './learning/worked-example';
 import { LessonConnection, LessonSummary, MethodSteps, PracticeCheckpoint } from './learning/lesson-flow';
 import { CalculusDiagram, Mat221CoursePlanner, Mat221CourseVideo, Mat221ExamPractice, Mat221FormulaSheet, Mat221QuestionBank } from '@/features/courses/mat221/components';
+import { Mat221SourceCourseOverview, Mat221SourceExamPracticePage, Mat221SourceQuestionsPage, Mat221SourceQuizPage, Mat221SourceReviewPage } from '@/features/courses/mat221/compat/source-pages';
+import { Mat221SourceFormulaSheet, Mat221SourcePlanner, Mat221SourceResources } from '@/features/courses/mat221/compat/source-tools';
 
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -118,6 +120,14 @@ export function getMDXComponents(components?: MDXComponents) {
     Mat221CourseVideo,
     Mat221QuestionBank,
     Mat221ExamPractice,
+    Mat221SourceCourseOverview,
+    Mat221SourceQuestionsPage,
+    Mat221SourceQuizPage,
+    Mat221SourceReviewPage,
+    Mat221SourceExamPracticePage,
+    Mat221SourceFormulaSheet,
+    Mat221SourcePlanner,
+    Mat221SourceResources,
     
     // Allow any other passed components to override
     ...components,

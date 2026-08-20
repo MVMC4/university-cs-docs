@@ -1,13 +1,58 @@
 # MAT221 Centralization and University Site Transition Plan
 
-**Status:** Core centralization implemented and locally validated on `feat/mat221-centralization`; remaining 14 chapters are held by the academic-content gate; Node 22, exhaustive visual/accessibility, preview, and cutover gates remain open
+**Status:** Fidelity-pass implementation in progress on `feat/mat221-fidelity-pass`; the earlier progressive rewrite/content-gate strategy is superseded by the amendment below
 **Prepared:** 20 August 2026
 **Last audited:** 20 August 2026
 **Target repository:** `C:\Users\Nido\Desktop\Projects\Active\university-cs-docs`
 **Migration source:** `C:\Users\Nido\Desktop\Projects\Active\mat221-docs`
-**Target branch when implementation begins:** `feat/mat221-centralization`
+**Original implementation branch:** `feat/mat221-centralization`
+**Active fidelity branch:** `feat/mat221-fidelity-pass`
 **Target baseline:** `d6267f8c155c7f1ffefcb64699e5b51ca225aace`
 **MAT221 source baseline:** `6f4dd6b48dafb2b0378dd265c2dac8bba799f815`
+
+---
+
+## 0. Fidelity-first amendment (supersedes conflicting sections)
+
+The initial plan solved for architectural normalization before it proved source parity. That was the wrong priority for this migration. It converted the source into host-native abstractions, published only a rewritten Substitution pilot, and treated most source route material as blocked. The result was cleaner in isolation but failed the primary requirement: students should receive the existing MAT221 notes, components, routes, and visual teaching system without content loss.
+
+This amendment changes the migration contract:
+
+1. The source repository at commit `6f4dd6b48dafb2b0378dd265c2dac8bba799f815` is the fidelity baseline.
+2. All 15 source MDX lessons are copied byte-for-byte to their numbered destination chapter `notes.mdx` files.
+3. All 16 source components, 19 source library files, seven CSS partials, 15 MDX lessons, and the source App Router files are retained unchanged under `features/courses/mat221/source/` as a reviewable frozen snapshot.
+4. Active MAT221 pages use the copied source primitives and interactive components. Thin compatibility wrappers may change only route paths, host shell placement, asset paths, theme ownership, and timer ownership.
+5. The source chapter route contract is retained: Notes, Questions, Quiz, Review, and Exam Practice for every chapter.
+6. The dedicated MAT221 sidebar is retained inside the course surface, with links translated to the host `/docs/sem3/mat221/...` paths.
+7. Source CSS is composed in source order and scoped to `.mat221-source`; its light palette remains source-faithful. A dark-mode adapter maps the same roles to the host dark palette.
+8. Source MathJax behavior is retained only inside the MAT221 course shell because prop-string mathematics in the copied components is not fully covered by the host static KaTeX pipeline. The host KaTeX pipeline remains active for ordinary MDX math.
+9. The source Pomodoro and Goals UI remain in the frozen snapshot for fidelity evidence but are not mounted. The course planner uses the university singleton timer and contains no goal UI.
+10. Source-root asset URLs are handled by host rewrites so copied video and diagram components do not need editing or duplicated public files.
+11. The content-quality concerns identified in the first audit become a later editorial pass. They do not authorize replacing, shortening, or withholding the source during migration.
+12. Tests and fixes run only after the complete copy and integration stages, per the requested execution order.
+
+### Critique of the original approach
+
+| Original choice | Why it was wrong for this request | Corrected approach |
+|---|---|---|
+| Rewrite source lessons into shared host primitives first | It changed wording, structure, example coverage, and component behavior before parity existed | Copy all source notes first; refactor only after parity is signed off |
+| Publish one pilot and gate the other 14 chapters | It made a complete source course appear mostly missing in the host | Publish the complete 15-chapter route set, then audit content quality separately |
+| Reject the source sidebar outright | It removed an important part of the source navigation experience | Mount a course-scoped copy with host-path translation |
+| Force a single KaTeX-only pipeline immediately | It risked losing math rendered from component prop strings | Keep course-scoped MathJax compatibility while retaining host KaTeX for MDX |
+| Rebuild components instead of preserving them | It made visual and behavioral parity difficult to prove | Freeze all components unchanged and use direct imports wherever host boundaries allow |
+| Treat generated source material as a migration blocker | It conflated migration fidelity with later academic editing | Copy faithfully, label provenance, and schedule editorial review after parity |
+
+### Corrected execution stages
+
+1. Freeze the exact source snapshot and record its commit.
+2. Add host adapters for numbered routes, assets, MDX registration, course shell, and source sidebar.
+3. Copy all 15 MDX notes byte-for-byte and generate the five source route surfaces per topic.
+4. Compose the seven source CSS files under the course scope and add a dark-theme adapter.
+5. Mount the complete overview, formula sheet, planner, resources, notes, questions, quiz, review, and exam-practice surfaces.
+6. Substitute only the shared Pomodoro and omit Goals from the mounted planner.
+7. At the end, run hash parity, route/content inventory, type checking, production build, and rendered desktop/mobile light/dark checks; apply fixes only from those results.
+
+The remainder of this document is retained as historical design rationale. Where it conflicts with this amendment—especially the progressive publication gate, prohibition on a MAT221 sidebar, KaTeX-only rule, five-page-without-quiz contract, and no-copy infrastructure rule—this amendment controls.
 
 ---
 

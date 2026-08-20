@@ -1,0 +1,164 @@
+---
+title: Antiderivatives & the Fundamental Theorem of Calculus
+description: Understand what an integral means, why the constant appears, and how accumulation and antiderivatives are connected.
+---
+
+<LessonIntro topic="foundations" />
+
+<Concept title="Antiderivatives and accumulation" what="Integration finds families of antiderivatives and measures signed accumulation over intervals." why="It recovers a total quantity from its rate of change and connects local derivatives to global change." when="Use indefinite integrals for antiderivative families and definite integrals for accumulated change or signed area." />
+
+<Theorem title="Fundamental Theorem of Calculus" statement={"\\(\\frac{d}{dx}\\int_a^x f(t)\\,dt=f(x),\\qquad \\int_a^b f(x)\\,dx=F(b)-F(a)\\)"} conditions="f is continuous on the interval and F is an antiderivative of f." meaning="Differentiation and integration undo one another under the theorem's conditions." consequences="Moving upper bounds require the chain rule; definite values do not retain +C." />
+
+## Antiderivative families
+
+An antiderivative of $f$ is a function $F$ whose derivative is $f$:
+
+$$
+F'(x)=f(x).
+$$
+
+Because the derivative of every constant is zero, one function has a whole family of antiderivatives:
+
+$$
+\boxed{\int f(x)\,dx=F(x)+C}.
+$$
+
+For example, $x^2$, $x^2+4$, and $x^2-100$ all differentiate to $2x$. Therefore
+
+$$
+\int2x\,dx=x^2+C.
+$$
+
+## Two questions integration answers
+
+Integration answers two related questions:
+
+- Which function has the given derivative?
+- How much quantity has accumulated over an interval?
+
+The Fundamental Theorem of Calculus connects these questions: antiderivatives calculate accumulated change.
+
+## Properties used throughout the course
+
+Linearity allows sums and constant multiples to be integrated term by term:
+
+$$
+\int[af(x)+bg(x)]\,dx=a\int f(x)\,dx+b\int g(x)\,dx.
+$$
+
+Reversing bounds changes the sign, and an interval of zero width has zero integral:
+
+$$
+\int_b^a f(x)\,dx=-\int_a^b f(x)\,dx,
+\qquad
+\int_a^a f(x)\,dx=0.
+$$
+
+## Basic antiderivative rules
+
+For $n\ne-1$,
+
+$$
+\boxed{\int x^n\,dx=\frac{x^{n+1}}{n+1}+C}.
+$$
+
+The exceptional exponent $n=-1$ gives a logarithm:
+
+$$
+\boxed{\int\frac{dx}{x}=\ln|x|+C}.
+$$
+
+Also remember
+
+$$
+\int e^x\,dx=e^x+C,
+\quad
+\int\cos x\,dx=\sin x+C,
+\quad
+\int\sin x\,dx=-\cos x+C.
+$$
+
+### Worked example: combine rules without skipping algebra
+
+Evaluate
+
+$$
+\int\left(4x^6-\frac3{x^4}+e^{-3x}\right)dx.
+$$
+
+First rewrite $3/x^4$ as $3x^{-4}$. By linearity,
+
+$$
+\int4x^6dx-\int3x^{-4}dx+\int e^{-3x}dx.
+$$
+
+Now apply each rule:
+
+$$
+\begin{aligned}
+\int4x^6dx&=\frac47x^7,\\
+-\int3x^{-4}dx&=-3\left(\frac{x^{-3}}{-3}\right)=x^{-3},\\
+\int e^{-3x}dx&=-\frac13e^{-3x}.
+\end{aligned}
+$$
+
+Therefore
+
+$$
+\boxed{\frac47x^7+\frac1{x^3}-\frac13e^{-3x}+C}.
+$$
+
+The factor $-1/3$ in the exponential term compensates for the inner derivative $-3$.
+
+## FTC Part 1: differentiating accumulated area
+
+If $f$ is continuous, then
+
+$$
+\boxed{\frac{d}{dx}\int_a^x f(t)\,dt=f(x)}.
+$$
+
+The upper limit moves. Increasing it by a small amount adds a thin strip whose height is approximately $f(x)$, so the rate of accumulation is $f(x)$.
+
+If the upper limit is another function, use the chain rule:
+
+$$
+\frac{d}{dx}\int_a^{g(x)}f(t)\,dt=f(g(x))g'(x).
+$$
+
+For example,
+
+$$
+\frac{d}{dx}\int_2^{x^2}(3t^2+1)dt
+=(3x^4+1)(2x).
+$$
+
+## FTC Part 2: evaluating a definite integral
+
+If $F'=f$ on $[a,b]$, then
+
+$$
+\boxed{\int_a^bf(x)\,dx=F(b)-F(a)}.
+$$
+
+For $\int_1^32x\,dx$, use $F(x)=x^2$:
+
+$$
+\int_1^32x\,dx=[x^2]_1^3=3^2-1^2=\boxed{8}.
+$$
+
+Do not add $C$ to a final definite value: the constants cancel in $F(b)-F(a)$.
+
+## Common errors
+
+- Forgetting $+C$ for an indefinite integral.
+- Using the power rule when $n=-1$.
+- Writing $F(b)+F(a)$ instead of $F(b)-F(a)$.
+- Applying the ordinary FTC across a discontinuity or blow-up.
+- Forgetting the chain-rule factor when a limit is $g(x)$.
+
+## Worked examples 2–8: rules, symmetry, and the FTC
+
+<WorkedExampleSet topic="foundations" count={7} numberStart={2} />
+
+<CheckpointQuiz topic="foundations" from={0} count={4} />

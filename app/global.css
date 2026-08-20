@@ -4,6 +4,7 @@
 @import 'katex/dist/katex.css';
 @import '../features/courses/mat221/styles/calculus.css';
 @import '../features/courses/mat221/styles/print.css';
+@import '../features/courses/mat221/compat/source-styles.css';
 
 :root {
   --color-fd-background: #f1ebdd;
@@ -123,6 +124,14 @@ article h4,
 ::selection {
   background: var(--color-fd-accent);
   color: var(--color-fd-accent-foreground);
+}
+
+body.mat221-course-active #nd-docs-layout {
+  --fd-sidebar-width: 0px !important;
+}
+
+body.mat221-course-active #nd-sidebar {
+  display: none;
 }
 
 /* Pomodoro workspace */

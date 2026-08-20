@@ -1,0 +1,115 @@
+---
+title: Sequences & Series
+description: Separate term limits from partial-sum limits and select convergence tests from visible structure.
+---
+
+<LessonIntro topic="sequences-series" />
+
+<Concept title="Sequences and infinite series" what="A sequence studies individual terms; a series studies the limit of their partial sums." why="Convergence decides whether an infinite process approaches a finite value and underpins later power-series work." when="Take a sequence limit for a_n; for Σa_n, first apply the term test and then choose a test from the term's structure." />
+
+<Theorem title="Necessary term condition" statement={"\\(\\sum_{n=1}^{\\infty}a_n\\text{ convergent }\\Longrightarrow\\lim_{n\\to\\infty}a_n=0\\)"} conditions="This is a necessary condition, not a sufficient one." meaning="A nonzero or nonexistent term limit proves divergence immediately." consequences="A zero term limit only permits further testing; it never proves that the series converges." />
+
+## Sequence versus series
+
+A sequence $(a_n)$ is an ordered list. It converges to $L$ when its terms approach $L$.
+
+An infinite series $\sum a_n$ is the limit of its partial sums
+
+$$
+S_N=a_1+a_2+\cdots+a_N.
+$$
+
+The series converges to $S$ when $S_N\to S$. This distinction is essential: $a_n\to0$ does not guarantee that $\sum a_n$ converges.
+
+## Sequence properties
+
+- A convergent sequence is bounded.
+- A bounded monotone sequence converges.
+- Limits respect sums, products, and quotients when the denominator limit is nonzero.
+
+For example,
+
+$$
+\lim_{n\to\infty}\frac{n}{\sqrt{n^2+1}}
+=\lim_{n\to\infty}\frac1{\sqrt{1+1/n^2}}=1.
+$$
+
+## Geometric series
+
+For
+
+$$
+\sum_{n=0}^{\infty}ar^n,
+$$
+
+the partial sum is
+
+$$
+S_N=a\frac{1-r^{N+1}}{1-r}.
+$$
+
+If $|r|<1$, then $r^{N+1}\to0$, giving
+
+$$
+\boxed{\sum_{n=0}^{\infty}ar^n=\frac{a}{1-r}}.
+$$
+
+If $|r|\ge1$, the series diverges.
+
+## When to use each convergence test
+
+1. Divergence test first: if $a_n\not\to0$, the series diverges.
+2. Geometric test when consecutive terms have a constant ratio.
+3. $p$-series test for $\sum1/n^p$, which converges iff $p>1$.
+4. Ratio test for factorials and exponentials in $n$.
+5. Root test when the entire term is raised to the $n$th power.
+6. Comparison for positive rational or radical terms.
+7. Integral test for positive, continuous, decreasing terms.
+8. Alternating-series test for alternating signs.
+
+## Worked example: ratio test
+
+Determine whether $\sum_{n=1}^{\infty}n!/3^n$ converges. Let $a_n=n!/3^n$. Then
+
+$$
+\begin{aligned}
+L
+&=\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right|\\
+&=\lim_{n\to\infty}\frac{(n+1)!}{3^{n+1}}\frac{3^n}{n!}\\
+&=\lim_{n\to\infty}\frac{n+1}{3}=\infty.
+\end{aligned}
+$$
+
+Since $L>1$, the series diverges.
+
+## Alternating, absolute, and conditional convergence
+
+For $\sum(-1)^nb_n$, the alternating-series test requires
+
+$$
+b_n\ge0,\qquad b_{n+1}\le b_n\text{ eventually},\qquad b_n\to0.
+$$
+
+If $\sum|a_n|$ converges, then $\sum a_n$ converges absolutely. If $\sum a_n$ converges but $\sum|a_n|$ diverges, convergence is conditional.
+
+For the alternating harmonic series,
+
+$$
+\sum_{n=1}^{\infty}\frac{(-1)^{n+1}}n,
+$$
+
+$1/n$ decreases to zero, so the series converges. But $\sum1/n$ diverges, so it converges conditionally.
+
+## Common errors
+
+- Claiming convergence because $a_n\to0$.
+- Using the ratio test when $L=1$ and still giving a verdict.
+- Checking alternation but not decrease and limit zero.
+- Confusing a sequence limit with a series sum.
+- Using comparison inequalities in the wrong direction.
+
+## Worked examples 2–8: selecting a convergence test
+
+<WorkedExampleSet topic="sequences-series" count={7} numberStart={2} />
+
+<CheckpointQuiz topic="sequences-series" from={0} count={4} />
