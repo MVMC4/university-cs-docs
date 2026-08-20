@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "auditedAt": "2026-08-20",
+  "sourceOrigin": "standalone MAT221 deployment",
+  "destinationBasePath": "/docs/sem3/mat221",
+  "redirectOwner": "standalone deployment when origins differ",
+  "courseRoutes": [
+    {
+      "source": "/",
+      "destination": "/docs/sem3/mat221",
+      "status": "planned"
+    },
+    {
+      "source": "/formula-sheet",
+      "destination": "/docs/sem3/mat221/formula-sheet",
+      "status": "planned"
+    },
+    {
+      "source": "/planner",
+      "destination": "/docs/sem3/mat221/planner",
+      "status": "planned"
+    },
+    {
+      "source": "/resources",
+      "destination": "/docs/sem3/mat221/resources",
+      "status": "planned"
+    }
+  ],
+  "topicRouteRules": [
+    {
+      "sourceSuffix": "",
+      "destinationSuffix": "/notes",
+      "status": "planned"
+    },
+    {
+      "sourceSuffix": "/questions",
+      "destinationSuffix": "/questions",
+      "status": "planned"
+    },
+    {
+      "sourceSuffix": "/quiz",
+      "destinationSuffix": "/review#chapter-assessment",
+      "status": "planned"
+    },
+    {
+      "sourceSuffix": "/review",
+      "destinationSuffix": "/review",
+      "status": "planned"
+    },
+    {
+      "sourceSuffix": "/exam-practice",
+      "destinationSuffix": "/exam-practice",
+      "status": "planned"
+    }
+  ],
+  "topics": [
+    { "order": 1, "title": "Antiderivatives and FTC", "sourceSlug": "foundations", "destinationSlug": "01-foundations", "wave": "A" },
+    { "order": 2, "title": "Integration by Substitution", "sourceSlug": "substitution", "destinationSlug": "02-substitution", "wave": "pilot/A" },
+    { "order": 3, "title": "Partial Fractions", "sourceSlug": "partials", "destinationSlug": "03-partial-fractions", "wave": "B" },
+    { "order": 4, "title": "Integration by Parts", "sourceSlug": "parts", "destinationSlug": "04-integration-by-parts", "wave": "B" },
+    { "order": 5, "title": "Reduction Formulas", "sourceSlug": "reduction-formulas", "destinationSlug": "05-reduction-formulas", "wave": "B" },
+    { "order": 6, "title": "Trigonometric Integrals", "sourceSlug": "trig", "destinationSlug": "06-trigonometric-integrals", "wave": "B" },
+    { "order": 7, "title": "Trigonometric Substitution", "sourceSlug": "trig-substitution", "destinationSlug": "07-trigonometric-substitution", "wave": "B" },
+    { "order": 8, "title": "Weierstrass Substitution", "sourceSlug": "weierstrass", "destinationSlug": "08-weierstrass-substitution", "wave": "B" },
+    { "order": 9, "title": "Improper Integrals", "sourceSlug": "improper", "destinationSlug": "09-improper-integrals", "wave": "C" },
+    { "order": 10, "title": "Numerical Integration", "sourceSlug": "numerical", "destinationSlug": "10-numerical-integration", "wave": "C" },
+    { "order": 11, "title": "Applications of Integration", "sourceSlug": "applications", "destinationSlug": "11-applications", "wave": "C" },
+    { "order": 12, "title": "L’Hôpital’s Rule", "sourceSlug": "lhopital", "destinationSlug": "12-lhopital", "wave": "C" },
+    { "order": 13, "title": "Sequences and Series", "sourceSlug": "sequences-series", "destinationSlug": "13-sequences-and-series", "wave": "D" },
+    { "order": 14, "title": "Power Series", "sourceSlug": "power-series", "destinationSlug": "14-power-series", "wave": "D" },
+    { "order": 15, "title": "Taylor Series", "sourceSlug": "taylor", "destinationSlug": "15-taylor-series", "wave": "D" }
+  ],
+  "hostPlaceholderRoutes": [
+    {
+      "route": "/docs/sem3/mat221/limits",
+      "listedInSidebar": false,
+      "incomingRepositoryReferences": 0,
+      "action": "archive and remove when the replacement course shell lands"
+    },
+    {
+      "route": "/docs/sem3/mat221/derivatives",
+      "listedInSidebar": false,
+      "incomingRepositoryReferences": 0,
+      "action": "archive and remove when the replacement course shell lands"
+    }
+  ]
+}
