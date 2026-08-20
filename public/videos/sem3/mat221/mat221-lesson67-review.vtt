@@ -1,0 +1,31 @@
+WEBVTT
+
+00:00.000 --> 00:23.000
+Inspect the powers, preserve the substitution factor, and use an identity on everything else.
+
+00:23.000 --> 00:48.000
+Odd sine saves sine x. Odd cosine saves cosine x. If both powers are even, use half-angle identities.
+
+00:48.000 --> 01:12.000
+For sine cubed x times cosine to the four thirds x, save one sine and use u equal to cosine x.
+
+01:12.000 --> 01:40.000
+Even powers call for half angles. An odd cosine power calls for u equal to sine x.
+
+01:40.000 --> 02:06.000
+Even secant saves secant squared for u equal to tangent. Odd tangent saves secant tangent for u equal to secant.
+
+02:06.000 --> 02:30.000
+Use tangent squared equals secant squared minus one, or save secant squared and substitute tangent.
+
+02:30.000 --> 03:01.000
+Match each remaining secant and tangent integral to its preserved derivative factor, then differentiate to verify.
+
+03:01.000 --> 03:27.000
+For products with different angles, convert products to sums before integrating.
+
+03:27.000 --> 03:53.000
+Apply product-to-sum, then track the inner-frequency factor during integration.
+
+03:53.000 --> 04:17.000
+Classify, preserve a derivative pair, apply one identity, integrate, and verify.

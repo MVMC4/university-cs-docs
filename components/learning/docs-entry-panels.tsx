@@ -111,20 +111,20 @@ export function StudyWorkspaceHeader() {
     <div className="study-workspace-icon"><TimerReset size={24} /></div>
     <div className="study-workspace-copy">
       <div className="welcome-kicker"><Clock3 size={14} /> Personal focus workspace</div>
-      <h1 id="pomodoro-timer-and-goals">Turn a clear goal into protected time.</h1>
-      <p>Select a goal, start the timer, and stay with one outcome. A completed focus block automatically advances the active goal, while your settings and progress remain saved on this device.</p>
+      <h1 id="pomodoro-focus-timer">Protect one block of attention.</h1>
+      <p>Choose one task, start the timer, and keep the same countdown while you move through notes, questions, and review pages. Settings and today’s focus totals remain saved on this device.</p>
       <div className="workspace-features">
         <span><CheckCircle2 size={14} /> Persistent progress</span>
         <span><CheckCircle2 size={14} /> Custom cycles</span>
-        <span><CheckCircle2 size={14} /> Goal-linked sessions</span>
+        <span><CheckCircle2 size={14} /> One global timer</span>
       </div>
     </div>
     <div className="workspace-sequence" aria-label="Three-step workflow">
-      <div><span>01</span><strong>Set a goal</strong></div>
+      <div><span>01</span><strong>Choose one task</strong></div>
       <ArrowRight size={15} />
       <div><span>02</span><strong>Focus</strong></div>
       <ArrowRight size={15} />
-      <div><span>03</span><strong>Complete</strong></div>
+      <div><span>03</span><strong>Take a break</strong></div>
     </div>
   </section>;
 }

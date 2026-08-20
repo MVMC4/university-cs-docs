@@ -9,7 +9,7 @@ Counts remain unapproved until explicit source records are separated from genera
 | # | Topic | Source | Destination | Wave | Explicit destination examples | Reviewed cards | Reviewed quiz items | Written questions | Exam items | Status |
 |---:|---|---|---|---|---:|---:|---:|---:|---:|---|
 | 1 | Antiderivatives and FTC | `content/docs/foundations.mdx` | `01-foundations` | A | 0 | 0 | 0 | 0 | 0 | Audit required |
-| 2 | Integration by Substitution | `content/docs/substitution.mdx` | `02-substitution` | Pilot/A | 0 | 0 | 0 | 0 | 0 | Pilot candidate |
+| 2 | Integration by Substitution | `content/docs/substitution.mdx` | `02-substitution` | Pilot/A | 8 | 11 | 6 | 6 | 3 | Implemented and locally validated; academic review pending |
 | 3 | Partial Fractions | `content/docs/partials.mdx` | `03-partial-fractions` | B | 0 | 0 | 0 | 0 | 0 | Audit required |
 | 4 | Integration by Parts | `content/docs/parts.mdx` | `04-integration-by-parts` | B | 0 | 0 | 0 | 0 | 0 | Audit required |
 | 5 | Reduction Formulas | `content/docs/reduction-formulas.mdx` | `05-reduction-formulas` | B | 0 | 0 | 0 | 0 | 0 | Priority after pilot |
@@ -27,10 +27,17 @@ Counts remain unapproved until explicit source records are separated from genera
 ## Phase 0 content decisions
 
 - The existing host overview, Limits, Derivatives, Resources, and metadata files are archived under `archive/2026-08-20`.
-- Limits and Derivatives remain active but hidden until the complete replacement shell lands.
+- Limits and Derivatives are archived and have no active MAT221 route.
 - No repository link targets either hidden placeholder route.
 - No generated source item has been approved for student-facing migration.
 - Existing host lecture PDFs remain canonical resources and are not duplicated.
+
+## Implementation audit update
+
+- The 15-topic typed manifest, course overview, and planner now represent the complete Calculus II sequence.
+- Only Integration by Substitution is published as a chapter because it is the only destination with all five explicit page types.
+- Formula sheet, planner, resources, the approved course assets, and one-copy video presentation are implemented.
+- The remaining topics retain `Audit required` status until explicit question/review/exam records are authored and academically reviewed. Narrative availability alone does not advance a row.
 
 ## Per-topic completion fields
 

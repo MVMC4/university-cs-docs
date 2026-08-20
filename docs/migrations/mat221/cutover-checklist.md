@@ -10,18 +10,18 @@ This checklist is initialized in Phase 0. Nothing is checked merely because a fi
 - [x] Archive the existing host MAT221 placeholders.
 - [x] Capture representative desktop/mobile light/dark baselines.
 - [x] Reproduce source and host builds, including documented generator recovery.
-- [ ] Review and approve the architecture gate.
+- [x] Review and approve the architecture gate.
 
 ## Course and application
 
-- [ ] Establish theme-token layers and preserve dark mode.
-- [ ] Extract one global timer provider.
-- [ ] Remove goal UI and goal-key reads without deleting stored data.
-- [ ] Add shared learning primitives and component reference route.
+- [x] Establish theme-token layers and preserve dark mode; representative desktop/mobile checks pass.
+- [x] Extract and behaviorally verify one global timer provider.
+- [x] Remove goal UI and goal-key reads without deleting stored data; active-code audit passes.
+- [x] Add shared learning primitives and a verified non-indexed component reference route.
 - [ ] Approve the Substitution pilot academically and visually.
 - [ ] Add all 15 five-page chapter contracts.
-- [ ] Migrate formula sheet, planner, resources, and approved assets.
-- [ ] Account for all 25 source public files.
+- [x] Migrate formula sheet, planner, resources, and approved assets.
+- [x] Account for all 25 source public files: 23 migrated and 2 rejected with recorded reasons.
 
 ## Final verification
 

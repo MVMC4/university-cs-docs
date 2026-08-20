@@ -1,0 +1,129 @@
+---
+title: Complete Notes
+description: The substitution rule, recognition strategy, full method, and eight explicit worked examples.
+---
+
+import { substitutionExamples } from '@/features/courses/mat221/data/substitution';
+
+# Integration by Substitution
+
+<ConceptBlock title="What substitution does">
+
+Integration by substitution is a change of variable that replaces a composite expression and its differential with $u$ and $du$. It reverses the chain rule and turns a composite integral into a basic antiderivative.
+
+</ConceptBlock>
+
+<TheoremBlock title="Substitution rule">
+
+If $g$ is differentiable and the complete integral can be rewritten in one variable, then
+
+$$
+\int f(g(x))g'(x)\,dx=\int f(u)\,du,qquad u=g(x).
+$$
+
+For a definite integral,
+
+$$
+\int_a^b f(g(x))g'(x)\,dx
+=
+\int_{g(a)}^{g(b)}f(u)\,du.
+$$
+
+</TheoremBlock>
+
+## Why the rule works
+
+The chain rule says
+
+$$
+\frac{d}{dx}F(g(x))=F'(g(x))g'(x).
+$$
+
+Reading this backwards gives
+
+$$
+\int F'(g(x))g'(x)\,dx=F(g(x))+C.
+$$
+
+The substitution $u=g(x)$ and differential $du=g'(x)dx$ make that reverse-chain-rule structure visible.
+
+<RecognitionStrategy>
+
+Look for:
+
+- a function inside another function, such as $\cos(x^2)$;
+- a denominator together with its derivative;
+- an exponent together with its derivative;
+- a trigonometric function together with its derivative;
+- a repeated expression that becomes simpler when renamed.
+
+After choosing $u$, the entire integral must use only $u$ and $du$.
+
+</RecognitionStrategy>
+
+<CalculusDiagram
+  diagram="substitutionU"
+  alt="A substitution flow showing an inner expression changing from x to u and returning after integration"
+  caption="A complete substitution changes the expression, differential, and—when applicable—the bounds before integration."
+/>
+
+<MethodSteps title="The complete substitution method" steps={[
+  "Choose the inner expression u = g(x)",
+  "Differentiate it to obtain du = g′(x) dx",
+  "Solve for the exact differential factor present",
+  "Rewrite every part of the integral in u",
+  "Integrate with respect to u",
+  "Back-substitute for an indefinite integral",
+  "For a definite integral, change bounds and remain in u",
+  "Verify by differentiation or a sign and size estimate"
+]} />
+
+## Constant factors
+
+If $du=2x\,dx$ but the integral contains only $x\,dx$, then
+
+$$
+x\,dx=\frac12du.
+$$
+
+The factor one half is required. It cannot be ignored merely because the substitution pattern is otherwise correct.
+
+## Eight worked examples
+
+<WorkedExampleSet examples={substitutionExamples} />
+
+<CommonMistake title="Variable mixing">
+
+An expression such as $\int x\sqrt{u}\,du$ is not a completed substitution. Rewrite $x$ in terms of $u$, or reconsider the choice of substitution.
+
+</CommonMistake>
+
+<CommonMistake title="Definite-bound mismatch">
+
+Never evaluate a $u$-antiderivative at old $x$-bounds. Either change the bounds and remain in $u$, or back-substitute and use the original bounds—not both.
+
+</CommonMistake>
+
+<PracticeCheckpoint>
+
+Before opening the written-question solutions, evaluate:
+
+1. $\int 4x(2x^2+3)^6\,dx$
+2. $\int_0^1 3x^2\sqrt{x^3+1}\,dx$
+3. $\int x^3\sqrt{x^2+1}\,dx$
+
+For each problem, write the recognition cue and the exact differential relation before integrating.
+
+</PracticeCheckpoint>
+
+<LessonSummary items={[
+  "Substitution reverses the chain rule",
+  "Constant mismatches must be compensated exactly",
+  "Every transformed integral must use one variable",
+  "Changed bounds remove the need to back-substitute",
+  "Verification is part of the method, not an optional extra"
+]} />
+
+<LessonConnection href="/docs/sem3/mat221/02-substitution/questions" title="Continue to written questions">
+Apply the method without relying on example headings.
+</LessonConnection>

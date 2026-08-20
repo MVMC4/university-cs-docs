@@ -2,10 +2,23 @@ import type { Metadata } from 'next';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import './global.css';
 import 'katex/dist/katex.css';
-import { Inter } from 'next/font/google';
+import { Fraunces, Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteConfig } from '@/lib/site';
+import { StudyTimerProvider, TimerOverlays } from '@/features/study-timer';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  display: 'swap',
+});
 
 const socialImage = {
   url: siteConfig.socialImage,
@@ -92,14 +105,19 @@ const websiteJsonLd = {
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen font-sans">
+      <body className={`${inter.variable} ${fraunces.variable} flex min-h-screen flex-col font-sans`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(websiteJsonLd).replace(/</g, '\\u003c'),
           }}
         />
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <StudyTimerProvider>
+            {children}
+            <TimerOverlays />
+          </StudyTimerProvider>
+        </RootProvider>
         <Analytics />
         <SpeedInsights />
       </body>

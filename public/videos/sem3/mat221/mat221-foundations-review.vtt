@@ -1,0 +1,82 @@
+WEBVTT
+
+00:00.000 --> 00:11.500
+Reconnect antiderivatives, the constant of integration, and the FTC.
+
+00:11.500 --> 00:23.000
+Keep one habit: differentiate every answer to verify it.
+
+00:23.000 --> 00:32.000
+Differentiation turns x cubed into three x squared.
+
+00:32.000 --> 00:41.000
+Integration asks which function produced that derivative.
+
+00:41.000 --> 00:50.000
+An antiderivative F satisfies F prime equals f.
+
+00:50.000 --> 00:59.300
+Vertical shifts have the same slope at every x value.
+
+00:59.300 --> 01:08.600
+Differentiation destroys the constant information.
+
+01:08.600 --> 01:18.000
+An indefinite integral restores it with one constant C.
+
+01:18.000 --> 01:27.300
+The integral sign gives the operation; f is the integrand.
+
+01:27.300 --> 01:36.600
+The differential d x names the variable of integration.
+
+01:36.600 --> 01:46.000
+No bounds means an indefinite integral and a plus C.
+
+01:46.000 --> 01:56.600
+Move the right edge: a thin strip of area appears.
+
+01:56.600 --> 02:07.300
+Area change divided by width approaches the curve height.
+
+02:07.300 --> 02:18.000
+Therefore A prime of x equals f of x.
+
+02:18.000 --> 02:28.600
+A definite integral equals F of b minus F of a.
+
+02:28.600 --> 02:39.300
+The source slide plus sign is a typo: use subtraction.
+
+02:39.300 --> 02:50.000
+The constants cancel, so the final answer needs no C.
+
+02:50.000 --> 03:00.000
+Raise the exponent, then divide by the new exponent.
+
+03:00.000 --> 03:10.000
+The rule excludes n equals negative one.
+
+03:10.000 --> 03:20.000
+One over x integrates to log absolute x plus C.
+
+03:20.000 --> 03:31.300
+Indefinite: integrate three x squared to x cubed plus C.
+
+03:31.300 --> 03:42.600
+Differentiate the result to recover three x squared.
+
+03:42.600 --> 03:54.000
+Definite: upper minus lower gives nine minus one, or eight.
+
+03:54.000 --> 04:03.000
+Why does an indefinite integral include C?
+
+04:03.000 --> 04:12.000
+What does Fundamental Theorem Part One say?
+
+04:12.000 --> 04:21.000
+How do you evaluate a definite integral?
+
+04:21.000 --> 04:30.000
+Recognize the pattern. Reverse the derivative. Verify the result.

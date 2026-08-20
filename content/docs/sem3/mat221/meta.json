@@ -1,7 +1,12 @@
 {
-  "title": "MAT221: Calculus I",
+  "title": "MAT221: Calculus II",
   "pages": [
-    "index", 
+    "index",
+    "---Pilot chapter---",
+    "02-substitution",
+    "---Course tools---",
+    "formula-sheet",
+    "planner",
     "resources"
   ]
 }

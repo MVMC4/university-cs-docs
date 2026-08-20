@@ -1,0 +1,22 @@
+---
+title: Review
+description: Reviewed substitution flashcards followed by an explained chapter quiz.
+---
+
+import { substitutionFlashcards, substitutionQuiz } from '@/features/courses/mat221/data/substitution';
+
+# Review
+
+Answer each flashcard aloud before flipping it. A correct response must include the condition or reason, not only the final formula.
+
+<FlashcardDeck cards={substitutionFlashcards} title="Substitution flashcards" />
+
+## Chapter assessment
+
+Choose each answer from the method logic. After submitting, read every explanation—even for questions answered correctly.
+
+<Quiz questions={substitutionQuiz} title="Substitution chapter quiz" />
+
+<LessonConnection href="/docs/sem3/mat221/02-substitution/exam-practice" title="Finish with exam practice">
+Work under time and mark constraints without opening the solutions.
+</LessonConnection>

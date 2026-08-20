@@ -33,11 +33,16 @@ import { ExcalidrawCanvas } from './interactive/excalidraw-canvas';
 
 import { ResourceCard, ResourceGrid } from './interactive/resource-card';
 import { TopicNotesFlow } from './learning/topic-notes-flow';
-import { StudyGoals, PomodoroTimer } from './learning/study-tools';
+import { PomodoroTimer, TimerSummary } from './learning/study-tools';
 import { DocsWelcome, StudyWorkspaceHeader } from './learning/docs-entry-panels';
 import { SemesterWorkInProgress } from './learning/semester-status';
 import { ChapterExam, ChapterQuestions, ChapterReview } from './learning/chapter-study-pages';
 import { CourseChapterIndex } from './learning/course-chapter-index';
+import { LessonIntroduction, LearningObjectives, Prerequisites } from './learning/lesson-introduction';
+import { CommonMistake, ConceptBlock, RecognitionStrategy, TheoremBlock } from './learning/concept-block';
+import { WorkedExample, WorkedExampleSet } from './learning/worked-example';
+import { LessonConnection, LessonSummary, MethodSteps, PracticeCheckpoint } from './learning/lesson-flow';
+import { CalculusDiagram, Mat221CoursePlanner, Mat221CourseVideo, Mat221ExamPractice, Mat221FormulaSheet, Mat221QuestionBank } from '@/features/courses/mat221/components';
 
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -85,8 +90,8 @@ export function getMDXComponents(components?: MDXComponents) {
     ResourceCard, 
     ResourceGrid,
     TopicNotesFlow,
-    StudyGoals,
     PomodoroTimer,
+    TimerSummary,
     DocsWelcome,
     StudyWorkspaceHeader,
     SemesterWorkInProgress,
@@ -94,6 +99,25 @@ export function getMDXComponents(components?: MDXComponents) {
     ChapterQuestions,
     ChapterExam,
     CourseChapterIndex,
+    LessonIntroduction,
+    LearningObjectives,
+    Prerequisites,
+    ConceptBlock,
+    TheoremBlock,
+    RecognitionStrategy,
+    CommonMistake,
+    WorkedExample,
+    WorkedExampleSet,
+    MethodSteps,
+    PracticeCheckpoint,
+    LessonSummary,
+    LessonConnection,
+    CalculusDiagram,
+    Mat221FormulaSheet,
+    Mat221CoursePlanner,
+    Mat221CourseVideo,
+    Mat221QuestionBank,
+    Mat221ExamPractice,
     
     // Allow any other passed components to override
     ...components,

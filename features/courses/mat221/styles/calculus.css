@@ -1,0 +1,65 @@
+.mat221-diagram {
+  margin-block: 2rem;
+  overflow: hidden;
+  border: 2px solid var(--color-fd-border);
+  border-radius: var(--university-radius);
+  background: var(--color-fd-card);
+  box-shadow: var(--university-shadow);
+}
+
+.mat221-diagram img {
+  width: 100%;
+  height: auto;
+}
+
+.mat221-diagram figcaption {
+  border-top: 2px solid var(--color-fd-border);
+  padding: .75rem 1rem;
+  color: var(--color-fd-muted-foreground);
+  font-size: .85rem;
+}
+
+.mat221-formula-group {
+  break-inside: avoid;
+  margin-block: 1rem;
+  border: 2px solid var(--color-fd-border);
+  border-radius: var(--university-radius);
+  background: var(--mat221-formula-surface);
+  padding: 1rem;
+}
+
+.mat221-formula-group h2 {
+  margin-top: 0;
+}
+
+.mat221-planner {
+  display: grid;
+  gap: .75rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mat221-planner li {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: .25rem 1rem;
+  border: 2px solid var(--color-fd-border);
+  border-radius: var(--university-radius);
+  background: var(--color-fd-card);
+  padding: 1rem;
+  box-shadow: var(--university-shadow);
+}
+
+.mat221-planner span {
+  grid-row: span 2;
+  color: var(--color-fd-muted-foreground);
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.mat221-planner small {
+  color: var(--color-fd-muted-foreground);
+}
