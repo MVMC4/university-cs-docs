@@ -6,10 +6,10 @@
   "summary": {
     "files": 25,
     "bytes": 39335696,
-    "migrated": 20,
+    "migrated": 17,
     "pendingMigration": 0,
     "pendingEvaluation": 0,
-    "rejected": 5
+    "rejected": 8
   },
   "assets": [
     {
@@ -62,24 +62,27 @@
       "bytes": 36849,
       "sha256": "67ca32e81e3c529a7fa5cbc886dc4bd762cd295b3300ee404ef83732f6d50471",
       "kind": "video-poster",
-      "decision": "migrate",
-      "target": "public/images/sem3/mat221/video-posters/mat221-lesson5-poster.png"
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination by explicit user request with the Lesson 5 narrated review."
     },
     {
       "source": "public/videos/mat221-lesson5-review.mp4",
       "bytes": 10011514,
       "sha256": "e6299ee4237fd5d132c6cd38275c96b84ed86cd796e160f9c23972f7f6d29a98",
       "kind": "video",
-      "decision": "migrate",
-      "target": "public/videos/sem3/mat221/mat221-lesson5-review.mp4"
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination by explicit user request."
     },
     {
       "source": "public/videos/mat221-lesson5-review.vtt",
       "bytes": 1103,
       "sha256": "f60d9df040a72bd45701aebf7e7b980d94225831630c93cd901256b136b9e7ba",
       "kind": "captions",
-      "decision": "migrate",
-      "target": "public/videos/sem3/mat221/mat221-lesson5-review.vtt"
+      "decision": "reject",
+      "target": null,
+      "reason": "Removed from the destination with its Lesson 5 narrated review."
     },
     {
       "source": "public/videos/mat221-lesson67-poster.png",

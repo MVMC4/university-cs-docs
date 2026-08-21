@@ -63,7 +63,7 @@ export default function Flashcards({ cards, storageKey = "mat221-flashcards", wo
   if (!c) return <div ref={ref} className="card"><p className="hint">No flashcards have been added for this topic yet.</p></div>;
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="fc-deck">
       <div className="fc-tracker" aria-live="polite">
         <div className="fc-number"><span className="fc-current">{number}</span><span className="fc-total">/ {String(order.length).padStart(2, "0")}</span></div>
         <div className="fc-tracker-copy"><strong>Card {i + 1} of {order.length}</strong><span>{reviewedCount} reviewed · {knownCount} known · {remainingCount} remaining</span></div>
@@ -83,12 +83,9 @@ export default function Flashcards({ cards, storageKey = "mat221-flashcards", wo
         </div>
       </div>
       <div className="fc-controls">
-        <button type="button" className="btn ghost sm" onClick={prev}>← Prev</button>
-        <button type="button" className="btn no sm" onClick={function () { mark("n"); }}>Review again</button>
-        <button type="button" className="btn yes sm" onClick={function () { mark("y"); }}>Got it</button>
-        <button type="button" className="btn ghost sm" onClick={next}>Next →</button>
-        <button type="button" className="btn sm" onClick={shuffle}>Shuffle</button>
-        <button type="button" className="btn ghost sm" onClick={reset}>Reset progress</button>
+        <div className="fc-navigation"><button type="button" className="btn ghost sm" onClick={prev}>← Previous</button><button type="button" className="btn ghost sm" onClick={next}>Next →</button><button type="button" className="btn ghost sm" onClick={shuffle}>Shuffle</button></div>
+        <div className="fc-assessment"><button type="button" className="btn no sm" onClick={function () { mark("n"); }}>Review again</button><button type="button" className="btn yes sm" onClick={function () { mark("y"); }}>Got it</button></div>
+        <button type="button" className="btn ghost sm fc-reset" onClick={reset}>Reset</button>
       </div>
     </div>
   );

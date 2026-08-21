@@ -2,9 +2,6 @@
   "title": "MAT221: Calculus II",
   "pages": [
     "index",
-    "---Course tools---",
-    "formula-sheet",
-    "resources",
     "---Chapters---",
     "01-foundations",
     "02-substitution",
@@ -20,6 +17,9 @@
     "12-lhopital",
     "13-sequences-and-series",
     "14-power-series",
-    "15-taylor-series"
+    "15-taylor-series",
+    "---Course tools---",
+    "formula-sheet",
+    "resources"
   ]
 }

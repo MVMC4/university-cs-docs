@@ -10,22 +10,6 @@ type VideoConfig = {
   chapters: Array<[string, string]>;
 };
 
-const lesson5: VideoConfig = {
-  id: "lesson-5-video-title",
-  badge: "3 min 18 sec · narrated review",
-  title: "Lesson 5: Reduction formulas",
-  description: "Build each recurrence with integration by parts, reduce to a base case, then use the formula on the lecture examples.",
-  file: "/videos/mat221-lesson5-review.mp4",
-  poster: "/videos/mat221-lesson5-poster.png",
-  captions: "/videos/mat221-lesson5-review.vtt",
-  aria: "MAT221 Lesson 5 review: reduction formulas",
-  chapters: [
-    ["00:00", "Roadmap"], ["00:23", "Reduction workflow"], ["00:46", "Exponential recurrence"],
-    ["01:11", "Evaluate I₃"], ["01:35", "Cosine recurrence"], ["02:01", "Evaluate I₅"],
-    ["02:24", "Definite families"], ["02:54", "Retrieval check"],
-  ],
-};
-
 const lesson67: VideoConfig = {
   id: "lesson-67-video-title",
   badge: "4 min 17 sec · narrated review",
@@ -70,7 +54,6 @@ function ReviewVideo({config}: {config: VideoConfig}) {
 }
 
 export default function LectureReviewVideo({slug}: {slug: string}) {
-  if (slug === "parts") return <ReviewVideo config={lesson5} />;
   if (slug === "trig") return <ReviewVideo config={lesson67} />;
   return null;
 }
