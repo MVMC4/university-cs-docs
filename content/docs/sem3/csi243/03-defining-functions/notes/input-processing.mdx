@@ -52,11 +52,15 @@ Review [Haskell Basics](/docs/sem3/csi243/02-expressions-types) if these ideas a
 Read `++` aloud as **append** or **join**. Both sides of `++` in this lesson must be strings. That is why `show doubled` is needed: `doubled` is a number, but `show doubled` is text.
 
 <ComparisonTable
-  columns={['Expression', 'What it produces', 'Does it display anything?']}
+  columns={[
+    { header: 'Expression', key: 'expression' },
+    { header: 'What it produces', key: 'result' },
+    { header: 'Does it display anything?', key: 'displays' }
+  ]}
   rows={[
-    ['show 8', 'The String "8"', 'No'],
-    ['"Result: " ++ show 8', 'The String "Result: 8"', 'No'],
-    ['putStrLn ("Result: " ++ show 8)', 'An IO output action', 'Yes, when the action is performed']
+    { expression: 'show 8', result: 'The String "8"', displays: 'No' },
+    { expression: '"Result: " ++ show 8', result: 'The String "Result: 8"', displays: 'No' },
+    { expression: 'putStrLn ("Result: " ++ show 8)', result: 'An IO output action', displays: 'Yes, when the action is performed' }
   ]}
 />
 
@@ -148,10 +152,15 @@ let doubled = number * 2
 ```
 
 <ComparisonTable
-  columns={['Form', 'Right side', 'Purpose', 'Example']}
+  columns={[
+    { header: 'Form', key: 'form' },
+    { header: 'Right side', key: 'rightSide' },
+    { header: 'Purpose', key: 'purpose' },
+    { header: 'Example', key: 'example' }
+  ]}
   rows={[
-    ['name <- action', 'An IO action', 'Perform the action and bind its result', 'inputText <- getLine'],
-    ['let name = expression', 'A pure expression', 'Give the calculated value a local name', 'let doubled = number * 2']
+    { form: 'name <- action', rightSide: 'An IO action', purpose: 'Perform the action and bind its result', example: 'inputText <- getLine' },
+    { form: 'let name = expression', rightSide: 'A pure expression', purpose: 'Give the calculated value a local name', example: 'let doubled = number * 2' }
   ]}
 />
 
@@ -287,12 +296,17 @@ The middle line is **user input**, not a line printed by the Haskell program.
 “Store the number” is not precise enough. Ask which of these operations is intended:
 
 <ComparisonTable
-  columns={['Meaning', 'What it actually does', 'Example', 'Does it survive after the program ends?']}
+  columns={[
+    { header: 'Meaning', key: 'meaning' },
+    { header: 'What it actually does', key: 'behavior' },
+    { header: 'Example', key: 'example' },
+    { header: 'Does it survive after the program ends?', key: 'persistent' }
+  ]}
   rows={[
-    ['Immutable binding', 'Gives a value a name in a scope', 'let doubled = number * 2', 'No'],
-    ['Data structure', 'Groups values in a list, tuple, or another structure in memory', '[4, 8, 12]', 'No, unless later written elsewhere'],
-    ['Source file', 'Saves Haskell instructions as text', 'DoubleNumber.hs', 'Yes, because the editor saves the file'],
-    ['Persistent external storage', 'Uses IO to write data outside the running process', 'Writing results to a data file', 'Yes, when the write succeeds']
+    { meaning: 'Immutable binding', behavior: 'Gives a value a name in a scope', example: 'let doubled = number * 2', persistent: 'No' },
+    { meaning: 'Data structure', behavior: 'Groups values in a list, tuple, or another structure in memory', example: '[4, 8, 12]', persistent: 'No, unless later written elsewhere' },
+    { meaning: 'Source file', behavior: 'Saves Haskell instructions as text', example: 'DoubleNumber.hs', persistent: 'Yes, because the editor saves the file' },
+    { meaning: 'Persistent external storage', behavior: 'Uses IO to write data outside the running process', example: 'Writing results to a data file', persistent: 'Yes, when the write succeeds' }
   ]}
 />
 
