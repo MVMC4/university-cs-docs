@@ -16,11 +16,18 @@ A **literal** is a value written directly in source text. An **identifier** is a
 
 ## Names are not text
 
-<ComparisonTable columns={['Source', 'Meaning', 'Why']} rows={[
-  ['Hello', 'A program name', 'No quotation marks'],
-  ['\"Hello\"', 'A String value', 'Double quotes mark text'],
-  ["'H'", 'One Char value', 'Single quotes mark one character']
-]} />
+<ComparisonTable
+  columns={[
+    { header: 'Source', key: 'source' },
+    { header: 'Meaning', key: 'meaning' },
+    { header: 'Why', key: 'why' }
+  ]}
+  rows={[
+    { source: 'Hello', meaning: 'A program name', why: 'No quotation marks' },
+    { source: '"Hello"', meaning: 'A String value', why: 'Double quotes mark text' },
+    { source: "'H'", meaning: 'One Char value', why: 'Single quotes mark one character' }
+  ]}
+/>
 
 Quotation marks instruct the parser to treat the enclosed characters as data.
 

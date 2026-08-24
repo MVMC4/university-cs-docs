@@ -50,10 +50,17 @@ The cube of 4 is:
 
 ## Value versus action
 
-<ComparisonTable columns={['Expression', 'Kind', 'Result']} rows={[
-  ['cube 4', 'Pure expression', 'Evaluates to 64 without printing'],
-  ['print (cube 4)', 'IO action', 'Calculates 64, displays it, and adds a newline']
-]} />
+<ComparisonTable
+  columns={[
+    { header: 'Expression', key: 'expression' },
+    { header: 'Kind', key: 'kind' },
+    { header: 'Result', key: 'result' }
+  ]}
+  rows={[
+    { expression: 'cube 4', kind: 'Pure expression', result: 'Evaluates to 64 without printing' },
+    { expression: 'print (cube 4)', kind: 'IO action', result: 'Calculates 64, displays it, and adds a newline' }
+  ]}
+/>
 
 `IO` marks a description of work involving the external world. `()` is **unit**, a value carrying no useful information. The useful outcome of terminal output is the visible effect.
 
