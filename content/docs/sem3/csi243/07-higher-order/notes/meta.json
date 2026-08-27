@@ -1,0 +1,4 @@
+{
+  "title": "Notes",
+  "pages": ["lambdas", "currying-and-sections", "map-and-filter", "folds-and-composition"]
+}

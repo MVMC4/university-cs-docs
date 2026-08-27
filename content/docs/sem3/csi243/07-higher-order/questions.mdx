@@ -1,0 +1,89 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on lambdas, currying, partial application, sections, map, filter, folds, and composition."
+---
+
+## Lambdas and currying
+
+<ExamQuestion title="Question 1: Anonymous functions and one-argument functions [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Write the Haskell lambda for the mathematical expression <code>λx ● x + x</code>, and show its application to 3. [3]</>}
+    solution={<><code>\x -{'>'} x + x</code>, applied as <code>(\x -{'>'} x + x) 3</code>, which evaluates to <code>6</code>. The parentheses are required because the lambda body extends as far right as possible. [3]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Express <code>add x y = x + y</code> in fully nested lambda form and explain what it reveals. [4]</>}
+    solution={<><code>add = \x -{'>'} (\y -{'>'} x + y)</code>. It makes precise that <code>add</code> is a function taking a number <code>x</code> and returning a function, which in turn takes <code>y</code> and returns <code>x + y</code>. Every multi-argument Haskell function works this way. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Given <code>f :: Int -{'>'} Int -{'>'} Int -{'>'} Int</code>, state the type of <code>f 1</code> and of <code>f 1 2</code>, and explain why. [4]</>}
+    solution={<><code>f 1 :: Int -{'>'} Int -{'>'} Int</code> and <code>f 1 2 :: Int -{'>'} Int</code>. The arrow associates to the right and application associates to the left, so each supplied argument consumes one arrow and returns a function awaiting the remainder. [4]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>State one situation where a named <code>where</code> helper is preferable to a lambda. [3]</>}
+    solution={<>When the rule is complicated, is used more than once, or deserves an explanatory name. A lambda is preferable only when the rule is short and referenced exactly once; clarity comes before compactness. [3]</>}
+  />
+</ExamQuestion>
+
+## Sections and operators
+
+<ExamQuestion title="Question 2: Converting between operators and functions [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain how to convert a two-argument function into an operator, and an operator into a function. Give an example of each. [4]</>}
+    solution={<>Enclose a function name in back quotes to use it infix, as in <code>7 `div` 2</code>. Enclose an operator in parentheses to use it as an ordinary curried function, as in <code>(+) 3 2</code>. The second is necessary because a bare operator is not a valid Haskell expression. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Define a <em>section</em> and give the lambda meaning of <code>(x⊕)</code> and <code>(⊕y)</code>. [4]</>}
+    solution={<>A section is an operator with one side already supplied. <code>(x⊕)</code> means <code>\y -{'>'} x ⊕ y</code>, fixing the left argument. <code>(⊕y)</code> means <code>\x -{'>'} x ⊕ y</code>, fixing the right argument. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>(-5)</code> cannot be used as a section to subtract five, and give a working alternative. [4]</>}
+    solution={<>The minus sign also marks negative literals, so <code>(-5)</code> parses as the number negative five rather than a section. Use <code>subtract 5</code> instead. A left section such as <code>(5-)</code> is unaffected. [4]</>}
+  />
+</ExamQuestion>
+
+## Map and filter
+
+<ExamQuestion title="Question 3: Abstracting the recursion shapes [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Give the recursive definitions of <code>map</code> and <code>filter</code>, with their signatures. [6]</>}
+    solution={<><code>map :: (a -{'>'} b) -{'>'} [a] -{'>'} [b]</code> with <code>map _ [] = []</code> and <code>map f (x:xs) = f x : map f xs</code>. <code>filter :: (a -{'>'} Bool) -{'>'} [a] -{'>'} [a]</code> with <code>filter _ [] = []</code> and <code>filter p (x:xs)</code> guarded by <code>| p x = x : filter p xs</code> and <code>| otherwise = filter p xs</code>. [6]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>From the signatures alone, state what each guarantees about the length and element type of its result. [4]</>}
+    solution={<><code>map</code> returns <code>[b]</code> where the input was <code>[a]</code>, so the element type may change, and since one result is produced per element the length is unchanged. <code>filter</code> returns <code>[a]</code>, so the element type is unchanged, and because elements may be dropped the result is the same length or shorter. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>State the values of <code>takeWhile ({'<'}4) [1,2,3,9,1]</code> and <code>filter ({'<'}4) [1,2,3,9,1]</code> and explain the difference. [4]</>}
+    solution={<><code>takeWhile</code> gives <code>[1,2,3]</code> and <code>filter</code> gives <code>[1,2,3,1]</code>. <code>takeWhile</code> returns the longest prefix satisfying the predicate and stops permanently at the first failure, so it never examines the trailing <code>1</code>. <code>filter</code> tests every element of the list. [4]</>}
+  />
+</ExamQuestion>
+
+## Folds and composition
+
+<ExamQuestion title="Question 4: Collapsing and chaining [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Give the signature of <code>foldr</code> and describe the role of each argument. [4]</>}
+    solution={<><code>foldr :: (a -{'>'} b -{'>'} b) -{'>'} b -{'>'} [a] -{'>'} b</code>. The first argument is the function combining an element with the accumulated result; the second is the starting value returned for the empty list; the third is the list to collapse. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Explain how to predict the result of a <code>foldr</code> by substitution, and use it to evaluate <code>foldr (-) 0 [1,2,3]</code>. [6]</>}
+    solution={<>Replace every <code>:</code> in the list with the operator and the final <code>[]</code> with the starting value. So <code>1:(2:(3:[]))</code> becomes <code>1 - (2 - (3 - 0))</code>, which is <code>1 - (2 - 3) = 1 - (-1) = 2</code>. [6]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>State why <code>foldr</code> and <code>foldl</code> agree for <code>(+)</code> but differ for <code>(-)</code>. [4]</>}
+    solution={<>Addition is associative, so the nesting direction does not affect the result. Subtraction is not, so nesting to the right gives <code>1-(2-(3-0)) = 2</code> while nesting to the left gives <code>((0-1)-2)-3 = -6</code>. The fold must be chosen to match the specification. [4]</>}
+  />
+</ExamQuestion>

@@ -1,0 +1,43 @@
+---
+title: "Chapter Overview"
+description: "Chapter 7 learning path for lambda expressions, currying, sections, map, filter, folds, and function composition."
+---
+
+## Chapter 7: Higher-Order Functions
+
+A **higher-order function** takes another function as an argument, or returns one as its result. This is possible because functions in Haskell are **first-class values**: they can be passed to functions, returned from functions, and stored in data structures, with no restriction on their use.
+
+The practical payoff is that the recursions you wrote by hand in Chapter 6 turn out to share three shapes. Name those shapes once, and you stop rewriting them.
+
+| Order | Lesson | Main question |
+|---:|---|---|
+| 1 | [Lambda Expressions](/docs/sem3/csi243/07-higher-order/notes/lambdas) | How do I write a function without giving it a name? |
+| 2 | [Currying and Sections](/docs/sem3/csi243/07-higher-order/notes/currying-and-sections) | Why does every function really take one argument, and what does that let me do? |
+| 3 | [Mapping and Filtering](/docs/sem3/csi243/07-higher-order/notes/map-and-filter) | How do `map` and `filter` capture the recursions I already write? |
+| 4 | [Folds and Composition](/docs/sem3/csi243/07-higher-order/notes/folds-and-composition) | How do I collapse a list to one value, and chain transformations together? |
+
+After the notes, use [Practice Questions](/docs/sem3/csi243/07-higher-order/questions) and then [Review](/docs/sem3/csi243/07-higher-order/review).
+
+## The three shapes
+
+Every list recursion in Chapter 6 was one of these:
+
+| Shape | Result | Captured by |
+|---|---|---|
+| Transform every element | A list of the same length | `map` |
+| Keep some elements | A shorter list, same type | `filter` |
+| Combine into one value | A single value | `foldr` / `foldl` |
+
+Recognising which shape a problem has is the skill this chapter builds. Writing them by hand first, as you did in Chapter 6, is what makes the abstraction obvious rather than mysterious.
+
+## Chapter outcomes
+
+- Write and apply anonymous functions with lambda notation.
+- Explain currying, and use partial application to fix an argument.
+- Convert between operators and functions with backticks and parentheses.
+- Build left and right sections and explain how they differ.
+- Use `map`, `filter`, `takeWhile`, `dropWhile`, and `zipWith` correctly.
+- Define `sum`, `product`, `and`, `or`, and `length` as folds.
+- Predict a fold by substituting the operator for every cons.
+- Explain why `foldr` and `foldl` differ for a non-associative operator.
+- Build a pipeline with function composition and know when not to.

@@ -1,0 +1,198 @@
+---
+title: "1. Lambda Expressions"
+description: "Write anonymous functions with backslash notation, apply them directly, and use them to avoid naming a function that is referenced only once."
+---
+
+
+
+A **lambda expression** is an alternative to defining a function using equations. It comprises a pattern for each of the arguments and a body specifying how the result is computed from them.
+
+Because it has no name, it is an **anonymous function definition**.
+
+## 1. The notation
+
+Mathematical lambda notation writes `λx ● x + x`. Haskell writes the same thing with a backslash, which is meant to resemble a λ:
+
+```haskell
+\x -> x + x
+```
+
+Read aloud: “lambda `x`, arrow, `x` plus `x`” — or “the function that takes `x` and returns `x + x`.”
+
+| Part | Meaning |
+|---|---|
+| `\` | Begins a lambda; stands for λ |
+| `x` | A pattern for the argument |
+| `->` | Separates the arguments from the body |
+| `x + x` | The body, computing the result |
+
+Several arguments are listed before the arrow:
+
+```haskell
+\x y -> x + y
+```
+
+## 2. Applying a lambda directly
+
+A nameless function can be used exactly like a named one. Because a lambda is an expression, applying it needs parentheses:
+
+```text
+ghci> (\x -> x + x) 3
+6
+ghci> (\x y -> x + y) 8 6
+14
+```
+
+Without the parentheses, Haskell would read `\x -> x + x 3` as a lambda whose body is `x + (x 3)`, which tries to apply `x` as a function.
+
+<Callout type="warn" title="Always parenthesise a lambda you are applying">
+The lambda body extends as far to the right as it can. `(\x -> x + 1) 5` gives `6`; `\x -> x + 1 5` is a type error.
+</Callout>
+
+## 3. Lambdas are ordinary values
+
+A lambda has a type like any other function, and can be bound to a name:
+
+```text
+ghci> :type (\x -> x + x)
+(\x -> x + x) :: Num a => a -> a
+ghci> let double = \x -> x + x
+ghci> double 7
+14
+```
+
+That last binding shows something important. These two definitions mean the same thing:
+
+```haskell
+double x = x + x
+double   = \x -> x + x
+```
+
+The equation form is shorthand for the lambda form. Every function definition you have written since Chapter 3 has been a lambda underneath.
+
+## 4. Why they exist: avoiding a needless name
+
+A lambda is useful when a function is referenced only once and naming it adds nothing.
+
+Consider a function returning the first `n` odd integers. Written with a local helper:
+
+```haskell
+-- Return the first n odd integers.
+odds :: Int -> [Int]
+odds n = map f [0 .. n - 1]
+  where
+    f x = x * 2 + 1
+```
+
+The helper `f` exists solely to be handed to `map`. Naming it forces the reader to look elsewhere for a one-line rule. A lambda puts the rule where it is used:
+
+```haskell
+odds :: Int -> [Int]
+odds n = map (\x -> (x * 2) + 1) [0 .. n - 1]
+```
+
+```text
+ghci> odds 5
+[1,3,5,7,9]
+```
+
+<Callout type="info" title="A name is not always worse">
+If the rule is complicated, or is used more than once, or genuinely deserves explanation, a named `where` helper is clearer. Prefer a lambda only when the rule is short and used once. Clarity comes before cleverness.
+</Callout>
+
+## 5. Functions that return functions
+
+Lambdas also matter when a function returns a function by its nature. The Prelude's `const` returns a constant function that always produces a given value:
+
+```haskell
+const :: a -> b -> a
+const x = \_ -> x
+```
+
+Read this as: `const x` produces *a function* which ignores its argument and returns `x`.
+
+```text
+ghci> let always5 = const 5
+ghci> always5 "anything"
+5
+ghci> always5 99
+5
+```
+
+The wildcard in `\_ -> x` says the returned function's argument is deliberately discarded.
+
+## 6. Lambdas make currying precise
+
+A lambda can be used to formalise the meaning of a curried function definition:
+
+```haskell
+add x y = x + y
+```
+
+means
+
+```haskell
+add = \x -> (\y -> x + y)
+```
+
+This makes precise that `add` is a function taking a number `x` and returning a **function**, which in turn takes a number `y` and returns `x + y`.
+
+That is not a curiosity — it is how every multi-argument Haskell function actually works, and the next lesson builds on it directly.
+
+## 7. Patterns in lambdas
+
+The argument of a lambda is a pattern, so tuple patterns work:
+
+```text
+ghci> (\(x, y) -> x * y) (3, 4)
+12
+ghci> map (\(name, mark) -> name) [("Kago", 72), ("Naledi", 68)]
+["Kago","Naledi"]
+```
+
+A lambda cannot have multiple equations or guards, however. When you need those, use a named function or a `case` inside the lambda body.
+
+## 8. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `\x -> x + 1 5` | The body extends rightwards, so `1 5` is an application | `(\x -> x + 1) 5` |
+| `\x = x + 1` | A lambda uses `->`, not `=` | `\x -> x + 1` |
+| `lambda x -> x` | The keyword is a backslash | `\x -> x` |
+| `\x -> x \| x > 0 = 1` | Lambdas cannot carry guards | Use a named function, or `case` |
+| `map \x -> x * 2 xs` | The lambda argument needs parentheses | `map (\x -> x * 2) xs` |
+
+## 9. Practice
+
+1. Write a lambda that triples its argument and apply it to `7` at the prompt.
+2. Write a lambda taking two arguments and returning their product; apply it to `6` and `5`.
+3. Rewrite `\x -> x * x` as an ordinary named equation, and the equation `inc n = n + 1` as a lambda.
+4. Use `map` with a lambda to add 10 to every element of `[1,2,3]`.
+5. Use `map` with a tuple-pattern lambda to turn `[("a",1),("b",2)]` into `["a1","b2"]`.
+6. Express `multiply x y = x * y` in fully nested lambda form, and say what `multiply 3` on its own denotes.
+
+<Accordions>
+<Accordion title="Check questions 5 and 6">
+
+**5.**
+
+```text
+ghci> map (\(s, n) -> s ++ show n) [("a",1),("b",2)]
+["a1","b2"]
+```
+
+**6.** `multiply = \x -> (\y -> x * y)`. On its own, `multiply 3` denotes the function that takes a number and multiplies it by 3 — it is a value in its own right, not an error about a missing argument.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can write a lambda with one or several arguments and read it aloud.' },
+  { type: 'must', text: 'I can explain why an applied lambda needs parentheses.' },
+  { type: 'must', text: 'I can convert between an equation definition and its lambda form.' },
+  { type: 'must', text: 'I can say when a lambda is preferable to a named where helper, and when it is not.' },
+  { type: 'must', text: 'I can explain how a lambda makes the meaning of a curried definition precise.' },
+  { type: 'avoid', text: 'Do not use = inside a lambda; it takes ->.' }
+]} />
+
+Continue with [Currying and Sections](/docs/sem3/csi243/07-higher-order/notes/currying-and-sections).
