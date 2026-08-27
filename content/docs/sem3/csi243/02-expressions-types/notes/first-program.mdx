@@ -74,7 +74,7 @@ Start GHCi **from the folder containing your file**, or move to that folder once
 
 ```text
 C:\CSI243\Labs> ghci
-GHCi, version 9.4.8: https://www.haskell.org/ghc/  :? for help
+GHCi, version 9.10.3: https://www.haskell.org/ghc/  :? for help
 ghci> :load Hello.hs
 [1 of 1] Compiling Main             ( Hello.hs, interpreted )
 Ok, one module loaded.
@@ -274,8 +274,16 @@ ghci> z
 
 `fst` and `snd` extract the first and second elements of a pair, so `z` is `5 * 6`.
 
-<Callout type="warn" title="A mismatched name is a common lost hour">
-If `Wrong.hs` declares `module Test where`, GHC rejects it. The file name and the module name must agree, character for character, including capitalisation.
+<Callout type="warn" title="Why the names must agree">
+Loading a single file whose module name differs from its file name actually succeeds — `Wrong.hs` containing `module Test where` will load. The rule bites as soon as **another module imports it**, because GHC locates a module by looking for a file of the same name:
+
+```text
+ghci> :load UsesIt.hs
+UsesIt.hs:1:1: error: [GHC-87110]
+    Could not find module `Test'.
+```
+
+Compiling with `ghc -o` is also stricter: it needs a module named `Main`, and reports `There is no module named 'Main'` otherwise. Treat matching names as a rule from the start, and neither problem can arise.
 </Callout>
 
 Splitting code into modules pays off in three ways: a sufficiently generic module can be reused across many tasks; loosely coupled modules can be reused separately later; and dividing a program into parts with clear purposes makes it more manageable. Chapter 8 develops this.
@@ -299,7 +307,7 @@ Splitting code into modules pays off in three ways: a sufficiently generic modul
 3. Add a function `double :: Integer -> Integer` to the file and call it directly at the prompt, without using `main`.
 4. Run the same file with `runhaskell`. State one difference you observed compared with `:load`.
 5. Compile it with `ghc -o greeting Greeting.hs` and run the executable. List the files that appeared in the folder and say what each one is.
-6. Rename the file to `Wrong.hs` but leave a `module Greeting where` line at the top. Load it, read the error, then repair it. Write down what the error told you.
+6. Rename the file to `Wrong.hs` but leave a `module Greeting where` line at the top. Load it directly — it still works. Now write a second file containing `import Greeting` and load that instead. Read the error and explain which file it blames.
 
 <Accordions>
 <Accordion title="Check question 4">

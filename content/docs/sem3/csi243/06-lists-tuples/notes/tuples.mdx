@@ -45,7 +45,7 @@ This means `(String, Integer)` and `(Integer, String)` are **different types**, 
 ghci> :type ('2', False)
 ('2', False) :: (Char, Bool)
 ghci> :type (50, "csi243", "2013/14")
-(50, "csi243", "2013/14") :: (Num a) => (a, String, String)
+(50, "csi243", "2013/14") :: Num a => (a, String, String)
 ```
 
 ## 3. Tuples are immutable and fixed

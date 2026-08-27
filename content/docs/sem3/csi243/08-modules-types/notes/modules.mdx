@@ -31,8 +31,18 @@ The rules:
 
 So module `MyCalculator` lives in `MyCalculator.hs`.
 
-<Callout type="warn" title="The mismatch that costs an hour">
-If `Wrong.hs` declares `module MyCalculator where`, GHC rejects it. The file name and the module name must agree exactly, including capitalisation. This is the single most common module error.
+<Callout type="warn" title="What actually goes wrong when the names differ">
+Loading `Wrong.hs` containing `module MyCalculator where` on its own **succeeds** — GHC does not object, and its functions work at the prompt. The convention only becomes a hard requirement when another module imports it, because GHC finds a module by searching for a file of the same name:
+
+```text
+ghci> :load UsesIt.hs
+UsesIt.hs:1:1: error: [GHC-87110]
+    Could not find module `MyCalculator'.
+    Use :set -v to see a list of the files searched for.
+Failed, unloaded all modules.
+```
+
+So the error surfaces in the *importing* file, pointing at a module that plainly exists — which is exactly why it costs people an hour. Match the names from the start.
 </Callout>
 
 ## 3. Defining a module
@@ -133,8 +143,8 @@ Loading the main module compiles both:
 
 ```text
 C:\CSI243> ghci MainModule
-[1 of 2] Compiling MyCalculator     ( MyCalculator.hs, interpreted )
-[2 of 2] Compiling Main             ( MainModule.hs, interpreted )
+[1 of 3] Compiling MyCalculator     ( MyCalculator.hs, interpreted )
+[2 of 3] Compiling Main             ( MainModule.hs, interpreted )
 Ok, two modules loaded.
 ghci> main
 "Hello There"
@@ -180,7 +190,7 @@ Anything you export is something other code may come to depend on. Exporting onl
 
 | Symptom | Cause | Repair |
 |---|---|---|
-| `File name does not match module name` | The declared module differs from the file name | Rename one so they agree exactly |
+| `Could not find module 'X'` on an import | `X` lives in a file with a different name | Rename the file to `X.hs` |
 | `module myCalc where` rejected | Module names must start with a capital | `module MyCalc where` |
 | `Variable not in scope` for an imported name | It is not in the module's export list | Add it to the export list, or export everything |
 | `Could not find module` | The file is not in GHCi's current directory | `:cd` to the right folder |
@@ -193,7 +203,7 @@ Anything you export is something other code may come to depend on. Exporting onl
 2. Create a `MainModule.hs` that imports it and prints the result of `maxThree 4 9 2`.
 3. Load the main module and confirm from the output that both modules compiled, and in which order.
 4. Add an export list exposing only `addTwo` and `maxThree`. Confirm that `averageTwo` is then out of scope in the main module.
-5. Deliberately rename the file without changing the `module` line. Read the error, then repair it, and write down what the error told you.
+5. Rename `MyCalculator.hs` to `Wrong.hs` without changing its `module` line. Load `Wrong.hs` directly and note that it still works. Then load `MainModule.hs` and read the error. Explain why the failure appears in the importing file rather than the renamed one.
 6. Explain in two sentences why exporting fewer names makes a module easier to change later.
 
 <Checklist title="Mastery check" rules={[

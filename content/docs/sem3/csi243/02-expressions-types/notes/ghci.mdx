@@ -100,22 +100,25 @@ Type `ghci` at your terminal prompt. On Windows you can also launch it from the 
 You will be greeted with something similar to:
 
 ```text
-GHCi, version 9.4.8: https://www.haskell.org/ghc/  :? for help
-Prelude>
+GHCi, version 9.10.3: https://www.haskell.org/ghc/  :? for help
+ghci>
 ```
 
-The prompt here is `Prelude>`. It carries information:
+The trailing `>` means the Haskell system is **waiting for your input**.
 
-- The prompt **lists the modules loaded into the interactive session**. Here that is `Prelude`.
+### Why the lecture slides show `Prelude>`
+
+Older GHC releases printed the prompt as `Prelude>`, and the course lecture material shows that form throughout. Both mean the same thing, but the older prompt carried extra information worth understanding:
+
+- It **listed the modules loaded into the interactive session** — hence `Prelude`.
 - **`Prelude`** is the standard library module containing a small set of standard definitions. It is included automatically into all Haskell modules, which is why arithmetic, comparison, and `putStrLn` work immediately.
-- If several modules are loaded, the prompt grows to show them: `Prelude Data.List Control.Monad>`.
-- The trailing `>` means the Haskell system is **waiting for your input**.
+- With several modules loaded the prompt grew to show them all: `Prelude Data.List Control.Monad>`.
 
-Newer GHC releases shorten the default prompt to `ghci>`. Both mean the same thing. You can set it yourself:
+Current releases shorten this to a plain `ghci>`. You can restore the older behaviour, or set any prompt you like:
 
 ```text
-Prelude> :set prompt "ghci> "
-ghci>
+ghci> :set prompt "Prelude> "
+Prelude>
 ```
 
 <Callout type="warn" title="Do not type the prompt">

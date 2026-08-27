@@ -190,6 +190,21 @@ ghci> maximum []
 
 The type of `head` is `[a] -> a`, which promises a result for every list — but there is no element to return from an empty one. This is the same gap between type and domain that Chapter 5 identified for `fac`.
 
+<Callout type="info" title="GHC 9.10 warns about head, even when it works">
+From GHC 9.8 onwards, *every* use of `head` or `tail` produces a warning, including uses that succeed:
+
+```text
+ghci> head [1,2,3]
+<interactive>:1:1: warning: [GHC-63394] [-Wx-partial]
+    In the use of `head' ...
+    "This is a partial function, it throws an error on empty lists.
+     Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. ..."
+1
+```
+
+The result `1` is still correct — this is a warning, not an error. The compiler is making exactly the point this section makes. Once you reach the next lesson you will handle the empty case with a `[]` pattern instead, and the warning disappears.
+</Callout>
+
 <Callout type="info" title="The habit this creates">
 Before calling `head`, `tail`, `last`, `init`, `maximum`, `minimum`, or `!!`, ask what happens if the list is empty or the index is out of range. Usually the answer is to handle the empty case yourself with a `[]` pattern — which the next lesson makes routine.
 </Callout>
