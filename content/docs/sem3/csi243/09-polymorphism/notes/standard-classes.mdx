@@ -1,0 +1,243 @@
+---
+title: "3. The Standard Type Classes"
+description: "Know what Eq, Ord, Show, Read, Num, Integral, Fractional, Enum, and Bounded each provide, and which one a given operation requires."
+---
+
+
+
+This lesson is a reference. When GHC reports “No instance for (X)”, this table tells you what `X` wanted.
+
+## 1. `Eq` — equality
+
+Provides `==` and `/=`.
+
+```haskell
+(==) :: Eq a => a -> a -> Bool
+(/=) :: Eq a => a -> a -> Bool
+```
+
+```text
+ghci> 3 == 3
+True
+ghci> "cs" /= "sc"
+True
+```
+
+Almost every basic type is an instance. Functions are **not**: there is no general way to decide whether two functions are equal, so `(+) == (*)` is rejected.
+
+## 2. `Ord` — ordering
+
+Provides `<`, `<=`, `>`, `>=`, `compare`, `max`, and `min`. Requires `Eq`.
+
+```haskell
+compare :: Ord a => a -> a -> Ordering
+```
+
+`Ordering` is an ordinary three-value type: `LT`, `EQ`, or `GT`.
+
+```text
+ghci> compare 3 5
+LT
+ghci> max 'a' 'z'
+'z'
+ghci> sort [3,1,2]
+[1,2,3]
+```
+
+For a derived instance, values are ordered by the **sequence in which the constructors are declared**:
+
+```haskell
+data Result = Pass | Fail deriving (Show, Eq, Ord)
+```
+
+```text
+ghci> Pass < Fail
+True
+```
+
+Strings and lists compare **lexicographically** — element by element from the left:
+
+```text
+ghci> "apple" < "banana"
+True
+ghci> [1,2,3] < [1,3]
+True
+```
+
+## 3. `Show` and `Read` — text conversion
+
+`Show` provides `show`, converting a value to a `String`. `Read` provides `read`, converting a `String` to a value.
+
+```haskell
+show :: Show a => a -> String
+read :: Read a => String -> a
+```
+
+```text
+ghci> show 42
+"42"
+ghci> read "42" :: Integer
+42
+ghci> read "42" :: Double
+42.0
+```
+
+They are opposites, and `read` is the reason a type annotation is so often needed: the same text could produce several types, so `read` cannot tell which you meant without being told.
+
+`print` is `Show` plus output:
+
+```haskell
+print :: Show a => a -> IO ()
+```
+
+<Callout type="warn" title="read is partial">
+`read "four" :: Integer` fails at run time with a parse error. This is the same partiality warned about in Chapter 3.
+</Callout>
+
+## 4. The numeric classes
+
+Numbers form a small hierarchy, which is why `div` and `/` have different constraints.
+
+| Class | Provides | Instances include |
+|---|---|---|
+| `Num` | `+`, `-`, `*`, `abs`, `negate`, `signum` | `Int`, `Integer`, `Float`, `Double` |
+| `Integral` | `div`, `mod`, `quot`, `rem`, `toInteger` | `Int`, `Integer` |
+| `Fractional` | `/`, `recip` | `Float`, `Double` |
+| `Floating` | `sqrt`, `sin`, `cos`, `exp`, `log`, `pi` | `Float`, `Double` |
+
+```text
+ghci> :type div
+div :: Integral a => a -> a -> a
+ghci> :type (/)
+(/) :: Fractional a => a -> a -> a
+```
+
+This is the mechanism behind the Chapter 2 rule that `div` is for whole numbers and `/` for fractional ones. `7 `div` 2` is `3`; `7 / 2` is `3.5`; and `7.5 `div` 2` is rejected because `Double` is not `Integral`.
+
+### Converting between numeric types
+
+Because the classes are separate, you sometimes need an explicit conversion:
+
+| Function | Type | Use |
+|---|---|---|
+| `fromIntegral` | `(Integral a, Num b) => a -> b` | Whole number to any numeric type |
+| `round` | `(RealFrac a, Integral b) => a -> b` | Nearest whole number |
+| `floor` | `(RealFrac a, Integral b) => a -> b` | Greatest integer not greater than the value |
+| `ceiling` | `(RealFrac a, Integral b) => a -> b` | Closest integer greater than or equal |
+| `truncate` | `(RealFrac a, Integral b) => a -> b` | Discard the fractional part |
+
+```text
+ghci> ceiling 2.3
+3
+ghci> floor 2.3
+2
+ghci> round 2.7
+3
+ghci> round 2.2
+2
+```
+
+The classic need for `fromIntegral` is an average:
+
+```haskell
+-- Rejected: length gives Int, but / needs Fractional.
+-- average xs = sum xs / length xs
+
+-- Correct.
+average :: [Double] -> Double
+average xs = sum xs / fromIntegral (length xs)
+```
+
+```text
+ghci> average [1,2,3,4]
+2.5
+```
+
+## 5. `Enum` and `Bounded`
+
+`Enum` provides `succ`, `pred`, and range notation. It is what makes `[1..5]` and `['a'..'f']` work.
+
+```text
+ghci> succ 'a'
+'b'
+ghci> [Red ..]
+[Red,Green,Yellow]
+```
+
+That last line requires `deriving (Show, Enum)` on the `TLights` type from Chapter 8.
+
+`Bounded` provides `minBound` and `maxBound`:
+
+```text
+ghci> maxBound :: Int
+9223372036854775807
+```
+
+This is the concrete meaning of the Chapter 2 claim that `Int` is bounded and `Integer` is not. `Integer` has no `Bounded` instance, because it has no maximum.
+
+## 6. Which class does an operation need?
+
+The lookup table to memorise:
+
+| You want to use | You need |
+|---|---|
+| `==`, `/=` | `Eq` |
+| `<`, `>`, `compare`, `maximum`, `sort` | `Ord` |
+| `show`, `print` | `Show` |
+| `read` | `Read` |
+| `+`, `-`, `*`, numeric literals | `Num` |
+| `div`, `mod` | `Integral` |
+| `/` | `Fractional` |
+| `sqrt`, `pi` | `Floating` |
+| `[a..b]`, `succ` | `Enum` |
+| `minBound`, `maxBound` | `Bounded` |
+
+## 7. Common errors
+
+| Message | Cause | Repair |
+|---|---|---|
+| `No instance for (Fractional Int)` | `/` used on `Int` | Use `div`, or convert with `fromIntegral` |
+| `No instance for (Integral Double)` | `div` used on `Double` | Use `/` |
+| `Couldn't match Int with Double` in an average | `length` gives `Int` | `fromIntegral (length xs)` |
+| `Ambiguous type variable` with `read` | The result type is undetermined | Annotate: `read s :: Integer` |
+| `No instance for (Eq (a -> b))` | Comparing functions | Not possible; compare results instead |
+| `[Red ..]` fails | The type has no `Enum` instance | Add `Enum` to the deriving clause |
+
+## 8. Practice
+
+1. State which class each requires: `==`, `sort`, `print`, `div`, `/`, `sqrt`, `maxBound`.
+2. Explain why `7.5 \`div\` 2` is rejected but `7 \`div\` 2` is fine.
+3. Write `average :: [Double] -> Double` and explain why `fromIntegral` is needed.
+4. Predict `ceiling 2.3`, `floor 2.3`, `round 2.7`, `round 2.2`.
+5. Explain why `read "42"` on its own is ambiguous and how to fix it.
+6. Declare `TLights` deriving `Enum` and evaluate `[Red ..]`.
+7. Explain why `Integer` has no `Bounded` instance.
+
+<Accordions>
+<Accordion title="Check questions 3 and 7">
+
+**3.**
+
+```haskell
+average :: [Double] -> Double
+average xs = sum xs / fromIntegral (length xs)
+```
+
+`length` always returns `Int`, but `/` requires both operands to be the same `Fractional` type. `Int` is not `Fractional`, so `fromIntegral` converts the count into the `Double` that `/` needs.
+
+**7.** `Bounded` provides `minBound` and `maxBound`, which presuppose a largest and smallest value. `Integer` is arbitrary-precision and grows as needed until memory is exhausted, so no maximum exists to report. `Int` is fixed-width and therefore does have one.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can name what Eq, Ord, Show, Read, Num, Integral, and Fractional each provide.' },
+  { type: 'must', text: 'I can say which class any given operation requires.' },
+  { type: 'must', text: 'I can explain why div and / carry different constraints.' },
+  { type: 'must', text: 'I can use fromIntegral to compute an average and say why it is needed.' },
+  { type: 'must', text: 'I can explain why read often needs a type annotation.' },
+  { type: 'must', text: 'I can explain why Integer has no Bounded instance.' },
+  { type: 'note', text: 'A derived Ord orders values by the sequence the constructors were declared in.' }
+]} />
+
+Continue with [Maybe and Writing Instances](/docs/sem3/csi243/09-polymorphism/notes/maybe-and-instances).

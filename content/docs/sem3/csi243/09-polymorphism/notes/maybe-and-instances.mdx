@@ -1,0 +1,248 @@
+---
+title: "4. Maybe and Writing Instances"
+description: "Replace error with the Maybe type so failure is recoverable, handle it by pattern matching, and write your own type class instances by hand."
+---
+
+
+
+Chapter 5 closed a gap using `error`, and noted the cost: `error` stops the whole program and the caller cannot recover. This lesson introduces the tool that fixes that, and then shows how to define class membership yourself.
+
+## 1. The `Maybe` type
+
+`Maybe` is an ordinary data declaration in the Prelude:
+
+```haskell
+data Maybe a = Nothing | Just a
+```
+
+A `Maybe a` is either `Nothing`, meaning no result, or `Just` holding a value of type `a`. It is polymorphic, so `Maybe Int`, `Maybe String`, and `Maybe Shape` are all available.
+
+```text
+ghci> Just 5
+Just 5
+ghci> Nothing :: Maybe Int
+Nothing
+ghci> :type Just 'a'
+Just 'a' :: Maybe Char
+```
+
+The point is that **failure becomes part of the result type**. A caller receiving a `Maybe Int` can see from the signature alone that the function might not produce an answer.
+
+## 2. Replacing `error`
+
+Compare the two ways of handling an empty list:
+
+```haskell
+-- Chapter 6: stops the program.
+safeHead :: [a] -> a
+safeHead []    = error "safeHead: empty list"
+safeHead (x:_) = x
+
+-- With Maybe: the caller decides what to do.
+maybeHead :: [a] -> Maybe a
+maybeHead []    = Nothing
+maybeHead (x:_) = Just x
+```
+
+```text
+ghci> maybeHead [1,2,3]
+Just 1
+ghci> maybeHead ([] :: [Int])
+Nothing
+```
+
+No crash. The empty case produced a perfectly ordinary value.
+
+<ComparisonTable
+  columns={[
+    { header: 'Approach', key: 'a' },
+    { header: 'On failure', key: 'f' },
+    { header: 'Caller can recover?', key: 'r' },
+    { header: 'Visible in the type?', key: 'v' }
+  ]}
+  rows={[
+    { a: 'No handling', f: 'Crashes or loops', r: 'No', v: 'No' },
+    { a: 'error "..."', f: 'Stops with a message', r: 'No', v: 'No' },
+    { a: 'Maybe', f: 'Returns Nothing', r: 'Yes', v: 'Yes' }
+  ]}
+  highlightCol="v"
+/>
+
+The last column matters most. `[a] -> a` promises a result and lies; `[a] -> Maybe a` tells the truth.
+
+## 3. Handling a `Maybe`
+
+Because `Nothing` and `Just` are ordinary constructors, you handle them by pattern matching — one equation per constructor, exactly as in Chapter 8:
+
+```haskell
+-- Describe the first element, or say there is none.
+describeHead :: Show a => [a] -> String
+describeHead xs =
+  case maybeHead xs of
+    Nothing -> "the list is empty"
+    Just x  -> "the first element is " ++ show x
+```
+
+```text
+ghci> describeHead [7,8]
+"the first element is 7"
+ghci> describeHead ([] :: [Int])
+"the list is empty"
+```
+
+The compiler will not let you forget the `Nothing` case, which is the whole benefit: the failure cannot be ignored silently.
+
+The Prelude provides `fromMaybe` for supplying a default:
+
+```haskell
+fromMaybe :: a -> Maybe a -> a
+```
+
+```text
+ghci> import Data.Maybe (fromMaybe)
+ghci> fromMaybe 0 (maybeHead [5,6])
+5
+ghci> fromMaybe 0 (maybeHead ([] :: [Int]))
+0
+```
+
+## 4. A lookup returning `Maybe`
+
+This is the most common use. Chapter 8 sketched it; here it is in full:
+
+```haskell
+type Assoc k v = [(k, v)]
+
+-- Find the value stored against a key, if there is one.
+lookUp :: Eq k => k -> Assoc k v -> Maybe v
+lookUp _ [] = Nothing
+lookUp key ((k, v):rest)
+  | key == k  = Just v
+  | otherwise = lookUp key rest
+```
+
+```text
+ghci> let marks = [("Kago", 72), ("Naledi", 68)]
+ghci> lookUp "Kago" marks
+Just 72
+ghci> lookUp "Sipho" marks
+Nothing
+```
+
+Note the `Eq k` constraint: the function compares keys, so `k` cannot be an arbitrary type. The Prelude's own `lookup` has exactly this shape.
+
+## 5. Writing your own instances
+
+`deriving` handles the obvious cases. When you want different behaviour, write the instance by hand.
+
+Take the `Shape` type from Chapter 8:
+
+```haskell
+data Shape = Circle Float | Rectangle Float Float
+```
+
+A derived `Show` would print `Circle 2.0`. Suppose you want something friendlier:
+
+```haskell
+instance Show Shape where
+  show (Circle r)      = "a circle of radius " ++ show r
+  show (Rectangle w l) = "a " ++ show w ++ " by " ++ show l ++ " rectangle"
+```
+
+```text
+ghci> print (Circle 2.0)
+a circle of radius 2.0
+```
+
+The form is:
+
+```haskell
+instance ClassName TypeName where
+  -- definitions of the class's operations
+```
+
+You write the operations the class requires, for your type. Now `Shape` is a member of `Show`, and every function with a `Show a =>` constraint accepts it.
+
+### An `Eq` instance
+
+Suppose two shapes should count as equal when their areas match:
+
+```haskell
+instance Eq Shape where
+  s1 == s2 = area s1 == area s2
+```
+
+```text
+ghci> Rectangle 2 6 == Rectangle 3 4
+True
+```
+
+A derived instance would have said `False`, because the constructors carry different numbers. Writing the instance by hand lets you define equality to mean what your problem needs.
+
+<Callout type="warn" title="Derive or define, not both">
+A type may have only one instance of a class. If you write `instance Show Shape`, remove `Show` from the `deriving` clause, or GHC reports duplicate instance declarations.
+</Callout>
+
+## 6. When to derive and when to write
+
+| Situation | Do this |
+|---|---|
+| You just need to print a value while testing | `deriving (Show)` |
+| Equality means comparing every field | `deriving (Eq)` |
+| Ordering follows the constructor sequence | `deriving (Ord)` |
+| Display should be human-readable prose | Write `instance Show` |
+| Equality means something domain-specific | Write `instance Eq` |
+| Ordering follows a computed value | Write `instance Ord` |
+
+Default to `deriving`. Write an instance only when the derived behaviour is genuinely wrong for your problem.
+
+## 7. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `maybeHead xs + 1` | `Maybe Int` is not `Int` | Pattern match, or use `fromMaybe` |
+| Handling only `Just` | Non-exhaustive patterns at run time | Always cover `Nothing` |
+| `Nothing` with no annotation at the prompt | The element type is undetermined | `Nothing :: Maybe Int` |
+| Both `deriving (Show)` and `instance Show` | Duplicate instance | Remove one |
+| `instance Show Shape` missing `show` | The class operation is undefined | Define every required operation |
+| `lookUp :: k -> Assoc k v -> Maybe v` | `==` needs a constraint | `Eq k =>` |
+
+## 8. Practice
+
+1. Give the data declaration for `Maybe` and explain what each constructor means.
+2. Write `maybeHead` and test it on a non-empty and an empty list.
+3. Write `safeDivide :: Int -> Int -> Maybe Int` returning `Nothing` for a zero divisor.
+4. Write `describeHead` using `case`, covering both constructors.
+5. Write `lookUp` and explain why it needs `Eq k`.
+6. Write a `Show` instance for `Result` from Chapter 8 printing `"passed"` and `"failed"`.
+7. Explain, in two sentences, why `Maybe` is preferable to `error` for a function a caller might reasonably call with invalid input.
+
+<Accordions>
+<Accordion title="Check questions 3 and 7">
+
+**3.**
+
+```haskell
+safeDivide :: Int -> Int -> Maybe Int
+safeDivide _ 0 = Nothing
+safeDivide m n = Just (m `div` n)
+```
+
+The literal `0` pattern is matched first, so `div` is never reached with a zero divisor.
+
+**7.** `error` stops the entire program and cannot be caught by the surrounding pure code, so the caller has no chance to recover or ask the user to try again. `Maybe` makes the possibility of failure part of the return type, so the caller both sees it in the signature and is forced by the compiler to handle it.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can give the data declaration for Maybe and explain both constructors.' },
+  { type: 'must', text: 'I can rewrite a partial function to return Maybe instead of calling error.' },
+  { type: 'must', text: 'I can handle a Maybe by pattern matching on both constructors.' },
+  { type: 'must', text: 'I can explain why Maybe in a signature is more honest than a bare result type.' },
+  { type: 'must', text: 'I can write an instance declaration for Show or Eq on my own type.' },
+  { type: 'must', text: 'I can say when to derive and when to write an instance by hand.' },
+  { type: 'avoid', text: 'Do not both derive and hand-write the same instance.' }
+]} />
+
+Continue to [Practice Questions](/docs/sem3/csi243/09-polymorphism/questions), then [Review](/docs/sem3/csi243/09-polymorphism/review).

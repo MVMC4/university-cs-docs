@@ -1,0 +1,205 @@
+---
+title: "1. Specification and Correctness"
+description: "Write a specification with a purpose, precondition, and postcondition, partition the input and output sets, and understand what correctness actually claims."
+---
+
+
+
+Every laboratory in this course has asked you to "specify the function" before implementing it. This lesson explains what a specification is and why the implementation is derived from it, not the other way round.
+
+## 1. What a specification states
+
+A specification says **what** a function computes, without saying **how**. It has three parts:
+
+| Part | States |
+|---|---|
+| **Purpose** | What the function represents, in one sentence |
+| **Precondition** | What must be true of the arguments before the function is applied |
+| **Postcondition** | What is true of the result afterwards |
+
+An **algorithm** is a routine that accepts a set of inputs and, for each, gives an output after a finite number of steps. It should terminate, and it should do what it is intended to do. Preconditions are assertions that must be valid before execution; postconditions are assertions that must be valid after it.
+
+A worked example, in the notation the course lectures use:
+
+```text
+isDigit : Char -> Boolean
+isDigit (Char c) : Boolean
+Purpose: report whether c is one of the decimal digits.
+Prec:    none; every Char is acceptable.
+Postc:   result = ('0' <= c <= '9')
+```
+
+The implementation then follows directly:
+
+```haskell
+isDigit :: Char -> Bool
+isDigit c = ('0' <= c) && (c <= '9')
+```
+
+Two more from the same source:
+
+```haskell
+-- Postc: result = ((c mod 2) /= 0)
+isOdd :: Integral a => a -> Bool
+isOdd c = (mod c 2) /= 0
+
+-- Postc: result = (first n elements, remaining elements)
+splitAt' :: Int -> [a] -> ([a], [a])
+splitAt' n xs = (take n xs, drop n xs)
+```
+
+<Callout type="info" title="Specification first, always">
+A function's implementation is derived from its specification. Writing code first and then describing what it happens to do reverses the dependency — and means you have no independent standard against which to judge the code correct.
+</Callout>
+
+## 2. Partitioning the input and output
+
+This is the formal version of the domain idea from Chapter 5.
+
+The input set **I** comprises a valid subset **Iv** and an invalid subset **Ie**:
+
+```text
+I = Iv ∪ Ie    where   Iv = I \ Ie
+```
+
+The output set **O** comprises a valid subset **Ov** and an erroneous subset **Oe**:
+
+```text
+O = Ov ∪ Oe    where   Ov = O \ Oe
+```
+
+A function `f` acts on arguments from **Iv** (the precondition state) to give output in **Ov** (the postcondition state).
+
+```text
+        Iv  ──── f ────►  Ov      the intended behaviour
+        Ie  ──── ? ────►  Oe      what happens outside the precondition
+```
+
+Two things follow, and both should now be familiar:
+
+- **A type is usually wider than Iv.** `fac :: Integer -> Integer` accepts every integer, but the specification's `Iv` is only the non-negative ones. That gap is where `fac (-1)` looped forever in Chapter 5.
+- **A function may still produce an anomaly on valid input.** `f` may give output in `Oe` even for arguments from `Iv` — through a coding fault, an overflow, or a division that was not guarded.
+
+## 3. Making the precondition explicit
+
+Once you have written the precondition, you have three choices for what lies outside it. You met all three in Chapter 5 and Chapter 9:
+
+| Choice | Mechanism | Effect |
+|---|---|---|
+| Reject it | `error "..."` | Stops with a message; not recoverable |
+| Define it | Extend the base case | The value gets a documented answer |
+| Report it | Return `Maybe` | Failure visible in the type; caller must handle it |
+
+```haskell
+-- Precondition rejected.
+fac :: Integer -> Integer
+fac n
+  | n < 0            = error "fac: only defined for non-negative integers"
+  | n >= 0 && n <= 1 = 1
+  | otherwise        = n * fac (n - 1)
+
+-- Precondition reported.
+facMaybe :: Integer -> Maybe Integer
+facMaybe n
+  | n < 0     = Nothing
+  | n <= 1    = Just 1
+  | otherwise = fmap (n *) (facMaybe (n - 1))
+```
+
+Whichever you choose, **state it in the specification**. An unstated precondition is a defect waiting to surface.
+
+## 4. What correctness claims
+
+A function is **correct with respect to its specification** when, for every argument satisfying the precondition, it terminates and produces a result satisfying the postcondition.
+
+Three things follow, and all three are examinable:
+
+1. **Correctness is relative.** There is no such thing as correct code in the abstract — only code correct against a stated specification. Change the specification and the same code may become wrong.
+2. **Type checking is not correctness.** A well-typed function may compute the wrong value, or never terminate. `fac 0 = 0` type checks perfectly and is wrong.
+3. **Testing is evidence, not proof.** Passing tests shows the function worked for those inputs. Only reasoning over the definition — the next lesson — argues about all inputs.
+
+<Callout type="warn" title="A compiler proves consistency, not intent">
+GHC verifies that types are used consistently. It cannot know what you meant. The specification is the only record of intent, which is why it is worth writing down.
+</Callout>
+
+## 5. Cohesion: one function, one task
+
+A function should do **one and only one logical task**. This is the functional-programming form of cohesion.
+
+Functional programming focuses on the model of the problem domain: a collection of data types, plus user-defined functions and types over them. Functions focus on **what** is to be computed, not **how** — and small, single-purpose functions are then combined by composition and recursion.
+
+```haskell
+-- Two tasks in one function: harder to specify, test, and reuse.
+reportAverage :: [Double] -> String
+reportAverage xs = "Average: " ++ show (sum xs / fromIntegral (length xs))
+
+-- Two functions, each with a clean specification.
+average :: [Double] -> Double
+average xs = sum xs / fromIntegral (length xs)
+
+report :: Double -> String
+report x = "Average: " ++ show x
+```
+
+The second version can be tested without inspecting strings, and `average` is reusable. Each has a postcondition you could actually write down.
+
+## 6. Composition and specifications
+
+Composition connects specifications as well as code. Given
+
+```text
+∘ :: ((A → C), (B → A)) → (B → C)
+(f ∘ g) x = f (g x)
+```
+
+the type of `∘` requires functions of **compatible types**: the result type of `g` must be the argument type of `f`.
+
+The same holds for the specifications. To compose `f` after `g` safely, the postcondition of `g` must guarantee the precondition of `f`:
+
+```haskell
+average :: [Double] -> Double   -- Prec: the list is non-empty
+report  :: Double -> String     -- Prec: none
+```
+
+`report . average` is safe because `report` has no precondition. But `average . someFilter` is only safe if that filter can never return an empty list — which is exactly the kind of question a specification lets you ask before the failure happens.
+
+## 7. Practice
+
+1. Write purpose, precondition, and postcondition for `isDigit`, `isOdd`, and `splitAt`.
+2. For `fac :: Integer -> Integer`, state `Iv` and `Ie`, and say what the type permits that the specification does not.
+3. Give the three ways of handling an argument outside the precondition, with an example of each.
+4. Explain why "this code is correct" is an incomplete claim.
+5. Write a specification for `average :: [Double] -> Double`. What is its precondition, and what should happen when it is violated?
+6. Split a two-task function of your own into two single-purpose functions and specify each.
+7. Given `head :: [a] -> a` and `sort :: Ord a => [a] -> [a]`, is `head . sort` safe? Justify your answer with the preconditions.
+
+<Accordions>
+<Accordion title="Check questions 5 and 7">
+
+**5.**
+
+```text
+average : [Double] -> Double
+Purpose: return the arithmetic mean of a list of values.
+Prec:    the list is non-empty.
+Postc:   result = (sum of the elements) / (number of elements)
+```
+
+Violating it gives `NaN`, because `sum [] / 0` is `0 / 0` in floating-point arithmetic — no exception is raised, so the fault propagates silently. That makes it a strong candidate for `Maybe Double`, where the empty case is visible in the type.
+
+**7.** `sort` has no precondition and its postcondition guarantees a list of the same length. `head` has the precondition that its argument is non-empty. So `head . sort` is safe exactly when the original list is non-empty — the composition inherits `head`'s precondition, because `sort` cannot manufacture elements. On an empty list it fails.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can write a specification with a purpose, precondition, and postcondition.' },
+  { type: 'must', text: 'I can partition an input set into valid and invalid subsets and relate that to a type.' },
+  { type: 'must', text: 'I can name three ways to handle an argument outside the precondition.' },
+  { type: 'must', text: 'I can explain that correctness is relative to a specification.' },
+  { type: 'must', text: 'I can explain why type checking is not correctness, with an example.' },
+  { type: 'must', text: 'I can say why one function should perform one logical task.' },
+  { type: 'must', text: 'I can check whether composing two functions respects their preconditions.' }
+]} />
+
+Continue with [Equational Reasoning](/docs/sem3/csi243/10-reasoning-revision/notes/equational-reasoning).

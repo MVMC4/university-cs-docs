@@ -1,0 +1,94 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on type variables, the inference rule, class constraints, the standard classes, numeric conversion, and Maybe."
+---
+
+## Parametric polymorphism
+
+<ExamQuestion title="Question 1: Type variables and what they permit [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain how a concrete type is distinguished from a type variable, and give an example of each. [3]</>}
+    solution={<>Concrete type names begin with an uppercase letter, such as <code>Int</code> or <code>Bool</code>. Type variables are lowercase, such as <code>a</code> or <code>b</code>, and stand for any type at all. [3]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>State what a function of type <code>[a] -{'>'} Int</code> cannot do, and explain why. [4]</>}
+    solution={<>It cannot inspect the elements in any way. Because <code>a</code> is an arbitrary type with no constraint, no operation on it is available — it cannot be compared, added, or displayed. The function can only count or structurally rearrange the elements. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Given <code>pasd :: Bool</code> and <code>neg :: Bool -{'>'} Bool</code>, use the type inference rule to determine whether <code>neg pasd</code> and <code>neg 3</code> are well typed. [4]</>}
+    solution={<>The rule states that if <code>f :: A -{'>'} B</code> and <code>e :: A</code> then <code>f e :: B</code>. For <code>neg pasd</code>, the argument has type <code>Bool</code> which matches the input type, so the application is valid with type <code>Bool</code>. For <code>neg 3</code>, the argument is numeric rather than <code>Bool</code>, so the types do not agree and the expression is rejected before evaluation. [4]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain why <code>pairUp 1 'a'</code> fails when <code>pairUp :: a -{'>'} a -{'>'} (a, a)</code>. [3]</>}
+    solution={<>A single type variable stands for one type throughout a given application. Both arguments are typed <code>a</code>, so they must have the same type in any one call. To permit different types the signature must use two variables, as in <code>a -{'>'} b -{'>'} (a, b)</code>. [3]</>}
+  />
+</ExamQuestion>
+
+## Constraints
+
+<ExamQuestion title="Question 2: Stating what a type must support [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Define <em>overloading</em> and illustrate it with <code>==</code>. [4]</>}
+    solution={<>Overloading is the use of one name with several implementations, selected according to the type it is used at. <code>==</code> compares <code>Integer</code>, <code>Char</code>, <code>Bool</code>, <code>String</code>, and any other type for which an equality operation can be defined, using a different underlying implementation in each case. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Read <code>elem :: Eq a ={'>'} a -{'>'} [a] -{'>'} Bool</code> aloud and explain the role of the fat arrow. [4]</>}
+    solution={<>"For any type <code>a</code> that is a member of <code>Eq</code>, <code>elem</code> takes an <code>a</code> and a list of <code>a</code> and returns a <code>Bool</code>." Everything before <code>={'>'}</code> is the class constraint stating what the type must support; everything after it is the type itself. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>sumList :: [a] -{'>'} a</code> is rejected and give the corrected signature. [3]</>}
+    solution={<>The definition uses <code>+</code> and a numeric literal, both of which require the <code>Num</code> class, but an unconstrained <code>a</code> supports no operations. GHC reports no instance for <code>Num a</code>. The corrected signature is <code>sumList :: Num a ={'>'} [a] -{'>'} a</code>. [3]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain the trade-off between adding constraints and keeping a type general. [3]</>}
+    solution={<>More constraints mean the function works on fewer types but can do more with their values. Fewer constraints mean it works on more types but can do less. The correct choice is the most general signature that still permits everything the function needs to do. [3]</>}
+  />
+</ExamQuestion>
+
+## The standard classes
+
+<ExamQuestion title="Question 3: Which class does what [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>State which class is required by each of <code>==</code>, <code>sort</code>, <code>print</code>, <code>div</code>, <code>/</code>, and <code>maxBound</code>. [6]</>}
+    solution={<><code>==</code> needs <code>Eq</code>; <code>sort</code> needs <code>Ord</code>; <code>print</code> needs <code>Show</code>; <code>div</code> needs <code>Integral</code>; <code>/</code> needs <code>Fractional</code>; <code>maxBound</code> needs <code>Bounded</code>. [6]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Write <code>average :: [Double] -{'>'} Double</code> and explain why a conversion function is required. [4]</>}
+    solution={<><code>average xs = sum xs / fromIntegral (length xs)</code>. <code>length</code> always returns an <code>Int</code>, but <code>/</code> requires both operands to share one <code>Fractional</code> type and <code>Int</code> is not <code>Fractional</code>. <code>fromIntegral</code> converts the count to the required <code>Double</code>. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>Integer</code> has no <code>Bounded</code> instance. [2]</>}
+    solution={<><code>Bounded</code> provides <code>minBound</code> and <code>maxBound</code>, which presuppose a largest and a smallest value. <code>Integer</code> is arbitrary precision and grows until memory is exhausted, so no maximum exists to report. [2]</>}
+  />
+</ExamQuestion>
+
+## Maybe and instances
+
+<ExamQuestion title="Question 4: Recoverable failure and class membership [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Give the data declaration for <code>Maybe</code> and explain what each constructor represents. [4]</>}
+    solution={<><code>data Maybe a = Nothing | Just a</code>. <code>Nothing</code> represents the absence of a result, and <code>Just</code> holds a successfully produced value of type <code>a</code>. The type is polymorphic, so it works for any result type. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Rewrite <code>safeHead</code> to return a <code>Maybe</code> rather than calling <code>error</code>, and explain why this is an improvement. [6]</>}
+    solution={<><code>maybeHead :: [a] -{'>'} Maybe a</code> with <code>maybeHead [] = Nothing</code> and <code>maybeHead (x:_) = Just x</code>. It is an improvement because <code>error</code> stops the whole program and cannot be recovered from, whereas <code>Nothing</code> is an ordinary value the caller can handle. The possibility of failure also becomes visible in the type, and the compiler forces the caller to cover it. [6]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Write a <code>Show</code> instance for <code>data Result = Pass | Fail</code> printing "passed" and "failed", and state one thing to check in the data declaration. [4]</>}
+    solution={<><code>instance Show Result where</code>, then <code>show Pass = "passed"</code> and <code>show Fail = "failed"</code>. The data declaration must not also derive <code>Show</code>, because a type may have only one instance of a class and GHC would report a duplicate instance declaration. [4]</>}
+  />
+</ExamQuestion>
