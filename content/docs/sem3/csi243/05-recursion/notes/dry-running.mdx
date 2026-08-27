@@ -1,0 +1,226 @@
+---
+title: "2. Dry Running a Recursive Function"
+description: "Trace a recursive call by hand through unwinding and rewinding, lay out a dry run for marks, and use tracing to find termination faults and wrong answers."
+---
+
+
+
+A **dry run** is a hand trace of a function: you substitute the argument into the definition and reduce, step by step, writing down every intermediate expression until a value appears.
+
+Dry running is a required part of every laboratory submission in this course, and it is examinable. It is also the fastest way to find out why a recursive function loops forever or returns the wrong answer.
+
+## 1. Why trace by hand
+
+A compiler proves that types are consistent. It does not prove that your formula matches the problem. A dry run is the evidence that it does.
+
+Tracing answers three questions at once:
+
+1. **Does it terminate?** Watch whether the argument shrinks towards the base case.
+2. **Is the answer right?** Compare the final value against the specification.
+3. **Where is the fault?** The first line that looks wrong locates the bug.
+
+## 2. Unwinding and rewinding
+
+A recursive evaluation has two phases. Recognising them is the whole skill.
+
+<StepByStep>
+  <StepByStepTitle>The two phases of a recursive call</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Unwinding</StepTitle>
+  Each call replaces itself with the recursive step, producing a longer and longer expression. Nothing is calculated yet — the calls are stacking up, waiting.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Hitting the base case</StepTitle>
+  Eventually an argument matches the base case, which returns a value directly instead of calling again. The stacking stops.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Rewinding</StepTitle>
+  That value is substituted back into the waiting expression, and the arithmetic is finally performed, innermost first, until one value remains.
+  </Step>
+</StepByStep>
+
+## 3. A full dry run: `fac 5`
+
+Using the definition:
+
+```haskell
+fac :: Integer -> Integer
+fac 0 = 1
+fac n = n * fac (n - 1)
+```
+
+**Unwinding.** Each line substitutes the argument into the recursive step:
+
+```text
+fac 5
+= 5 * fac 4
+= 5 * (4 * fac 3)
+= 5 * (4 * (3 * fac 2))
+= 5 * (4 * (3 * (2 * fac 1)))
+= 5 * (4 * (3 * (2 * (1 * fac 0))))
+```
+
+**Base case.** `fac 0` matches the first equation and returns `1` without calling again:
+
+```text
+= 5 * (4 * (3 * (2 * (1 * 1))))
+```
+
+**Rewinding.** Now the multiplications are performed, innermost first:
+
+```text
+= 5 * (4 * (3 * (2 * 1)))
+= 5 * (4 * (3 * 2))
+= 5 * (4 * 6)
+= 5 * 24
+= 120
+```
+
+So `fac 5` evaluates to `120`. Confirm at the prompt:
+
+```text
+ghci> fac 5
+120
+```
+
+<Callout type="info" title="How to lay this out for marks">
+Show one reduction per line, keep the parentheses so the pending calls are visible, mark the line where the base case is reached, and state the final value on its own line. A trace that jumps from `fac 5` to `120` earns nothing, because it demonstrates no reasoning.
+</Callout>
+
+## 4. Tracing a two-branch recursion: `fib 5`
+
+`fib` calls itself twice per step, so the trace forms a tree rather than a chain:
+
+```haskell
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+```
+
+```text
+fib 5
+= fib 4 + fib 3
+= (fib 3 + fib 2) + (fib 2 + fib 1)
+= ((fib 2 + fib 1) + (fib 1 + fib 0)) + ((fib 1 + fib 0) + 1)
+= (((fib 1 + fib 0) + 1) + (1 + 0)) + ((1 + 0) + 1)
+= (((1 + 0) + 1) + (1 + 0)) + ((1 + 0) + 1)
+= ((1 + 1) + 1) + (1 + 1)
+= (2 + 1) + 2
+= 3 + 2
+= 5
+```
+
+Checking against the sequence table in the previous lesson: position 5 holds `5`. Correct.
+
+Notice how often `fib 1` and `fib 0` appear. `fib 5` evaluates `fib 2` three separate times. This is why the naive Fibonacci definition becomes unusably slow well before `fib 40` — the work doubles with each step. Chapter 10 returns to the cost of recursive definitions.
+
+## 5. Using a trace to find a fault
+
+Suppose a student writes:
+
+```haskell
+-- Intended: sum all whole numbers up to n.
+sumNumbers :: Integer -> Integer
+sumNumbers 1 = 1
+sumNumbers n = n + sumNumbers n   -- fault is here
+```
+
+The type checker is satisfied. The trace exposes the problem immediately:
+
+```text
+sumNumbers 4
+= 4 + sumNumbers 4
+= 4 + (4 + sumNumbers 4)
+= 4 + (4 + (4 + sumNumbers 4))
+...
+```
+
+The argument never changes, so the base case is never reached. In GHCi this appears as a session that hangs, or eventually a stack overflow. The repair is to shrink the argument:
+
+```haskell
+sumNumbers n = n + sumNumbers (n - 1)
+```
+
+<Callout type="warn" title="Two lines is usually enough">
+You rarely need a full trace to spot a termination fault. Write two or three unwinding steps and look at the argument. If it is not moving towards the base case, stop — the fault is found.
+</Callout>
+
+## 6. Tracing a wrong answer
+
+A function can terminate and still be wrong. Here the base case returns the wrong value:
+
+```haskell
+fac :: Integer -> Integer
+fac 0 = 0          -- should be 1
+fac n = n * fac (n - 1)
+```
+
+```text
+fac 3
+= 3 * fac 2
+= 3 * (2 * fac 1)
+= 3 * (2 * (1 * fac 0))
+= 3 * (2 * (1 * 0))
+= 3 * (2 * 0)
+= 3 * 0
+= 0
+```
+
+Every factorial returns `0`. The trace shows exactly where: the base case injected a `0` that then absorbed the whole product. Comparing the trace against the specification's `fac 0 = 1` locates the error in one line.
+
+## 7. Practice
+
+Produce a full dry run for each, one reduction per line, marking the base case.
+
+1. `fac 4`
+2. `sumNumbers 5`, using `sumNumbers 1 = 1` and `sumNumbers n = n + sumNumbers (n - 1)`
+3. `fib 4`
+4. `power 2 3`, using `power x 0 = 1` and `power x n = x * power x (n - 1)`
+5. Trace `fac (-1)` with the standard definition. What do you observe, and what does it tell you about the function's domain?
+
+<Accordions>
+<Accordion title="Check question 2">
+
+```text
+sumNumbers 5
+= 5 + sumNumbers 4
+= 5 + (4 + sumNumbers 3)
+= 5 + (4 + (3 + sumNumbers 2))
+= 5 + (4 + (3 + (2 + sumNumbers 1)))
+= 5 + (4 + (3 + (2 + 1)))        <- base case reached
+= 5 + (4 + (3 + 3))
+= 5 + (4 + 6)
+= 5 + 10
+= 15
+```
+
+</Accordion>
+<Accordion title="Check question 5">
+
+```text
+fac (-1)
+= (-1) * fac (-2)
+= (-1) * ((-2) * fac (-3))
+= (-1) * ((-2) * ((-3) * fac (-4)))
+...
+```
+
+The argument moves *away* from the base case with every call, so `fac 0` is never matched and the recursion never terminates. This is not a coding slip — it is the function being applied outside its domain. The specification said factorial is defined for non-negative integers, but the type `Integer -> Integer` promises a result for every integer. The next lessons close that gap.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can name the unwinding and rewinding phases and say what happens in each.' },
+  { type: 'must', text: 'I can lay out a dry run with one reduction per line and mark the base case.' },
+  { type: 'must', text: 'I can use two or three unwinding steps to diagnose a non-terminating function.' },
+  { type: 'must', text: 'I can trace a two-branch recursion such as fib and explain why it repeats work.' },
+  { type: 'must', text: 'I can locate a wrong answer by comparing a trace against the specification.' },
+  { type: 'avoid', text: 'Do not present a trace that jumps straight to the answer; it shows no reasoning.' }
+]} />
+
+Continue with [Writing Recursive Functions](/docs/sem3/csi243/05-recursion/notes/writing-recursive-functions).

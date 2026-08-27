@@ -1,0 +1,204 @@
+---
+title: "4. Termination and Error Handling"
+description: "Recognise definitions that never terminate, close the gap between a type and a specification's domain, and report invalid arguments with error instead of looping."
+---
+
+
+
+Chapter 3 introduced the idea that a function has a **domain**: the set of inputs for which it is defined. Recursion makes that idea urgent, because an argument outside the domain does not simply give a wrong answer — it can make the program run forever.
+
+## 1. The problem
+
+Factorial is only defined for non-negative integers. But the signature promises more:
+
+```haskell
+fac :: Integer -> Integer
+fac 0 = 1
+fac n = n * fac (n - 1)
+```
+
+`Integer -> Integer` says: give me *any* integer and I will return one. Negative integers are included, and for them the definition never terminates:
+
+```text
+fac (-4)
+= (-4) * fac (-5)
+= (-4) * ((-5) * fac (-6))
+= ...
+```
+
+The argument moves away from the base case with every call. This is an infinite loop. In GHCi the session appears to hang; in a compiled program it consumes memory until it crashes.
+
+<Callout type="warn" title="The type is wider than the specification">
+This is the gap to watch for. `Integer` includes negatives; the specification does not. Whenever a type admits values your specification excludes, you must decide explicitly what happens to them.
+</Callout>
+
+## 2. Three ways to close the gap
+
+| Approach | What it does | When to use it |
+|---|---|---|
+| **Report an error** | Stop with an informative message | The input is genuinely invalid and there is no sensible result |
+| **Extend the base case** | Give the extra values a defined answer | A sensible answer exists, e.g. an empty range summing to `0` |
+| **Narrow the type** | Choose a type that cannot represent invalid values | Available for some domains; beyond this chapter |
+
+## 3. Reporting an error
+
+The Prelude's `error` function stops evaluation with a message you supply:
+
+```haskell
+error :: String -> a
+```
+
+Its result type is `a` — any type at all — so it can be used wherever a value of any type is expected. That is not because it produces one; it is because it never returns.
+
+Adding a guard for the invalid case gives a factorial that fails fast and says why:
+
+```haskell
+-- Return the factorial of a non-negative integer.
+-- Calling this with a negative argument is an error.
+fac :: Integer -> Integer
+fac n
+  | n < 0            = error "fac: only defined for non-negative integers"
+  | n >= 0 && n <= 1 = 1
+  | otherwise        = n * fac (n - 1)
+```
+
+```text
+ghci> fac 5
+120
+ghci> fac 0
+1
+ghci> fac (-1)
+*** Exception: fac: only defined for non-negative integers
+```
+
+Compare the two behaviours. Before, `fac (-1)` hung forever with no explanation. Now it stops immediately and names the problem. The specification that produced it:
+
+```text
+fac n = | 1                if n = 0
+        | fac (n - 1) * n  if n > 0
+        | erroneous        if n < 0
+```
+
+<Callout type="info" title="Write the error case into the specification">
+Notice that the third line was part of the specification, not an afterthought. Deciding what invalid input means is design work, and it belongs beside the other cases.
+</Callout>
+
+### Writing a useful message
+
+An error message is read by someone trying to fix a program, often under time pressure.
+
+| Message | Verdict |
+|---|---|
+| `error "error"` | Useless — says nothing |
+| `error "invalid input"` | Weak — which function, which input? |
+| `error "fac: only defined for non-negative integers"` | Good — names the function and states the rule |
+
+Prefix the message with the function name. When the failure surfaces from deep inside a program, that prefix is often the only clue to its origin.
+
+## 4. Extending the base case instead
+
+Sometimes the extra values have a sensible answer, and inventing an error would be unhelpful. `rangeSum` from the previous lesson is an example: a reversed range can reasonably be treated as empty.
+
+```haskell
+rangeSum :: Integer -> Integer -> Integer
+rangeSum m n
+  | m > n     = 0          -- an empty range sums to zero
+  | m == n    = m
+  | otherwise = m + rangeSum (m + 1) n
+```
+
+This is a design decision, not a rule. Ask which answer a caller would find more useful, and document the choice in a comment.
+
+## 5. Why `error` is a blunt instrument
+
+`error` stops the entire program. It cannot be caught by the pure code around it, and a caller has no way to recover or offer the user another attempt.
+
+That is acceptable for laboratory functions with a clearly stated domain, and it is what this course uses. But it is worth knowing the trade-off now:
+
+<ComparisonTable
+  columns={[
+    { header: 'Approach', key: 'approach' },
+    { header: 'On invalid input', key: 'behaviour' },
+    { header: 'Can the caller recover?', key: 'recover' }
+  ]}
+  rows={[
+    { approach: 'No handling at all', behaviour: 'Loops forever or crashes obscurely', recover: 'No' },
+    { approach: 'error "..."', behaviour: 'Stops immediately with a message', recover: 'No' },
+    { approach: 'Extend the base case', behaviour: 'Returns a defined, documented value', recover: 'Not needed' },
+    { approach: 'A Maybe result type', behaviour: 'Returns Nothing, which the caller must handle', recover: 'Yes' }
+  ]}
+  highlightCol="recover"
+/>
+
+The `Maybe` type belongs to Chapter 9, once custom types and polymorphism are available. Until then, `error` plus an honest comment is the right tool.
+
+## 6. A checklist for termination
+
+Before you consider any recursive function finished:
+
+<Checklist title="Termination checklist" rules={[
+  { type: 'must', text: 'There is a base case, and it is listed before the recursive step.' },
+  { type: 'must', text: 'Every recursive call changes the argument.' },
+  { type: 'must', text: 'The change moves the argument towards the base case, not away from it.' },
+  { type: 'must', text: 'Every value the type permits either reaches the base case or is rejected.' },
+  { type: 'must', text: 'I have dry run at least the base case and one ordinary input.' },
+  { type: 'avoid', text: 'Do not assume the type checker has verified termination. It has not.' }
+]} />
+
+## 7. Common errors
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| GHCi hangs on a negative argument | The type admits values the specification excludes | Add a guard reporting the invalid case |
+| `*** Exception: Prelude.head: empty list` | A partial Prelude function met an input it does not define | Handle the empty case yourself before calling |
+| Error message gives no clue where it came from | The message omits the function name | Prefix with the function name |
+| A guard using `error` placed last | Valid input reaches it first | Test the invalid case in the first guard |
+| Stack overflow instead of a clear message | An unbounded recursion ran until memory ran out | Find the argument that is not shrinking |
+
+## 8. Practice
+
+1. Add error handling to `power x n` so that a negative exponent is rejected with a useful message.
+2. Take `sumNumbers` with base case `1`. What does `sumNumbers 0` do? Repair it in two different ways and say which you prefer.
+3. Write `safeDivide :: Integer -> Integer -> Integer` that reports division by zero rather than crashing obscurely.
+4. Write `countDown n` that rejects negative input, then dry run `countDown (-2)` and state exactly which guard fires.
+5. A classmate says the type checker guarantees their recursive function terminates. Write two sentences explaining why that is false, and give a counter-example.
+
+<Accordions>
+<Accordion title="Check question 2">
+
+`sumNumbers 0` hangs. The base case is `1`, so `0` falls to the recursive step and produces `0 + sumNumbers (-1)`, then `sumNumbers (-2)`, moving away from the base case forever.
+
+**Repair A — reject it:**
+
+```haskell
+sumNumbers :: Integer -> Integer
+sumNumbers n
+  | n < 1     = error "sumNumbers: only defined for positive whole numbers"
+  | n == 1    = 1
+  | otherwise = n + sumNumbers (n - 1)
+```
+
+**Repair B — extend the base case:**
+
+```haskell
+sumNumbers :: Integer -> Integer
+sumNumbers n
+  | n <= 0    = 0     -- the empty sum
+  | otherwise = n + sumNumbers (n - 1)
+```
+
+Repair B is preferable *if* the caller might legitimately ask for the sum of nothing, since `0` is the mathematically natural answer for an empty sum and it also handles negatives without failing. Repair A is preferable if passing `0` indicates a bug the caller should hear about. The specification decides; what matters is choosing deliberately and documenting it.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can explain how a type can be wider than a specification domain, and why that matters for recursion.' },
+  { type: 'must', text: 'I can state what error does and why its result type is any type.' },
+  { type: 'must', text: 'I can write an error message that names the function and the rule broken.' },
+  { type: 'must', text: 'I can decide between rejecting an input and extending the base case, and justify the choice.' },
+  { type: 'must', text: 'I can apply the termination checklist to any recursive function I write.' },
+  { type: 'note', text: 'error cannot be recovered from. Maybe, in Chapter 9, is the tool for recoverable failure.' }
+]} />
+
+Continue to [Practice Questions](/docs/sem3/csi243/05-recursion/questions), then [Review](/docs/sem3/csi243/05-recursion/review). Chapter 6 applies recursion to lists.
