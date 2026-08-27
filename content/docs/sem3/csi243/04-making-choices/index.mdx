@@ -1,0 +1,43 @@
+---
+title: "Chapter Overview"
+description: "Chapter 4 learning path for conditional expressions, pattern matching, guarded equations, case expressions, and choosing between the four forms."
+---
+
+## Chapter 4: Making Choices
+
+Almost every useful function treats some inputs differently from others. Haskell offers four ways to express that choice. They are not interchangeable stylistic preferences: each one reads best for a particular shape of decision, and this chapter teaches you to recognise which shape you have.
+
+| Order | Lesson | Main question |
+|---:|---|---|
+| 1 | [Conditional Expressions](/docs/sem3/csi243/04-making-choices/notes/conditional-expressions) | How does `if … then … else` produce a value, and why must the `else` always be present? |
+| 2 | [Pattern Matching](/docs/sem3/csi243/04-making-choices/notes/pattern-matching) | How does Haskell select an equation by the *shape* of an argument? |
+| 3 | [Guarded Equations](/docs/sem3/csi243/04-making-choices/notes/guards) | How do I choose between results using Boolean conditions? |
+| 4 | [Case Expressions](/docs/sem3/csi243/04-making-choices/notes/case-expressions) | How do I match patterns inside an expression, and which form should I reach for? |
+
+Complete [Lab 02: Making Choices](/docs/sem3/csi243/04-making-choices/lab-02), then use [Practice Questions](/docs/sem3/csi243/04-making-choices/questions) and [Review](/docs/sem3/csi243/04-making-choices/review).
+
+## The four forms at a glance
+
+<ComparisonTable
+  columns={[
+    { header: 'Form', key: 'form' },
+    { header: 'Chooses on', key: 'basis' },
+    { header: 'Reads best when', key: 'when' }
+  ]}
+  rows={[
+    { form: 'if … then … else', basis: 'One Boolean condition', when: 'There are exactly two outcomes' },
+    { form: 'Pattern matching', basis: 'The shape or literal value of an argument', when: 'Each case is a distinct constructor, literal, or structure' },
+    { form: 'Guards', basis: 'A sequence of Boolean tests', when: 'Cases are ranges or compound conditions on the same argument' },
+    { form: 'case … of', basis: 'The shape of any expression, not just an argument', when: 'You need pattern matching part-way through a definition' }
+  ]}
+  highlightCol="when"
+/>
+
+## Chapter outcomes
+
+- Write a conditional expression and explain why Haskell requires the `else` branch.
+- Select an equation by pattern matching and explain why order matters.
+- Write guarded equations with a correctly placed `otherwise`.
+- Use `case … of` inside a larger expression.
+- Recognise and repair a non-exhaustive set of cases.
+- Implement one specification in all four forms and justify which reads best.

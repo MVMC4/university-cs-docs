@@ -1,0 +1,272 @@
+---
+title: "2. Pattern Matching"
+description: "Select an equation by the shape of an argument using literal, variable, wildcard, tuple, and list patterns, and keep the set of cases exhaustive and correctly ordered."
+---
+
+
+
+Conditional expressions choose on a **Boolean test**. Pattern matching chooses on the **shape of the argument itself** — its literal value, or the structure it was built from.
+
+The result is code that is neater, more readable, and simpler than the equivalent nest of conditionals.
+
+## 1. The idea
+
+Write several equations for the same function. Haskell tries them **in order**, top to bottom, and uses the first one whose pattern matches.
+
+```haskell
+-- Negate a Boolean value.
+negateBool :: Bool -> Bool
+negateBool True  = False
+negateBool False = True
+```
+
+Line by line:
+
+1. The signature says the function takes a `Bool` and returns a `Bool`.
+2. The first equation matches the literal `True`, and returns `False`.
+3. The second equation matches the literal `False`, and returns `True`.
+
+```text
+ghci> negateBool True
+False
+ghci> negateBool False
+True
+```
+
+There are only two `Bool` values, so these two patterns cover everything.
+
+## 2. Matching is sequential, and order matters
+
+Arguments are matched against patterns **in sequence**, and the first equation that applies is used. The compiler starts at the top and takes the first match.
+
+> Always list multiple definitions starting with the **most specific** and proceeding to the **most general**.
+
+```haskell
+-- Square a number, but treat 0 as a special case returning 1.
+square :: Int -> Int
+square 0 = 1     -- most specific: the literal 0
+square y = y * y -- most general: a variable matching anything
+```
+
+```text
+ghci> square 0
+1
+ghci> square 5
+25
+```
+
+Reverse those two lines and the function breaks:
+
+```haskell
+-- WRONG: the variable pattern swallows every argument.
+square y = y * y
+square 0 = 1     -- unreachable
+```
+
+`square 0` would now return `0`, and GHC warns that the second equation is redundant. **A variable pattern matches anything, so nothing below it is ever reached.**
+
+## 3. The kinds of pattern
+
+| Pattern | Matches | Example |
+|---|---|---|
+| **Literal** | An argument equal to that value | `fac 0 = 1` |
+| **Variable** | Any argument at all, binding it to the name | `fac n = n * fac (n - 1)` |
+| **Wildcard** `_` | Any argument, without binding a name | `isZero _ = False` |
+| **Tuple** | A tuple of the same arity whose components all match | `fst (x, _) = x` |
+| **List** | A list of matching structure and length | `stW ['b', _, _] = True` |
+| **Cons** `(x:xs)` | A non-empty list, splitting head from tail | `head1 (x:_) = x` |
+
+### The wildcard
+
+`_` is the catch-all. Use it when a position must match but its value is not needed:
+
+```haskell
+isZero :: Int -> Bool
+isZero 0 = True
+isZero _ = False   -- anything else
+```
+
+Writing `isZero n = False` would work identically, but `_` documents that the value is deliberately ignored, and avoids an unused-name warning.
+
+## 4. Exhaustiveness
+
+A set of patterns is **exhaustive** when every possible argument matches at least one of them. Leaving a gap does not fail at compile time by default — it fails at *run* time, when an unmatched argument arrives:
+
+```haskell
+-- Not exhaustive: nothing matches 3.
+dayName :: Int -> String
+dayName 1 = "Monday"
+dayName 2 = "Tuesday"
+```
+
+```text
+ghci> dayName 3
+*** Exception: Non-exhaustive patterns in function dayName
+```
+
+Always finish with a catch-all so the program cannot crash:
+
+```haskell
+dayName :: Int -> String
+dayName 1 = "Monday"
+dayName 2 = "Tuesday"
+dayName 3 = "Wednesday"
+dayName 4 = "Thursday"
+dayName 5 = "Friday"
+dayName 6 = "Saturday"
+dayName 7 = "Sunday"
+dayName _ = "Not a day number"
+```
+
+<Callout type="info" title="Ask the compiler to warn you">
+Start GHCi with `ghci -Wincomplete-patterns`, or enter `:set -Wincomplete-patterns`, and GHC reports non-exhaustive patterns at compile time instead of letting them crash later. Turn this on for laboratory work.
+</Callout>
+
+## 5. Tuple patterns
+
+A tuple of patterns is itself a pattern. It matches any tuple of the same arity whose components all match in order. This is how the Prelude defines `fst` and `snd`:
+
+```haskell
+fst :: (a, b) -> a
+fst (x, _) = x
+
+snd :: (a, b) -> b
+snd (_, x) = x
+```
+
+The pattern destructures the pair and names only the component that is wanted.
+
+```haskell
+-- Add the two components of a pair.
+addPair :: (Integer, Integer) -> Integer
+addPair (x, y) = x + y
+```
+
+```text
+ghci> addPair (3, 4)
+7
+```
+
+## 6. List patterns
+
+A list of patterns matches a list of the **same length** whose elements match in order:
+
+```haskell
+-- True for exactly three characters starting with 'b'.
+stW :: [Char] -> Bool
+stW ['b', _, _] = True
+stW _           = False
+```
+
+### The cons pattern
+
+A list is built one element at a time from the empty list `[]` using the `:` operator, called **cons**:
+
+```text
+[1,2,3]
+= 1 : [2,3]
+= 1 : (2 : [3])
+= 1 : (2 : (3 : []))
+```
+
+So `[1,2,3]` is an abbreviation of `1:(2:(3:[]))`. The cons operator associates to the right.
+
+This gives the most important pattern in Haskell: `(x:xs)` matches a **non-empty** list, binding `x` to the head and `xs` to the tail. It lets the Prelude's basic list functions be defined directly:
+
+```haskell
+null :: [a] -> Bool
+null []    = True
+null (_:_) = False
+
+head :: [a] -> a
+head (x:_) = x
+
+tail :: [a] -> [a]
+tail (_:xs) = xs
+```
+
+`[]` and `(x:xs)` between them cover every possible list, which makes that pair the standard exhaustive split.
+
+<Callout type="warn" title="Cons patterns must be parenthesised">
+Function application binds more tightly than any operator, so `tail _:xs = xs` is read as `(tail _):xs = xs` — a different and invalid meaning. Always write `tail (_:xs) = xs`.
+</Callout>
+
+## 7. Worked example: recognising a vowel
+
+Specify, then implement.
+
+```text
+isVowel :: Char -> Bool
+Purpose: report whether a character is a vowel, in either case.
+```
+
+```haskell
+isVowel :: Char -> Bool
+isVowel 'a' = True
+isVowel 'e' = True
+isVowel 'i' = True
+isVowel 'o' = True
+isVowel 'u' = True
+isVowel 'A' = True
+isVowel 'E' = True
+isVowel 'I' = True
+isVowel 'O' = True
+isVowel 'U' = True
+isVowel _   = False
+```
+
+```text
+ghci> isVowel 'a'
+True
+ghci> isVowel 'A'
+True
+ghci> isVowel 't'
+False
+```
+
+Ten literal patterns is verbose. This is precisely the shape of decision that guards handle better, and the next lesson rewrites it in two lines. Recognising *which* form suits a decision is the real skill of this chapter.
+
+## 8. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| Variable pattern placed above a literal | The variable matches everything; later equations are unreachable | Put the most specific pattern first |
+| No catch-all | `Non-exhaustive patterns` at run time | End with `_`, or cover every constructor |
+| `tail _:xs = xs` | Parsed as `(tail _):xs` | Parenthesise: `tail (_:xs)` |
+| `f (x:xs)` applied to `[]` | The cons pattern requires at least one element | Add a separate `f [] = …` equation |
+| Equations with different arities | Every equation must take the same number of arguments | Make the argument counts agree |
+
+## 9. Practice
+
+1. Define `isZero` for `Int` using two patterns.
+2. Define `dayName` for `1..7` with a catch-all.
+3. Define `swap :: (a, b) -> (b, a)` using a tuple pattern.
+4. Define `secondElement :: [a] -> a` returning the second element, using a cons pattern. What should it do for a list that is too short?
+5. Rewrite `isVowel` so that uppercase is handled without five extra equations. (Hint: `toLower` from `Data.Char`.)
+
+<Accordions>
+<Accordion title="Check question 4">
+
+```haskell
+-- Return the second element of a list.
+secondElement :: [a] -> a
+secondElement (_:x:_) = x
+secondElement _       = error "secondElement: list has fewer than two elements"
+```
+
+The pattern `(_:x:_)` requires at least two elements: a head that is ignored, then `x`, then any remaining tail. A list of length 0 or 1 falls through to the catch-all. Returning `error` is honest here, because there is no sensible `a` to invent — Chapter 5 returns to error handling.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can explain that equations are tried in order and the first match wins.' },
+  { type: 'must', text: 'I can name the literal, variable, wildcard, tuple, list, and cons patterns.' },
+  { type: 'must', text: 'I can explain why a variable pattern must come last.' },
+  { type: 'must', text: 'I can split any list with the exhaustive pair [] and (x:xs).' },
+  { type: 'must', text: 'I can say why cons patterns need parentheses.' },
+  { type: 'avoid', text: 'Do not leave a pattern set non-exhaustive; it crashes at run time, not compile time.' },
+  { type: 'note', text: 'Turn on -Wincomplete-patterns so GHC finds the gaps for you.' }
+]} />
+
+Continue with [Guarded Equations](/docs/sem3/csi243/04-making-choices/notes/guards).

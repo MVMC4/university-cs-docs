@@ -1,0 +1,101 @@
+---
+title: "Lab 02: Making Choices"
+description: "Implement four specifications using if-then-else, pattern matching, and guards, and justify which form reads best for each."
+---
+
+## Objectives
+
+- `if … then … else`
+- Pattern matching
+- Guards
+
+## How to submit each task
+
+Every task below asks for the **same function written more than once**. That is deliberate: the point is not to get an answer, but to see how the same decision looks in each form, and to develop a reason for preferring one.
+
+For every task, supply four things:
+
+<StepByStep>
+  <Step number={1} title="Specification">
+  State the function's purpose in one sentence, then write its type signature and the cases as a table of conditions and results.
+  </Step>
+  <Step number={2} title="Implementation(s)">
+  Write the function in each form the task names. Every version needs a type signature and a purpose comment.
+  </Step>
+  <Step number={3} title="Evidence">
+  Load the file and test each version on a normal input, every boundary, and an invalid input where the signature permits one.
+  </Step>
+  <Step number={4} title="Judgement">
+  Say in one sentence which form reads best for this specification, and why.
+  </Step>
+</StepByStep>
+
+## Task 1 — `isEven`
+
+`isEven` checks whether an integer is even. It returns `"The number is even"` if the number is even and `"The number is odd"` if the number is odd.
+
+1. Specify the function definition.
+2. Write the function using `if … then … else`.
+3. Write the function using guards.
+
+<Callout type="info" title="On the third case">
+The original task sheet also mentions returning `"Invalid input"`. Consider carefully whether that case is reachable given a signature of `Integer -> String`: every `Integer` is either even or odd. Either argue in your submission that the case cannot arise, or change the signature so that it can — and say which you chose.
+</Callout>
+
+## Task 2 — `bothEven`
+
+`bothEven` takes two integers and determines whether one, both, or neither is even. It returns `0` if neither is even, `1` if exactly one is even, and `2` if both are.
+
+1. Specify the function definition.
+2. Write the function using `if … then … else`.
+3. Write the function using guards.
+
+Test all four combinations: both even, first only, second only, neither.
+
+## Task 3 — `isDiv`
+
+`isDiv` accepts two integers `m` and `n` and reports whether `m` is divisible by `n`. The function should only perform the divisibility test when `m` is greater than `n`.
+
+| Call | Expected result |
+|---|---|
+| `isDiv 8 4` | `"Yes, m is divisible by n"` |
+| `isDiv 8 3` | `"No, m is not divisible by n"` |
+| `isDiv 3 8` | `"m should be greater than n"` |
+| `isDiv 4 4` | `"m and n are equal"` |
+
+1. Specify the definition of the function.
+2. Write it using `if … then … else`.
+3. Write it using pattern matching.
+4. Write it using guards.
+
+<Callout type="warn" title="Two traps in this task">
+First, the ordering of the cases is forced: the equality and less-than cases must be settled before any use of `mod`. Second, pattern matching alone cannot express “greater than” — a literal pattern only matches a fixed value. Part 3 will need patterns combined with guards. Explain that limitation in your submission rather than working around it silently.
+</Callout>
+
+## Task 4 — `isVowel`
+
+`isVowel` accepts a character and returns `True` if the character is a vowel and `False` if not. It must work for both lowercase and uppercase, so `isVowel 'a'` and `isVowel 'A'` both return `True`, while `isVowel 't'` returns `False`.
+
+1. Specify the definition of the function.
+2. Write it using `if … then … else`.
+3. Write it using pattern matching.
+4. Write it using guards.
+
+Compare the three implementations by line count and by how easily a reader can confirm all ten vowels are covered.
+
+## Submission requirements
+
+- The source file loads without errors.
+- Every function has a type signature and a purpose comment.
+- Each task shows a specification, the required implementations, tested evidence, and your judgement.
+- Boundary values are tested, not only convenient ones.
+- Where a form cannot express a case cleanly, you say so and explain why.
+
+<Checklist title="Before you submit" rules={[
+  { type: 'must', text: 'Every version of every function was actually loaded and run, not only written.' },
+  { type: 'must', text: 'Guard order was checked against a value that would expose a wrong ordering.' },
+  { type: 'must', text: 'Every guarded function ends with otherwise.' },
+  { type: 'must', text: 'Every pattern-matched function ends with a catch-all.' },
+  { type: 'avoid', text: 'Do not submit four identical-looking functions without the judgement sentence.' },
+  { type: 'note', text: 'Turn on :set -Wincomplete-patterns before testing to catch gaps.' }
+]} />
