@@ -106,7 +106,6 @@ reinforces the partial-function point that section makes.
 
 - Decide whether Lab 1 Task 5 (the Hello World comparison) should also appear as an exercise in `notes/first-program`.
 - Consider a capstone integrating modules, custom types, and IO once units 00–10 are verified.
-- Retire `content/archive/sem3/csi243-redemption-drafts`, whose only page links to routes that no longer exist.
 
 ## Completion gates
 
