@@ -1,0 +1,331 @@
+---
+title: "2. Your First Haskell Program"
+description: "Create a .hs script in a text editor, load it into GHCi, run main, reload after edits, and compile it into a standalone executable with runhaskell and ghc."
+---
+
+
+
+Everything you typed at the prompt in the previous lesson disappeared when GHCi closed. This lesson makes work permanent: you will write a Haskell **script**, save it, load it, run it, edit it, and finally compile it into a program you can run without GHCi.
+
+The destination is the traditional first program:
+
+```text
+Hello, World!
+```
+
+Getting there teaches the whole edit–load–run cycle you will use for every laboratory in this course.
+
+## 1. What a Haskell script is
+
+A Haskell program is also called a **script**.
+
+- Any text editor can create one — Notepad, VS Code, Notepad++, `nano`, whatever you have.
+- Scripts are saved with the **`.hs` extension**. Only files with that extension can be loaded.
+- The filename should be meaningful and imply the contents.
+- A script contains program text, comments, and definitions.
+
+<Callout type="warn" title="Watch the extension on Windows">
+Windows hides known file extensions by default, so saving from Notepad can silently produce `Hello.hs.txt`, which GHCi will not load. In Notepad's Save dialog set **Save as type** to *All Files* before typing the name. In File Explorer, turn on **View → Show → File name extensions** so you can see what you actually created.
+</Callout>
+
+## 2. Write the file
+
+Create a folder for your CSI243 work — for example `C:\CSI243\Labs` on Windows, or `~/csi243/labs` elsewhere. In it, create a file called `Hello.hs` containing exactly this:
+
+```haskell
+-- Hello.hs
+-- PURPOSE: Display a greeting on the terminal.
+
+-- main is the entry point: the action the runtime starts.
+main :: IO ()
+main = putStrLn "Hello, World!"
+```
+
+Three things are worth naming now, even though Chapter 3 explains them properly:
+
+| Piece | Read aloud | What it does here |
+|---|---|---|
+| `--` | “comment” | Makes the rest of the line explanatory text that Haskell ignores |
+| `main` | “main” | The name the runtime looks for; every runnable program needs one |
+| `IO ()` | “I-O unit” | Marks an action that touches the outside world and returns no useful data |
+| `putStrLn` | “put string line” | Writes a `String` to the terminal, then moves to a new line |
+
+`putStrLn` is one of the standard Prelude tools, which is why it works without importing anything.
+
+### Comments
+
+A comment carries information for the reader rather than the computer — typically what a function does, how it works, or how it should not be used. Haskell has two forms:
+
+```haskell
+-- A short comment. It runs to the end of the line and may follow code.
+
+{- A block comment.
+   It may span as many lines as you like,
+   and may even contain nested comments. -}
+square :: Int -> Int
+square x = x * x
+```
+
+Comment syntax from other languages does **not** work. `// this` and `# this` are syntax errors in Haskell, not comments.
+
+## 3. Load the file into GHCi
+
+Start GHCi **from the folder containing your file**, or move to that folder once inside GHCi with `:cd`.
+
+```text
+C:\CSI243\Labs> ghci
+GHCi, version 9.10.3: https://www.haskell.org/ghc/  :? for help
+ghci> :load Hello.hs
+[1 of 1] Compiling Main             ( Hello.hs, interpreted )
+Ok, one module loaded.
+ghci>
+```
+
+The `.hs` extension may be omitted — `:load Hello` works identically.
+
+The compiler's exact progress wording varies between GHC versions. The evidence that matters is the final line reporting that the module loaded.
+
+<Callout type="warn" title="&quot;target Hello.hs is not a module name or a source file&quot;">
+This almost always means GHCi is looking in the wrong directory, not that your file is broken. Check where you are with `:!cd` (Windows) or `:!pwd` (macOS/Linux), then move with `:cd C:\CSI243\Labs`. Confirm the file is really there and really ends in `.hs`.
+</Callout>
+
+## 4. Run it
+
+Once the module is loaded, run the program by typing its entry point:
+
+```text
+ghci> main
+Hello, World!
+```
+
+That is the complete cycle. You wrote a definition, saved it, loaded it, and performed it.
+
+<StepByStep>
+  <StepByStepTitle>What just happened</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>You saved a definition</StepTitle>
+  `Hello.hs` binds the name `main` to an output action. Nothing has run yet — the file is only text.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>GHCi compiled and loaded it</StepTitle>
+  `:load` checked the syntax and the types, then made every top-level definition in the file available at the prompt.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>You named the action</StepTitle>
+  Typing `main` asked GHCi to perform the action that name refers to.
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>The effect became visible</StepTitle>
+  `putStrLn` wrote the characters `Hello, World!` and a newline to the terminal.
+  </Step>
+</StepByStep>
+
+## 5. Edit and reload
+
+Leave GHCi open. Change the file so it greets the course instead:
+
+```haskell
+main :: IO ()
+main = putStrLn "Hello, CSI243!"
+```
+
+Save it, then in the still-open GHCi session:
+
+```text
+ghci> :reload
+[1 of 1] Compiling Main             ( Hello.hs, interpreted )
+Ok, one module loaded.
+ghci> main
+Hello, CSI243!
+```
+
+`:reload` recompiles as necessary, avoiding work when a module's external dependencies have not changed. **Edit → save → `:reload` → test** is the loop you will spend most of this course in. Do not quit and restart GHCi after every change.
+
+## 6. Add a function and use it
+
+A script can hold as many definitions as you like. Add one above `main`:
+
+```haskell
+-- Hello.hs
+
+-- Return the cube of a whole number.
+cube :: Integer -> Integer
+cube x = x * x * x
+
+main :: IO ()
+main = do
+  putStrLn "The cube of 4 is:"
+  print (cube 4)
+```
+
+Reload and run:
+
+```text
+ghci> :reload
+Ok, one module loaded.
+ghci> main
+The cube of 4 is:
+64
+```
+
+Because `cube` is a top-level definition in a loaded module, you can also call it directly at the prompt without going through `main`:
+
+```text
+ghci> cube 5
+125
+ghci> :type cube
+cube :: Integer -> Integer
+```
+
+The `do` keyword introduces a sequence of actions. The lines inside it must be **aligned with each other** — Haskell uses indentation to decide which statements belong to the block. Chapter 3 explains `do`, `print`, and `show` in full.
+
+## 7. Run a script without loading it
+
+`runhaskell` compiles and runs a script in one step, without an interactive session:
+
+```text
+C:\CSI243\Labs> runhaskell Hello.hs
+The cube of 4 is:
+64
+```
+
+This is convenient for a quick check. It does not leave an executable behind, and it does not give you a prompt for testing individual functions, so it complements GHCi rather than replacing it.
+
+## 8. Compile a standalone executable
+
+To produce a program that runs on its own, compile with `ghc`. The `-o` option names the output file:
+
+```text
+C:\CSI243\Labs> ghc -o hello Hello.hs
+[1 of 2] Compiling Main             ( Hello.hs, Hello.o )
+[2 of 2] Linking hello.exe
+```
+
+Then run it directly:
+
+```text
+C:\CSI243\Labs> hello
+The cube of 4 is:
+64
+```
+
+On macOS and Linux the executable has no `.exe` suffix and is run as `./hello`.
+
+Compiling also leaves two intermediate files beside your source:
+
+| File | What it is |
+|---|---|
+| `Hello.o` | The compiled object code for the module |
+| `Hello.hi` | The interface file describing what the module exports |
+
+Both are generated artefacts. They are safe to delete; `ghc` recreates them.
+
+<ComparisonTable
+  columns={[
+    { header: 'Way to run it', key: 'how' },
+    { header: 'Command', key: 'cmd' },
+    { header: 'Leaves an executable?', key: 'exe' },
+    { header: 'Best for', key: 'use' }
+  ]}
+  rows={[
+    { how: 'Interactive', cmd: ':load then main', exe: 'No', use: 'Developing and testing individual functions' },
+    { how: 'Script runner', cmd: 'runhaskell Hello.hs', exe: 'No', use: 'A quick one-off run of a finished script' },
+    { how: 'Compiler', cmd: 'ghc -o hello Hello.hs', exe: 'Yes', use: 'Producing a program to hand in or distribute' }
+  ]}
+  highlightCol="use"
+/>
+
+## 9. Modules and filenames
+
+A Haskell program is a collection of **modules**. The main module loads the others and uses the functions they define.
+
+You have not written a `module` line yet, and did not need to: a file without one is treated as module `Main`, which is why GHCi reported `Compiling Main`. When you do declare a module, the rules are:
+
+```haskell
+module Test where
+
+x = 5
+y = (6, "Hello")
+z = x * fst y
+```
+
+- A module name is alphanumeric and **must begin with a capital letter**.
+- The convention is **one module per file**, and the **filename must match the module name**. Module `Test` lives in `Test.hs`.
+- `where` follows the module name and marks the start of the code.
+- Imports, if any, come before any function definitions.
+
+Loading it makes its definitions available, and older GHC releases show the module name in the prompt instead of `Prelude`:
+
+```text
+ghci> :load Test.hs
+[1 of 1] Compiling Test             ( Test.hs, interpreted )
+Ok, one module loaded.
+ghci> x
+5
+ghci> y
+(6,"Hello")
+ghci> z
+30
+```
+
+`fst` and `snd` extract the first and second elements of a pair, so `z` is `5 * 6`.
+
+<Callout type="warn" title="Why the names must agree">
+Loading a single file whose module name differs from its file name actually succeeds — `Wrong.hs` containing `module Test where` will load. The rule bites as soon as **another module imports it**, because GHC locates a module by looking for a file of the same name:
+
+```text
+ghci> :load UsesIt.hs
+UsesIt.hs:1:1: error: [GHC-87110]
+    Could not find module `Test'.
+```
+
+Compiling with `ghc -o` is also stricter: it needs a module named `Main`, and reports `There is no module named 'Main'` otherwise. Treat matching names as a rule from the start, and neither problem can arise.
+</Callout>
+
+Splitting code into modules pays off in three ways: a sufficiently generic module can be reused across many tasks; loosely coupled modules can be reused separately later; and dividing a program into parts with clear purposes makes it more manageable. Chapter 8 develops this.
+
+## 10. Common failures
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| `target ... is not a module name or a source file` | GHCi is in the wrong directory, or the file is not really `.hs` | `:cd` to the right folder; check the real extension |
+| `Variable not in scope: main` | The file has no `main`, or it failed to load | Define `main`; re-read the `:load` output for the real error |
+| `The IO action 'main' is not defined in module 'Main'` | `main` is misspelled or capitalised, e.g. `Main =` | Names are case-sensitive; use exactly `main` |
+| `parse error on input` after `do` | The actions under `do` are not aligned | Give every statement in the block the same indentation |
+| `Couldn't match type '[Char]' with '()'` on `putStrLn` | A number or non-string was passed | `putStrLn (show 42)`, or use `print 42` |
+| Edits appear to have no effect | The file was saved but not reloaded | Run `:reload` before testing again |
+| `Hello.hs.txt` will not load | The editor appended a second extension | Re-save with **All Files** selected, or rename the file |
+
+## 11. Practice
+
+1. Create `Greeting.hs` that prints your own name, load it, and run `main`.
+2. Without quitting GHCi, change the message, save, `:reload`, and run it again. Confirm the new output.
+3. Add a function `double :: Integer -> Integer` to the file and call it directly at the prompt, without using `main`.
+4. Run the same file with `runhaskell`. State one difference you observed compared with `:load`.
+5. Compile it with `ghc -o greeting Greeting.hs` and run the executable. List the files that appeared in the folder and say what each one is.
+6. Rename the file to `Wrong.hs` but leave a `module Greeting where` line at the top. Load it directly — it still works. Now write a second file containing `import Greeting` and load that instead. Read the error and explain which file it blames.
+
+<Accordions>
+<Accordion title="Check question 4">
+
+`runhaskell` performs the program and returns you to the operating-system prompt. `:load` leaves you inside GHCi with every top-level definition available, so you can test `double 21` on its own. `runhaskell` gives you no way to call anything except `main`.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can create a .hs file in a text editor and confirm its real extension.' },
+  { type: 'must', text: 'I can load a script with :load and run it by typing main.' },
+  { type: 'must', text: 'I can edit, save, :reload, and re-test without restarting GHCi.' },
+  { type: 'must', text: 'I can call any top-level function of a loaded module directly at the prompt.' },
+  { type: 'must', text: 'I can compile with ghc -o, run the executable, and say what the .o and .hi files are.' },
+  { type: 'must', text: 'I can explain why a module name must match its filename.' },
+  { type: 'avoid', text: 'Do not quit and restart GHCi after every edit; use :reload.' },
+  { type: 'note', text: 'A comment uses -- or {- -}. // and # are syntax errors in Haskell.' }
+]} />
+
+Continue with [Values, Names, Types, and Text](/docs/sem3/csi243/02-expressions-types/notes/values-text).

@@ -1,0 +1,277 @@
+---
+title: "4. Folds and Function Composition"
+description: "Collapse a list to a single value with foldr and foldl, define Prelude functions as folds, and build pipelines with the composition operator."
+---
+
+
+
+`map` and `filter` both return lists. The third recursion shape from Chapter 6 returned a **single value**:
+
+```haskell
+sum' []     = 0
+sum' (x:xs) = x + sum' xs
+
+product' []     = 1
+product' (x:xs) = x * product' xs
+```
+
+Again these differ in only two places: the base value, and the operator. Abstracting both gives a **fold**.
+
+## 1. `foldr`
+
+```haskell
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ acc []     = acc
+foldr f acc (x:xs) = f x (foldr f acc xs)
+```
+
+Three arguments: a combining function, a starting value, and the list.
+
+```text
+ghci> foldr (+) 0 [1,2,3,4]
+10
+ghci> foldr (*) 1 [1,2,3,4]
+24
+ghci> foldr max 0 [3,9,2]
+9
+```
+
+The `r` means **right**: the combining starts from the right-hand end. `foldr f acc` replaces every `:` with `f` and the final `[]` with `acc`:
+
+```text
+     1 : (2 : (3 : (4 : [])))
+=>   1 + (2 + (3 + (4 + 0)))
+=    10
+```
+
+That substitution picture is the fastest way to predict what a `foldr` does.
+
+<StepByStep>
+  <StepByStepTitle>Tracing foldr (+) 0 [1,2,3]</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Unwind</StepTitle>
+  `foldr (+) 0 [1,2,3]` becomes `1 + foldr (+) 0 [2,3]`, then `1 + (2 + foldr (+) 0 [3])`, then `1 + (2 + (3 + foldr (+) 0 []))`.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Base case</StepTitle>
+  `foldr (+) 0 []` returns the starting value `0`, giving `1 + (2 + (3 + 0))`.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Rewind</StepTitle>
+  The additions are performed innermost first: `1 + (2 + 3)`, then `1 + 5`, then `6`.
+  </Step>
+</StepByStep>
+
+## 2. Defining Prelude functions as folds
+
+Most of Chapter 6's single-value functions are one-liners once you have `foldr`:
+
+```haskell
+sum'     = foldr (+) 0
+product' = foldr (*) 1
+and'     = foldr (&&) True     -- True when every element is True
+or'      = foldr (||) False    -- True when any element is True
+length'  = foldr (\_ n -> n + 1) 0
+maximum' = foldr max minBound
+```
+
+`and = foldr (&&) True` is the definition from the course notes. Note that `(&&)` must be parenthesised, because a bare operator is not a valid expression — the reason sections exist.
+
+Even `map` and `filter` are folds:
+
+```haskell
+map' f     = foldr (\x acc -> f x : acc) []
+filter' p  = foldr (\x acc -> if p x then x : acc else acc) []
+```
+
+You would not normally write them this way, but it shows that `foldr` is the general shape of list recursion, with `map` and `filter` as special cases.
+
+## 3. `foldl`
+
+`foldl` combines from the **left** instead:
+
+```haskell
+foldl :: (b -> a -> b) -> b -> [a] -> b
+```
+
+```text
+     1 : (2 : (3 : []))
+=>   ((0 + 1) + 2) + 3
+```
+
+For `+` the answer is the same, because addition is associative. For a non-associative operator it is not:
+
+```text
+ghci> foldr (-) 0 [1,2,3]
+2
+ghci> foldl (-) 0 [1,2,3]
+-6
+```
+
+Because `foldr` gives `1 - (2 - (3 - 0))` = `1 - (2 - 3)` = `1 - (-1)` = `2`, while `foldl` gives `((0 - 1) - 2) - 3` = `-6`.
+
+<Callout type="warn" title="Check associativity before choosing">
+For `+`, `*`, `max`, `&&`, and `||` the two folds agree. For `-`, `/`, `++`, and anything order-sensitive they do not. When in doubt, write out the substitution picture.
+</Callout>
+
+There is also `foldr1` and `foldl1`, which use the list's first element as the starting value and therefore fail on an empty list:
+
+```text
+ghci> foldr1 max [3,9,2]
+9
+ghci> foldr1 max []
+*** Exception: foldr1: empty structure
+```
+
+## 4. Scans
+
+A **scan** is a fold that keeps every intermediate result rather than only the last:
+
+```text
+ghci> scanl (+) 0 [1,2,3,4]
+[0,1,3,6,10]
+ghci> foldl (+) 0 [1,2,3,4]
+10
+```
+
+The final element of a `scanl` is exactly what the corresponding `foldl` returns. Scans are useful for running totals.
+
+## 5. Function composition
+
+Composition connects the output of one function to the input of another. Chapter 1 introduced the idea informally; here is the operator.
+
+Mathematically, composition takes two functions `f` and `g` and produces `h = f ∘ g` such that `h(x) = f(g(x))`. In Haskell the operator is a full stop:
+
+```haskell
+(.) :: (b -> c) -> (a -> b) -> a -> c
+(f . g) x = f (g x)
+```
+
+**Read `f . g` from right to left**: first apply `g`, then apply `f`. The types must be compatible — the result of `g` must be acceptable to `f`.
+
+```text
+ghci> ((*2) . (+1)) 5
+12
+ghci> ((+1) . (*2)) 5
+11
+```
+
+The first adds 1 to get 6, then doubles it. The second doubles to get 10, then adds 1. Order matters.
+
+### Building pipelines
+
+Composition shines when several transformations are chained:
+
+```haskell
+-- Sum the squares of the odd numbers in a list.
+sumOddSquares :: [Integer] -> Integer
+sumOddSquares = sum . map (^2) . filter odd
+```
+
+```text
+ghci> sumOddSquares [1..10]
+165
+```
+
+Read right to left: keep the odds, square them, add them up. The list argument is never mentioned, because each stage is already a complete function.
+
+The explicit version says the same thing:
+
+```haskell
+sumOddSquares xs = sum (map (^2) (filter odd xs))
+```
+
+<Callout type="info" title="Clarity before cleverness">
+Point-free style — omitting the argument — is not automatically better. Use composition when it makes a pipeline read clearly, and the explicit version whenever the composed form becomes hard to follow. A readable named function beats a dense chain of operators.
+</Callout>
+
+## 6. The `$` operator
+
+A companion to composition, `$` applies a function to an argument with the lowest possible precedence:
+
+```haskell
+($) :: (a -> b) -> a -> b
+f $ x = f x
+```
+
+Its only purpose is to remove nested parentheses:
+
+```text
+ghci> sum (map (^2) (filter odd [1..10]))
+165
+ghci> sum $ map (^2) $ filter odd [1..10]
+165
+```
+
+Both are correct. Use whichever your reader will find clearer.
+
+## 7. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `foldr (+) [1,2,3]` | The starting value is missing | `foldr (+) 0 [1,2,3]` |
+| `foldr (-) 0 xs` expected to equal `foldl` | `-` is not associative | Choose the fold that matches the specification |
+| `foldr1 max []` | `foldr1` has no starting value | Use `foldr max` with an explicit base |
+| `foldr && True xs` | A bare operator is not an expression | `foldr (&&) True xs` |
+| `(f . g) x` expected to apply `f` first | Composition applies right to left | Swap them, or use `g . f` |
+| `sum . map (^2) $ xs` misread | `$` has the lowest precedence | Add parentheses if unsure |
+
+## 8. Practice
+
+Predict each result before running it.
+
+1. `foldr (+) 0 [1,2,3,4,5]`
+2. `foldr (*) 1 [1,2,3,4]`
+3. `foldr (-) 0 [1,2,3]` and `foldl (-) 0 [1,2,3]`
+4. `scanl (+) 0 [1,2,3]`
+5. `((*3) . (+2)) 4` and `((+2) . (*3)) 4`
+
+Then write:
+
+6. `and` and `or` as folds.
+7. `countTrue :: [Bool] -> Int` counting the `True` values, using a fold.
+8. `joinWords :: [String] -> String` concatenating a list of strings, using a fold.
+9. `averageOfEvens :: [Double] -> Double` as a composition pipeline.
+10. Explain why `foldr (-) 0 [1,2,3]` is `2` by writing out the substitution picture.
+
+<Accordions>
+<Accordion title="Check questions 7 and 10">
+
+**7.**
+
+```haskell
+countTrue :: [Bool] -> Int
+countTrue = foldr (\b n -> if b then n + 1 else n) 0
+```
+
+The combining function takes the element and the accumulated count, adding one only when the element is `True`.
+
+**10.** `foldr` replaces every `:` with the operator and the final `[]` with the starting value:
+
+```text
+     1 : (2 : (3 : []))
+=>   1 - (2 - (3 - 0))
+=    1 - (2 - 3)
+=    1 - (-1)
+=    2
+```
+
+The nesting is to the right, so the innermost subtraction happens first. `foldl` nests to the left instead, giving `((0-1)-2)-3 = -6`.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can state the signature of foldr and explain each of its three arguments.' },
+  { type: 'must', text: 'I can predict a fold by replacing every : with the operator and [] with the base value.' },
+  { type: 'must', text: 'I can define sum, product, and, or, and length as folds.' },
+  { type: 'must', text: 'I can say when foldr and foldl differ, and give an operator where they do.' },
+  { type: 'must', text: 'I can read f . g right to left and give the type of the composition operator.' },
+  { type: 'must', text: 'I can build a pipeline with composition and rewrite it explicitly.' },
+  { type: 'avoid', text: 'Do not use point-free style when it makes the code harder to read.' }
+]} />
+
+Continue to [Practice Questions](/docs/sem3/csi243/07-higher-order/questions), then [Review](/docs/sem3/csi243/07-higher-order/review).

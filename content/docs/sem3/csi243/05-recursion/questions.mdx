@@ -1,0 +1,84 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on base cases, recursive steps, dry running, equation order, termination, and error handling."
+---
+
+## Structure of a recursive definition
+
+<ExamQuestion title="Question 1: Base cases and recursive steps [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Name the two parts of every recursive definition and state the purpose of each. [4]</>}
+    solution={<>The base case defines the function for the first input values and terminates the recursion. The recursive step defines the function for other input values in terms of itself, creating the loop. Without a base case the function may remain in an indefinite loop. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Give a specification and a Haskell implementation of <code>fac n</code>. [4]</>}
+    solution={<>Specification: <code>fac n = 1</code> if <code>n = 0</code>, and <code>n * fac (n - 1)</code> if <code>n {'>'} 0</code>. Implementation: <code>fac :: Integer -{'>'} Integer</code>, then <code>fac 0 = 1</code> and <code>fac n = n * fac (n - 1)</code>. Marks for a correct signature, a literal base case listed first, and a step that reduces the argument. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>fib</code> requires two base cases while <code>fac</code> requires only one. [4]</>}
+    solution={<><code>fac</code> reduces its argument by one per call, so a single base case at <code>0</code> is always reached. <code>fib</code> reaches back two positions, calling <code>fib (n-1)</code> and <code>fib (n-2)</code>. With only <code>fib 0</code> defined, evaluating <code>fib 2</code> would require <code>fib (-1)</code>, which no base case stops. A base case is needed for every position the recursive step can reach back to. [4]</>}
+  />
+</ExamQuestion>
+
+## Order and termination
+
+<ExamQuestion title="Question 2: Why definitions fail to terminate [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>The equations <code>fac n = n * fac (n - 1)</code> and <code>fac 0 = 1</code> are written in that order. Explain what happens when <code>fac 0</code> is evaluated. [4]</>}
+    solution={<>Equations are matched sequentially from the top and the first match is used. The variable pattern <code>n</code> matches any argument including <code>0</code>, so the recursive step is selected. Evaluation produces <code>0 * fac (-1)</code>, then <code>fac (-2)</code>, and continues indefinitely. The base case is unreachable. The repair is to list the literal base case first. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>State the three conditions that together guarantee a recursive function terminates. [6]</>}
+    solution={<>There must be a base case, and it must be positioned so that it can be matched. Every recursive call must change the argument. The change must move the argument towards the base case rather than away from it. Any two stated correctly earn four marks; all three earn six. [6]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>A student claims the type checker proves their recursive function terminates. Explain why this is false. [4]</>}
+    solution={<>Type checking establishes only that types are used consistently. It does not examine whether an argument decreases or whether a base case is reachable. <code>fac (-1)</code> with the standard definition is well typed yet never terminates, which is a direct counter-example. [4]</>}
+  />
+</ExamQuestion>
+
+## Dry running
+
+<ExamQuestion title="Question 3: Tracing evaluation [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Dry run <code>fac 4</code>, showing one reduction per line and marking where the base case is reached. [6]</>}
+    solution={<><code>fac 4 = 4 * fac 3 = 4 * (3 * fac 2) = 4 * (3 * (2 * fac 1)) = 4 * (3 * (2 * (1 * fac 0)))</code>, then the base case gives <code>4 * (3 * (2 * (1 * 1)))</code>, which rewinds to <code>4 * (3 * 2) = 4 * 6 = 24</code>. Marks are for showing the unwinding, identifying the base case, and completing the rewinding to <code>24</code>. [6]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Name the two phases of a recursive evaluation and describe what happens in each. [4]</>}
+    solution={<>Unwinding: each call replaces itself with the recursive step, building a longer expression while calls stack up and nothing is calculated. Rewinding: once the base case supplies a value, it is substituted back and the arithmetic is performed innermost first until one value remains. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>A definition uses <code>fac 0 = 0</code> instead of <code>fac 0 = 1</code>. State what <code>fac 3</code> returns and explain how a dry run locates the fault. [4]</>}
+    solution={<>It returns <code>0</code>. The trace reaches <code>3 * (2 * (1 * fac 0))</code>, and the base case supplies <code>0</code>, which is then multiplied through the whole product. The trace shows the exact line where the incorrect value enters, and comparing that line with the specification identifies the base case as the fault. [4]</>}
+  />
+</ExamQuestion>
+
+## Domain and error handling
+
+<ExamQuestion title="Question 4: Inputs outside the specification [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain why <code>fac :: Integer -{'>'} Integer</code> is a wider promise than the factorial specification, and what goes wrong as a result. [4]</>}
+    solution={<>The type promises a result for every <code>Integer</code>, including negative values, but factorial is specified only for non-negative integers. For a negative argument the recursive step moves the argument further from the base case on every call, so evaluation never terminates. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Write <code>fac</code> with guards so that a negative argument is reported rather than looping. [4]</>}
+    solution={<><code>fac n</code> with <code>| n {'<'} 0 = error "fac: only defined for non-negative integers"</code>, then <code>| n {'>'}= 0 {'&&'} n {'<'}= 1 = 1</code>, then <code>| otherwise = n * fac (n - 1)</code>. Marks for testing the invalid case first, a correct base case, and a message naming the function. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>The type of <code>error</code> is <code>String -{'>'} a</code>. Explain why its result type is an arbitrary type variable. [4]</>}
+    solution={<><code>error</code> never returns a value; it stops evaluation. Because it produces no result, its result type places no constraint, so it can be typed as any <code>a</code> and used anywhere a value of any type is expected — for instance as one branch of a guard whose other branches return <code>Integer</code>. [4]</>}
+  />
+</ExamQuestion>

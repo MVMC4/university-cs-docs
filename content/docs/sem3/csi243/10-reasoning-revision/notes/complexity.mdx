@@ -1,0 +1,220 @@
+---
+title: "4. The Cost of a Definition"
+description: "Count the reduction steps a recursive definition performs, compare linear and exponential growth, know the cost of the common list operations, and recognise laziness."
+---
+
+
+
+Two definitions can compute the same values and differ enormously in how much work they do. Chapter 5 noticed this with `fib`; this lesson makes it measurable.
+
+## 1. Counting steps
+
+The cost of a definition is the number of reduction steps needed to reach a value. Count the recursive calls.
+
+```haskell
+length' :: [a] -> Int
+length' []     = 0
+length' (_:xs) = 1 + length' xs
+```
+
+For a list of `n` elements, `length'` makes one call per element, then stops:
+
+| List length | Calls |
+|---|---|
+| 0 | 1 |
+| 1 | 2 |
+| 5 | 6 |
+| n | n + 1 |
+
+The work grows in direct proportion to `n`. This is **linear** cost, written **O(n)**. Doubling the list roughly doubles the work.
+
+Most of the list functions you have written are linear: `sum`, `product`, `reverse` (naively), `map f`, `filter p`, `elem`.
+
+## 2. When cost explodes
+
+Now the Fibonacci definition:
+
+```haskell
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+```
+
+Each call makes **two** further calls. The trace from Chapter 5 showed `fib 5` evaluating `fib 2` three separate times.
+
+| `n` | Approximate calls |
+|---|---|
+| 5 | 15 |
+| 10 | 177 |
+| 20 | 21,891 |
+| 30 | 2,692,537 |
+| 40 | about 331 million |
+
+The work roughly **doubles** for each increase of one in `n`. This is **exponential** cost, written **O(2ⁿ)**. It is why `fib 40` is unusable while `length` on a list of a million elements is fine.
+
+<Callout type="warn" title="The fault is recomputation, not recursion">
+Recursion is not slow. This definition is slow because it solves the same subproblem many times over. `fib 5` computes `fib 2` three times; `fib 30` computes it hundreds of thousands of times.
+</Callout>
+
+### The repair
+
+Carry the previous two values along instead of recomputing them:
+
+```haskell
+-- Linear: each value is computed once.
+fibFast :: Integer -> Integer
+fibFast n = go n 0 1
+  where
+    go 0 a _ = a
+    go k a b = go (k - 1) b (a + b)
+```
+
+```text
+ghci> fibFast 40
+102334155
+```
+
+Instant, where the naive version would take minutes. Same specification, same results, a completely different cost.
+
+## 3. The cost of common operations
+
+Worth knowing, because they compose:
+
+| Operation | Cost | Why |
+|---|---|---|
+| `head xs`, `null xs` | O(1) | Inspects one constructor |
+| `x : xs` | O(1) | Builds one cell |
+| `length xs` | O(n) | Walks the whole list |
+| `xs !! k` | O(k) | Walks to position `k` |
+| `last xs`, `init xs` | O(n) | Must reach the end |
+| `xs ++ ys` | O(n) in `xs` | Rebuilds the first list |
+| `reverse xs` naive | O(n²) | `++ [x]` at each of `n` steps |
+| `map f xs`, `filter p xs` | O(n) | One pass |
+| `sum`, `product`, `maximum` | O(n) | One pass |
+| `sort xs` | O(n log n) | A comparison sort |
+
+Two consequences matter in practice.
+
+**Consing is cheap; appending is not.** `x : xs` is constant, but `xs ++ [x]` walks the whole list. That is why the naive `myReverse` from Chapter 6 is quadratic:
+
+```haskell
+-- O(n^2): ++ [x] costs a full traversal at every step.
+myReverse []     = []
+myReverse (x:xs) = myReverse xs ++ [x]
+
+-- O(n): an accumulator conses onto the front instead.
+fastReverse :: [a] -> [a]
+fastReverse xs = go xs []
+  where
+    go [] acc     = acc
+    go (y:ys) acc = go ys (y : acc)
+```
+
+**`length` inside a loop is a trap.** Calling `length` for each element turns a linear pass into a quadratic one:
+
+```haskell
+-- O(n^2): length is recomputed for every element.
+slow xs = [x | x <- xs, length xs > 3]
+
+-- O(n): computed once.
+fast xs = if length xs > 3 then xs else []
+```
+
+## 4. Laziness
+
+Haskell is a **lazy** language: it will not evaluate any expression without a reason. When the evaluation engine finds an expression needs evaluating, it creates a **thunk** — a structure holding the information required for that evaluation, plus a pointer to it. A thunk is a subroutine wrapping a function or expression to delay computation until the result is needed. The engine starts work only when the value is actually required.
+
+Two practical consequences.
+
+**Infinite structures are usable**, provided you only take a finite part:
+
+```text
+ghci> take 5 [1..]
+[1,2,3,4,5]
+ghci> take 3 (map (*2) [1..])
+[2,4,6]
+```
+
+`[1..]` is never fully built. Only the five elements demanded are computed.
+
+**Unused arguments cost nothing**:
+
+```haskell
+constant :: a -> b -> a
+constant x _ = x
+```
+
+```text
+ghci> constant 5 (fib 40)
+5
+```
+
+`fib 40` is never evaluated, because its value is never demanded.
+
+Laziness also explains why `takeWhile` can be cheaper than `filter`: it stops at the first failure and never examines the rest.
+
+<Callout type="info" title="Laziness is not always a saving">
+Unevaluated thunks occupy memory. A long chain of them can use more space than computing the values would have. At this stage, simply know the mechanism; tuning it is beyond CSI243.
+</Callout>
+
+## 5. Comparing two definitions
+
+The procedure to apply in an examination:
+
+<StepByStep>
+  <StepByStepTitle>Comparing the cost of two definitions</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Count the recursive calls per step</StepTitle>
+  One call per step gives linear growth. Two or more gives exponential growth.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Check the cost of the work inside each step</StepTitle>
+  A constant-cost operation such as `:` keeps the total linear. A linear operation such as `++` or `length` makes it quadratic.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Look for repeated subproblems</StepTitle>
+  If the same call appears in more than one branch, results are being recomputed.
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>State the growth and justify it</StepTitle>
+  Say how the work changes as the input doubles, and name the step that causes it.
+  </Step>
+</StepByStep>
+
+## 6. Practice
+
+1. Count the calls `length'` makes on a list of 5 elements, and give the general formula.
+2. Explain why naive `fib` is exponential, and identify the exact cause.
+3. Write `fibFast` with an accumulator and explain why it is linear.
+4. Give the cost of `head`, `length`, `xs !! k`, `xs ++ ys`, and `sort`.
+5. Explain why naive `myReverse` is quadratic, and write a linear version.
+6. Explain why `take 5 [1..]` terminates.
+7. Explain why `constant 5 (fib 40)` returns immediately.
+8. A student writes `[x | x <- xs, length xs > 3]`. State the cost and improve it.
+
+<Accordions>
+<Accordion title="Check questions 2 and 5">
+
+**2.** Each call makes two further calls, so the number of calls roughly doubles for each increase of one in `n`. The cause is **recomputation**: `fib (n-1)` and `fib (n-2)` overlap heavily, so the same subproblem is solved many times over. `fib 5` evaluates `fib 2` three separate times. The recursion itself is not the problem — a linear accumulator version is instant.
+
+**5.** `myReverse (x:xs) = myReverse xs ++ [x]`. The `++` walks the whole reversed tail at every one of the `n` steps, giving roughly `n + (n-1) + … + 1` work, which is O(n²). The linear version uses an accumulator and `:`, which is constant-cost, so the total is O(n).
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can count the recursive calls a definition makes and express the growth in n.' },
+  { type: 'must', text: 'I can explain why naive fib is exponential and name recomputation as the cause.' },
+  { type: 'must', text: 'I can state the cost of the common list operations.' },
+  { type: 'must', text: 'I can explain why consing is cheap and appending is not.' },
+  { type: 'must', text: 'I can spot a linear operation inside a loop turning a pass quadratic.' },
+  { type: 'must', text: 'I can explain laziness with thunks, and why take 5 [1..] terminates.' },
+  { type: 'note', text: 'Recursion is not slow. Recomputing the same subproblem is.' }
+]} />
+
+Continue to [Practice Questions](/docs/sem3/csi243/10-reasoning-revision/questions), then [Review](/docs/sem3/csi243/10-reasoning-revision/review).

@@ -1,0 +1,183 @@
+---
+title: "3. Type Synonyms"
+description: "Give an existing type a meaningful name with the type keyword, parameterise a synonym, and understand why a synonym adds no type safety."
+---
+
+
+
+The basic types may not be sufficient for a given problem domain. The first and simplest way to improve them is to give an existing type a **name that says what it means**.
+
+## 1. The `type` keyword
+
+A **type synonym**, also called a type alias, introduces another name for an existing type:
+
+```haskell
+type String = [Char]
+```
+
+That is the actual Prelude definition. `String` and `[Char]` are two names for exactly the same type — which is why Chapter 2 could say a `String` *is* a list of characters.
+
+You can declare your own:
+
+```haskell
+type Pos   = (Int, Int)
+type Board = [Pos]
+type Name  = String
+type Mark  = Int
+```
+
+Now signatures state their intent:
+
+```haskell
+-- Without synonyms: what do these Ints mean?
+movePiece :: (Int, Int) -> (Int, Int) -> [(Int, Int)] -> [(Int, Int)]
+
+-- With synonyms: the same type, but readable.
+movePiece :: Pos -> Pos -> Board -> Board
+```
+
+Both signatures are identical to the compiler. Only the second is readable to a person.
+
+## 2. A worked example
+
+```haskell
+type Name = String
+type Mark = Int
+type Student = (Name, Mark)
+type ClassList = [Student]
+
+classList :: ClassList
+classList = [("Kago", 72), ("Naledi", 68), ("Thato", 91)]
+
+-- Return the names of students who passed.
+passed :: ClassList -> [Name]
+passed cs = [n | (n, m) <- cs, m >= 50]
+```
+
+```text
+ghci> passed classList
+["Kago","Naledi","Thato"]
+```
+
+`ClassList` reads far better than `[(String, Int)]`, and the definition is one line.
+
+## 3. Synonyms are interchangeable, not distinct
+
+This is the crucial limitation. A type declaration introduces a **name**, not a new type. The compiler expands every synonym before checking, so a synonym provides no protection:
+
+```haskell
+type Metres = Double
+type Feet   = Double
+
+distance :: Metres
+distance = 100
+
+height :: Feet
+height = 30
+```
+
+```text
+ghci> distance + height
+130.0
+```
+
+Adding metres to feet is accepted, because both are simply `Double`. The synonym documented the intent but did not enforce it.
+
+<Callout type="warn" title="Synonyms document; they do not protect">
+If you need the compiler to *reject* mixing two things, a synonym is the wrong tool. The next lesson introduces `data`, which creates a genuinely new and distinct type.
+</Callout>
+
+## 4. Parameterised synonyms
+
+A type declaration may be parameterised by other types. The parameters are lowercase names written after the synonym name:
+
+```haskell
+type Pair a = (a, a)
+type Assoc k v = [(k, v)]
+type Parser a = String -> [(a, String)]
+```
+
+`Assoc` is the useful one at this stage: a lookup table from keys to values.
+
+```haskell
+type Assoc k v = [(k, v)]
+
+marks :: Assoc String Int
+marks = [("Kago", 72), ("Naledi", 68)]
+
+-- Find the value stored against a key.
+lookUp :: Eq k => k -> Assoc k v -> Maybe v
+lookUp key table = case [v | (k, v) <- table, k == key] of
+  (v:_) -> Just v
+  []    -> Nothing
+```
+
+```text
+ghci> lookUp "Kago" marks
+Just 72
+ghci> lookUp "Sipho" marks
+Nothing
+```
+
+`Maybe` appears here for the first time. It is the standard way to express “possibly no answer” without using `error`, and Chapter 9 develops it properly.
+
+## 5. Rules for synonyms
+
+| Rule | Reason |
+|---|---|
+| The synonym name must begin with a **capital** letter | It is a type name |
+| Parameters are **lowercase** | They are type variables |
+| A synonym cannot be **recursive** | `type T = [T]` has no finite expansion and is rejected |
+| Synonyms are always exported | They cannot be hidden on import |
+
+The third rule is worth remembering. A recursive definition needs `data`, which the next lesson introduces.
+
+## 6. When to use one
+
+Use a type synonym when:
+
+- a compound type is written out repeatedly, such as `[(String, Int)]`;
+- a bare type does not say what it represents, such as `Int` used for a mark;
+- a signature has several arguments of the same type and their roles need distinguishing.
+
+Do **not** use one when you need the compiler to keep two things apart. That requires `data`.
+
+## 7. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `type pos = (Int, Int)` | Type names must be capitalised | `type Pos = (Int, Int)` |
+| `type T = [T]` | Synonyms cannot be recursive | Use a `data` declaration |
+| Expecting `Metres` and `Feet` not to mix | A synonym is not a distinct type | Use `data` or `newtype` |
+| `type Assoc = [(k, v)]` | The parameters were not declared | `type Assoc k v = [(k, v)]` |
+| Hiding a synonym on import | Types cannot be hidden | Use a qualified import |
+
+## 8. Practice
+
+1. Declare `Pos` and `Board` and write a signature for a function moving a piece on a board.
+2. Declare `ClassList` and write `topMark :: ClassList -> Mark`.
+3. Explain why `distance + height` is accepted when `Metres` and `Feet` are both synonyms for `Double`.
+4. Declare a parameterised `Assoc k v` and write `keys :: Assoc k v -> [k]`.
+5. Try `type Chain = [Chain]` and explain the error in your own words.
+6. Give one situation where a synonym is the right tool and one where it is not.
+
+<Accordions>
+<Accordion title="Check questions 3 and 5">
+
+**3.** A type synonym introduces a new *name* for an existing type, not a new type. The compiler expands `Metres` and `Feet` to `Double` before type checking, so by the time the addition is checked both operands are `Double` and it is perfectly valid. The synonyms document intent for human readers only.
+
+**5.** GHC rejects it as a cycle in type synonym declarations. Expanding `Chain` gives `[Chain]`, then `[[Chain]]`, and so on without ever reaching a concrete type — the expansion never terminates. Recursive structures need `data`, which introduces constructors that stop the expansion.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can declare a type synonym and say why the name must be capitalised.' },
+  { type: 'must', text: 'I can explain that String is a synonym for [Char].' },
+  { type: 'must', text: 'I can state that a synonym adds readability but no type safety, with an example.' },
+  { type: 'must', text: 'I can declare and use a parameterised synonym such as Assoc k v.' },
+  { type: 'must', text: 'I can explain why a synonym cannot be recursive.' },
+  { type: 'avoid', text: 'Do not reach for a synonym when you need two types kept apart.' }
+]} />
+
+Continue with [Custom Data Types](/docs/sem3/csi243/08-modules-types/notes/custom-types).

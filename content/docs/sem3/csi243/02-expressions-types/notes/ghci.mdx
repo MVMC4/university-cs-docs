@@ -1,75 +1,350 @@
 ---
-title: "1. GHCi from the Beginning"
-description: "Learn the prompt, expressions, evaluation, values, commands, and type inspection without assuming terminal experience."
+title: "1. Setting Up and Using GHCi"
+description: "Install the Haskell toolchain, start GHCi, read the Prelude prompt, evaluate expressions, define functions interactively, and use the GHCi command set."
 ---
 
 
 
-**Haskell** is the language. **GHC** checks and compiles Haskell. **GHCi** is the interactive environment; its final `i` means *interactive*.
+**Haskell** is the language. **GHC** — the Glasgow Haskell Compiler — checks and compiles it. **GHCi** is GHC's interactive environment; the final `i` means *interactive*.
+
+This lesson takes you from an empty machine to a working Haskell session. By the end you will have installed the toolchain, evaluated expressions at the prompt, defined a function interactively, and learned the commands you will use in every laboratory.
 
 ```text
 expression you enter  ->  GHCi evaluates it  ->  resulting value
        2 + 3          ->       add           ->        5
 ```
 
-## The prompt
+## 1. What you are installing
+
+| Tool | What it is | When you use it |
+|---|---|---|
+| **GHC** | The Glasgow Haskell Compiler | Compiling a saved program into an executable; checking a complete module |
+| **GHCi** | GHC's interactive read–evaluate–print environment | Trying expressions, inspecting types, loading files, testing functions quickly |
+| **GHCup** | The installer that manages GHC, GHCi, and related tools | Once, at setup, and later to change versions |
+| **A `.hs` file** | A text file holding saved Haskell definitions | Keeping work after GHCi closes; building larger programs |
+
+GHC can be divided into three parts: the **compilation manager**, which handles multiple source files; the **Haskell compiler** itself (abbreviated `Hsc` inside GHC), which compiles a single source file; and the **pipeline**, which composes the external programs needed to turn a source file into object code.
+
+GHCi is the interactive executable of the GHC interpreter. It can evaluate Haskell expressions interactively, interpret Haskell programs, and load GHC-compiled modules.
+
+<HighlightCard
+  title="The mental model"
+  description="GHCi is a laboratory. A .hs file is your notebook. Use both: experiment at the prompt, then save the definitions that worked."
+  variant="primary"
+/>
+
+## 2. Install the toolchain
+
+The official recommendation is to install everything through [GHCup](https://www.haskell.org/ghcup/). It installs GHC, GHCi, Cabal, and the Haskell Language Server together, and keeps them upgradable.
+
+<Callout type="info" title="Always check the official page">
+Installer one-liners change between releases. The commands below are the current published forms, but [www.haskell.org/ghcup](https://www.haskell.org/ghcup/) is the authoritative source. If a command below fails, copy the current one from that page.
+</Callout>
+
+<Tabs items={['Windows', 'macOS / Linux']}>
+<Tab value="Windows">
+
+Open **PowerShell** (not the old Command Prompt) and run:
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; try { & ([ScriptBlock]::Create((Invoke-WebRequest https://www.haskell.org/ghcup/sh/bootstrap-haskell.ps1 -UseBasicParsing))) -Interactive -DisableCurl } catch { Write-Error $_ }
+```
+
+The installer asks several questions. Accepting the defaults is correct for this course. It will offer to install the Haskell Language Server and Stack; neither is required for CSI243, but neither causes harm.
+
+When it finishes, **close PowerShell and open a new window**. The installer edits your `PATH`, and an already-open window will not see the change.
+
+</Tab>
+<Tab value="macOS / Linux">
+
+Open a terminal and run:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+```
+
+Answer the prompts; the defaults are correct for this course. The installer appends a line to your shell profile so that `ghc` and `ghci` are found.
+
+When it finishes, **open a new terminal**, or reload your profile:
+
+```bash
+source ~/.ghcup/env
+```
+
+</Tab>
+</Tabs>
+
+### Verify the installation
+
+Run these two commands in a new terminal:
 
 ```text
+ghc --version
+ghci --version
+```
+
+Each should report a version number rather than an error such as `command not found`. The exact version differs between machines and releases; what matters is that both commands answer.
+
+<Callout type="warn" title="If the command is not found">
+The three usual causes, in order of likelihood: you did not open a **new** terminal after installing; the installer did not finish successfully (re-run it and read the final lines); or you ran the installer in a different user account from the one you are now using.
+</Callout>
+
+### Working without an installation
+
+If your machine cannot run the installer yet, use the official [Haskell Playground](https://play.haskell.org/) for single-file programs. It is enough for the expressions in this chapter, but the local toolchain is still required for module work and for the laboratories, because the Playground cannot `:load` your own files.
+
+## 3. Start GHCi and read the prompt
+
+Type `ghci` at your terminal prompt. On Windows you can also launch it from the Start menu.
+
+You will be greeted with something similar to:
+
+```text
+GHCi, version 9.10.3: https://www.haskell.org/ghc/  :? for help
 ghci>
 ```
 
-The prompt is produced by GHCi. Do not type `ghci>` yourself. It means “I am ready for your next expression or command.”
+The trailing `>` means the Haskell system is **waiting for your input**.
+
+### Why the lecture slides show `Prelude>`
+
+Older GHC releases printed the prompt as `Prelude>`, and the course lecture material shows that form throughout. Both mean the same thing, but the older prompt carried extra information worth understanding:
+
+- It **listed the modules loaded into the interactive session** — hence `Prelude`.
+- **`Prelude`** is the standard library module containing a small set of standard definitions. It is included automatically into all Haskell modules, which is why arithmetic, comparison, and `putStrLn` work immediately.
+- With several modules loaded the prompt grew to show them all: `Prelude Data.List Control.Monad>`.
+
+Current releases shorten this to a plain `ghci>`. You can restore the older behaviour, or set any prompt you like:
 
 ```text
-ghci> 2 + 3
-5
+ghci> :set prompt "Prelude> "
+Prelude>
 ```
 
-The first line contains the prompt and your expression. The second line is GHCi's answer.
+<Callout type="warn" title="Do not type the prompt">
+`Prelude>` and `ghci>` are printed *by* GHCi. In every example on this site, type only the text after the prompt.
+</Callout>
 
-## Three essential words
+## 4. Evaluate your first expressions
+
+Functional programming evaluates **expressions** to give **values**. Haskell works like a functional calculator: it applies mathematical rules and stops when the expression cannot be reduced any further.
+
+Consider `1 + 2 * 3`. The reduction is:
+
+```text
+1 + 2 * 3
+=> 1 + 6
+=> 7
+```
+
+Multiplication has higher precedence than addition, so `2 * 3` reduces first. Enter these one line at a time:
+
+```text
+ghci> 1 + 2 * 3 + 4
+11
+ghci> (1 + 2) * (3 + 4)
+21
+ghci> 400 > 200
+True
+ghci> 1 /= 1
+False
+ghci> True || False
+True
+```
+
+### Three essential words
 
 - An **expression** describes a computation: `2 + 3`.
-- **Evaluation** is Haskell applying its rules.
+- **Evaluation** is Haskell applying its rules until no rule applies.
 - A **value** is the finished result: `5`.
 
-```text
-ghci> 1 + 2 * 3
-7
-```
+GHCi interprets the whole line as one expression to evaluate. The expression may not span several lines — as soon as you press Enter, GHCi attempts to evaluate what you typed. (Section 8 shows how to enter something longer.)
 
-`2 * 3` becomes `6` first because multiplication has higher precedence. Then `1 + 6` becomes `7`.
+### Comparison and Boolean operators
 
-```text
-ghci> (1 + 2) * 3
-9
-```
+Boolean values are `True` and `False`. They combine with `&&` for *and* and `||` for *or*; `&&` has higher precedence than `||`.
 
-Parentheses require `1 + 2` to happen first.
-
-## Commands versus expressions
-
-Commands begin with a colon; ordinary expressions do not.
-
-| Command | Purpose |
+| Operator | True when |
 |---|---|
-| `:help` | Show help |
-| `:type expression` | Ask for a type |
-| `:load File.hs` | Check and load a saved file |
-| `:reload` | Reload the current file |
-| `:quit` | Leave GHCi |
+| `a == b` | `a` and `b` are equal |
+| `a /= b` | `a` is not equal to `b` |
+| `a < b` | `a` is less than `b` |
+| `a > b` | `a` is greater than `b` |
+| `a <= b` | `a` is less than or equal to `b` |
+| `a >= b` | `a` is greater than or equal to `b` |
+| `a && b` | both `a` and `b` are `True` |
+| <code>a &#124;&#124; b</code> | at least one of `a` and `b` is `True` |
+| `not a` | `a` is `False` |
+
+Every value and every expression has a type, and **an expression always has the same type as the value it evaluates to**. Chapter lesson 4 develops this properly.
+
+### Negative numbers need brackets
+
+Haskell writes negative numbers with a `-` in front. When a negative number follows an operator, enclose it in brackets, or Haskell reads the `-` as subtraction and reports an error:
+
+```text
+ghci> 9 + -7
+<interactive>:1:1: error: ...
+ghci> 9 + (-7)
+2
+```
+
+## 5. Ask for types with `:type`
 
 ```text
 ghci> :type True
 True :: Bool
+ghci> :type 'A'
+'A' :: Char
+ghci> :type "A"
+"A" :: String
 ```
 
-Read this as: “`True` **has type** `Bool`.” The symbol `::` is read “has type.” A type describes the kind of value and which operations make sense for it.
+Read `::` as **“has type.”** A type describes the kind of value and which operations make sense for it. Notice that `'A'` and `"A"` have different types: single quotes make one `Char`, double quotes make a `String`. The next lesson returns to this.
 
-<StepByStep>
-  <Step number={1} title="Predict">Write the value you expect.</Step>
-  <Step number={2} title="Enter">Type only the expression after the prompt.</Step>
-  <Step number={3} title="Observe">Copy the exact result.</Step>
-  <Step number={4} title="Explain">Name the rule that produced it.</Step>
-  <Step number={5} title="Inspect">Use `:type` and read the answer aloud.</Step>
-</StepByStep>
+## 6. Name things with `let` and `it`
+
+You may define a name at the prompt with the keyword `let`. The name can then be reused later in the session.
+
+```text
+ghci> let radius = 5
+ghci> radius * 2
+10
+```
+
+The keyword `it` refers to the value of the most recently evaluated expression. It is useful when you did not name a result but now want it:
+
+```text
+ghci> 12 * 12
+144
+ghci> it + 1
+145
+```
+
+<Callout type="warn" title="Prompt definitions do not survive">
+Expressions and definitions entered at the prompt are **lost when GHCi closes**. That is the whole reason for saving work in a `.hs` file, which the next lesson covers.
+</Callout>
+
+## 7. Define and test a function interactively
+
+```text
+ghci> cube x = x * x * x
+ghci> cube 3
+27
+ghci> cube (-2)
+-8
+ghci> :type cube
+cube :: Num a => a -> a
+```
+
+Line by line:
+
+1. `cube` is the function name. Function names begin with a **lowercase** letter.
+2. `x` names the input for this definition.
+3. `=` separates the left side from the result expression.
+4. `x * x * x` describes the value the function returns.
+5. Brackets around `-2` stop the minus sign being read as subtraction.
+
+There are no parentheses or commas between a function name and its arguments. A definition such as `a b c d = b * c * d` defines a function `a` taking three arguments `b`, `c`, and `d`.
+
+### Every `if` needs an `else`
+
+In Java an `if` statement can exist without an `else`. In Haskell it cannot:
+
+```text
+ghci> isNegative n = if n < 0 then True else False
+ghci> isNegative (-4)
+True
+ghci> isNegative 4
+False
+```
+
+This is because **everything in Haskell is an expression, and every expression has a type**. Without an `else`, the expression would have no value when the condition is `False`, so it could not have a type.
+
+## 8. Entering something longer
+
+Some definitions are too long for one line. Enclose them between `:{` and `:}`, pressing Enter after each line:
+
+```text
+ghci> :{
+ghci| isVowel c =
+ghci|   c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+ghci| :}
+ghci> isVowel 'e'
+True
+```
+
+The continuation prompt `ghci|` means GHCi is still collecting the block. Haskell expects the second and later lines to be **indented** relative to the name being defined. Indentation is part of the syntax, so use the space bar consistently — mixing tabs and spaces very often causes compiler errors.
+
+## 9. The GHCi command set
+
+GHCi commands begin with a colon; ordinary expressions do not. Most can be abbreviated to their initial letter, with ambiguities resolved in favour of the more commonly used command.
+
+| Command | Short form | Purpose |
+|---|---|---|
+| `:help` | `:?` | Show the complete list of GHCi commands |
+| `:type expression` | `:t` | Show the type of an expression |
+| `:load File.hs` | `:l` | Check and load definitions from a file |
+| `:reload` | `:r` | Reload the most recently loaded file |
+| `:info name` | `:i` | Show information about a name, type, or operator |
+| `:browse Module` | — | List the signatures a module exports |
+| `:show modules` | — | List the modules currently loaded |
+| `:set prompt "…"` | — | Change the prompt text |
+| `:cd directory` | — | Change GHCi's current directory |
+| `:!command` | — | Run an external operating-system command |
+| `:quit` | `:q` | Leave GHCi (Ctrl+D also works) |
+
+```text
+ghci> :quit
+Leaving GHCi.
+```
+
+The up and down arrow keys move through your command history, which saves a great deal of retyping.
+
+## 10. Common first-session failures
+
+These are the mistakes almost every beginner makes in their first hour. Each is a language rule, not a bug.
+
+| Attempt | Why Haskell rejects it | Correction |
+|---|---|---|
+| `9 + -7` | The `-` after an operator is read as subtraction | `9 + (-7)` |
+| `X == x` | `X` is uppercase, so Haskell expects a constructor; `x` is undefined | Compare defined lowercase names or literal values |
+| <code>False &#124;&#124; true</code> | `True` and `False` are constructors and must be capitalised | <code>False &#124;&#124; True</code> |
+| `if 'A' > 'a' then True` | Every Haskell `if` expression requires an `else` | `if 'A' > 'a' then True else False` |
+| `Print "Hello"` | Names are case-sensitive; `Print` is not `print` | `print "Hello"` |
+| `print Hello World` | Unquoted words are program names, so this is three identifiers | `print "Hello World"` |
+
+The last two matter enough that the next lesson takes them apart in full.
+
+## 11. Practice
+
+Work these at the prompt. Predict each answer **before** pressing Enter, then explain any difference.
+
+1. Evaluate `1+2*3+4`, `400>200`, `1/=1`, and `True || False`.
+2. Write one expression that adds 5 to the sum of 19 and 1, then multiplies the result by 10. What does it evaluate to?
+3. Use `:help` to find what `:load`, `:type`, `:quit`, and `:info` do, and whether each can be abbreviated.
+4. Define `cube x = x * x * x` and run it on three different values. Use `:type cube` to find its type.
+5. Define `isNegative`, which reports whether a number is less than zero.
+6. Define `power x n`, which raises `x` to the power of `n`. What is its type?
+7. Repair each rejected expression from the table in Section 10 and confirm your repair at the prompt.
+
+<Accordions>
+<Accordion title="Check question 2">
+
+`(19 + 1 + 5) * 10` evaluates to `250`. Written to follow the wording more literally, `(5 + (19 + 1)) * 10` gives the same value. The brackets are required: without them, `5 + 19 + 1 * 10` evaluates to `34`, because `*` binds more tightly than `+`.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can install the toolchain and prove it works with ghc --version and ghci --version.' },
+  { type: 'must', text: 'I can explain what the Prelude prompt tells me and why it sometimes lists several modules.' },
+  { type: 'must', text: 'I can predict the value of an arithmetic or Boolean expression before running it.' },
+  { type: 'must', text: 'I can define a function at the prompt and ask for its type with :type.' },
+  { type: 'must', text: 'I can use :help, :load, :reload, :type, :info, and :quit.' },
+  { type: 'must', text: 'I can explain why every Haskell if expression needs an else.' },
+  { type: 'avoid', text: 'Do not type the prompt text (Prelude> or ghci>) as part of an expression.' },
+  { type: 'note', text: 'Everything defined at the prompt disappears when GHCi closes. The next lesson fixes that.' }
+]} />
+
+Continue with [Your First Haskell Program](/docs/sem3/csi243/02-expressions-types/notes/first-program), which saves work in a file and runs it.

@@ -1,0 +1,231 @@
+---
+title: "2. Equational Reasoning"
+description: "Use referential transparency to substitute equals for equals, prove a property by induction over a list, and argue about all inputs rather than a tested few."
+---
+
+
+
+A dry run shows what happens for **one** input. Equational reasoning argues about **all** of them.
+
+It is possible because Haskell is pure. In an imperative language, `x` may mean different things at different moments, so you cannot simply replace an expression by its value. In Haskell you can.
+
+## 1. Referential transparency
+
+An expression is **referentially transparent** when it can be replaced by its value without changing observable program behaviour.
+
+```haskell
+square :: Integer -> Integer
+square n = n * n
+```
+
+Any occurrence of `square 6` may be replaced by `36`, and any occurrence of `36` by `square 6`. This holds because `square` is pure: its result depends only on its argument, and evaluating it causes no effect.
+
+Contrast the imperative assignment:
+
+```text
+x = x + 1
+```
+
+This changes the value assigned to `x`, so the expression is **not** referentially transparent — the same text means different things before and after. Functional programs have no assignment statements; if a value must be kept, a new name is defined instead. The state of any variable is constant at any instant.
+
+<Callout type="info" title="Why this matters here">
+Referential transparency is what licenses the whole technique. Every step below replaces a subexpression with something equal to it, and purity guarantees that nothing else changes as a result.
+</Callout>
+
+## 2. Definitions are equations
+
+A Haskell definition is a genuine equation, usable in either direction:
+
+```haskell
+double x = x + x
+```
+
+means `double x` **equals** `x + x`. So in any expression you may replace `double 5` with `5 + 5`, or `5 + 5` with `double 5`.
+
+Reasoning proceeds by chaining such replacements, justifying each step:
+
+```text
+double (double 2)
+= double (2 + 2)      -- definition of double, inner
+= double 4            -- arithmetic
+= 4 + 4               -- definition of double, outer
+= 8                   -- arithmetic
+```
+
+Every line names the rule used. That justification is what makes it reasoning rather than guessing, and it is what earns marks.
+
+## 3. Proving a property for all inputs
+
+Take two definitions from Chapter 6:
+
+```haskell
+length :: [a] -> Int
+length []     = 0        -- (L1)
+length (_:xs) = 1 + length xs  -- (L2)
+
+(++) :: [a] -> [a] -> [a]
+[] ++ ys     = ys        -- (A1)
+(x:xs) ++ ys = x : (xs ++ ys)  -- (A2)
+```
+
+**Claim:** `length (xs ++ ys) = length xs + length ys`, for every pair of lists.
+
+Testing a few examples gives evidence. Proving it needs **induction over the structure of `xs`** — which is exactly the `[]` and `(x:xs)` split you already use for writing recursive functions.
+
+<StepByStep>
+  <StepByStepTitle>Structural induction over a list</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Base case: xs = []</StepTitle>
+
+  ```text
+  length ([] ++ ys)
+  = length ys              -- (A1)
+  ```
+  and
+  ```text
+  length [] + length ys
+  = 0 + length ys          -- (L1)
+  = length ys              -- arithmetic
+  ```
+  Both sides reduce to `length ys`, so the claim holds for `[]`.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Inductive hypothesis</StepTitle>
+  Assume the claim holds for some list `xs`:
+  ```text
+  length (xs ++ ys) = length xs + length ys
+  ```
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Inductive step: show it holds for (x:xs)</StepTitle>
+
+  ```text
+  length ((x:xs) ++ ys)
+  = length (x : (xs ++ ys))        -- (A2)
+  = 1 + length (xs ++ ys)          -- (L2)
+  = 1 + (length xs + length ys)    -- inductive hypothesis
+  = (1 + length xs) + length ys    -- associativity of +
+  = length (x:xs) + length ys      -- (L2), backwards
+  ```
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>Conclude</StepTitle>
+  The claim holds for `[]`, and holds for `(x:xs)` whenever it holds for `xs`. Since every finite list is built from `[]` by consing, it holds for every finite list.
+  </Step>
+</StepByStep>
+
+Notice the shape: **the proof follows the same two cases as the function definition.** If you can write the recursion, you can structure the proof.
+
+## 4. A second example
+
+**Claim:** `sum (map (*2) xs) = 2 * sum xs`.
+
+```haskell
+sum []     = 0            -- (S1)
+sum (x:xs) = x + sum xs   -- (S2)
+
+map _ []     = []         -- (M1)
+map f (x:xs) = f x : map f xs  -- (M2)
+```
+
+**Base case,** `xs = []`:
+
+```text
+sum (map (*2) [])
+= sum []            -- (M1)
+= 0                 -- (S1)
+
+2 * sum []
+= 2 * 0             -- (S1)
+= 0                 -- arithmetic
+```
+
+**Inductive step,** assuming `sum (map (*2) xs) = 2 * sum xs`:
+
+```text
+sum (map (*2) (x:xs))
+= sum ((x*2) : map (*2) xs)      -- (M2)
+= (x*2) + sum (map (*2) xs)      -- (S2)
+= (x*2) + 2 * sum xs             -- inductive hypothesis
+= 2 * (x + sum xs)               -- distributivity
+= 2 * sum (x:xs)                 -- (S2), backwards
+```
+
+The claim holds for every finite list.
+
+## 5. Using reasoning to find a fault
+
+Reasoning also exposes errors. Suppose someone claims `reverse (reverse xs) = xs` for their definition:
+
+```haskell
+myReverse []     = []
+myReverse (x:xs) = myReverse xs      -- fault: [x] is missing
+```
+
+Check the base case — it holds. Check the inductive step:
+
+```text
+myReverse (myReverse (x:xs))
+= myReverse (myReverse xs)     -- definition
+= xs                            -- inductive hypothesis
+```
+
+But the claim required `(x:xs)`, and we obtained `xs`. The step fails, and the line where it fails names the faulty equation. The missing `++ [x]` is exactly what the proof could not supply.
+
+<Callout type="warn" title="Reasoning assumes termination">
+These arguments hold for finite lists and terminating definitions. A definition that loops forever satisfies its equations vacuously while being useless, so termination must be argued separately — as in Chapter 5.
+</Callout>
+
+## 6. Practice
+
+1. Define referential transparency and explain why `x = x + 1` is not referentially transparent.
+2. Reduce `double (double 3)` step by step, justifying each line.
+3. Prove `length (xs ++ ys) = length xs + length ys` by induction, giving justifications.
+4. Prove `sum (map (*2) xs) = 2 * sum xs`.
+5. Prove `map f (xs ++ ys) = map f xs ++ map f ys`.
+6. A student defines `myLength (_:xs) = length xs`. Use the inductive step to show the claim `myLength xs = length xs` fails, and identify the faulty equation.
+7. Explain why passing ten tests is weaker evidence than a completed induction.
+
+<Accordions>
+<Accordion title="Check question 5">
+
+**Base case,** `xs = []`:
+
+```text
+map f ([] ++ ys)
+= map f ys                 -- (A1)
+
+map f [] ++ map f ys
+= [] ++ map f ys           -- (M1)
+= map f ys                 -- (A1)
+```
+
+**Inductive step,** assuming `map f (xs ++ ys) = map f xs ++ map f ys`:
+
+```text
+map f ((x:xs) ++ ys)
+= map f (x : (xs ++ ys))          -- (A2)
+= f x : map f (xs ++ ys)          -- (M2)
+= f x : (map f xs ++ map f ys)    -- inductive hypothesis
+= (f x : map f xs) ++ map f ys    -- (A2), backwards
+= map f (x:xs) ++ map f ys        -- (M2), backwards
+```
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can define referential transparency and give a non-transparent counter-example.' },
+  { type: 'must', text: 'I can treat a definition as an equation usable in both directions.' },
+  { type: 'must', text: 'I can justify every line of a reduction by naming the rule used.' },
+  { type: 'must', text: 'I can structure an induction over a list with a base case and an inductive step.' },
+  { type: 'must', text: 'I can use the inductive hypothesis at the right point in the step.' },
+  { type: 'must', text: 'I can use a failed proof step to locate a faulty equation.' },
+  { type: 'note', text: 'Reasoning assumes termination; that must be argued separately.' }
+]} />
+
+Continue with [Errors and Testing](/docs/sem3/csi243/10-reasoning-revision/notes/errors-and-testing).

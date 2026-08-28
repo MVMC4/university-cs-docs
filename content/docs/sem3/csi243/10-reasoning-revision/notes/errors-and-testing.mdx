@@ -1,0 +1,198 @@
+---
+title: "3. Errors and Testing"
+description: "Distinguish syntax errors from semantic errors, read the two stages of analysis GHC performs, choose test cases by category, and diagnose the standard CSI243 failures."
+---
+
+
+
+A great deal of laboratory time is lost to errors that would take a minute to fix if their category were recognised. This lesson classifies them.
+
+## 1. Two stages of analysis
+
+When an expression is submitted for evaluation, there are **two stages** before anything runs.
+
+<StepByStep>
+  <StepByStepTitle>What happens before evaluation</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Syntax analysis</StepTitle>
+  The expression is checked against the syntax laid down for expressions. If it does not conform, the computer signals a **syntax error**.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Type analysis</StepTitle>
+  If the syntax is correct, the expression is analysed to see whether it possesses a sensible type. If it fails, the computer signals a **type error**.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Evaluation</StepTitle>
+  Only if the expression passes **both** stages does evaluation begin. Similar remarks apply to definitions before a script is accepted.
+  </Step>
+</StepByStep>
+
+This is why Chapter 2 insisted on asking "is it well typed?" before "what value does it produce?" A type error prevents evaluation entirely.
+
+**Strong typing** is important because adherence to the discipline helps in designing clear, well-structured programs, and because a wide range of logical errors can be trapped by a computer that enforces it.
+
+## 2. Syntax errors versus semantic errors
+
+The two classes of error, with examples from the course notes:
+
+| Class | Concerns | Examples |
+|---|---|---|
+| **Syntax errors** | The structure or syntax of the language | Type mismatch; unbalanced parentheses; a missing `else`; `if (2 = "tree")` |
+| **Semantic errors** | The interpretation or meaning of the program | Division by zero; list index out of range; using an uninitialised value |
+
+The practical difference is **when** they surface:
+
+- A syntax or type error is caught **before the program runs**. GHC refuses to load the module.
+- A semantic error is caught **while it runs**, if at all. `head []` compiles perfectly and fails only when reached.
+
+<Callout type="info" title="Which is better to have?">
+A compile-time error, every time. It is found immediately, on your machine, with a message pointing at the line. This is why widening a partial function into a total one — with `Maybe`, or an extra pattern — converts a run-time failure into something the compiler can check.
+</Callout>
+
+## 3. The standard CSI243 errors
+
+Collected from every chapter, with the category and the question to ask.
+
+### Compile-time
+
+| Message | Category | Ask |
+|---|---|---|
+| `parse error on input ...` | Syntax | Is an `else` missing? Are the parentheses balanced? Is the indentation consistent? |
+| `Variable not in scope: x` | Scope | Spelling and case. `score`, `Score`, and `scores` are three different names. |
+| `Couldn't match expected type 'Bool' with actual type 'Int'` | Type | Which subexpression must produce `Bool`? |
+| `No instance for (Num a)` | Class constraint | Which class does the operation need? Add it before `=>`. |
+| `No instance for (Show Shape)` | Class constraint | Add `deriving (Show)`. |
+| `Ambiguous type variable` | Type | Does an annotation express the intended type, as in `read s :: Integer`? |
+| `File name does not match module name` | Module | Do the file and the `module` line agree exactly? |
+| `Ambiguous occurrence 'nub'` | Import | Use `hiding`, or a qualified import. |
+
+### Run-time
+
+| Message | Category | Ask |
+|---|---|---|
+| `Non-exhaustive patterns in function f` | Semantic | Which input matches no equation? Add a catch-all. |
+| `Non-exhaustive guards` | Semantic | Is `otherwise` missing? |
+| `Prelude.head: empty list` | Semantic | Was the empty case handled before calling a partial function? |
+| `Prelude.!!: index too large` | Semantic | Is the index within `0 .. length - 1`? |
+| `Prelude.read: no parse` | Semantic | Can the input text really denote that type? |
+| `divide by zero` | Semantic | Is the divisor guarded? |
+| Session hangs | Semantic | Is the recursive argument shrinking towards the base case? |
+
+## 4. Choosing test cases
+
+Chapter 3 gave three categories. Use all three, every time:
+
+| Category | Means | Example for `absoluteValue` |
+|---|---|---|
+| **Normal** | An ordinary representative input | `absoluteValue (-5)` |
+| **Boundary** | Zero, an empty structure, a decision edge | `absoluteValue 0` |
+| **Invalid** | Outside the mathematical domain, where the signature permits it | Depends on the precondition |
+
+A weak suite tests only the normal case. A strong one tests the edges, because that is where faults concentrate:
+
+```text
+ghci> absoluteValue (-5)
+5
+ghci> absoluteValue 0
+0
+ghci> absoluteValue 5
+5
+```
+
+### Boundaries worth testing by type
+
+| Argument type | Test at least |
+|---|---|
+| A whole number | `0`, a negative, a positive, and the precondition edge |
+| A list | `[]`, a singleton, and a list of two or more |
+| A `Char` | The characters immediately **outside** each range boundary |
+| Two arguments | The equal case, and each ordering |
+
+The `Char` row is the one most often skipped. Chapter 3's `isDigitChar` used `'/'` and `':'` — the characters immediately either side of `'0'` and `'9'` — precisely because a mistaken strict comparison passes ordinary examples while rejecting the boundary digits.
+
+## 5. A diagnostic procedure
+
+When something fails, work through this rather than changing code at random.
+
+<StepByStep>
+  <StepByStepTitle>Diagnosing a failure</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Read the whole message</StepTitle>
+  GHC names the file, the line, the expected type, and the actual type. Most of the answer is already there.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Classify it</StepTitle>
+  Compile-time or run-time? Syntax, type, class, or semantic? The table above narrows it immediately.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Find the smallest failing subexpression</StepTitle>
+  Enter parts of the expression at the prompt separately, and use `:type` on each until one disagrees with your expectation.
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>Compare against the specification</StepTitle>
+  If it compiles and runs but the answer is wrong, the fault is in the formula, not the syntax. Return to the examples and dry run.
+  </Step>
+
+  <Step number={5}>
+  <StepTitle>Fix the cause, not the symptom</StepTitle>
+  Adding a catch-all to silence a non-exhaustive warning hides the fault if the missing case was genuinely reachable.
+  </Step>
+</StepByStep>
+
+## 6. Turning run-time failures into compile-time ones
+
+The single most valuable habit, and the tools you now have for it:
+
+| Run-time failure | Prevented by |
+|---|---|
+| Non-exhaustive patterns | `:set -Wincomplete-patterns` |
+| `head []` | Match `[]` yourself, or return `Maybe` |
+| `read: no parse` | Validate before parsing |
+| Wrong constructor handled | One equation per constructor, warnings on |
+| Non-terminating recursion | Confirm the argument shrinks; dry run two steps |
+
+```text
+ghci> :set -Wincomplete-patterns
+ghci> :reload
+```
+
+Turn this on for every laboratory.
+
+## 7. Practice
+
+1. Classify each as syntax or semantic: `if (2 = "tree")`; unbalanced parentheses; division by zero; list index out of range; a missing `else`.
+2. Explain the two stages of analysis and why a type error prevents evaluation.
+3. For each of `Non-exhaustive patterns`, `No instance for (Num a)`, and `parse error on input 'else'`, state the category and the first thing to check.
+4. Give normal, boundary, and invalid test cases for `isDigitChar`, `absoluteValue`, and `average`.
+5. Why is a compile-time error preferable to a run-time one?
+6. Name three run-time failures you can convert into compile-time ones, and say how.
+7. A function compiles, runs, and returns a wrong answer. What does that tell you about where the fault is?
+
+<Accordions>
+<Accordion title="Check questions 4 and 7">
+
+**4.** `isDigitChar`: normal `'7'`; boundary `'0'` and `'9'`; just outside `'/'` and `':'`. `absoluteValue`: normal `-5` and `5`; boundary `0`. `average`: normal `[1,2,3]`; boundary a singleton `[4]`; invalid the empty list, which its precondition excludes.
+
+**7.** The fault is in the **formula**, not the syntax or the types. A compiler proves type consistency, not that your formula matches the problem. Return to the specification's examples and dry run the failing input by hand — the first line of the trace that disagrees with the expected value locates the faulty equation.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can name the two stages of analysis and say why a type error prevents evaluation.' },
+  { type: 'must', text: 'I can classify an error as syntax or semantic, and as compile-time or run-time.' },
+  { type: 'must', text: 'I can state the first thing to check for each of the standard CSI243 errors.' },
+  { type: 'must', text: 'I can give normal, boundary, and invalid test cases for any function.' },
+  { type: 'must', text: 'I test the values immediately outside a range boundary, not only inside it.' },
+  { type: 'must', text: 'I can convert a run-time failure into a compile-time check.' },
+  { type: 'avoid', text: 'Do not silence a warning with a catch-all if the missing case was reachable.' }
+]} />
+
+Continue with [The Cost of a Definition](/docs/sem3/csi243/10-reasoning-revision/notes/complexity).

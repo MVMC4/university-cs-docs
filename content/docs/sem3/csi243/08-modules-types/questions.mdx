@@ -1,0 +1,94 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on module structure, import forms, type synonyms, data declarations, deriving, and recursive types."
+---
+
+## Modules
+
+<ExamQuestion title="Question 1: Structuring a program [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>State three advantages of splitting code into several modules. [3]</>}
+    solution={<>A sufficiently generic module can have its exported functions reused across many different tasks. Loosely coupled, self-contained modules can be reused separately later. Splitting code into parts with specific purposes makes writing and maintaining it more manageable. [3]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>State the naming rules for modules and the convention this course follows. [4]</>}
+    solution={<>Module names are alphanumeric and must begin with an uppercase letter. The convention is one module per file, with the file name matching the module name exactly, including capitalisation. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain what it means for a module to be <em>closed</em>. [3]</>}
+    solution={<>Every name explicitly mentioned in the source must be either defined locally or imported from another module. Entities the compiler needs only for type checking need not be imported if they are not mentioned by name; the system supplies those silently. [3]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain why restricting a module's export list makes the program easier to change. [2]</>}
+    solution={<>Anything exported may be depended on by other code. Exporting only what callers need means the unexported internals can be rewritten without breaking those callers. [2]</>}
+  />
+</ExamQuestion>
+
+## Imports
+
+<ExamQuestion title="Question 2: Bringing in other modules [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Write import statements that: bring in only <code>toLower</code> and <code>toUpper</code> from <code>Data.Char</code>; bring in all of <code>Data.List</code> except <code>nub</code>; and bring in <code>Data.Map</code> qualified with the alias <code>Map</code>. [6]</>}
+    solution={<><code>import Data.Char (toLower, toUpper)</code>; <code>import Data.List hiding (nub)</code>; <code>import qualified Data.Map as Map</code>. [6]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Two imported modules both export <code>nub</code>. Describe two different ways to resolve the ambiguity. [4]</>}
+    solution={<>Use <code>hiding (nub)</code> on one import so only the other version is in scope. Alternatively import one or both modules <code>qualified</code>, optionally with an alias, so every use is prefixed by the module name and no ambiguity arises. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>Prelude</code> requires no import statement. [2]</>}
+    solution={<><code>Prelude</code> is the standard library module containing the standard definitions, and it is imported automatically into every Haskell module. That is why arithmetic, comparison, and the basic list operations are available without any import. [2]</>}
+  />
+</ExamQuestion>
+
+## Type synonyms
+
+<ExamQuestion title="Question 3: Naming existing types [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Declare synonyms so that <code>movePiece :: Pos -{'>'} Pos -{'>'} Board -{'>'} Board</code> is meaningful, where a position is a pair of <code>Int</code>. [4]</>}
+    solution={<><code>type Pos = (Int, Int)</code> and <code>type Board = [Pos]</code>. Marks for capitalised synonym names and for a board being a list of positions. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Given <code>type Metres = Double</code> and <code>type Feet = Double</code>, explain why adding a value of each type is accepted. [4]</>}
+    solution={<>A type synonym introduces a new name, not a new type. The compiler expands both synonyms to <code>Double</code> before type checking, so the addition is between two <code>Double</code> values and is valid. Synonyms document intent for readers but provide no type safety. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>type Chain = [Chain]</code> is rejected, and state what should be used instead. [4]</>}
+    solution={<>Type synonyms cannot be recursive. Expanding <code>Chain</code> gives <code>[Chain]</code>, then <code>[[Chain]]</code>, without ever reaching a concrete type, so the expansion does not terminate. A <code>data</code> declaration is required, because its constructors stop the expansion. [4]</>}
+  />
+</ExamQuestion>
+
+## Custom data types
+
+<ExamQuestion title="Question 4: Creating new types [16 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Declare a <code>Shape</code> type with a circle carrying a radius and a rectangle carrying a width and length, then write <code>area</code>. [6]</>}
+    solution={<><code>data Shape = Circle Float | Rectangle Float Float deriving (Show)</code>, then <code>area :: Shape -{'>'} Float</code> with <code>area (Circle r) = pi * r * r</code> and <code>area (Rectangle w l) = w * l</code>. Marks for capitalised constructors, one equation per constructor, and parenthesised constructor patterns. [6]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Explain why <code>print (classify 64)</code> fails for a custom type, and how to fix it. [4]</>}
+    solution={<>GHC has no way to display a newly declared type, so there is no <code>Show</code> instance and <code>print</code> is rejected. Adding <code>deriving (Show)</code> to the data declaration asks GHC to generate the obvious instance. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain how <code>data Metres = Metres Double</code> gives type safety that a synonym cannot. [3]</>}
+    solution={<>A <code>data</code> declaration creates a genuinely new type distinct from <code>Double</code> and from any other type. Adding a <code>Metres</code> to a <code>Feet</code> is then a type error, because the compiler does not expand them to a common underlying type as it does with synonyms. [3]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Declare a recursive <code>Tree a</code> with leaves and branches, and write <code>countLeaves</code>. [3]</>}
+    solution={<><code>data Tree a = Leaf a | Branch (Tree a) (Tree a)</code>, then <code>countLeaves (Leaf _) = 1</code> and <code>countLeaves (Branch l r) = countLeaves l + countLeaves r</code>. The <code>Leaf</code> equation is the base case and the <code>Branch</code> equation is the recursive step. [3]</>}
+  />
+</ExamQuestion>

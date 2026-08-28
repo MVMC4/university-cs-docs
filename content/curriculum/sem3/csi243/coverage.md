@@ -1,25 +1,112 @@
-# CSI243 Redemption source-coverage matrix
+# CSI243 source-coverage matrix
 
 This matrix controls the redevelopment of CSI243. A topic is not complete until its source material, explanation, runnable examples, practice, lab, and review checks are all covered.
 
 | Unit | Required coverage | Primary supplied sources | Required practical evidence | Status |
 |---|---|---|---|---|
-| 00 Start Here | GHC, GHCi, prompt, `:help`, `:load`, `:type`, `:info`, `:quit`, expressions, first file | Lab 1; csi243_ho4 | Environment check and first saved program | Current - GHC verified |
-| 01 Functional Thinking | Functions, expressions, purity, side effects, composition, FP vs imperative | csi243_ho4 | Compare two solutions and identify side effects | Current |
-| 02 Expressions and Types | Syntax/type analysis, `Int`, `Integer`, `Float`, `Double`, `Bool`, `Char`, `String`, lists, tuples, inference | Definitions and Data Types; csi243_ho4 | Predict and verify expression types and results | Current |
-| 03 Defining Functions | Signature, specification, implementation, comments, identifiers, precedence, testing | csi243_ho4; csi243_ho6; Lab 1 | A documented `.hs` file with verified calls | Current - GHC verified |
-| 04 Making Choices | `if`, guards, pattern matching, `case`, ordering, exhaustiveness | csi243_ho6; Making Choices; csi243_ho7 | One problem implemented four ways | Planned |
-| 05 Recursion | Base case, recursive step, termination, factorial, Fibonacci, invalid inputs, dry runs | Making Choices; csi243_ho7; Lab 3 | Recursive trace and lab functions | Planned |
-| 06 Lists and Tuples | Homogeneous lists, heterogeneous tuples, cons, concatenation, indexing, nested structures | Modules, Lists, Tuples; Definitions and Data Types | Collection-operation lab | Planned |
-| 07 Recursive Lists | Structural recursion, head/tail patterns, positional lookup, list construction | Making Choices; Lab 3 | Complete Lab 3 with tests | Planned |
-| 08 Modules and Programs | Module naming, exports, imports, qualified imports, Prelude, `main` | csi243_ho4; Modules, Lists, Tuples | Two-module program | Planned |
-| 09 List Comprehensions | Output expression, generators, predicates, multiple generators | Modules, Lists, Tuples | Translate comprehensions and ordinary functions | Planned |
-| 10 Lambdas, Currying and Sections | Lambda expressions, curried definitions, returned functions, operator sections | csi243_ho7 | Rewrite named functions as lambdas/sections | Planned |
-| 11 Higher-Order Functions | `map`, `filter`, folds, `takeWhile`, `dropWhile`, `zipWith`, `iterate`, scans | Higher order functions; csi243_ho7 | Trace and compare higher-order pipelines | Planned |
-| 12 Polymorphism and Typeclasses | Polymorphic signatures, constraints, common typeclasses | Existing Lab 6 and legacy notes | Generic functions and signature reading | Planned |
-| 13 Data Types and Abstraction | Type synonyms, `data`, constructors, pattern matching, modules | csi243_ho7; legacy labs | Model and process a custom data type | Planned |
-| 14 Reasoning and Complexity | Equational traces, correctness, recursive cost, list-operation cost | Course outline and legacy notes | Reasoning worksheet and complexity comparison | Planned |
-| 15 Capstone and Revision | Integrated program, troubleshooting, practical and theory revision | All current sources | Capstone, mock lab, mock exam | Planned |
+| 00 Start Here | GHCup install, GHC, GHCi, Prelude prompt, `:help`, `:load`, `:reload`, `:type`, `:info`, `:set prompt`, `:quit`, expressions, `let`, `it`, `:{ :}`, first saved script, `runhaskell`, `ghc -o`, comments, module/filename rule | Lecture 2 Using Haskell; Lab 1; csi243_ho4 | Environment check, first saved program, and a compiled executable | Verified (GHC 9.10.3) |
+| 01 Functional Thinking | Functions, expressions, purity, side effects, composition, FP vs imperative | Lecture 1 Intro to FP; csi243_ho4 | Compare two solutions and identify side effects | Verified (GHC 9.10.3) |
+| 02 Expressions and Types | Syntax/type analysis, `Int`, `Integer`, `Float`, `Double`, `Bool`, `Char`, `String`, lists, tuples, inference | Definitions and Data Types; csi243_ho4 | Predict and verify expression types and results | Verified (GHC 9.10.3) |
+| 03 Defining Functions | Signature, specification, implementation, comments, identifiers, precedence, testing | csi243_ho4; csi243_ho6; Lab 1 | A documented `.hs` file with verified calls | Verified (GHC 9.10.3) |
+| 04 Making Choices | `if`, guards, pattern matching, `case`, ordering, exhaustiveness | csi243_ho6; Making Choices 2; csi243_ho7; Haskell Functions | One problem implemented four ways (Lab 02) | Verified (GHC 9.10.3) |
+| 05 Recursion | Base case, recursive step, termination, factorial, Fibonacci, dry runs, invalid inputs, `error` | Making Choices 2; csi243_ho7; Haskell Functions | Recursive traces and error handling | Verified (GHC 9.10.3) |
+| 06 Lists, Tuples and Comprehensions | Homogeneous lists, cons, ranges, list recursion, partial functions, tuple arity, `fst`/`snd`, comprehensions with generators and tests | Modules, Lists, Tuples; Definitions and Data Types; Haskell Functions; csi243_ho7; Lab 3 | Recursive list functions with dry runs (Lab 03) | Verified (GHC 9.10.3) |
+| 07 Higher-Order Functions | Lambdas, currying, partial application, sections, `map`, `filter`, `takeWhile`, `zipWith`, folds, composition | csi243_ho7; csi243_ho4; Haskell Functions | Trace and compare higher-order pipelines | Verified (GHC 9.10.3) |
+| 08 Modules and Custom Types | Module naming, exports, imports, qualified imports, `Prelude`, type synonyms, `data`, constructors, recursive types | Modules, Lists, Tuples; Lecture 2; csi243_ho7; csi243_ho4 | Two-module program and a custom data type | Verified (GHC 9.10.3) |
+| 09 Polymorphism and Type Classes | Type variables, inference rule, constraints, `Eq`/`Ord`/`Show`/`Num`/`Integral`/`Fractional`, numeric conversion, `Maybe`, instances | csi243_ho7; Definitions and Data Types; Haskell Functions | Generic functions and signature reading | Verified (GHC 9.10.3) |
+| 10 Reasoning, Testing and Revision | Specification, pre/postconditions, input partitioning, referential transparency, structural induction, error classes, test categories, recursive and list-operation cost, laziness | csi243_ho4; Lecture 1; Making Choices 2 | Reasoning worksheet and complexity comparison | Verified (GHC 9.10.3) |
+
+## Site chapter mapping
+
+The units above are taught on the site inside chapter folders, which do not map one-to-one:
+
+| Unit | Site location |
+|---|---|
+| 00 Start Here | `02-expressions-types/notes/ghci`, `notes/first-program` |
+| 01 Functional Thinking | `01-functional-thinking/notes/*` |
+| 02 Expressions and Types | `02-expressions-types/notes/values-text`, `notes/expressions-types` |
+| 03 Defining Functions | `03-defining-functions/notes/*`, `lab-01` |
+| 04 Making Choices | `04-making-choices/notes/*`, `lab-02` |
+| 05 Recursion | `05-recursion/notes/*` |
+| 06 Lists, Tuples and Comprehensions | `06-lists-tuples/notes/*`, `lab-03` |
+| 07 Higher-Order Functions | `07-higher-order/notes/*` |
+| 08 Modules and Custom Types | `08-modules-types/notes/*` |
+| 09 Polymorphism and Type Classes | `09-polymorphism/notes/*` |
+| 10 Reasoning, Testing and Revision | `10-reasoning-revision/notes/*` |
+
+## Laboratory coverage
+
+| Lab | Source | Site location |
+|---|---|---|
+| Lab 1 — Introduction to the Haskell Environment | `Labs/Lab 1 (1).docx` | `03-defining-functions/lab-01`, with Tasks 1–3 also covered in `02-expressions-types/notes/ghci` |
+| Lab 2 — Making Choices | `Labs/Lab 2 Making Choices (1).docx` | `04-making-choices/lab-02` |
+| Lab 3 — Recursion and Lists | `Labs/Lab 3 Recursion Continued.pdf` | `06-lists-tuples/lab-03` |
+
+## Verification status
+
+**Course GHC version: 9.10.3** (installed via GHCup, Windows x86_64).
+
+Every fenced `ghci>` transcript in the chapter notes was extracted mechanically (337 claims
+across 34 files) and replayed against GHC 9.10.3, each in an isolated GHCi process. Results:
+
+| Outcome | Count |
+|---|---|
+| Matched exactly | 215 |
+| Matched (error/exception text, abbreviated in the notes) | 13 |
+| Matched (expected text contained in a longer real message) | 62 |
+| **Verified total** | **290** |
+| Bindings and `:{ … :}` blocks producing no output | 21 |
+| Not auto-runnable (`:load`, `main`, `import`, `it`) — checked by hand instead | 17 |
+| Genuine mismatches found and fixed | 4 |
+| Non-terminating by design, deliberately not executed | 1 |
+
+| Chapter | Verified / runnable |
+|---|---|
+| 01 Functional Thinking | 1 / 1 |
+| 02 Haskell Basics | 32 / 34 |
+| 03 Functions & I/O | 14 / 14 |
+| 04 Making Choices | 29 / 29 |
+| 05 Recursion | 21 / 21 |
+| 06 Lists, Tuples & Comprehensions | 55 / 59 |
+| 07 Higher-Order Functions | 62 / 62 |
+| 08 Modules & Custom Types | 24 / 26 |
+| 09 Polymorphism & Type Classes | 45 / 46 |
+| 10 Reasoning, Testing & Revision | 7 / 7 |
+
+### Corrections made as a result
+
+1. **`tuples.mdx`** — `:type` reported `(Num a) => (a, String, String)`; GHC 9.10 prints the
+   single constraint without parentheses. Corrected to `Num a =>`.
+2. **`first-program.mdx` and `modules.mdx`** — both claimed GHC *rejects* a file whose module
+   name differs from its file name. It does not: such a file loads and compiles fine. The rule
+   only bites when another module `import`s it, because GHC locates a module by filename, and
+   the error then appears in the *importing* file. Both callouts, the error table, and the two
+   practice questions were rewritten against the real behaviour.
+3. **`modules.mdx`** — the two-module load shows `[1 of 3]` / `[2 of 3]` on GHC 9.10, not
+   `[1 of 2]` / `[2 of 2]`.
+4. **`ghci.mdx`** — GHC 9.10 opens with a plain `ghci>` prompt, not `Prelude>`. The section now
+   leads with the current behaviour and explains `Prelude>` as what the lecture slides show.
+
+Also added: a callout in `lists.mdx` recording that GHC 9.8+ emits a `-Wx-partial` warning on
+*every* use of `head`, including successful ones — students will meet it immediately, and it
+reinforces the partial-function point that section makes.
+
+### Verified by hand (not auto-runnable)
+
+- `:load` → `main` → edit → `:reload` cycle.
+- `runhaskell Cube.hs`.
+- `ghc -o cube Cube.hs`, producing `[1 of 2] Compiling Main` / `[2 of 2] Linking cube.exe`,
+  a working executable, and the `.o` and `.hi` artefacts.
+- The two-module `MyCalculator` / `MainModule` program, including `averageTwo 24 67` → `45.5`
+  and `addTwo 89 23` → `112`.
+- The `getLine` / `read` / `show` pipeline in `input-processing.mdx`, driven from stdin.
+- Exception wording for `head []`, `maximum []`, `!!` out of range, and `read "four"`.
+
+## Outstanding work
+
+- Decide whether Lab 1 Task 5 (the Hello World comparison) should also appear as an exercise in `notes/first-program`.
+- Consider a capstone integrating modules, custom types, and IO once units 00–10 are verified.
+- Retire `content/archive/sem3/csi243-redemption-drafts`, whose only page links to routes that no longer exist.
 
 ## Completion gates
 

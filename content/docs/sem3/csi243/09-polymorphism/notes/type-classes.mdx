@@ -1,0 +1,217 @@
+---
+title: "2. Type Classes and Constraints"
+description: "Understand overloading, read a class constraint before the fat arrow, and see why a constrained type variable sits between a concrete type and a fully general one."
+---
+
+
+
+The previous lesson showed that a fully general type variable permits nothing. But `sumTree` needed `+`, and `elem` needs `==`. **Type classes** are how Haskell states what a type variable must support.
+
+## 1. Overloading
+
+In Haskell, `Integer`, `Int`, `Bool`, `Char`, and many other types can all be compared for equality using `==`. The symbol is used for equality over **any type for which an equality operation can be defined**.
+
+This is called **overloading**: one name with several implementations, chosen by the type it is used at.
+
+```text
+ghci> 3 == 3
+True
+ghci> 'a' == 'a'
+True
+ghci> "cs" == "cs"
+True
+ghci> True == False
+False
+```
+
+Four different comparisons, four different underlying implementations, one name. Numeric literals are overloaded too — `4` belongs to both `Integer` and `Double`.
+
+## 2. What a type class is
+
+A **type class** is a named collection of operations that a type may provide. A type that provides them is an **instance** of the class.
+
+| Class | Requires the type to provide | So you may use |
+|---|---|---|
+| `Eq` | Equality testing | `==`, `/=` |
+| `Ord` | Ordering | `<`, `<=`, `>`, `>=`, `compare`, `max`, `min` |
+| `Show` | Conversion to `String` | `show`, and therefore `print` |
+| `Num` | Arithmetic | `+`, `-`, `*`, `abs`, `negate` |
+
+You met these in Chapter 8 as things to `derive`. Now you can say what deriving does: it asks GHC to generate the instance that makes your type a member of the class.
+
+<Callout type="info" title="A class is not a type">
+`Eq` is not a type — you cannot have a value of type `Eq`. It is a *constraint on* types: a statement about what a type can do. This is quite different from a class in Java or C++.
+</Callout>
+
+## 3. Reading a constraint
+
+A **class constraint** appears before a fat arrow `=>`:
+
+```haskell
+sumList :: Num a => [a] -> a
+```
+
+Read: “for any type `a` **that is a member of** `Num`, `sumList` takes a list of `a` and returns an `a`.”
+
+Everything before `=>` is the constraint. Everything after it is the type.
+
+```haskell
+elem   :: Eq a => a -> [a] -> Bool
+maximum :: Ord a => [a] -> a
+show   :: Show a => a -> String
+print  :: Show a => a -> IO ()
+div    :: Integral a => a -> a -> a
+(/)    :: Fractional a => a -> a -> a
+```
+
+You have been reading these since Chapter 2, where `Integral a =>` was glossed as “for any whole-number type `a`”. Now the mechanism is visible: `Integral` is a class, and `a` must be an instance of it.
+
+Several constraints are written as a tuple:
+
+```haskell
+showAll :: (Show a, Ord a) => [a] -> String
+```
+
+“For any type that is both showable and orderable.”
+
+## 4. The three levels of generality
+
+This is the idea to take from the chapter.
+
+<ComparisonTable
+  columns={[
+    { header: 'Signature', key: 'sig' },
+    { header: 'Works on', key: 'works' },
+    { header: 'Function may', key: 'may' }
+  ]}
+  rows={[
+    { sig: '[Int] -> Int', works: 'Only Int', may: 'Anything Int supports' },
+    { sig: 'Num a => [a] -> a', works: 'Any numeric type', may: 'Only what Num provides' },
+    { sig: '[a] -> Int', works: 'Any type at all', may: 'Nothing to the elements' }
+  ]}
+  highlightCol="may"
+/>
+
+There is a trade-off in both directions:
+
+- **More constraints** → works on fewer types, but the function can do more.
+- **Fewer constraints** → works on more types, but the function can do less.
+
+The right signature is the **most general one that still permits what the function needs**. Constraining to `Int` when `Num a` would do makes the function needlessly narrow.
+
+## 5. Where constraints come from
+
+You rarely write constraints from scratch. GHC infers them from the operations you use, and you copy them into the signature.
+
+```haskell
+-- Without a signature, GHC works out what is needed.
+addUp xs = sum xs + 1
+```
+
+```text
+ghci> :type addUp
+addUp :: Num a => [a] -> a
+```
+
+`+` requires `Num`, so `Num a =>` appears. If you had also compared elements, `Eq a` would join it.
+
+This is the practical technique: **write the function, ask GHCi for the type, then write that type into your file.** For course work, always write explicit signatures — they document intent and expose mistakes near their cause.
+
+## 6. What goes wrong without a constraint
+
+```haskell
+-- Rejected.
+sumList :: [a] -> a
+sumList []     = 0
+sumList (x:xs) = x + sumList xs
+```
+
+```text
+* No instance for (Num a) arising from a use of '+'
+  Possible fix: add (Num a) to the context of the type signature
+```
+
+GHC is explicit about the repair. `a` promises nothing, but `+` and the literal `0` both require `Num`. Adding the constraint fixes it:
+
+```haskell
+sumList :: Num a => [a] -> a
+```
+
+The same happens with comparison:
+
+```haskell
+-- Rejected: == is not available for an arbitrary type.
+countOf :: a -> [a] -> Int
+countOf _ [] = 0
+countOf v (x:xs)
+  | v == x    = 1 + countOf v xs
+  | otherwise = countOf v xs
+```
+
+```haskell
+-- Correct.
+countOf :: Eq a => a -> [a] -> Int
+```
+
+<Callout type="warn" title="Read the error; it names the class">
+“No instance for (Num a) arising from a use of '+'” tells you the class, the operation that needed it, and the fix. These are among the most helpful error messages GHC produces.
+</Callout>
+
+## 7. Class hierarchies
+
+Classes can require other classes. `Ord` requires `Eq`, because ordering values presupposes being able to tell whether they are equal:
+
+```text
+Eq  ->  Ord
+Num ->  Integral, Fractional
+```
+
+A consequence: writing `Ord a =>` gives you `==` as well, because every `Ord` instance is also an `Eq` instance. You do not need to write `(Eq a, Ord a) =>`.
+
+```haskell
+-- Ord alone is enough; == comes with it.
+countMax :: Ord a => [a] -> Int
+countMax xs = length (filter (== maximum xs) xs)
+```
+
+## 8. Common errors
+
+| Message or attempt | Cause | Repair |
+|---|---|---|
+| `No instance for (Num a)` | Arithmetic on an unconstrained variable | Add `Num a =>` |
+| `No instance for (Eq a)` | `==` on an unconstrained variable | Add `Eq a =>` |
+| `No instance for (Show Shape)` | A custom type with no `Show` | Add `deriving (Show)` |
+| `f :: Num a -> a -> a` | The constraint arrow is `=>`, not `->` | `f :: Num a => a -> a` |
+| `(Eq a, Ord a) =>` | Redundant; `Ord` implies `Eq` | `Ord a =>` |
+| Writing `[Int] -> Int` for a general function | Needlessly narrow | `Num a => [a] -> a` |
+
+## 9. Practice
+
+1. Read aloud: `elem :: Eq a => a -> [a] -> Bool`.
+2. Explain why `sumList :: [a] -> a` is rejected and give the corrected signature.
+3. Write `countOf` with the correct constraint and test it on a list of `Char`.
+4. Ask GHCi for the type of `\xs -> maximum xs == minimum xs` and explain each constraint.
+5. Explain why `(Eq a, Ord a) =>` is redundant.
+6. For each, give the most general correct signature: a function returning a list's length; one returning its largest element; one adding its elements.
+
+<Accordions>
+<Accordion title="Check questions 4 and 6">
+
+**4.** The type is `(Ord a) => [a] -> Bool`. `maximum` and `minimum` both need `Ord`, and `==` needs `Eq` — but `Ord` implies `Eq`, so only `Ord a` is reported.
+
+**6.** Length: `[a] -> Int`, needing no constraint because the elements are never examined. Largest element: `Ord a => [a] -> a`, because comparison is required. Sum: `Num a => [a] -> a`, because addition is required. Each is the most general signature that still permits what the function does.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can define overloading and give an example with ==.' },
+  { type: 'must', text: 'I can explain that a type class is a set of operations a type may provide, not a type itself.' },
+  { type: 'must', text: 'I can read a constraint before => and say what it requires.' },
+  { type: 'must', text: 'I can explain the trade-off between more constraints and more general types.' },
+  { type: 'must', text: 'I can diagnose a "No instance for" error and add the right constraint.' },
+  { type: 'must', text: 'I can use GHCi :type to discover the constraints a function needs.' },
+  { type: 'note', text: 'Ord implies Eq, so writing both is redundant.' }
+]} />
+
+Continue with [The Standard Type Classes](/docs/sem3/csi243/09-polymorphism/notes/standard-classes).

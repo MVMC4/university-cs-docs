@@ -1,0 +1,239 @@
+---
+title: "1. Parametric Polymorphism"
+description: "Read type variables in a signature, understand what a polymorphic type promises and forbids, and use the type inference rule to check an application."
+---
+
+
+
+You have been using polymorphic functions since Chapter 6 without naming them. `length` works on a list of anything. `fst` works on a pair of anything. This lesson explains how.
+
+## 1. Type variables
+
+A **type variable** is a lowercase name standing for “any type at all”:
+
+```haskell
+length :: [a] -> Int
+```
+
+Read: “`length` takes a list of `a`, for any type `a`, and returns an `Int`.”
+
+| Convention | Meaning |
+|---|---|
+| **Uppercase** name, e.g. `Int`, `Bool`, `Shape` | A concrete type |
+| **Lowercase** name, e.g. `a`, `b`, `k`, `v` | A type variable — any type |
+
+A function whose type contains a type variable is **polymorphic**, meaning “having many forms”. This particular kind is called **parametric** polymorphism, because the type is parameterised by a variable.
+
+```haskell
+head :: [a] -> a
+fst  :: (a, b) -> a
+map  :: (a -> b) -> [a] -> [b]
+id   :: a -> a
+```
+
+Different letters mean the types **may** differ, not that they must. `map` may take `Int -> Int`, in which case `a` and `b` are both `Int`.
+
+## 2. What a polymorphic type promises
+
+Reading a signature tells you what a function can and cannot do.
+
+```haskell
+mystery :: [a] -> Int
+```
+
+Whatever `mystery` is, it **cannot look at the elements**. It knows nothing about type `a` — not whether it can be compared, added, or printed. All it can do is count, so it is `length` or something like it.
+
+That is the key insight: **the fewer constraints a type variable carries, the fewer things the function can possibly do.** A very general type is a very strong promise.
+
+```haskell
+id :: a -> a
+```
+
+There is exactly one function with this type that always terminates: it must return its argument unchanged. It has nothing else to work with.
+
+<Callout type="info" title="Reading a signature as a specification">
+Before writing a function, ask what its signature permits. If you find yourself needing to compare two values of type `a`, the signature `[a] -> a` is not enough — you need a constraint, which the next lesson introduces.
+</Callout>
+
+## 3. Every argument of the same variable must agree
+
+Within one signature, a type variable stands for **one** type throughout that application:
+
+```haskell
+pairUp :: a -> a -> (a, a)
+pairUp x y = (x, y)
+```
+
+```text
+ghci> pairUp 1 2
+(1,2)
+ghci> pairUp 'a' 'b'
+('a','b')
+ghci> pairUp 1 'a'
+<interactive>: error:
+    * No instance for (Num Char) ...
+```
+
+Both arguments are typed `a`, so they must be the same type in any given call. To allow them to differ, use two variables:
+
+```haskell
+pairUp2 :: a -> b -> (a, b)
+```
+
+## 4. The type inference rule
+
+Chapter 2 said GHC infers types by collecting constraints. The formal rule for **function application** is:
+
+> If `f` is a function mapping arguments of type `A` to results of type `B`, and `e` is an expression of type `A`, then the application `f e` has type `B`.
+
+Written as the course notes do:
+
+```text
+f :: A -> B      e :: A
+------------------------
+       f e :: B
+```
+
+Apply it to a concrete example. Given:
+
+```haskell
+pasd :: Bool
+neg  :: Bool -> Bool
+```
+
+**Is `neg pasd` well typed?**
+
+```text
+neg :: Bool -> Bool      pasd :: Bool
+-------------------------------------
+         neg pasd :: Bool
+```
+
+The argument type matches the function's input type, so the application is valid and has type `Bool`.
+
+**Is `neg 3` well typed?**
+
+```text
+neg :: Bool -> Bool      3 :: ??
+--------------------------------
+         neg 3 :: ???
+```
+
+`3` is numeric, not `Bool`. The types do not agree, so the application is invalid and is rejected before evaluation.
+
+<StepByStep>
+  <StepByStepTitle>Checking an application by hand</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Write the function's type</StepTitle>
+  Identify the input type `A` and the result type `B`.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Write the argument's type</StepTitle>
+  Determine it independently, from the argument alone.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Compare</StepTitle>
+  If the argument's type is `A`, the application is valid and has type `B`. Otherwise it is a type error.
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>For a polymorphic function, instantiate first</StepTitle>
+  Replace each type variable consistently with the concrete type the argument supplies, then compare.
+  </Step>
+</StepByStep>
+
+## 5. Instantiating a polymorphic type
+
+When a polymorphic function is applied, each type variable is fixed to a concrete type for that call:
+
+```haskell
+length :: [a] -> Int
+```
+
+```text
+ghci> length [1,2,3]      -- a becomes Integer
+3
+ghci> length "hello"      -- a becomes Char
+5
+ghci> length [True,False] -- a becomes Bool
+2
+```
+
+For `map`:
+
+```text
+ghci> :type map show
+map show :: Show a => [a] -> [String]
+```
+
+`map :: (a -> b) -> [a] -> [b]` applied to `show :: Show a => a -> String` fixes `b` to `String`, leaving `a` general but now carrying `show`'s own constraint.
+
+## 6. Polymorphic data types
+
+Type variables appear in data declarations too. Chapter 8's tree is one:
+
+```haskell
+data Tree a = Leaf a | Branch (Tree a) (Tree a)
+```
+
+`Tree` is not a type on its own — it is a **type constructor** that becomes a type once applied to one: `Tree Int`, `Tree String`, `Tree Bool`.
+
+The same is true of the list type: `[]` alone is not a type, `[Int]` is. And of `Maybe`, which the fourth lesson covers.
+
+```haskell
+-- Works for a tree of anything.
+countLeaves :: Tree a -> Int
+countLeaves (Leaf _)     = 1
+countLeaves (Branch l r) = countLeaves l + countLeaves r
+
+-- Requires a tree of numbers specifically.
+sumTree :: Num a => Tree a -> a
+sumTree (Leaf n)     = n
+sumTree (Branch l r) = sumTree l + sumTree r
+```
+
+`countLeaves` ignores the elements, so it needs no constraint. `sumTree` adds them, so it does — again, the next lesson.
+
+## 7. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `f :: [A] -> Int` | Type variables must be lowercase | `f :: [a] -> Int` |
+| `pairUp 1 'a'` with `a -> a -> (a,a)` | One variable means one type per call | Use `a -> b -> (a, b)` |
+| Writing `sumList :: [a] -> a` with `+` | `a` permits no arithmetic | Add the constraint `Num a =>` |
+| `Tree` used as a type | It is a type constructor | `Tree Int` |
+| Expecting `a` and `b` to be different | They may coincide | They only *may* differ |
+
+## 8. Practice
+
+1. Give the type of `fst`, `snd`, `head`, and `id` from memory.
+2. Explain what a function of type `[a] -> Int` cannot do, and why.
+3. Given `pasd :: Bool` and `neg :: Bool -> Bool`, use the inference rule to check `neg pasd` and `neg 3`.
+4. Explain why `pairUp 1 'a'` fails for `pairUp :: a -> a -> (a, a)`.
+5. State what `a` becomes in `length "hello"` and in `map show [True]`.
+6. Why can `countLeaves :: Tree a -> Int` be fully polymorphic while `sumTree` cannot?
+
+<Accordions>
+<Accordion title="Check questions 2 and 6">
+
+**2.** It cannot inspect the elements at all. The signature says `a` is an arbitrary type, so the function has no operation available on it — it cannot compare, add, or display them. All it can do is count or reorder them structurally. The fewer constraints a variable carries, the fewer things the function can possibly do.
+
+**6.** `countLeaves` only counts constructors; the values inside the leaves are never examined, so no operation on `a` is needed. `sumTree` applies `+` to those values, and `+` is not available for an arbitrary type. It therefore needs `Num a =>` to state that `a` must be a numeric type.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can distinguish a concrete type from a type variable by capitalisation.' },
+  { type: 'must', text: 'I can read a polymorphic signature and say what the function cannot do.' },
+  { type: 'must', text: 'I can explain that one type variable means one type per application.' },
+  { type: 'must', text: 'I can apply the type inference rule to check an application by hand.' },
+  { type: 'must', text: 'I can say what a type variable is instantiated to in a given call.' },
+  { type: 'must', text: 'I can explain why Tree is a type constructor rather than a type.' },
+  { type: 'note', text: 'Different letters mean types may differ, not that they must.' }
+]} />
+
+Continue with [Type Classes and Constraints](/docs/sem3/csi243/09-polymorphism/notes/type-classes).

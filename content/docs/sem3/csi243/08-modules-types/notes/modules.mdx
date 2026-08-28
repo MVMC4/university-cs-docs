@@ -1,0 +1,219 @@
+---
+title: "1. Modules"
+description: "Split a program into named modules, follow the one-module-per-file convention, control what a module exports, and load a multi-module program."
+---
+
+
+
+A Haskell program is a **collection of modules**. The main module loads the others and uses the functions defined in them to do something.
+
+Chapter 2 mentioned modules in passing, when a file without a `module` line was compiled as `Main`. This lesson makes them a working tool.
+
+## 1. Why split a program up
+
+Having code split into several modules has three advantages:
+
+- If a module is generic enough, the functions it exports can be used for many different programming tasks.
+- If your code is separated into self-contained modules that do not rely on each other too much — **loosely coupled** — you can reuse some of them separately later.
+- Splitting code into several parts, each with a specific purpose, makes writing code more manageable.
+
+Modules also make code easier to share: you can package your functions into a module and distribute it for others to use.
+
+## 2. Naming a module
+
+Each module has a **unique name**, and contains a collection of related definitions, types, and type classes.
+
+The rules:
+
+- Module names are **alphanumeric**.
+- A module name **must begin with an uppercase letter**.
+- There is no formal connection between a Haskell module and the file system, but this course adopts the standard convention: **one module per file**, and **the file name is the name of the module it contains**.
+
+So module `MyCalculator` lives in `MyCalculator.hs`.
+
+<Callout type="warn" title="What actually goes wrong when the names differ">
+Loading `Wrong.hs` containing `module MyCalculator where` on its own **succeeds** — GHC does not object, and its functions work at the prompt. The convention only becomes a hard requirement when another module imports it, because GHC finds a module by searching for a file of the same name:
+
+```text
+ghci> :load UsesIt.hs
+UsesIt.hs:1:1: error: [GHC-87110]
+    Could not find module `MyCalculator'.
+    Use :set -v to see a list of the files searched for.
+Failed, unloaded all modules.
+```
+
+So the error surfaces in the *importing* file, pointing at a module that plainly exists — which is exactly why it costs people an hour. Match the names from the start.
+</Callout>
+
+## 3. Defining a module
+
+Use the keyword `module`, the name, and `where`:
+
+```haskell
+module MyModule where
+
+function1 x y = x + y
+function2 x y = x * y
+```
+
+The `where` clause marks the start of the module's contents. Everything defined after it belongs to the module.
+
+A fuller example, saved as `MyCalculator.hs`:
+
+```haskell
+module MyCalculator where
+
+-- Add the two numbers together.
+addTwo :: Int -> Int -> Int
+addTwo x y = x + y
+
+-- Calculate the average of two floating-point values.
+averageTwo :: Float -> Float -> Float
+averageTwo a b = (a + b) / 2.0
+
+-- Calculate the average of three values.
+averageThree :: Float -> Float -> Float -> Float
+averageThree a b c = (a + b + c) / 3.0
+
+-- Return True when the three numbers are in ascending or descending order.
+areSorted :: Int -> Int -> Int -> Bool
+areSorted x y z
+  | (x > y) && (y > z) = True
+  | (x < y) && (y < z) = True
+  | otherwise          = False
+
+-- Return the largest of three integers.
+maxThree :: Int -> Int -> Int -> Int
+maxThree x y z
+  | x >= y && x >= z = x
+  | y >= z           = y
+  | otherwise        = z
+
+-- Return True when the number is even.
+showEven :: Int -> Bool
+showEven x = rem x 2 == 0
+```
+
+## 4. Testing a module on its own
+
+Make sure you are in the directory where the module is saved, then start GHCi and load it:
+
+```text
+C:\CSI243> ghci
+ghci> :load MyCalculator
+[1 of 1] Compiling MyCalculator     ( MyCalculator.hs, interpreted )
+Ok, one module loaded.
+```
+
+Remember `:load` may be abbreviated to `:l`, and the `.hs` extension may be omitted. You can also load in one step from the command line:
+
+```text
+C:\CSI243> ghci MyCalculator
+```
+
+If it compiled properly, older GHC releases show the module name in the prompt as `*MyCalculator>`. Now test the functions:
+
+```text
+ghci> averageTwo 24 67
+45.5
+ghci> addTwo 89 23
+112
+ghci> maxThree 3 9 2
+9
+```
+
+<Callout type="info" title="A module is testable in isolation">
+This is the practical payoff of modularity. `MyCalculator` can be checked completely without any program that uses it, which makes faults far easier to locate.
+</Callout>
+
+## 5. A program made of two modules
+
+Now write a `Main` module that uses it, saved as `MainModule.hs`:
+
+```haskell
+import MyCalculator
+
+main :: IO ()
+main = do
+  print "Hello There"
+  print "Let us calculate!!!"
+```
+
+Loading the main module compiles both:
+
+```text
+C:\CSI243> ghci MainModule
+[1 of 3] Compiling MyCalculator     ( MyCalculator.hs, interpreted )
+[2 of 3] Compiling Main             ( MainModule.hs, interpreted )
+Ok, two modules loaded.
+ghci> main
+"Hello There"
+"Let us calculate!!!"
+ghci> averageTwo 24 67
+45.5
+```
+
+GHC worked out the dependency itself: it saw the `import`, compiled `MyCalculator` first, then `MainModule`. You never list the files in order.
+
+## 6. Every module must be closed
+
+Every module in a Haskell program must be **closed**. This means every name explicitly mentioned by the source code must either be **defined locally** or **imported from another module**.
+
+There is one convenience: entities the compiler needs for type checking do not have to be imported if they are not mentioned by name. Importing a function `x` does not require you to also import the types and classes appearing in its signature, unless you refer to those by name yourself. The Haskell system silently imports whatever must accompany an entity.
+
+## 7. Controlling what is exported
+
+By default a module exports everything it defines. An **export list** after the module name restricts that:
+
+```haskell
+-- Only addTwo and averageTwo are visible to importers.
+module MyCalculator (addTwo, averageTwo) where
+
+addTwo :: Int -> Int -> Int
+addTwo x y = x + y
+
+averageTwo :: Float -> Float -> Float
+averageTwo a b = (a + b) / 2.0
+
+-- Not exported: an internal helper.
+roundTo2 :: Float -> Float
+roundTo2 x = fromIntegral (round (x * 100)) / 100
+```
+
+An importer can now use `addTwo` and `averageTwo`, but `roundTo2` is private to the module. This is how you keep a module's interface small and its internals free to change.
+
+<Callout type="info" title="Why hide anything?">
+Anything you export is something other code may come to depend on. Exporting only what callers genuinely need means you can rewrite the rest without breaking them — the practical meaning of "loosely coupled".
+</Callout>
+
+## 8. Common errors
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| `Could not find module 'X'` on an import | `X` lives in a file with a different name | Rename the file to `X.hs` |
+| `module myCalc where` rejected | Module names must start with a capital | `module MyCalc where` |
+| `Variable not in scope` for an imported name | It is not in the module's export list | Add it to the export list, or export everything |
+| `Could not find module` | The file is not in GHCi's current directory | `:cd` to the right folder |
+| Import written after a function definition | Imports must precede all definitions | Move every import to the top |
+| Two modules define the same name | An ambiguous occurrence | Use a qualified import — the next lesson |
+
+## 9. Practice
+
+1. Create `MyCalculator.hs` with the six functions above, load it, and test each one.
+2. Create a `MainModule.hs` that imports it and prints the result of `maxThree 4 9 2`.
+3. Load the main module and confirm from the output that both modules compiled, and in which order.
+4. Add an export list exposing only `addTwo` and `maxThree`. Confirm that `averageTwo` is then out of scope in the main module.
+5. Rename `MyCalculator.hs` to `Wrong.hs` without changing its `module` line. Load `Wrong.hs` directly and note that it still works. Then load `MainModule.hs` and read the error. Explain why the failure appears in the importing file rather than the renamed one.
+6. Explain in two sentences why exporting fewer names makes a module easier to change later.
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can state the three advantages of splitting code into modules.' },
+  { type: 'must', text: 'I can write a module header and say why the name must start with a capital.' },
+  { type: 'must', text: 'I can apply the one-module-per-file convention and match the filename.' },
+  { type: 'must', text: 'I can load a two-module program and read the compilation order from the output.' },
+  { type: 'must', text: 'I can restrict a module interface with an export list and say why that helps.' },
+  { type: 'must', text: 'I can explain what it means for a module to be closed.' },
+  { type: 'avoid', text: 'Do not place an import after any function definition.' }
+]} />
+
+Continue with [Importing](/docs/sem3/csi243/08-modules-types/notes/imports).

@@ -1,0 +1,276 @@
+---
+title: "3. Writing Recursive Functions"
+description: "Turn a specification into a tested recursive definition, express the same recursion with conditionals, pattern matching, guards, and case, and handle two-argument recursion."
+---
+
+
+
+You can now read a recursive definition and trace it. This lesson is about producing one: going from a prose problem to a definition you have evidence for.
+
+## 1. The procedure
+
+This extends the six-part process from Chapter 3 with the two questions that recursion adds.
+
+<StepByStep>
+  <StepByStepTitle>From specification to tested recursive function</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Purpose</StepTitle>
+  State in one sentence what the function represents.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Examples</StepTitle>
+  Write concrete input–output pairs, including the smallest input.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Base case</StepTitle>
+  Which input stops the recursion, and what is the answer for it? Take this from the specification, not from convenience.
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>Recursive step</StepTitle>
+  Express the answer for `n` in terms of the answer for a smaller input. Check the argument shrinks.
+  </Step>
+
+  <Step number={5}>
+  <StepTitle>Signature</StepTitle>
+  Write the type contract.
+  </Step>
+
+  <Step number={6}>
+  <StepTitle>Implementation and dry run</StepTitle>
+  Write the equations, then trace one example by hand.
+  </Step>
+
+  <Step number={7}>
+  <StepTitle>Verification</StepTitle>
+  Load and test the base case, an ordinary input, and a boundary.
+  </Step>
+</StepByStep>
+
+## 2. Worked example: `sumNumbers`
+
+**Purpose.** `sumNumbers n` computes the sum of all positive whole numbers up to and including `n`.
+
+**Examples.**
+
+```text
+sumNumbers 1 = 1
+sumNumbers 3 = 1 + 2 + 3 = 6
+sumNumbers 5 = 15
+```
+
+**Base case.** The smallest positive whole number is `1`, and the sum up to `1` is `1`.
+
+**Recursive step.** The sum up to `n` is `n` plus the sum up to `n - 1`.
+
+**Specification.**
+
+```text
+sumNumbers n = | 1                       if n = 1
+               | n + sumNumbers (n - 1)  if n > 1
+```
+
+**Signature and implementation.**
+
+```haskell
+-- Sum all positive whole numbers up to and including n.
+sumNumbers :: Integer -> Integer
+sumNumbers 1 = 1
+sumNumbers n = n + sumNumbers (n - 1)
+```
+
+**Verification.**
+
+```text
+ghci> sumNumbers 1
+1
+ghci> sumNumbers 5
+15
+ghci> sumNumbers 100
+5050
+```
+
+## 3. The same recursion in every form
+
+Chapter 4 gave four ways to express a choice. A recursive definition is a choice between the base case and the recursive step, so all four apply.
+
+```haskell
+-- 1. Pattern matching: base case is a literal, so this reads best.
+sumPat :: Integer -> Integer
+sumPat 1 = 1
+sumPat n = n + sumPat (n - 1)
+
+-- 2. Guards
+sumGuard :: Integer -> Integer
+sumGuard n
+  | n == 1    = 1
+  | otherwise = n + sumGuard (n - 1)
+
+-- 3. Conditional expression
+sumIf :: Integer -> Integer
+sumIf n = if n == 1 then 1 else n + sumIf (n - 1)
+
+-- 4. Case expression
+sumCase :: Integer -> Integer
+sumCase n =
+  case n of
+    1 -> 1
+    _ -> n + sumCase (n - 1)
+```
+
+All four compute the same values. The rule from Chapter 4 still decides: the base case here is a **literal**, so pattern matching expresses it most directly.
+
+When the base case is a **range**, guards win:
+
+```haskell
+-- The base case covers 0 and 1, which no single literal pattern can express.
+facSafe :: Integer -> Integer
+facSafe n
+  | n >= 0 && n <= 1 = 1
+  | otherwise        = n * facSafe (n - 1)
+```
+
+## 4. Recursion on two arguments
+
+Not every recursion counts down a single number. `rangeSum` takes two integers and returns the sum of all integers from the first to the second, inclusive.
+
+```text
+ghci> rangeSum 3 5
+12
+```
+
+Because `3 + 4 + 5 = 12`.
+
+**Which argument shrinks?** The gap between them must close. Moving the *first* argument up towards the second does that:
+
+```text
+rangeSum m n = | m               if m = n
+               | m + rangeSum (m + 1) n   if m < n
+```
+
+**What about `rangeSum 9 6`, where the first exceeds the second?** The specification must say. Two defensible choices: return `0` for an empty range, or report an error. Here we treat a reversed range as empty:
+
+```haskell
+-- Sum every integer from m to n inclusive; a reversed range sums to zero.
+rangeSum :: Integer -> Integer -> Integer
+rangeSum m n
+  | m > n     = 0
+  | m == n    = m
+  | otherwise = m + rangeSum (m + 1) n
+```
+
+```text
+ghci> rangeSum 3 5
+12
+ghci> rangeSum 4 4
+4
+ghci> rangeSum 9 6
+0
+```
+
+Dry running confirms it:
+
+```text
+rangeSum 3 5
+= 3 + rangeSum 4 5
+= 3 + (4 + rangeSum 5 5)
+= 3 + (4 + 5)            <- base case reached
+= 3 + 9
+= 12
+```
+
+<Callout type="info" title="Order the guards carefully">
+`m > n` must be tested before `m == n`, and both before the recursive step. Reversing the first two still works, because the conditions are mutually exclusive — but putting the recursive step anywhere but last would make it capture cases meant for the base.
+</Callout>
+
+## 5. Recursion that builds on another recursive function
+
+`sumFac n` computes `fac 0 + fac 1 + … + fac n`. It is recursive, and its recursive step calls a *different* recursive function:
+
+```haskell
+-- Sum the factorials of every whole number from 0 to n.
+sumFac :: Integer -> Integer
+sumFac 0 = 1
+sumFac n = fac n + sumFac (n - 1)
+```
+
+```text
+ghci> sumFac 3
+10
+```
+
+Because `fac 0 + fac 1 + fac 2 + fac 3 = 1 + 1 + 2 + 6 = 10`.
+
+The base case is `sumFac 0 = 1` because `fac 0` is `1`. Writing `sumFac 0 = 0` would be a natural-looking mistake — and the dry run catches it, because the total would come out one short.
+
+## 6. Common errors
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| Function hangs | The argument does not shrink | Check the recursive call actually changes the argument |
+| Off-by-one in the total | The base case returns the wrong value | Re-read the specification for the smallest input |
+| Base case never matched | The argument skips past it | Make the step move by one, or widen the base to a range with guards |
+| Works for `n > 0`, hangs on `0` | The base case is `1` but `0` was allowed by the type | Either widen the base case or reject `0` explicitly |
+| Correct for small `n`, unbearably slow for large | The definition recomputes sub-results, as `fib` does | Acceptable at this stage; note it and move on |
+
+## 7. Practice
+
+For each: specification, base case, recursive step, signature, implementation, dry run, and three tests.
+
+1. `power x n` raises `x` to a non-negative power `n`.
+2. `countDigits n` returns how many digits a positive integer has.
+3. `rangeProduct m n` multiplies every integer from `m` to `n` inclusive.
+4. `sumEven n` sums every even number from `0` to `n`.
+5. `gcdRec a b` computes the greatest common divisor using the rule that `gcd a 0 = a` and `gcd a b = gcd b (a mod b)`. Explain why this terminates even though neither argument simply counts down.
+
+<Accordions>
+<Accordion title="Check question 1">
+
+```text
+power x n = | 1                   if n = 0
+            | x * power x (n - 1) if n > 0
+```
+
+```haskell
+-- Raise x to the power of a non-negative exponent n.
+power :: Integer -> Integer -> Integer
+power _ 0 = 1
+power x n = x * power x (n - 1)
+```
+
+```text
+ghci> power 2 3
+8
+ghci> power 5 0
+1
+```
+
+Note the wildcard in `power _ 0 = 1`: the base value is irrelevant when the exponent is `0`, and `_` documents that. Only the second argument shrinks; the first is carried along unchanged.
+
+</Accordion>
+<Accordion title="Check question 5">
+
+```haskell
+gcdRec :: Integer -> Integer -> Integer
+gcdRec a 0 = a
+gcdRec a b = gcdRec b (a `mod` b)
+```
+
+It terminates because `a mod b` is always strictly less than `b`, so the second argument decreases on every call and cannot go below `0`. The argument shrinks even though no subtraction is visible — the requirement is that *something* measurably decreases towards the base case, not that it decreases by one.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can go from a prose problem to specification, base case, recursive step, signature, implementation, dry run, and tests.' },
+  { type: 'must', text: 'I can take the base case from the specification rather than from convenience.' },
+  { type: 'must', text: 'I can write the same recursion with patterns, guards, if, and case, and justify which reads best.' },
+  { type: 'must', text: 'I can write a recursion where the shrinking argument is not the first one.' },
+  { type: 'must', text: 'I can state what my function does for an argument outside the intended range.' },
+  { type: 'avoid', text: 'Do not write the recursive step before deciding the base case.' }
+]} />
+
+Continue with [Termination and Error Handling](/docs/sem3/csi243/05-recursion/notes/termination-and-errors).

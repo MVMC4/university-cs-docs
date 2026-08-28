@@ -5,6 +5,13 @@
     "01-functional-thinking",
     "02-expressions-types",
     "03-defining-functions",
+    "04-making-choices",
+    "05-recursion",
+    "06-lists-tuples",
+    "07-higher-order",
+    "08-modules-types",
+    "09-polymorphism",
+    "10-reasoning-revision",
     "resources"
   ]
 }

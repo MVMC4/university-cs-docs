@@ -1,0 +1,239 @@
+---
+title: "1. How Recursion Works"
+description: "Understand recursion as repetition without loops, identify the base case and recursive step, and see why equation order and a shrinking argument are both essential."
+---
+
+
+
+The term **recursion** means repetition. A **recursive function** defines the function in terms of itself, and invokes itself only when a certain condition is met.
+
+Instead of `for` or `while` loops, Haskell uses recursion for looping. As with any loop, there has to be at least one case that **terminates** the repetition, and a case that causes the function to **call itself**.
+
+## 1. The two parts
+
+Every recursive definition has this structure:
+
+| Part | What it does |
+|---|---|
+| **Base case** | Defines the function for the first input values. It terminates the recursion. |
+| **Recursive step** | Defines the function for other input values in terms of itself, creating the loop. |
+
+Without the base case, the function may remain in an indefinite loop.
+
+## 2. A first example: factorial
+
+The factorial of a positive integer `n` takes all positive integers less than or equal to `n` and multiplies them together:
+
+```text
+factorial 6 = 6! = 6*5*4*3*2*1
+factorial 5 = 5! = 5*4*3*2*1
+factorial 4 = 4! = 4*3*2*1
+factorial 1 = 1! = 1
+factorial 0 = 0! = 1
+```
+
+Look at those lines together and one relationship jumps out:
+
+> A factorial of a number is just that number multiplied by the factorial of a number one less than it.
+
+That sentence *is* the recursive step. The `0` case is the exception that stops it. So the specification is:
+
+```text
+fac n = | 1               if n = 0     -- base case
+        | n * fac (n - 1) if n > 0     -- recursive step
+```
+
+And the Haskell definition follows directly:
+
+```haskell
+-- Return the factorial of a non-negative whole number.
+fac :: Integer -> Integer
+fac 0 = 1                -- base case
+fac n = n * fac (n - 1)  -- recursive step
+```
+
+```text
+ghci> fac 6
+720
+ghci> fac 0
+1
+```
+
+Unfolding `fac 4` by hand shows the loop:
+
+```text
+fac 4 = 4 * fac 3
+      = 4 * 3 * fac 2
+      = 4 * 3 * 2 * fac 1
+      = 4 * 3 * 2 * 1 * fac 0
+      = 4 * 3 * 2 * 1 * 1
+      = 24
+```
+
+Each call reduces the argument by one, and the chain stops the moment it reaches `0`.
+
+## 3. Order matters
+
+A recursive declaration has two definitions: one for the base case and one for the recursive case. **The order of the declarations is important in Haskell.** The compiler selects a declaration starting at the top, then picks the one that matches.
+
+Recall the rule from Chapter 4: list definitions from the most specific to the most general. The base case is a literal — the most specific thing there is — so it goes first:
+
+```haskell
+-- WRONG: the variable pattern matches 0 as well, so the base case is dead.
+fac n = n * fac (n - 1)
+fac 0 = 1
+```
+
+This version never terminates. `fac 0` matches the first equation, producing `0 * fac (-1)`, then `fac (-2)`, and so on forever.
+
+<Callout type="warn" title="The base case must be reachable">
+It is not enough to write a base case. It must be listed where it can match, and every recursive call must move the argument towards it. Both conditions are needed for termination.
+</Callout>
+
+## 4. A second example: the Fibonacci sequence
+
+The Fibonacci sequence, starting with 0 and 1, is a set of steadily increasing numbers where each number equals the sum of the preceding two.
+
+| Position | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Value | 0 | 1 | 1 | 2 | 3 | 5 | 8 | 13 | 21 | 34 | 55 | 89 | 144 | 233 |
+
+This specification needs **two** base cases, because the recursive step reaches back two places:
+
+```text
+fib n = | 0                       if n = 0
+        | 1                       if n = 1
+        | fib (n-1) + fib (n-2)   otherwise
+```
+
+```haskell
+-- Return the nth Fibonacci number, counting from zero.
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+```
+
+```text
+ghci> fib 9
+34
+ghci> fib 13
+233
+```
+
+Checking against the table: `F9 = F8 + F7 = 21 + 13 = 34`. Correct.
+
+<Callout type="info" title="How many base cases?">
+As many as the recursive step needs. `fac` subtracts 1, so one base case suffices. `fib` reaches back two positions, so it needs two — with only `fib 0`, evaluating `fib 2` would call `fib 1`, which would call `fib 0` and `fib (-1)`, and never stop.
+</Callout>
+
+## 5. The rules to apply
+
+When you meet a new problem, work through these in order:
+
+<StepByStep>
+  <StepByStepTitle>Designing a recursive function</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Identify the end goal</StepTitle>
+  What is the smallest input, and what is the answer for it? That is your base case.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Determine what happens when the goal is reached</StepTitle>
+  The base case returns a value directly, with no further call.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>List all alternate possibilities</StepTitle>
+  What other shapes of input exist? Each needs a case, and together they must be exhaustive.
+  </Step>
+
+  <Step number={4}>
+  <StepTitle>Determine the repeating process</StepTitle>
+  Express the answer for `n` in terms of the answer for a smaller input.
+  </Step>
+
+  <Step number={5}>
+  <StepTitle>Check that each alternative moves towards the goal</StepTitle>
+  If any recursive call does not shrink the argument, the function will not terminate.
+  </Step>
+</StepByStep>
+
+## 6. Defining a recursive function at the prompt
+
+A multi-equation definition needs the multi-line brackets you met in Chapter 2:
+
+```text
+ghci> :{
+ghci| factorial 0 = 1
+ghci|  factorial n = n * factorial (n - 1)
+ghci| :}
+ghci> factorial 6
+720
+```
+
+Or, as a one-liner separating the equations with a semicolon:
+
+```text
+ghci> factorial 0 = 1; factorial n = n * factorial (n - 1)
+ghci> factorial 6
+720
+```
+
+For anything longer, save the definitions in a `.hs` file, as Chapter 2 showed.
+
+## 7. Common errors
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| GHCi hangs and never returns | No reachable base case | Check the base case is listed first and is actually matched |
+| `fac 0` loops forever | Variable pattern placed above the literal base case | Put the most specific equation first |
+| Stack overflow on a large input | The argument is not shrinking, or the chain is genuinely too deep | Confirm each call reduces the argument |
+| `fib 2` never stops | Only one base case for a step that reaches back two | Add the second base case |
+| Wrong answer, no crash | The recursive step does not match the specification | Return to the specification and dry run by hand |
+
+## 8. Practice
+
+For each, write the specification with its base case and recursive step, then the Haskell definition, then test the base case and two ordinary inputs.
+
+1. `sumNumbers n` computes the sum of all positive whole numbers up to and including `n`.
+2. `power x n` raises `x` to the power of `n`, where `n` is non-negative.
+3. `countDown n` returns the number of steps needed to reach zero by subtracting one.
+4. `double n` doubles a number without using `*` — by adding it to itself recursively. What is the base case?
+
+<Accordions>
+<Accordion title="Check question 1">
+
+```text
+sumNumbers n = | 1                       if n = 1
+               | n + sumNumbers (n - 1)  if n > 1
+```
+
+```haskell
+-- Sum all positive whole numbers up to and including n.
+sumNumbers :: Integer -> Integer
+sumNumbers 1 = 1
+sumNumbers n = n + sumNumbers (n - 1)
+```
+
+```text
+ghci> sumNumbers 5
+15
+```
+
+The base case here is `1`, not `0`, because the specification says *positive* whole numbers. Using `0` as the base would also work arithmetically, but it would accept `sumNumbers 0` as meaningful, which the specification does not. Let the specification choose the base case.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can name the two parts of every recursive definition and say what each does.' },
+  { type: 'must', text: 'I can explain why the base case must be listed before the recursive step.' },
+  { type: 'must', text: 'I can say how many base cases a specification needs and why.' },
+  { type: 'must', text: 'I can check that every recursive call moves the argument towards the base case.' },
+  { type: 'must', text: 'I can enter a multi-equation recursive definition at the GHCi prompt.' },
+  { type: 'avoid', text: 'Do not write a recursive step without first writing the base case.' }
+]} />
+
+Continue with [Dry Running a Recursive Function](/docs/sem3/csi243/05-recursion/notes/dry-running).

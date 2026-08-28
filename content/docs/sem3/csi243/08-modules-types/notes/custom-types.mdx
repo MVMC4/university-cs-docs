@@ -1,0 +1,289 @@
+---
+title: "4. Custom Data Types"
+description: "Define genuinely new types with the data declaration, carry values in constructors, pattern match on them, derive standard behaviour, and build recursive types."
+---
+
+
+
+A type synonym renames an existing type. The `data` declaration creates a **genuinely new type**, distinct from every other, which the compiler will keep separate.
+
+## 1. Enumerations
+
+The simplest form lists the values the type can have:
+
+```haskell
+data Result = Pass | Fail
+data TLights = Red | Green | Yellow
+```
+
+Read `|` as **“or”**: a `Result` is either `Pass` or `Fail`.
+
+`Pass`, `Fail`, `Red`, `Green`, and `Yellow` are **data constructors**. They are the values of the type, and like all constructors they begin with a capital letter.
+
+```haskell
+-- Convert a mark into a result.
+classify :: Int -> Result
+classify mark
+  | mark >= 50 = Pass
+  | otherwise  = Fail
+```
+
+Because these are ordinary constructors, they can be pattern matched exactly as `True` and `False` were in Chapter 4:
+
+```haskell
+-- Describe a result in words.
+describe :: Result -> String
+describe Pass = "Congratulations"
+describe Fail = "Please resubmit"
+```
+
+Two patterns, and the set is exhaustive — a `Result` has no other possible value.
+
+## 2. Deriving standard behaviour
+
+Try to print a `Result` and it fails:
+
+```text
+ghci> classify 64
+<interactive>: error:
+    * No instance for (Show Result) arising from a use of 'print'
+```
+
+GHC does not know how to display a type you just invented. A `deriving` clause asks it to work out the obvious definitions:
+
+```haskell
+data Result = Pass | Fail
+  deriving (Show, Eq, Ord)
+```
+
+```text
+ghci> classify 64
+Pass
+ghci> Pass == Fail
+False
+ghci> Pass < Fail
+True
+```
+
+| Derived class | What it provides |
+|---|---|
+| `Show` | Converting the value to a `String`, so it can be printed |
+| `Eq` | `==` and `/=` |
+| `Ord` | `<`, `<=`, `>`, `>=`, and `compare` |
+| `Enum` | `succ`, `pred`, and ranges such as `[Red ..]` |
+
+`Ord` orders the constructors by the sequence in which they are declared, which is why `Pass < Fail`. Chapter 9 explains what a type class actually is; for now, `deriving` is the tool.
+
+<Callout type="info" title="Add deriving (Show, Eq) by habit">
+Almost every custom type in this course benefits from both. Without `Show` you cannot inspect a value at the prompt, which makes testing painful.
+</Callout>
+
+## 3. Constructors that carry values
+
+A constructor may take arguments, which lets the type carry data:
+
+```haskell
+data Shape = Circle Float | Rectangle Float Float
+  deriving (Show)
+```
+
+A `Shape` is either a `Circle` holding one `Float`, or a `Rectangle` holding two.
+
+```text
+ghci> :type Circle
+Circle :: Float -> Shape
+ghci> :type Rectangle
+Rectangle :: Float -> Float -> Shape
+```
+
+Notice that a constructor with arguments **is a function** that builds a value of the type.
+
+Pattern matching takes the values back out:
+
+```haskell
+-- Calculate the area of a shape.
+area :: Shape -> Float
+area (Circle r)      = pi * r * r
+area (Rectangle w l) = w * l
+```
+
+```text
+ghci> area (Circle 2.0)
+12.566371
+ghci> area (Rectangle 3.0 4.0)
+12.0
+```
+
+The pattern `(Circle r)` matches any circle and binds `r` to the radius it carries. Constructor patterns need parentheses, for the same reason cons patterns did — application binds tighter than anything else.
+
+<Callout type="warn" title="Constructors are capitalised; the type is too">
+`data Shape = Circle Float` declares the *type* `Shape` and the *constructor* `Circle`. They live in separate namespaces, so it is legal — and common — for a single-constructor type to use the same name for both.
+</Callout>
+
+## 4. This is where the type safety comes from
+
+Compare the synonym problem from the previous lesson:
+
+```haskell
+type Metres = Double
+type Feet   = Double
+-- distance + height is accepted
+```
+
+With `data`, the two become genuinely distinct:
+
+```haskell
+data Metres = Metres Double deriving (Show)
+data Feet   = Feet Double   deriving (Show)
+```
+
+```text
+ghci> Metres 100 + Feet 30
+<interactive>: error:
+    * Couldn't match expected type 'Metres' with actual type 'Feet'
+```
+
+The compiler now enforces what the synonym could only suggest. That is the reason to prefer `data` whenever mixing two things would be a real bug.
+
+## 5. Records of related fields
+
+A single constructor with several arguments models a record:
+
+```haskell
+data Student = Student String Int Bool
+  deriving (Show, Eq)
+
+kago :: Student
+kago = Student "Kago" 72 True
+
+-- Extract the mark.
+studentMark :: Student -> Int
+studentMark (Student _ mark _) = mark
+```
+
+```text
+ghci> studentMark kago
+72
+```
+
+This is clearer than the `(String, Int, Bool)` tuple of Chapter 6, because the constructor name says what the group represents and the type cannot be confused with any other triple.
+
+## 6. Recursive types
+
+Unlike a type synonym, a **type declaration may be recursive**, because the constructors stop the expansion:
+
+```haskell
+data Tree a = Leaf a | Branch (Tree a) (Tree a)
+  deriving (Show)
+```
+
+A `Tree a` is either a `Leaf` holding one value, or a `Branch` holding two subtrees. The `a` makes it work for any element type.
+
+```haskell
+exampleTree :: Tree Int
+exampleTree = Branch (Leaf 1) (Branch (Leaf 2) (Leaf 3))
+```
+
+Functions over a recursive type follow the structure exactly, with one equation per constructor — the same discipline as `[]` and `(x:xs)`:
+
+```haskell
+-- Count the leaves in a tree.
+countLeaves :: Tree a -> Int
+countLeaves (Leaf _)     = 1
+countLeaves (Branch l r) = countLeaves l + countLeaves r
+
+-- Add up the values in a tree of numbers.
+sumTree :: Tree Int -> Int
+sumTree (Leaf n)     = n
+sumTree (Branch l r) = sumTree l + sumTree r
+```
+
+```text
+ghci> countLeaves exampleTree
+3
+ghci> sumTree exampleTree
+6
+```
+
+The `Leaf` case is the base case and the `Branch` case is the recursive step. Every recursion technique from Chapter 5 transfers directly.
+
+## 7. `data` or `type`?
+
+<ComparisonTable
+  columns={[
+    { header: 'Question', key: 'q' },
+    { header: 'type', key: 'type' },
+    { header: 'data', key: 'data' }
+  ]}
+  rows={[
+    { q: 'Creates a new type?', type: 'No, just a name', data: 'Yes, distinct from all others' },
+    { q: 'Interchangeable with the original?', type: 'Yes', data: 'No' },
+    { q: 'Can be recursive?', type: 'No', data: 'Yes' },
+    { q: 'Needs constructors?', type: 'No', data: 'Yes, at least one' },
+    { q: 'Good for', type: 'Readability of an existing type', data: 'A genuinely new concept, or enforced separation' }
+  ]}
+  highlightCol="data"
+/>
+
+## 8. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `data result = Pass \| Fail` | Type names must be capitalised | `data Result = ...` |
+| `data Result = pass \| fail` | Constructors must be capitalised | `Pass`, `Fail` |
+| `print (classify 64)` fails | No `Show` instance | Add `deriving (Show)` |
+| `area Circle r = ...` | Constructor patterns need parentheses | `area (Circle r) = ...` |
+| `Circle 2 == Circle 2` fails | No `Eq` instance | Add `Eq` to the deriving clause |
+| Missing a constructor in a function | Non-exhaustive patterns at run time | One equation per constructor |
+| `type Tree = Branch Tree Tree` | Synonyms cannot be recursive or carry constructors | Use `data` |
+
+## 9. Practice
+
+1. Declare `data Result = Pass | Fail deriving (Show, Eq)` and write `classify :: Int -> Result`.
+2. Declare `TLights` and write `nextLight :: TLights -> TLights` cycling red, green, yellow.
+3. Declare `Shape` with `Circle` and `Rectangle`, write `area`, and add a `Square` constructor. Which existing functions must change?
+4. Declare a `Student` type with a name, a mark, and a registered flag, then write `passedStudents :: [Student] -> [String]`.
+5. Declare `Tree a` and write `depth :: Tree a -> Int` returning the longest path from the root.
+6. Explain, with `Metres` and `Feet`, why `data` gives type safety that `type` cannot.
+
+<Accordions>
+<Accordion title="Check questions 3 and 5">
+
+**3.** Adding `Square Float` to the type means `area` gains an equation:
+
+```haskell
+data Shape = Circle Float | Rectangle Float Float | Square Float
+  deriving (Show)
+
+area :: Shape -> Float
+area (Circle r)      = pi * r * r
+area (Rectangle w l) = w * l
+area (Square s)      = s * s
+```
+
+**Every** function pattern matching on `Shape` must gain a case, or it becomes non-exhaustive and fails at run time on a square. This is why `-Wincomplete-patterns` matters: with it enabled, GHC lists exactly which functions you still need to update.
+
+**5.**
+
+```haskell
+depth :: Tree a -> Int
+depth (Leaf _)     = 1
+depth (Branch l r) = 1 + max (depth l) (depth r)
+```
+
+One equation per constructor. The `Leaf` case is the base case; the `Branch` case adds one to the deeper of the two subtrees.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can declare an enumeration with data and read | as "or".' },
+  { type: 'must', text: 'I can explain that constructors are capitalised values of the type.' },
+  { type: 'must', text: 'I can use deriving (Show, Eq, Ord) and say what each provides.' },
+  { type: 'must', text: 'I can write constructors that carry values and pattern match to extract them.' },
+  { type: 'must', text: 'I can explain why data gives type safety that type does not.' },
+  { type: 'must', text: 'I can define a recursive type and write a function with one equation per constructor.' },
+  { type: 'avoid', text: 'Do not omit a constructor case; it fails at run time, not compile time.' }
+]} />
+
+Continue to [Practice Questions](/docs/sem3/csi243/08-modules-types/questions), then [Review](/docs/sem3/csi243/08-modules-types/review).

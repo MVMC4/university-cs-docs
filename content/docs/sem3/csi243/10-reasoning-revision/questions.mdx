@@ -1,0 +1,94 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on specification, preconditions, referential transparency, structural induction, error classification, testing, and complexity."
+---
+
+## Specification
+
+<ExamQuestion title="Question 1: Saying what a function promises [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Name the three parts of a specification and state what each records. [3]</>}
+    solution={<>The purpose states what the function represents in one sentence. The precondition states what must be true of the arguments before application. The postcondition states what is true of the result afterwards. [3]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Write a full specification for <code>isDigit :: Char -{'>'} Bool</code>. [4]</>}
+    solution={<>Purpose: report whether the character is one of the decimal digits. Precondition: none, since every <code>Char</code> is acceptable. Postcondition: result = <code>('0' {'<'}= c {'&&'} c {'<'}= '9')</code>. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain how the input set <code>I</code> is partitioned, and relate that partition to the type of <code>fac :: Integer -{'>'} Integer</code>. [4]</>}
+    solution={<><code>I = Iv ∪ Ie</code>, where <code>Iv</code> is the valid subset satisfying the precondition and <code>Ie</code> is the invalid remainder. For <code>fac</code>, <code>Iv</code> is the non-negative integers, but the type <code>Integer</code> admits every integer, so <code>Ie</code> is non-empty. That gap is why <code>fac (-1)</code> fails to terminate unless the case is handled explicitly. [4]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain why the claim "this code is correct" is incomplete. [3]</>}
+    solution={<>Correctness is relative to a specification. A function is correct with respect to a stated specification when, for every argument satisfying the precondition, it terminates and produces a result satisfying the postcondition. Without naming the specification the claim has no content, and changing the specification can make the same code wrong. [3]</>}
+  />
+</ExamQuestion>
+
+## Equational reasoning
+
+<ExamQuestion title="Question 2: Arguing about every input [16 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Define referential transparency and explain why <code>x = x + 1</code> is not referentially transparent. [4]</>}
+    solution={<>An expression is referentially transparent when it can be replaced by its value without changing observable program behaviour. The assignment <code>x = x + 1</code> changes the value bound to <code>x</code>, so the same text denotes different values before and after; it therefore cannot be replaced by any single value. Functional programs have no assignment statements. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Prove that <code>length (xs ++ ys) = length xs + length ys</code> by induction over <code>xs</code>. [8]</>}
+    solution={<>Base case <code>xs = []</code>: <code>length ([] ++ ys) = length ys</code> by the definition of <code>++</code>, and <code>length [] + length ys = 0 + length ys = length ys</code>, so both sides agree. Inductive hypothesis: assume <code>length (xs ++ ys) = length xs + length ys</code>. Step: <code>length ((x:xs) ++ ys) = length (x : (xs ++ ys)) = 1 + length (xs ++ ys) = 1 + (length xs + length ys) = (1 + length xs) + length ys = length (x:xs) + length ys</code>. Since every finite list is built from <code>[]</code> by consing, the claim holds for all finite lists. Marks for both cases, correct use of the hypothesis, and justified steps. [8]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why passing ten tests is weaker evidence than a completed induction. [4]</>}
+    solution={<>Tests show only that the function produced the expected result for those ten inputs; they say nothing about any untested input. An induction covers every finite input, since it establishes the base case and shows the property is preserved by the constructor step. Testing is evidence, reasoning is proof — though reasoning assumes termination, which must be argued separately. [4]</>}
+  />
+</ExamQuestion>
+
+## Errors and testing
+
+<ExamQuestion title="Question 3: Classifying and finding faults [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Name the two stages of analysis performed before evaluation and explain what each rejects. [4]</>}
+    solution={<>Syntax analysis checks the expression against the syntax laid down for expressions and signals a syntax error if it does not conform. Type analysis then checks whether the expression possesses a sensible type and signals a type error otherwise. Evaluation begins only if both stages pass. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Classify each as a syntax or a semantic error: unbalanced parentheses; division by zero; a missing <code>else</code>; list index out of range. [4]</>}
+    solution={<>Unbalanced parentheses and a missing <code>else</code> are syntax errors, concerning the structure of the language and caught before the program runs. Division by zero and an index out of range are semantic errors, concerning the interpretation of the program and caught only during execution. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Give normal, boundary, and invalid test cases for <code>isDigitChar</code>, and explain why the boundary tests matter. [6]</>}
+    solution={<>Normal: <code>'7'</code>. Boundary: <code>'0'</code> and <code>'9'</code>. Just outside: <code>'/'</code> and <code>':'</code>, the characters immediately either side of the range. The boundary tests matter because a mistaken strict comparison such as <code>c {'>'} '0'</code> passes ordinary examples while wrongly rejecting <code>'0'</code>, and only a test at the exact edge exposes it. [6]</>}
+  />
+</ExamQuestion>
+
+## Complexity
+
+<ExamQuestion title="Question 4: Comparing the cost of definitions [16 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>State how many calls <code>length</code> makes on a list of <code>n</code> elements, and name the growth. [4]</>}
+    solution={<>It makes <code>n + 1</code> calls: one per element plus the base case. The work grows in direct proportion to <code>n</code>, so the growth is linear, written O(n). Doubling the list roughly doubles the work. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Explain why the naive <code>fib</code> is exponential and identify the exact cause. [4]</>}
+    solution={<>Each call makes two further calls, so the number of calls roughly doubles for each increase of one in <code>n</code>, giving O(2ⁿ). The cause is recomputation: <code>fib (n-1)</code> and <code>fib (n-2)</code> overlap heavily, so the same subproblem is solved many times — <code>fib 5</code> evaluates <code>fib 2</code> three separate times. Recursion itself is not the problem. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why the naive <code>myReverse</code> using <code>++ [x]</code> is quadratic, and give a linear alternative. [4]</>}
+    solution={<><code>++</code> must walk its entire left argument, so at each of the <code>n</code> steps the reversed tail is traversed again, giving roughly <code>n + (n-1) + … + 1</code> work, which is O(n²). A linear version uses an accumulator and the constant-cost cons operator: <code>go [] acc = acc</code> and <code>go (y:ys) acc = go ys (y : acc)</code>. [4]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain, in terms of laziness, why <code>take 5 [1..]</code> terminates. [4]</>}
+    solution={<>Haskell will not evaluate an expression without a reason, representing pending computation as a thunk that delays evaluation until the result is needed. <code>[1..]</code> is never fully constructed; only the five elements <code>take</code> demands are ever computed, so the expression terminates despite the list being infinite. [4]</>}
+  />
+</ExamQuestion>

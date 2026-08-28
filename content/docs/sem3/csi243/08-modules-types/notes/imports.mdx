@@ -1,0 +1,232 @@
+---
+title: "2. Importing"
+description: "Import whole modules or selected names, hide conflicting ones, use qualified imports and aliases, and find your way around the standard library modules."
+---
+
+
+
+A module may **import** definitions from other modules. This lesson covers the five forms of import and when each is the right one.
+
+## 1. The basic form
+
+```haskell
+import ModuleName
+```
+
+`import MyCalculator` brings in everything the module exports.
+
+Two rules govern placement:
+
+- **Imports must appear before any function definition**, so they go at the top of the file.
+- To import several modules, put **each import statement on its own line**.
+
+```haskell
+import Data.Char
+import Data.List
+import MyCalculator
+
+-- definitions follow
+```
+
+## 2. Selective import
+
+If you need only a couple of functions from a module, import just those by listing them in parentheses:
+
+```haskell
+import Data.Char (toLower, toUpper)
+```
+
+Now `toLower` and `toUpper` are available, and nothing else from `Data.Char` is.
+
+```haskell
+import MyCalculator (addTwo)
+import Data.List           -- everything from Data.List
+```
+
+<Callout type="info" title="Why bother being selective">
+A selective import documents exactly what your module depends on, and it prevents a name you did not expect from clashing with one of your own. For a large module such as `Data.List`, being explicit is usually worth it.
+</Callout>
+
+## 3. Hiding
+
+To import everything **except** a few names, use `hiding`:
+
+```haskell
+import Data.List hiding (nub)
+```
+
+Everything after `hiding` is not imported. To hide several names, list them comma-separated in parentheses:
+
+```haskell
+import Data.List hiding (nub, sort)
+```
+
+This is useful when several modules export functions with the same name and you want to avoid a conflict — for instance when you have written your own `nub` and still want the rest of `Data.List`.
+
+<Callout type="warn" title="Types cannot be hidden">
+Algebraic datatypes and type synonyms cannot be hidden; they are always imported. `hiding` applies to functions and values.
+</Callout>
+
+## 4. Qualified imports
+
+If a name is defined in two imported modules, referring to it is ambiguous. A **qualified** import requires every name from that module to be prefixed with the module name:
+
+```haskell
+import qualified Data.Map
+
+-- Must now be written with the prefix.
+example = Data.Map.insert 1 "one" Data.Map.empty
+```
+
+With qualified imports, all imported values include the module name as a prefix. That makes the origin of every name unambiguous:
+
+```haskell
+MyModule.functionName variables        -- the version from MyModule
+MyOtherModule.functionName variables   -- the version from MyOtherModule
+```
+
+## 5. Aliases with `as`
+
+Imported modules may be renamed and assigned a local alias using the `as` clause:
+
+```haskell
+import qualified MyVeryLongModuleName as ModAlias
+```
+
+Entities are then referenced with `ModAlias.` instead of `MyVeryLongModuleName.`. This renaming works with both qualified and regular importing.
+
+```haskell
+import qualified Data.Map as Map
+
+example = Map.insert 1 "one" Map.empty
+```
+
+As long as there are no conflicting items, several modules may be imported and renamed the same:
+
+```haskell
+import MyLongModule as My
+import MyCompletelyDifferentModule as My
+```
+
+Both modules' functions can then be prefixed with `My`.
+
+## 6. The five forms together
+
+<ComparisonTable
+  columns={[
+    { header: 'Form', key: 'form' },
+    { header: 'Brings in', key: 'brings' },
+    { header: 'Use when', key: 'when' }
+  ]}
+  rows={[
+    { form: 'import M', brings: 'Everything M exports', when: 'You use much of a small, familiar module' },
+    { form: 'import M (f, g)', brings: 'Only f and g', when: 'You need a couple of names and want the dependency documented' },
+    { form: 'import M hiding (f)', brings: 'Everything except f', when: 'One name clashes with yours' },
+    { form: 'import qualified M', brings: 'Everything, prefixed with M.', when: 'Names would otherwise be ambiguous' },
+    { form: 'import qualified M as X', brings: 'Everything, prefixed with X.', when: 'The same, but M is long to type' }
+  ]}
+  highlightCol="when"
+/>
+
+## 7. The standard library modules
+
+The Haskell standard library is split into modules, each containing functions and types that are related and serve a common purpose.
+
+| Module | Contains |
+|---|---|
+| `Prelude` | The standard definitions, imported automatically into every module |
+| `Data.List` | A wide range of functions for working with list data |
+| `Data.Char` | Predefined functions for working with the `Char` type |
+| `Data.Map` | An unsorted key-value pair data type, with many useful functions |
+| `Data.Set` | Functions for manipulating mathematical sets |
+
+`Prelude` needs no import, which is why arithmetic, `putStrLn`, and the list operations have worked from Chapter 2 onwards.
+
+`Data.Set` is implemented as a binary tree, so **all the elements in a set must be unique**.
+
+### Using `Data.Char`
+
+```haskell
+import Data.Char (toUpper, toLower, ord, chr, isDigit, isAlpha)
+
+shout :: String -> String
+shout = map toUpper
+```
+
+```text
+ghci> shout "csi243"
+"CSI243"
+ghci> ord 'A'
+65
+ghci> chr 97
+'a'
+ghci> isDigit '7'
+True
+```
+
+`ord :: Char -> Int` turns a character into its character code, and `chr :: Int -> Char` turns a code back into a character. Capital letters A to Z have codes 65 to 90, and lowercase a to z have codes 97 to 122.
+
+Other useful `Data.Char` functions are `isAscii`, `isUpper`, `isLower`, `isAlpha`, `isDigit`, and `isAlphaNum`.
+
+### Using `Data.List`
+
+```haskell
+import Data.List (sort, nub, group)
+```
+
+```text
+ghci> sort [3,1,2]
+[1,2,3]
+ghci> nub [1,1,2,3,3]
+[1,2,3]
+```
+
+## 8. Common errors
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| `Could not find module 'Data.Char'` | Misspelling, or the package is unavailable | Check the spelling and capitalisation |
+| `Ambiguous occurrence 'nub'` | Two imported modules export the name | Use `hiding`, or a qualified import |
+| `Variable not in scope: toUpper` | It was not included in a selective import | Add it to the parentheses |
+| `Not in scope: Map.insert` | The module was imported unqualified, or the alias differs | `import qualified Data.Map as Map` |
+| `parse error on input 'import'` | An import appears after a definition | Move all imports to the top |
+| `hiding` on a type has no effect | Types and synonyms cannot be hidden | Use a qualified import instead |
+
+## 9. Practice
+
+1. Write a module importing only `toUpper` and `toLower` from `Data.Char`, and use both.
+2. Write a function `isVowel` using `Data.Char.toLower`, replacing the eleven-equation version from Chapter 4.
+3. Import `Data.List` while hiding `sort`, then write your own `sort` and confirm no conflict arises.
+4. Import `Data.Map` qualified as `M` and write an expression using `M.empty`.
+5. Explain why `Prelude` needs no import statement.
+6. You have your own `reverse`. Give two different import forms that let you keep it while still using the rest of `Data.List`.
+
+<Accordions>
+<Accordion title="Check questions 2 and 6">
+
+**2.**
+
+```haskell
+import Data.Char (toLower)
+
+-- Report whether a character is a vowel, in either case.
+isVowel :: Char -> Bool
+isVowel c = toLower c `elem` "aeiou"
+```
+
+**6.** Either `import Data.List hiding (reverse)`, which brings in everything else unprefixed; or `import qualified Data.List as L`, which keeps every name behind the `L.` prefix so nothing clashes at all. The first is lighter to read; the second is safer if more clashes may appear later.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can write all five import forms and say when each is appropriate.' },
+  { type: 'must', text: 'I know imports go at the top, one per line, before any definition.' },
+  { type: 'must', text: 'I can resolve a name clash with hiding or a qualified import.' },
+  { type: 'must', text: 'I can alias a module with as and reference its names through the alias.' },
+  { type: 'must', text: 'I can name the main standard library modules and what each is for.' },
+  { type: 'must', text: 'I can explain why Prelude needs no import.' },
+  { type: 'note', text: 'Types and type synonyms are always imported; hiding cannot exclude them.' }
+]} />
+
+Continue with [Type Synonyms](/docs/sem3/csi243/08-modules-types/notes/type-synonyms).

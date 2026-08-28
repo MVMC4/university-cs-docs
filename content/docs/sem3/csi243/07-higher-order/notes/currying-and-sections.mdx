@@ -1,0 +1,244 @@
+---
+title: "2. Currying and Sections"
+description: "Understand every multi-argument function as a chain of one-argument functions, apply arguments partially, convert between operators and functions, and build sections."
+---
+
+
+
+Chapter 3 read `add :: Integer -> Integer -> Integer` as “two inputs and a result.” That reading gets the right answer, but it hides what is really happening — and the truth is more useful.
+
+## 1. Every function takes one argument
+
+Recall from the previous lesson that
+
+```haskell
+add x y = x + y
+```
+
+means
+
+```haskell
+add = \x -> (\y -> x + y)
+```
+
+`add` takes a number `x` and returns a **function**. That returned function takes a number `y` and returns `x + y`. This is called **currying**, after Haskell B. Curry — the same man the language is named after.
+
+The type reflects it exactly, because `->` associates to the right:
+
+```haskell
+add :: Integer -> Integer -> Integer
+-- is really
+add :: Integer -> (Integer -> Integer)
+```
+
+Read it as: “`add` takes an `Integer` and returns a function from `Integer` to `Integer`.”
+
+Application associates to the **left**, which is the matching half of the rule:
+
+```haskell
+add 3 4
+-- is really
+(add 3) 4
+```
+
+`add 3` produces a function; that function is then applied to `4`.
+
+## 2. Partial application
+
+Because `add 3` is a perfectly good value, you may stop there and give it a name:
+
+```text
+ghci> let addThree = add 3
+ghci> :type addThree
+addThree :: Integer -> Integer
+ghci> addThree 10
+13
+ghci> addThree 100
+103
+```
+
+Supplying fewer arguments than the full count is **partial application**. It is not an error or a special feature — it is the direct consequence of currying.
+
+<Callout type="info" title="Why curried order matters">
+Put the argument that varies *least* first. `add` is more useful as `Integer -> Integer -> Integer` than as a tupled `(Integer, Integer) -> Integer`, because only the curried form lets you fix one argument and reuse the result.
+</Callout>
+
+This is why Chapter 3 recommended the curried form over the tupled form. A tupled function cannot be partially applied: `addPair (3, 4)` needs the whole pair at once.
+
+## 3. Operators and functions are interchangeable
+
+Functions such as `+` are **infix operators**: they are written between their arguments. Ordinary functions are written before theirs. Haskell lets you convert freely in both directions.
+
+### Function to operator: backticks
+
+Any function with two arguments can be converted into an operator by enclosing its name in single back quotes:
+
+```text
+ghci> div 7 2
+3
+ghci> 7 `div` 2
+3
+ghci> mod 14 3
+2
+ghci> 14 `mod` 3
+2
+```
+
+You have already used this with `elem`:
+
+```text
+ghci> 'a' `elem` "aeiou"
+True
+```
+
+Backticks are for readability. `x `elem` vowels` reads closer to English than `elem x vowels`.
+
+### Operator to function: parentheses
+
+The converse is also possible. Any operator can be converted into an ordinary curried function by enclosing it in parentheses:
+
+```text
+ghci> (+) 3 2
+5
+ghci> (*) 4 5
+20
+ghci> :type (+)
+(+) :: Num a => a -> a -> a
+```
+
+This matters because an operator on its own is **not a valid Haskell expression**. To state its type, or to pass it to another function, you must parenthesise it:
+
+```haskell
+(&&) :: Bool -> Bool -> Bool
+(||) :: Bool -> Bool -> Bool
+```
+
+## 4. Sections
+
+If `⊕` is an operator, then expressions of the form `(⊕)`, `(x⊕)`, and `(⊕y)` are called **sections**. A section is an operator with one side already supplied — partial application, written in operator form.
+
+Their meanings are made precise by lambdas:
+
+| Section | Lambda form | Meaning |
+|---|---|---|
+| `(⊕)` | `\x -> (\y -> x ⊕ y)` | The operator as a plain curried function |
+| `(x⊕)` | `\y -> x ⊕ y` | The left argument is fixed |
+| `(⊕y)` | `\x -> x ⊕ y` | The right argument is fixed |
+
+Worked examples:
+
+| Section | Is the function | Example |
+|---|---|---|
+| `(+)` | Addition | `(+) 3 2` is `5` |
+| `(1+)` | The successor function | `(1+) 5` is `6` |
+| `(1/)` | The reciprocal function | `(1/) 4` is `0.25` |
+| `(*2)` | The doubling function | `(*2) 7` is `14` |
+| `(/2)` | The halving function | `(/2) 9` is `4.5` |
+| `(>5)` | Tests whether a value exceeds 5 | `(>5) 8` is `True` |
+
+```text
+ghci> map (*2) [1,2,3]
+[2,4,6]
+ghci> filter (>5) [3,7,2,9]
+[7,9]
+```
+
+Sections construct a number of simple but useful functions in a compact way, and they are the most idiomatic way to supply a small function to `map` or `filter`.
+
+### The subtraction trap
+
+`(-)` is the one operator that does not section cleanly on the right, because `-` also marks negative numbers:
+
+```text
+ghci> (-5) 10
+<interactive>: error: ...
+```
+
+`(-5)` is the *number* negative five, not a section. To subtract 5, use `subtract`:
+
+```text
+ghci> subtract 5 10
+5
+ghci> map (subtract 5) [10, 20]
+[5,15]
+```
+
+Left sections are fine: `(5-)` is the function that subtracts its argument from 5.
+
+## 5. Sections as arguments
+
+Sections are often necessary when using operators as arguments to other functions. The Prelude's `and`, which returns `True` when every value in a list of Booleans is `True`, can be defined as:
+
+```haskell
+and :: [Bool] -> Bool
+and = foldr (&&) True
+```
+
+Here `(&&)` is passed as a value. Written bare, `&&` would be a parse error. Folds are the subject of the fourth lesson in this chapter.
+
+## 6. Reading a curried type
+
+Given a type, count the arrows to see how many arguments can be supplied and what each stage produces:
+
+```haskell
+f :: Int -> Int -> Int -> Int
+```
+
+| Expression | Type | Meaning |
+|---|---|---|
+| `f` | `Int -> Int -> Int -> Int` | Needs three arguments |
+| `f 1` | `Int -> Int -> Int` | Needs two more |
+| `f 1 2` | `Int -> Int` | Needs one more |
+| `f 1 2 3` | `Int` | A finished value |
+
+## 7. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `(-5)` used as a section | It parses as negative five | `subtract 5` |
+| `map *2 [1,2]` | A bare operator is not an expression | `map (*2) [1,2]` |
+| `7 div 2` | `div` is a function, so it is written before its arguments | ``7 `div` 2`` or `div 7 2` |
+| ``7 'div' 2`` | Those are single quotes, not back quotes | Use backticks |
+| `add (3, 4)` where `add` is curried | Curried functions take arguments separately | `add 3 4` |
+| Expecting `add 3` to be an error | Partial application is legal and produces a function | Use it, or supply the second argument |
+
+## 8. Practice
+
+1. Give the fully parenthesised type of `f :: Int -> Int -> Bool`, and the type of `f 1`.
+2. Define `addThree` by partially applying `add`, then use it twice.
+3. Rewrite `div 17 5` using backticks, and `x `mod` y` using ordinary application.
+4. State what each section denotes: `(3*)`, `(*3)`, `(++ "!")`, `("!" ++)`, `(< 10)`.
+5. Use `map` with a section to halve every element of `[2,4,6]`.
+6. Explain why `(-3)` cannot be used to subtract three, and give a working alternative.
+7. `(++ "!")` and `("!" ++)` behave differently. Apply both to `"hi"` and explain the difference.
+
+<Accordions>
+<Accordion title="Check questions 4 and 7">
+
+**4.** `(3*)` multiplies its argument by 3. `(*3)` also multiplies by 3 — multiplication is commutative, so these agree. `(++ "!")` appends `"!"` to the end of its argument. `("!" ++)` puts `"!"` at the front. `(< 10)` tests whether its argument is less than 10.
+
+**7.**
+
+```text
+ghci> (++ "!") "hi"
+"hi!"
+ghci> ("!" ++) "hi"
+"!hi"
+```
+
+A right section fixes the right operand, so the argument goes on the left. A left section fixes the left operand, so the argument goes on the right. For a non-commutative operator such as `++` the two differ, which is exactly why both forms exist.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can explain currying and state that every Haskell function takes one argument.' },
+  { type: 'must', text: 'I know -> associates right and application associates left, and why those pair up.' },
+  { type: 'must', text: 'I can partially apply a function and give the type of the result.' },
+  { type: 'must', text: 'I can convert a function to an operator with backticks and an operator to a function with parentheses.' },
+  { type: 'must', text: 'I can write left and right sections and say how they differ.' },
+  { type: 'must', text: 'I can explain the (-) trap and use subtract instead.' },
+  { type: 'note', text: 'Put the least-varying argument first so partial application is useful.' }
+]} />
+
+Continue with [Mapping and Filtering](/docs/sem3/csi243/07-higher-order/notes/map-and-filter).

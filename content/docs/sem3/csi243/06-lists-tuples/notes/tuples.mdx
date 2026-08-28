@@ -1,0 +1,262 @@
+---
+title: "3. Tuples"
+description: "Group values of different types with fixed arity, use fst and snd and tuple patterns, return several results from one function, and choose between a list and a tuple."
+---
+
+
+
+A **tuple** is a finite sequence of values of **possibly different types**. Components are separated by commas and enclosed in round brackets.
+
+```haskell
+(50, "csi243", "2013/14")
+('2', False)
+```
+
+Where a list is homogeneous and variable in length, a tuple is heterogeneous and fixed. That single contrast decides which one a problem needs.
+
+## 1. Arity
+
+**Arity** is the number of components in a tuple, and it is part of the type.
+
+| Tuple | Arity | Name |
+|---|---|---|
+| `()` | 0 | Unit |
+| `(1, 'a')` | 2 | Pair |
+| `(1, 'a', True)` | 3 | Triple |
+| `(1, 2, 3, 4)` | 4 | 4-tuple |
+
+Two rules follow:
+
+- **Tuples of arity 1 are not allowed.** `(5)` is just `5` in brackets, not a tuple.
+- **The unit `()`** is the empty tuple. You have already met it in `IO ()`, where it means the action returns no useful data.
+
+## 2. The type records every position
+
+A tuple's type lists the type of each position, in order:
+
+```haskell
+student :: (String, Integer, Bool)
+student = ("Kago", 2026001, True)
+```
+
+This means `(String, Integer)` and `(Integer, String)` are **different types**, and neither can be used where the other is expected. Position carries meaning.
+
+```text
+ghci> :type ('2', False)
+('2', False) :: (Char, Bool)
+ghci> :type (50, "csi243", "2013/14")
+(50, "csi243", "2013/14") :: Num a => (a, String, String)
+```
+
+## 3. Tuples are immutable and fixed
+
+The elements in a tuple are fixed. You cannot add elements to a tuple as the program runs, and there is no cons operator for tuples.
+
+Use a tuple when you know **in advance** how many values are to be stored, and a list when the count can vary.
+
+<Callout type="warn" title="Arity cannot change">
+Adding a component produces a value of a *different type*, not a longer tuple. A function returning `(Int, Int)` can never return `(Int, Int, Int)`.
+</Callout>
+
+## 4. `fst` and `snd`
+
+Most tuples are pairs, so the Prelude provides two functions for them:
+
+```text
+ghci> fst (5, 'h')
+5
+ghci> snd (5, 'h')
+'h'
+ghci> fst ("Tebogo", "Lesego")
+"Tebogo"
+```
+
+They are defined with tuple patterns, exactly as Chapter 4 showed:
+
+```haskell
+fst :: (a, b) -> a
+fst (x, _) = x
+
+snd :: (a, b) -> b
+snd (_, x) = x
+```
+
+<Callout type="warn" title="Pairs only">
+`fst` and `snd` work only on tuples of arity 2. For a triple, use a pattern: `(a, _, _)`.
+</Callout>
+
+## 5. Tuple patterns
+
+Destructuring is usually clearer than repeated `fst`/`snd` calls:
+
+```haskell
+-- Add the components of a pair.
+addPair :: (Integer, Integer) -> Integer
+addPair (x, y) = x + y
+
+-- Swap the components of a pair.
+swap' :: (a, b) -> (b, a)
+swap' (x, y) = (y, x)
+
+-- Take the middle of a triple.
+middle :: (a, b, c) -> b
+middle (_, y, _) = y
+```
+
+```text
+ghci> addPair (3, 4)
+7
+ghci> swap' (1, "one")
+("one",1)
+```
+
+Patterns nest, so a tuple inside a tuple can be taken apart in one step:
+
+```text
+ghci> let nested = ((1, 'a'), "foo")
+ghci> snd (fst nested)
+'a'
+```
+
+Or with a single pattern:
+
+```haskell
+innerChar :: ((Int, Char), String) -> Char
+innerChar ((_, c), _) = c
+```
+
+## 6. Nesting
+
+There are no restrictions on the types of a tuple's components. They may be tuples, lists, or anything else:
+
+```haskell
+(50, ("cs", False))                  -- tuple of tuples
+(['2', 'a', 'x'], [False, False])    -- tuple of lists
+[("cs", False), ("sc", True)]        -- list of tuples
+```
+
+The last is the important one. **A list of tuples** is how Haskell represents a table before custom types are available: every row has the same shape, and there can be any number of rows.
+
+```haskell
+marks :: [(String, Integer)]
+marks = [("Kago", 72), ("Naledi", 68), ("Thato", 91)]
+```
+
+```text
+ghci> length marks
+3
+ghci> fst (head marks)
+"Kago"
+ghci> map snd marks
+[72,68,91]
+```
+
+## 7. Returning several results
+
+A Haskell function returns one value. A tuple lets that one value carry several results:
+
+```haskell
+-- Return the sum and the absolute difference of two integers.
+addAndDifference :: Integer -> Integer -> (Integer, Integer)
+addAndDifference x y = (x + y, abs (x - y))
+```
+
+```text
+ghci> addAndDifference 9 4
+(13,5)
+```
+
+The caller takes it apart with a pattern:
+
+```haskell
+report :: Integer -> Integer -> String
+report x y = "Sum " ++ show total ++ ", difference " ++ show diff
+  where
+    (total, diff) = addAndDifference x y
+```
+
+## 8. Tuples as arguments
+
+A tuple may also be the input, which is the curried-versus-tupled distinction from Chapter 3:
+
+```haskell
+add :: (Integer, Integer) -> Integer
+add (x, y) = x + y
+```
+
+<ComparisonTable
+  columns={[
+    { header: 'Form', key: 'form' },
+    { header: 'Signature', key: 'sig' },
+    { header: 'Call', key: 'call' },
+    { header: 'Use when', key: 'use' }
+  ]}
+  rows={[
+    { form: 'Curried', sig: 'Integer -> Integer -> Integer', call: 'add 5 3', use: 'Normal Haskell style; supports partial application' },
+    { form: 'Tupled', sig: '(Integer, Integer) -> Integer', call: 'add (5, 3)', use: 'The arguments genuinely arrive as one grouped value' }
+  ]}
+  highlightCol="use"
+/>
+
+Prefer the curried form unless the pair is a single conceptual thing — a coordinate, a key-value entry, a range.
+
+## 9. List or tuple?
+
+<ComparisonTable
+  columns={[
+    { header: 'Question', key: 'q' },
+    { header: 'List', key: 'list' },
+    { header: 'Tuple', key: 'tuple' }
+  ]}
+  rows={[
+    { q: 'Length', list: 'May vary at run time', tuple: 'Fixed by its type' },
+    { q: 'Element types', list: 'All the same', tuple: 'Each position may differ' },
+    { q: 'Delimiters', list: 'Square brackets', tuple: 'Round brackets' },
+    { q: 'Can you cons?', list: 'Yes, with :', tuple: 'No' },
+    { q: 'Typical use', list: 'A collection of similar items', tuple: 'One record-like group, or several returned values' }
+  ]}
+  highlightCol="tuple"
+/>
+
+The deciding question: **can the number of components change?** If yes, you need a list. If no, and the parts mean different things, you need a tuple.
+
+## 10. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `fst (1,2,3)` | `fst` works only on pairs | Use a pattern `(a,_,_)` |
+| `(5)` treated as a tuple | Arity 1 does not exist | `(5, x)` or just `5` |
+| `(1,2) == (2,1)` expected `True` | Position is part of the value | Compare the intended components |
+| `x : (1,2)` | Tuples have no cons | Use a list if it must grow |
+| Passing `(5,3)` to `add :: Int -> Int -> Int` | That signature is curried | `add 5 3`, or change the signature |
+| `[(1,'a'), (2,3)]` | List elements must share one type | Make every tuple the same type |
+
+## 11. Practice
+
+1. Use `fst` and `snd` together to extract the character from `((1,'a'), "foo")`.
+2. Write `swap :: (a,b) -> (b,a)` and give its type by inspection before checking with `:type`.
+3. Write `addAndDifference` and test it on two equal values.
+4. Build a `[(String, Integer)]` of three students and marks, then write `bestMark` returning the highest mark.
+5. State whether each needs a list or a tuple, and why: a date; the marks of a class; a point in 3-D space; the words in a sentence.
+
+<Accordions>
+<Accordion title="Check questions 1 and 5">
+
+**1.** `snd (fst ((1,'a'), "foo"))`. The inner `fst` gives `(1,'a')`, then `snd` gives `'a'`.
+
+**5.** A date is a tuple — always three parts of different meaning. Class marks are a list — the count varies. A 3-D point is a tuple — always exactly three coordinates. Words in a sentence are a list — the count varies, and every word is the same kind of thing.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can define arity and say why arity 1 does not exist.' },
+  { type: 'must', text: 'I can explain why (String, Integer) and (Integer, String) are different types.' },
+  { type: 'must', text: 'I can use fst, snd, and tuple patterns, including nested ones.' },
+  { type: 'must', text: 'I can return several results from one function using a tuple.' },
+  { type: 'must', text: 'I can represent a table as a list of tuples.' },
+  { type: 'must', text: 'I can decide between a list and a tuple by asking whether the count can change.' },
+  { type: 'avoid', text: 'Do not use fst or snd on anything but a pair.' }
+]} />
+
+Continue with [List Comprehensions](/docs/sem3/csi243/06-lists-tuples/notes/list-comprehensions).

@@ -1,0 +1,284 @@
+---
+title: "1. Lists"
+description: "Build homogeneous lists with literals, ranges, and cons, nest them, and use the Prelude's basic list operations including the partial ones."
+---
+
+
+
+A **list** contains several values. They are enclosed in square brackets, separated by commas, and **all of the same type**.
+
+```haskell
+[1, 5, 8]      -- three values
+[10 .. 20]     -- eleven integers from 10 to 20
+```
+
+Chapter 2 introduced lists briefly. This lesson makes them a working tool.
+
+## 1. Lists are homogeneous
+
+A list is a **homogeneous** data structure: every element has the same type. You can have a list of integers or a list of characters, but not a list holding a few of each.
+
+```text
+ghci> let numbers = [1, 2, 3, 4, 5]
+ghci> let truths = [True, False, True]
+ghci> let strings = ["yes", "they", "are"]
+ghci> let characters = ['a', 'b', 'c']
+ghci> characters
+"abc"
+```
+
+Note the last result: a list of `Char` **is** a `String`, so GHCi displays it in double quotes. `String` and `[Char]` are two names for the same type.
+
+Mixing types is rejected:
+
+```text
+ghci> let wrongList = [1, 'a', "string"]
+<interactive>: error:
+    * Couldn't match expected type `Char' with actual type `[Char]'
+    * In the expression: "string"
+      In the expression: [1, 'a', "string"]
+```
+
+Haskell cannot choose one element type that makes a number, a character, and a string the same kind of value.
+
+### Two special cases
+
+- The **empty list** is written `[]`. It has length 0 and is a valid list of any element type.
+- A **singleton** is a list of length 1, such as `[7]`.
+
+<Callout type="warn" title="A singleton is not its element">
+`[7]` and `7` are different values with different types: `[Integer]` and `Integer`. Likewise `"A"` is a one-element list while `'A'` is a character. This distinction causes many early type errors.
+</Callout>
+
+## 2. Type notation
+
+`[T]` is the type of all lists whose elements have type `T`.
+
+| Value | Type |
+|---|---|
+| `[2, 4, 50]` | `[Integer]` |
+| `['2', '4', 'r']` | `[Char]`, i.e. `String` |
+| `["2", "int", "50"]` | `[String]` |
+| `[[1, 2], [3]]` | `[[Integer]]` |
+| `[]` | `[a]` — a list of any type |
+
+## 3. Ranges
+
+A range builds a list from its endpoints, without typing every element:
+
+```text
+ghci> [1 .. 5]
+[1,2,3,4,5]
+ghci> [1, 3 .. 10]
+[1,3,5,7,9]
+ghci> [10, 9 .. 1]
+[10,9,8,7,6,5,4,3,2,1]
+ghci> ['a' .. 'f']
+"abcdef"
+```
+
+Giving the first **two** elements sets the step: `[1, 3 .. 10]` steps by 2. To count downwards you must supply the step, because `[10 .. 1]` produces the empty list.
+
+Haskell is lazy, so a range may be infinite. `[1 ..]` is a valid list; taking a finite part of it is safe:
+
+```text
+ghci> take 5 [1 ..]
+[1,2,3,4,5]
+```
+
+Evaluating `[1 ..]` on its own at the prompt prints forever — press Ctrl+C to stop it.
+
+## 4. Cons: how lists are really built
+
+Every list is constructed one element at a time, starting from `[]`, using the `:` operator, called **cons**.
+
+```text
+[1,2,3]
+= 1 : [2,3]
+= 1 : (2 : [3])
+= 1 : (2 : (3 : []))
+```
+
+So `[1,2,3]` is an abbreviation of `1:(2:(3:[]))`. The cons operator associates to the right, so the parentheses can be dropped: `1:2:3:[]`.
+
+Consing an element onto a list returns a new list with that element at the front:
+
+```text
+ghci> let numbers = [1,2,3,4]
+ghci> 0 : numbers
+[0,1,2,3,4]
+ghci> 1 : 2 : 3 : numbers
+[1,2,3,1,2,3,4]
+```
+
+<Callout type="warn" title="You cannot cons a list onto an element">
+`:` takes an **element** on the left and a **list** on the right. `[1,2] : 3` is a type error. To join two lists use `++`, not `:`.
+</Callout>
+
+This structure is the reason `(x:xs)` is the fundamental list pattern, and the next lesson builds every recursive list function on it.
+
+## 5. Basic list operations
+
+These come from the Prelude and need no import.
+
+| Function | Returns | Example |
+|---|---|---|
+| `null lst` | `True` if the list is empty | `null [5,4,3]` is `False` |
+| `head lst` | The first value | `head [5,4,3,2,1]` is `5` |
+| `tail lst` | Everything except the head | `tail [5,4,3,2,1]` is `[4,3,2,1]` |
+| `last lst` | The final value | `last [5,4,3,2,1]` is `1` |
+| `init lst` | Everything except the last | `init [5,4,3,2,1]` is `[5,4,3,2]` |
+| `length lst` | The number of values | `length [5,4,3,2,1]` is `5` |
+| `reverse lst` | The list in reverse order | `reverse [1,2,3]` is `[3,2,1]` |
+| `sum lst` | The total of the elements | `sum [1,2,3]` is `6` |
+| `product lst` | The product of the elements | `product [1,2,3]` is `6` |
+| `minimum lst` | The smallest element | `minimum [5,2,8]` is `2` |
+| `maximum lst` | The largest element | `maximum [5,2,8]` is `8` |
+| `elem v lst` | `True` if `v` occurs in the list | `elem 3 [1,2,3]` is `True` |
+
+### `take` and `drop`
+
+`take v lst` returns the first `v` elements. If the list has fewer than `v`, the whole list is returned — it does not fail:
+
+```text
+ghci> let numbers = [1,2,3,4,5]
+ghci> take 2 numbers
+[1,2]
+ghci> take 0 numbers
+[]
+ghci> take 6 numbers
+[1,2,3,4,5]
+```
+
+`drop` discards the first `v` elements instead.
+
+### Indexing with `!!`
+
+`lst !! k` returns the element at position `k`, **indexed from 0**:
+
+```text
+ghci> let numbers = [1,2,3,4,5]
+ghci> numbers !! 0
+1
+ghci> numbers !! 1
+2
+ghci> numbers !! 9
+*** Exception: Prelude.!!: index too large
+```
+
+### Concatenation with `++`
+
+`++` joins two lists, taking all elements of the first followed by all of the second:
+
+```text
+ghci> [1,2,3,4] ++ [4,5,6,7]
+[1,2,3,4,4,5,6,7]
+ghci> "cat" ++ "fish"
+"catfish"
+```
+
+## 6. Partial functions
+
+Several of these operations are **partial**: they are undefined for some inputs the type allows.
+
+```text
+ghci> head []
+*** Exception: Prelude.head: empty list
+ghci> maximum []
+*** Exception: Prelude.maximum: empty list
+```
+
+The type of `head` is `[a] -> a`, which promises a result for every list — but there is no element to return from an empty one. This is the same gap between type and domain that Chapter 5 identified for `fac`.
+
+<Callout type="info" title="GHC 9.10 warns about head, even when it works">
+From GHC 9.8 onwards, *every* use of `head` or `tail` produces a warning, including uses that succeed:
+
+```text
+ghci> head [1,2,3]
+<interactive>:1:1: warning: [GHC-63394] [-Wx-partial]
+    In the use of `head' ...
+    "This is a partial function, it throws an error on empty lists.
+     Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. ..."
+1
+```
+
+The result `1` is still correct — this is a warning, not an error. The compiler is making exactly the point this section makes. Once you reach the next lesson you will handle the empty case with a `[]` pattern instead, and the warning disappears.
+</Callout>
+
+<Callout type="info" title="The habit this creates">
+Before calling `head`, `tail`, `last`, `init`, `maximum`, `minimum`, or `!!`, ask what happens if the list is empty or the index is out of range. Usually the answer is to handle the empty case yourself with a `[]` pattern — which the next lesson makes routine.
+</Callout>
+
+## 7. Lists of lists
+
+A list may contain lists. The inner lists may have different lengths, but they must all have the same type:
+
+```haskell
+[[1,2], [3,4], [5,6]]    -- valid, type [[Integer]]
+[[1,2], [2,3,4], [5]]    -- still valid; lengths may differ
+[['2','S'], ['4','2','r']] -- type [[Char]], i.e. [String]
+```
+
+```text
+ghci> let grid = [[1,2],[3,4,5],[6]]
+ghci> length grid
+3
+ghci> head grid
+[1,2]
+ghci> map length grid
+[2,3,1]
+```
+
+`length grid` is `3` because the outer list has three elements — each of which happens to be a list.
+
+## 8. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `[1, 'a', True]` | Lists are homogeneous | Use a tuple, or one element type |
+| `[1,2] : 3` | `:` needs an element then a list | `[1,2] ++ [3]` |
+| `[1,2] ++ 3` | `++` needs two lists | `[1,2] ++ [3]` |
+| `head []` | `head` is partial | Match `[]` yourself first |
+| `numbers !! 9` on a 5-element list | Index out of range | Check `length` first, or use pattern matching |
+| `[10 .. 1]` returns `[]` | Ranges count upwards by default | `[10, 9 .. 1]` |
+| `'A' == "A"` | `Char` and `String` are different types | Compare like with like |
+
+## 9. Practice
+
+1. Build the list of even numbers from 2 to 20 using a range with a step.
+2. Predict then check: `take 3 [5,4,3,2,1]`, `drop 3 [5,4,3,2,1]`, `init [1]`, `null []`.
+3. Use cons three times to build `[7,8,9]` starting from `[]`.
+4. Write an expression producing the first 4 elements of the infinite list of odd numbers.
+5. Explain why `length [[1,2],[3,4,5]]` is `2` and not `5`.
+6. `head [] `fails. Write a function `safeHead :: [a] -> a` that reports the empty case with a useful message instead.
+
+<Accordions>
+<Accordion title="Check questions 3 and 6">
+
+**3.** `7 : 8 : 9 : []`, which Haskell displays as `[7,8,9]`. Because `:` associates to the right this is `7:(8:(9:[]))`.
+
+**6.**
+
+```haskell
+-- Return the first element, reporting an informative error for an empty list.
+safeHead :: [a] -> a
+safeHead []    = error "safeHead: empty list has no first element"
+safeHead (x:_) = x
+```
+
+The `[]` pattern is matched first, so the cons pattern only ever sees a non-empty list. This is the standard exhaustive split, and it is the subject of the next lesson.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can explain why lists are homogeneous and what error a mixed list produces.' },
+  { type: 'must', text: 'I can read [T] notation and give the type of a nested list.' },
+  { type: 'must', text: 'I can build lists with literals, ranges with a step, and cons.' },
+  { type: 'must', text: 'I can expand [1,2,3] into its cons form.' },
+  { type: 'must', text: 'I can name and use the basic Prelude list operations.' },
+  { type: 'must', text: 'I can identify a partial function and say what makes it partial.' },
+  { type: 'avoid', text: 'Do not cons a list onto an element, or use ++ with a non-list.' }
+]} />
+
+Continue with [Recursion on Lists](/docs/sem3/csi243/06-lists-tuples/notes/list-recursion).

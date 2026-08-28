@@ -1,0 +1,84 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on list construction, recursion over lists, partial functions, tuples, arity, and list comprehensions."
+---
+
+## Lists and construction
+
+<ExamQuestion title="Question 1: Building and typing lists [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain what it means to say lists are homogeneous, and state what happens when <code>[1, 'a', "string"]</code> is entered. [4]</>}
+    solution={<>Every element of a list must have the same type. The expression is rejected at compile time with a type error, because no single element type makes a number, a character, and a string the same kind of value. Typically GHC reports that it could not match <code>Char</code> with <code>[Char]</code>. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Expand <code>[1,2,3]</code> into its <code>cons</code> form and state which way the operator associates. [4]</>}
+    solution={<><code>[1,2,3] = 1:(2:(3:[]))</code>. The cons operator associates to the right, so the parentheses may be omitted and written <code>1:2:3:[]</code>. Every list is built one element at a time starting from the empty list. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>State the value of <code>take 6 [1,2,3,4,5]</code> and of <code>[1,2] !! 5</code>, and explain why they behave differently. [4]</>}
+    solution={<><code>take 6 [1,2,3,4,5]</code> returns <code>[1,2,3,4,5]</code>: <code>take</code> is total and simply returns the whole list when fewer elements are available. <code>[1,2] !! 5</code> raises an index-too-large exception: <code>!!</code> is partial and has no result to return for an out-of-range index. [4]</>}
+  />
+</ExamQuestion>
+
+## Recursion over lists
+
+<ExamQuestion title="Question 2: The standard split [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain why <code>[]</code> and <code>(x:xs)</code> form an exhaustive pair of patterns, and why recursion on them terminates. [4]</>}
+    solution={<>Every list is either empty or is an element consed onto another list, so the two patterns cover all cases with no gap. Recursion terminates because <code>xs</code> is always one element shorter than the argument, so repeated calls must eventually reach <code>[]</code>. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Define <code>length</code> and <code>sum</code> recursively, and explain why their base cases differ. [6]</>}
+    solution={<><code>length [] = 0</code>, <code>length (_:xs) = 1 + length xs</code>. <code>sum [] = 0</code>, <code>sum (x:xs) = x + sum xs</code>. Both base cases are <code>0</code> here, but the reason differs: for <code>length</code> an empty list has no elements, and for <code>sum</code> zero is the identity for addition, leaving the result unchanged. By contrast <code>product [] = 1</code>, because one is the identity for multiplication. [6]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>A student writes <code>positiveNumbers (x:xs) | x {'>'} 0 = x : positiveNumbers xs | otherwise = positiveNumbers (x:xs)</code>. State the fault and its effect. [4]</>}
+    solution={<>The <code>otherwise</code> branch recurses on <code>(x:xs)</code>, the same list, rather than on <code>xs</code>. The list never shrinks, so the base case is never reached and evaluation does not terminate for any input whose first element is not positive. The repair is to recurse on <code>xs</code> in both branches. [4]</>}
+  />
+</ExamQuestion>
+
+## Tuples
+
+<ExamQuestion title="Question 3: Fixed-arity grouping [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Define <em>arity</em>, and explain why tuples of arity 1 are not allowed. [4]</>}
+    solution={<>Arity is the number of components in a tuple, and it forms part of the type. A tuple of arity 1 is not allowed because <code>(5)</code> is simply the value <code>5</code> in brackets; brackets around a single expression are grouping, not construction, so there is no distinct one-component tuple. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Explain why <code>(String, Integer)</code> and <code>(Integer, String)</code> are different types, and give the definitions of <code>fst</code> and <code>snd</code>. [4]</>}
+    solution={<>A tuple type records the type of each position in order, so swapping the positions produces a different type that cannot be used where the other is expected. <code>fst :: (a,b) -{'>'} a</code> with <code>fst (x,_) = x</code>; <code>snd :: (a,b) -{'>'} b</code> with <code>snd (_,x) = x</code>. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>State whether each needs a list or a tuple, with a reason: the marks of a class; a point in three-dimensional space. [4]</>}
+    solution={<>Class marks need a list: the number of students varies at run time and every mark is the same kind of value. A 3-D point needs a tuple: it always has exactly three components, fixed by its type. The deciding question is whether the number of components can change. [4]</>}
+  />
+</ExamQuestion>
+
+## List comprehensions
+
+<ExamQuestion title="Question 4: Describing one list by another [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Name the three kinds of element that may appear in a comprehension and state the role of each. [6]</>}
+    solution={<>The output function appears before the pipe and specifies what is applied to each element that survives. A generator has the form <code>x {'<'}- listExpression</code> and supplies the input values. A test is a Boolean predicate after the pipe that filters, keeping only values for which it is <code>True</code>. Tests are separated by commas. [6]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>State the value of <code>[x * x | x {'<'}- [1..10], x * 2 {'>'}= 12]</code> and explain the order of evaluation. [4]</>}
+    solution={<><code>[36,49,64,81,100]</code>. The generator supplies 1 to 10; the test keeps values where <code>x {'>'}= 6</code>, namely 6 to 10; the output function squares each survivor, and results are collected in generation order. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>State the value of <code>[x + y | x {'<'}- [1,2,3], y {'<'}- [-3,0,3]]</code> and explain which generator varies fastest. [4]</>}
+    solution={<><code>[-2,1,4,-1,2,5,0,3,6]</code>, nine results in total. The rightmost generator varies fastest: <code>x</code> is held at 1 while <code>y</code> takes all three values, then <code>x</code> becomes 2, and so on — equivalent to a nested loop with the later generator innermost. [4]</>}
+  />
+</ExamQuestion>

@@ -1,0 +1,271 @@
+---
+title: "3. Mapping and Filtering"
+description: "Recognise the two recursion shapes you already write by hand, replace them with map and filter, and use takeWhile, dropWhile, and zipWith."
+---
+
+
+
+A **higher-order function** is a function that takes another function as an argument, or returns one as its result. You have already met one: `map`.
+
+This lesson shows that `map` and `filter` are not new machinery. They are the two list recursions from Chapter 6, written once and given a name.
+
+## 1. The shape you already know
+
+Compare two functions from Chapter 6:
+
+```haskell
+doubleAll :: [Integer] -> [Integer]
+doubleAll []     = []
+doubleAll (x:xs) = (x * 2) : doubleAll xs
+
+addTen :: [Integer] -> [Integer]
+addTen []     = []
+addTen (x:xs) = (x + 10) : addTen xs
+```
+
+They are identical except for one expression. Everything else — the base case, the cons, the recursive call — is repeated boilerplate.
+
+`map` abstracts the difference into a parameter:
+
+```haskell
+map :: (a -> b) -> [a] -> [b]
+map _ []     = []
+map f (x:xs) = f x : map f xs
+```
+
+Read the signature carefully. The first argument `(a -> b)` is **itself a function**. That is what makes `map` higher-order.
+
+```text
+ghci> map (*2) [1,2,3]
+[2,4,6]
+ghci> map (+10) [1,2,3]
+[11,12,13]
+ghci> map show [1,2,3]
+["1","2","3"]
+ghci> map length ["hi", "there"]
+[2,5]
+```
+
+`map` never changes the number of elements, and it may change the element type: `map show` turns `[Integer]` into `[String]`, which is exactly what `(a -> b)` permits.
+
+## 2. `filter`: the other shape
+
+The second recursion shape from Chapter 6 kept some elements:
+
+```haskell
+positiveNumbers :: [Integer] -> [Integer]
+positiveNumbers [] = []
+positiveNumbers (x:xs)
+  | x > 0     = x : positiveNumbers xs
+  | otherwise = positiveNumbers xs
+```
+
+Abstracting the test gives `filter`:
+
+```haskell
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ [] = []
+filter p (x:xs)
+  | p x       = x : filter p xs
+  | otherwise = filter p xs
+```
+
+The function argument returns `Bool`, which is why it is called a **predicate**.
+
+```text
+ghci> filter (>0) [-1,5,-3,8]
+[5,8]
+ghci> filter even [1..10]
+[2,4,6,8,10]
+ghci> filter (`elem` "aeiou") "functional"
+"uioa"
+```
+
+`filter` never changes the element type, and the result is never longer than the input.
+
+<ComparisonTable
+  columns={[
+    { header: 'Function', key: 'fn' },
+    { header: 'Signature', key: 'sig' },
+    { header: 'Length of result', key: 'len' },
+    { header: 'Element type', key: 'type' }
+  ]}
+  rows={[
+    { fn: 'map', sig: '(a -> b) -> [a] -> [b]', len: 'Always the same', type: 'May change' },
+    { fn: 'filter', sig: '(a -> Bool) -> [a] -> [a]', len: 'Same or shorter', type: 'Unchanged' }
+  ]}
+  highlightCol="len"
+/>
+
+## 3. Rewriting Chapter 6 with them
+
+Every filter from Lab 03 collapses to one line:
+
+```haskell
+largerY :: [Integer] -> Integer -> [Integer]
+largerY xs y = filter (> y) xs
+
+positiveNumbers :: [Integer] -> [Integer]
+positiveNumbers = filter (> 0)
+
+doubleAll :: [Integer] -> [Integer]
+doubleAll = map (* 2)
+```
+
+Note the last two: with the list argument dropped from both sides, the definition says directly *what the function is* rather than what it does to an argument. That is legitimate precisely because of currying — `filter (> 0)` is already a complete `[Integer] -> [Integer]` function.
+
+## 4. Combining them
+
+`map` and `filter` compose naturally into a pipeline. Read from the inside out:
+
+```text
+ghci> map (*2) (filter even [1..10])
+[4,8,12,16,20]
+```
+
+Filter first, then double what survives. The same result as a comprehension:
+
+```text
+ghci> [x * 2 | x <- [1..10], even x]
+[4,8,12,16,20]
+```
+
+<Callout type="info" title="Comprehension or higher-order function?">
+They are equally correct. A comprehension often reads better when both a transformation and a filter are involved. A bare `map` or `filter` reads better when there is only one of the two. Choose for the reader.
+</Callout>
+
+## 5. Taking and dropping by a condition
+
+`take` and `drop` from Chapter 6 work by count. Their higher-order cousins work by test:
+
+```haskell
+takeWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile :: (a -> Bool) -> [a] -> [a]
+```
+
+`takeWhile` returns the longest prefix whose elements all satisfy the predicate, and **stops at the first failure**:
+
+```text
+ghci> takeWhile (<5) [1,2,3,7,1,2]
+[1,2,3]
+ghci> dropWhile (<5) [1,2,3,7,1,2]
+[7,1,2]
+```
+
+Compare with `filter`, which examines the whole list:
+
+```text
+ghci> filter (<5) [1,2,3,7,1,2]
+[1,2,3,1,2]
+```
+
+`takeWhile` stopped at `7` and never looked further; `filter` kept the trailing `1,2` as well. Confusing them is a common source of wrong answers.
+
+## 6. Combining two lists with `zipWith`
+
+`zipWith` applies a two-argument function to corresponding elements of two lists:
+
+```haskell
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+```
+
+```text
+ghci> zipWith (+) [1,2,3] [10,20,30]
+[11,22,33]
+ghci> zipWith (*) [1,2,3] [4,5,6]
+[4,10,18]
+ghci> zipWith max [1,9,3] [5,2,8]
+[5,9,8]
+```
+
+It stops when the shorter list runs out:
+
+```text
+ghci> zipWith (+) [1,2,3] [10,20]
+[11,22]
+```
+
+The related `zip` pairs elements into tuples, and is just `zipWith` with the pairing function:
+
+```text
+ghci> zip [1,2,3] "abc"
+[(1,'a'),(2,'b'),(3,'c')]
+```
+
+## 7. Functions as values
+
+The idea underneath all of this is that **functions are first-class values**. A first-class value can be passed to a function, returned from a function, or stored in a data structure — with no restriction on its use.
+
+```text
+ghci> let operations = [(*2), (+10), (subtract 1)]
+ghci> map (\f -> f 5) operations
+[10,15,4]
+```
+
+A list of functions, each applied to `5`. Nothing special is required to make that work; functions are values like any other.
+
+## 8. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `map (*2) 5` | The second argument must be a list | `map (*2) [5]` |
+| `map *2 [1,2]` | A bare operator is not an expression | `map (*2) [1,2]` |
+| `filter (*2) xs` | `filter` needs a predicate returning `Bool` | `filter even xs` |
+| `takeWhile` used where `filter` was meant | It stops at the first failure | Use `filter` to scan the whole list |
+| `map` expected to shorten the list | `map` preserves length | Use `filter` to remove elements |
+| `zipWith (+) [1,2,3] [1,2]` giving 3 results | It stops at the shorter list | Check the lengths first |
+
+## 9. Practice
+
+Predict each result before running it.
+
+1. `map (+3) [1,2,3]`
+2. `filter odd [1..10]`
+3. `takeWhile (<4) [1,2,3,9,1]` and `filter (<4) [1,2,3,9,1]`
+4. `zipWith (*) [1,2,3] [4,5,6]`
+5. `map (\f -> f 2) [(*3), (+3)]`
+
+Then write:
+
+6. `initials :: [String] -> [Char]` giving the first letter of each name, using `map`.
+7. `longWords :: [String] -> [String]` keeping words of more than four characters.
+8. Rewrite `evensOnly` from Chapter 6 using `filter`, with no explicit recursion.
+9. Use `map` and `filter` together to square every odd number in `[1..10]`, then write the same thing as a comprehension.
+
+<Accordions>
+<Accordion title="Check questions 3, 6 and 9">
+
+**3.** `takeWhile (<4) [1,2,3,9,1]` is `[1,2,3]` — it stops at `9` and never sees the final `1`. `filter (<4) [1,2,3,9,1]` is `[1,2,3,1]` — it examines every element.
+
+**6.**
+
+```haskell
+initials :: [String] -> [Char]
+initials = map head
+```
+
+This is partial: `head` fails on an empty name. `map (take 1)` returning `[String]` avoids that.
+
+**9.**
+
+```text
+ghci> map (^2) (filter odd [1..10])
+[1,9,25,49,81]
+ghci> [x ^ 2 | x <- [1..10], odd x]
+[1,9,25,49,81]
+```
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can define a higher-order function and say why map qualifies.' },
+  { type: 'must', text: 'I can write the recursive definitions of map and filter from memory.' },
+  { type: 'must', text: 'I can state the signature of each and what it implies about length and element type.' },
+  { type: 'must', text: 'I can explain how takeWhile differs from filter.' },
+  { type: 'must', text: 'I can use zipWith and say what happens with lists of unequal length.' },
+  { type: 'must', text: 'I can rewrite a hand-written list recursion using map or filter.' },
+  { type: 'note', text: 'Functions are first-class values: they can be passed, returned, and stored in lists.' }
+]} />
+
+Continue with [Folds and Function Composition](/docs/sem3/csi243/07-higher-order/notes/folds-and-composition).

@@ -1,0 +1,94 @@
+---
+title: "Practice Questions"
+description: "Exam-style practice on conditional expressions, pattern matching, guarded equations, case expressions, exhaustiveness, and ordering."
+---
+
+## Conditional expressions
+
+<ExamQuestion title="Question 1: Expressions and branches [10 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain why a Haskell <code>if</code> must always have an <code>else</code> branch, referring to expressions and types. [4]</>}
+    solution={<>A Haskell <code>if</code> is an expression rather than a statement, so it must evaluate to a value, and every value has a type. If the condition were <code>False</code> and no <code>else</code> branch existed, the expression would have no value and therefore no type. The <code>else</code> branch guarantees a result on both paths. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>State the two type rules that a conditional expression must satisfy. [3]</>}
+    solution={<>The condition must have type <code>Bool</code>. Both branches must have the same type, which is also the type of the whole expression. [3]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Explain why <code>if n {'>'} 0 then "positive" else 0</code> is rejected. [3]</>}
+    solution={<>The <code>then</code> branch has type <code>String</code> and the <code>else</code> branch is numeric. A conditional expression has a single type, so the two branches must agree; here they cannot, and the expression is rejected before evaluation. [3]</>}
+  />
+</ExamQuestion>
+
+## Pattern matching
+
+<ExamQuestion title="Question 2: Selecting by shape [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Explain how Haskell selects which equation of a multi-equation definition to use. [3]</>}
+    solution={<>Arguments are matched against the patterns sequentially from the top. The first equation whose pattern matches is the one used, and the remaining equations are not considered. [3]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Consider <code>square y = y * y</code> written above <code>square 0 = 1</code>. State what <code>square 0</code> evaluates to and explain why. [4]</>}
+    solution={<>It evaluates to <code>0</code>. A variable pattern matches any argument, so the first equation matches <code>0</code> and returns <code>0 * 0</code>. The second equation is unreachable, and GHC reports it as redundant. The most specific pattern must be listed first. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Name four kinds of pattern and give one example of each. [4]</>}
+    solution={<>Any four, with valid examples: literal (<code>fac 0</code>); variable (<code>fac n</code>); wildcard (<code>isZero _</code>); tuple (<code>fst (x, _)</code>); list (<code>stW ['b', _, _]</code>); cons (<code>head (x:_)</code>). [4]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain why <code>tail _:xs = xs</code> is invalid and give the correct definition. [3]</>}
+    solution={<>Function application binds more tightly than any operator, so the definition is read as <code>(tail _):xs = xs</code>, which is not the intended meaning and is not a valid definition. Cons patterns must be parenthesised: <code>tail (_:xs) = xs</code>. [3]</>}
+  />
+</ExamQuestion>
+
+## Guards and exhaustiveness
+
+<ExamQuestion title="Question 3: Ordering and catch-alls [14 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>Write <code>grade :: Int -{'>'} String</code> using guards, returning "A" for 90 or above, "B" for 80 or above, "C" for 70 or above, and "F" otherwise. [4]</>}
+    solution={<><code>grade score</code> followed by <code>| score {'>'}= 90 = "A"</code>, <code>| score {'>'}= 80 = "B"</code>, <code>| score {'>'}= 70 = "C"</code>, <code>| otherwise = "F"</code>. Marks are for correct guard syntax with no <code>=</code> after the parameter, and for correct ordering. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>The three conditions in part (a) are reversed so that <code>score {'>'}= 70</code> is tested first. State what <code>grade 95</code> now returns and explain why the function still compiles. [4]</>}
+    solution={<>It returns <code>"C"</code>. Guards are checked in the order listed and the first <code>True</code> guard supplies the result; <code>95 {'>'}= 70</code> is true, so the later guards are never reached. The function still compiles because every guard is a well-typed <code>Bool</code> and all results share one type; the fault is logical, not type-related. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>Define <code>otherwise</code> and explain why it must be the last guard. [3]</>}
+    solution={<><code>otherwise</code> is an ordinary Prelude name defined as <code>otherwise = True</code>. Because it always succeeds, any guard placed after it could never be reached, so it belongs last. [3]</>}
+  />
+  <SubQuestion
+    part="d"
+    prompt={<>Explain what happens at run time when no guard succeeds and no <code>otherwise</code> is present. [3]</>}
+    solution={<>Evaluation falls through to the next equation if one exists. If none applies, the program fails at run time with a non-exhaustive guards exception. This is a run-time failure, not a compile-time error, unless incomplete-pattern warnings are enabled. [3]</>}
+  />
+</ExamQuestion>
+
+## Case expressions and choosing a form
+
+<ExamQuestion title="Question 4: Selecting the right construct [12 marks]">
+  <SubQuestion
+    part="a"
+    prompt={<>State two things a <code>case</code> expression can do that equation-level pattern matching cannot. [4]</>}
+    solution={<>A <code>case</code> can scrutinise an arbitrary expression — a calculation, a tuple, or a function application — rather than only the arguments as supplied. A <code>case</code> is itself an expression, so it can appear inside a larger expression rather than selecting a whole equation. [4]</>}
+  />
+  <SubQuestion
+    part="b"
+    prompt={<>Write <code>parity :: Int -{'>'} String</code> using <code>case</code> on a calculated value, returning "even" or "odd". [4]</>}
+    solution={<><code>parity n = case n `mod` 2 of</code> with alternatives <code>0 -{'>'} "even"</code> and <code>_ -{'>'} "odd"</code>. Marks are for scrutinising the calculation rather than <code>n</code>, for using <code>-{'>'}</code> rather than <code>=</code>, and for the wildcard catch-all. [4]</>}
+  />
+  <SubQuestion
+    part="c"
+    prompt={<>A specification has a base case at <code>n = 0</code> and a second case for all other values. Another has a base case at <code>n {'<'}= 1</code>. State which construct reads best for each and justify your answer. [4]</>}
+    solution={<>The first suits pattern matching, because the base case is a literal value and a literal pattern expresses it directly. The second suits guards, because <code>n {'<'}= 1</code> is a range and no literal pattern can express a range. [4]</>}
+  />
+</ExamQuestion>

@@ -1,0 +1,202 @@
+---
+title: "1. Conditional Expressions"
+description: "Use if-then-else as a value-producing expression, understand why the else branch is mandatory, nest conditionals, and recognise when nesting becomes unreadable."
+---
+
+
+
+Most functions treat some inputs differently from others. The most direct way to express that in Haskell is the **conditional expression**:
+
+```haskell
+if condition then resultWhenTrue else resultWhenFalse
+```
+
+You met this briefly in Chapter 2. This lesson makes it precise.
+
+## 1. It is an expression, not a statement
+
+In Java, C, and Python, `if` is a **statement**: it tells the machine to take a branch. It may exist without an `else`, because it does not have to produce anything.
+
+In Haskell, `if` is an **expression**. It has a value, and therefore it has a type. This single fact explains every rule that follows.
+
+```haskell
+-- The whole expression evaluates to a String.
+resultLabel :: Double -> String
+resultLabel mark = if mark >= 50 then "Pass" else "Fail"
+```
+
+```text
+ghci> resultLabel 64
+"Pass"
+ghci> resultLabel 49.5
+"Fail"
+```
+
+## 2. Why the `else` is compulsory
+
+Ask what `if 3 > 5 then "yes"` would evaluate to. The condition is `False`, so there is no result — but the expression was supposed to *have* a value. Haskell rejects it before evaluation:
+
+```text
+ghci> if 3 > 5 then "yes"
+<interactive>:1:1: error: ... parse error ...
+```
+
+Two rules follow, and both are enforced by the type checker:
+
+1. **Every `if` must have an `else`.**
+2. **Both branches must have the same type.** The whole expression has one type, so the two branches cannot disagree.
+
+```haskell
+-- Rejected: the branches have different types.
+-- if n > 0 then "positive" else 0
+```
+
+<Callout type="warn" title="The condition must be Bool">
+`if 1 then "a" else "b"` is rejected too. Haskell does not treat non-zero numbers as truth. The condition must have type `Bool`.
+</Callout>
+
+## 3. A worked example: the sign of an integer
+
+Specify first. `getSign` maps an integer to `1`, `0`, or `-1`:
+
+```text
+getSign n = |  1   if n > 0
+            |  0   if n = 0
+            | -1   otherwise
+```
+
+Three outcomes, one Boolean test each — so we nest conditionals, using the `else` of one as the home of the next:
+
+```haskell
+getSign :: Integral a => a -> a
+getSign n =
+  if n < 0
+    then -1
+    else if n > 0
+      then 1
+      else 0
+```
+
+```text
+ghci> getSign (-7)
+-1
+ghci> getSign 0
+0
+ghci> getSign 42
+1
+```
+
+<StepByStep>
+  <StepByStepTitle>Tracing getSign (-7)</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>Evaluate the first condition</StepTitle>
+  `n` is `-7`, so `n < 0` evaluates to `True`.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Take the then branch</StepTitle>
+  The result is `-1`. The remaining `else` is never examined.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>The whole expression has a value</StepTitle>
+  `getSign (-7)` evaluates to `-1`, which matches the declared result type.
+  </Step>
+</StepByStep>
+
+Now trace `getSign 0` yourself: the first condition is `False`, so evaluation moves into the outer `else`, which is itself an `if`. Its condition `0 > 0` is also `False`, so the innermost `else` supplies `0`.
+
+## 4. Nesting works, but it does not scale
+
+Conditional expressions are exactly right for **two** outcomes. Beyond that they grow awkward:
+
+```haskell
+-- Correct, but already hard to scan.
+grade :: Int -> String
+grade score =
+  if score >= 90
+    then "A"
+    else if score >= 80
+      then "B"
+      else if score >= 70
+        then "C"
+        else "F"
+```
+
+The problems compound as cases are added:
+
+- The conditions drift rightwards, so the shape of the decision is hidden by indentation.
+- Every case after the first is buried inside the previous `else`.
+- Adding a case in the middle means re-indenting everything below it.
+- A missing `else` deep in the chain produces a parse error far from its cause.
+
+The remaining lessons in this chapter introduce three forms that express the same decisions without the drift. Guards, in particular, rewrite `grade` as four aligned lines.
+
+<Callout type="info" title="Not a rule against if">
+`if … then … else` remains the clearest form for a genuine two-way decision. Prefer it there. The advice is only against deep nesting.
+</Callout>
+
+## 5. Indentation
+
+Haskell uses layout to decide what belongs to what. When a conditional spans several lines, indent `then` and `else` consistently beneath the condition:
+
+```haskell
+-- Clear.
+absoluteValue :: Integer -> Integer
+absoluteValue n =
+  if n < 0
+    then -n
+    else n
+```
+
+Mixing tabs and spaces very often causes compiler errors. Use spaces only.
+
+## 6. Common errors
+
+| Attempt | What Haskell reports | Repair |
+|---|---|---|
+| `if n > 0 then "yes"` | Parse error | Add an `else` branch |
+| `if n > 0 then "yes" else 0` | Couldn't match type `[Char]` with a numeric type | Make both branches the same type |
+| `if n then 1 else 0` where `n :: Int` | Couldn't match expected type `Bool` | Write an actual comparison, e.g. `n /= 0` |
+| `if n > 0 then 1 else if n < 0 then -1` | Parse error | The inner `if` also needs its own `else` |
+| Misaligned `then` / `else` | Parse error on input `else` | Indent both consistently under the condition |
+
+## 7. Practice
+
+For each, write the specification first, then the implementation, then test three inputs.
+
+1. `isEven` returns `"The number is even"` or `"The number is odd"`.
+2. `larger` returns the larger of two integers.
+3. `bothEven` takes two integers and returns `2` if both are even, `1` if exactly one is, and `0` if neither is.
+4. `isVowel` returns `True` for a vowel in either case, and `False` otherwise.
+
+<Accordions>
+<Accordion title="Check question 3">
+
+```haskell
+-- Return how many of the two arguments are even.
+bothEven :: Integer -> Integer -> Integer
+bothEven m n =
+  if even m && even n
+    then 2
+    else if even m || even n
+      then 1
+      else 0
+```
+
+Order matters here. Testing `even m || even n` first would report `1` for two even numbers, because that condition is also true of them. The most specific case must be tested first — a rule that returns in every form in this chapter.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can explain why Haskell if is an expression and what follows from that.' },
+  { type: 'must', text: 'I can state the two rules: an else is required, and both branches share one type.' },
+  { type: 'must', text: 'I can trace a nested conditional and say which branches were never examined.' },
+  { type: 'must', text: 'I can explain why the most specific condition must be tested first.' },
+  { type: 'avoid', text: 'Do not nest conditionals more than two deep; use guards instead.' },
+  { type: 'note', text: 'A condition must be Bool. Haskell has no truthy numbers.' }
+]} />
+
+Continue with [Pattern Matching](/docs/sem3/csi243/04-making-choices/notes/pattern-matching).

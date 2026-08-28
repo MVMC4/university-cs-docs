@@ -1,0 +1,286 @@
+---
+title: "3. Guarded Equations"
+description: "Choose between results with a sequence of Boolean guards, place otherwise correctly, combine guards with pattern matching, and factor shared calculations into a where clause."
+---
+
+
+
+Pattern matching chooses on the **shape** of an argument. But many decisions are about a **range** — is the mark above 50, is the number negative, is the value between 13 and 19? A literal pattern cannot express that, and nested conditionals become unreadable.
+
+**Guarded equations** are the answer. A guard is a Boolean expression that tests whether a property of some value holds.
+
+## 1. The form
+
+```haskell
+functionName parameters
+  | condition1 = result1
+  | condition2 = result2
+  | otherwise  = defaultResult
+```
+
+The rules:
+
+- Start with the function name and its parameters, then **no `=` sign** on that line.
+- Move to a new line and use the pipe `|` character to introduce each option.
+- Each `|` line is a different option, written as a Boolean expression.
+- The last option should catch everything remaining, using the keyword `otherwise`.
+- There must be at least two guards; there may be many.
+
+Compare the two forms of the same function:
+
+```haskell
+-- With nested conditionals.
+getSign :: Integral a => a -> a
+getSign n =
+  if n < 0 then -1 else
+    if n > 0 then 1 else 0
+
+-- With guards: the cases are aligned and readable.
+getSign :: Integral a => a -> a
+getSign n
+  | n < 0     = -1
+  | n > 0     = 1
+  | otherwise = 0
+```
+
+The guarded version reads as a table of cases, which is exactly what the specification was.
+
+## 2. Guards are sequential
+
+Options are checked **in the order they are listed**. The first guard that evaluates to `True` supplies the result, and the rest are never examined. Careful ordering is therefore essential — the same discipline as pattern matching.
+
+```haskell
+-- Convert a mark to a letter grade.
+grade :: Int -> String
+grade score
+  | score >= 90 = "A"
+  | score >= 80 = "B"
+  | score >= 70 = "C"
+  | otherwise   = "F"
+```
+
+```text
+ghci> grade 95
+"A"
+ghci> grade 85
+"B"
+ghci> grade 42
+"F"
+```
+
+Now reverse the order:
+
+```haskell
+-- WRONG: every passing mark is caught by the first guard.
+grade score
+  | score >= 70 = "C"
+  | score >= 80 = "B"
+  | score >= 90 = "A"
+  | otherwise   = "F"
+```
+
+`grade 95` now returns `"C"`, because `95 >= 70` is the first `True` guard. The function compiles and runs; it is simply wrong. **Order the guards from the most restrictive condition to the least.**
+
+<StepByStep>
+  <StepByStepTitle>Tracing grade 85</StepByStepTitle>
+
+  <Step number={1}>
+  <StepTitle>First guard</StepTitle>
+  `85 >= 90` evaluates to `False`. Move to the next guard.
+  </Step>
+
+  <Step number={2}>
+  <StepTitle>Second guard</StepTitle>
+  `85 >= 80` evaluates to `True`.
+  </Step>
+
+  <Step number={3}>
+  <StepTitle>Take that result</StepTitle>
+  The result is `"B"`. The third guard and `otherwise` are never evaluated.
+  </Step>
+</StepByStep>
+
+## 3. `otherwise`
+
+`otherwise` is not special syntax. It is an ordinary name defined in the Prelude as:
+
+```haskell
+otherwise :: Bool
+otherwise = True
+```
+
+Because it is always `True`, a final `| otherwise = …` always matches. That is what makes it the catch-all.
+
+The `otherwise` guard is optional, but it is good practice to have one. Without it, an argument satisfying no guard produces a run-time failure:
+
+```haskell
+-- No catch-all.
+classify :: Int -> String
+classify n
+  | n > 0 = "positive"
+  | n < 0 = "negative"
+```
+
+```text
+ghci> classify 0
+*** Exception: Non-exhaustive guards in function classify
+```
+
+## 4. Guards combine with pattern matching
+
+The two forms are not rivals; an equation can use both. Patterns select the equation, guards then choose among results within it:
+
+```haskell
+-- Describe a list by its length and contents.
+describe :: [Int] -> String
+describe []  = "empty"
+describe (x:xs)
+  | null xs   = "one element"
+  | x > 0     = "starts positive"
+  | otherwise = "starts with zero or a negative"
+```
+
+```text
+ghci> describe []
+"empty"
+ghci> describe [5]
+"one element"
+ghci> describe [7, 1, 2]
+"starts positive"
+ghci> describe [-3, 1]
+"starts with zero or a negative"
+```
+
+If every guard in an equation fails, matching **falls through to the next equation** rather than failing immediately.
+
+## 5. Sharing work with `where`
+
+Guards often test the same calculated value several times. Recomputing it in each guard is wasteful and repetitive. A `where` clause makes definitions local to the whole equation, including all its guards:
+
+```haskell
+-- Classify a body mass index calculated from weight and height.
+bmiTell :: Double -> Double -> String
+bmiTell weight height
+  | bmi <= 18.5 = "underweight"
+  | bmi <= 25.0 = "normal weight"
+  | bmi <= 30.0 = "overweight"
+  | otherwise   = "obese"
+  where
+    bmi = weight / (height ^ 2)
+```
+
+`bmi` is computed once and is visible to every guard and every result in that equation. It is not visible outside it.
+
+A `where` clause may define several names, and even local functions:
+
+```haskell
+-- Report the area and perimeter of a rectangle as a labelled string.
+rectangleReport :: Double -> Double -> String
+rectangleReport len wid
+  | isSquare  = "Square with area " ++ show area
+  | otherwise = "Rectangle with area " ++ show area ++ " and perimeter " ++ show perimeter
+  where
+    area      = len * wid
+    perimeter = 2 * (len + wid)
+    isSquare  = len == wid
+```
+
+<Callout type="warn" title="Indentation carries meaning">
+The `where` keyword and its definitions must be indented **to the right of the start of the equation** they belong to, and the definitions must be aligned with each other. Mixing tabs and spaces very often causes compiler errors. Use spaces only.
+</Callout>
+
+### `where` versus `let`
+
+Both introduce local definitions, but they attach to different things:
+
+<ComparisonTable
+  columns={[
+    { header: 'Feature', key: 'feature' },
+    { header: 'where', key: 'where' },
+    { header: 'let … in', key: 'let' }
+  ]}
+  rows={[
+    { feature: 'Scope', where: 'The whole equation, including every guard', let: 'One expression' },
+    { feature: 'Position', where: 'After the equation body', let: 'Before the expression that uses it' },
+    { feature: 'Visible to guards?', where: 'Yes', let: 'No' },
+    { feature: 'Is it an expression?', where: 'No, it is part of a definition', let: 'Yes, it has a value' }
+  ]}
+  highlightCol="where"
+/>
+
+Because guards cannot see a `let` binding placed in the result, `where` is the natural choice whenever guards share a calculation.
+
+## 6. Rewriting the vowel test
+
+The previous lesson needed eleven equations. One guard does it:
+
+```haskell
+import Data.Char (toLower)
+
+-- Report whether a character is a vowel, in either case.
+isVowel :: Char -> Bool
+isVowel c = toLower c `elem` "aeiou"
+```
+
+Or, staying with guards and no import:
+
+```haskell
+isVowel :: Char -> Bool
+isVowel c
+  | c `elem` "aeiou" = True
+  | c `elem` "AEIOU" = True
+  | otherwise        = False
+```
+
+Backticks turn the two-argument function `elem` into an infix operator, which reads closer to English. Chapter 7 develops that idea.
+
+## 7. Common errors
+
+| Attempt | Problem | Repair |
+|---|---|---|
+| `f n = \| n > 0 = 1` | An `=` was written before the guards | Remove it: `f n` then the guard lines |
+| Guards ordered least-restrictive first | An early guard captures cases meant for a later one | Order from most restrictive to least |
+| No `otherwise` | `Non-exhaustive guards` at run time | Add `\| otherwise = …` |
+| `otherwise` placed above other guards | It is always `True`, so nothing below runs | Put `otherwise` last |
+| `where` aligned with the function name | Layout error | Indent `where` past the start of the equation |
+| A guard returning a different type | All results must share one type | Make every result the same type |
+
+## 8. Practice
+
+Write each function with guards, then test the boundary values.
+
+1. `isEven` returning `"The number is even"` or `"The number is odd"`.
+2. `bothEven m n` returning `2`, `1`, or `0`.
+3. `maxThree x y z` returning the largest of three integers.
+4. `areSorted x y z` returning `True` when the three are in strictly ascending or strictly descending order.
+5. `isDiv m n`, which reports whether `m` is divisible by `n`, but only when `m > n`. It must report the equal case and the `m < n` case separately.
+
+<Accordions>
+<Accordion title="Check question 5">
+
+```haskell
+-- Report the divisibility of m by n, requiring m to exceed n.
+isDiv :: Int -> Int -> String
+isDiv m n
+  | m == n         = "m and n are equal"
+  | m < n          = "m should be greater than n"
+  | m `mod` n == 0 = "Yes, m is divisible by n"
+  | otherwise      = "No, m is not divisible by n"
+```
+
+The order is forced by the specification. Both `m == n` and `m < n` must be tested *before* the divisibility test, because `mod` would otherwise report a true but unwanted answer for equal values — and would divide by zero if `n` were `0`. Guards let you state those preconditions as ordinary readable lines.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can write a guarded equation with no = before the first pipe.' },
+  { type: 'must', text: 'I can explain that guards are checked in order and the first True one wins.' },
+  { type: 'must', text: 'I can order guards from most restrictive to least and say why it matters.' },
+  { type: 'must', text: 'I know that otherwise is just a Prelude name bound to True.' },
+  { type: 'must', text: 'I can use where to share a calculation across every guard in an equation.' },
+  { type: 'must', text: 'I can state the difference in scope between where and let.' },
+  { type: 'avoid', text: 'Do not omit otherwise; missing guards fail at run time.' }
+]} />
+
+Continue with [Case Expressions](/docs/sem3/csi243/04-making-choices/notes/case-expressions).

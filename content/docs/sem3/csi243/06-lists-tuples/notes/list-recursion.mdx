@@ -1,0 +1,260 @@
+---
+title: "2. Recursion on Lists"
+description: "Use the empty and cons patterns as a base case and recursive step, define the Prelude list functions from scratch, and build lists that filter or transform their input."
+---
+
+
+
+Chapter 5 recursed on numbers by counting towards a base case. Lists recurse the same way, but the shrinking is structural: each step removes the head and recurses on the tail.
+
+The whole technique rests on one observation from the previous lesson: **every list is either empty, or an element consed onto another list.**
+
+## 1. The standard split
+
+That observation gives an exhaustive pair of patterns:
+
+| Pattern | Matches | Role |
+|---|---|---|
+| `[]` | The empty list | **Base case** — nothing left to process |
+| `(x:xs)` | A non-empty list | **Recursive step** — `x` is the head, `xs` is the tail |
+
+Every recursive list function in this chapter has that shape:
+
+```haskell
+functionName []     = -- the answer for an empty list
+functionName (x:xs) = -- combine x with functionName xs
+```
+
+The recursion terminates because `xs` is always one element shorter than the list you started with, so repeated calls must reach `[]`.
+
+<Callout type="info" title="Naming convention">
+The plural `xs` is read “exes” and means “the rest of the x values”. The course lecture notes recommend ending list argument names with `s` for exactly this reason: `ints`, `lists`, `scores`.
+</Callout>
+
+## 2. Defining the Prelude functions
+
+The best way to understand these is to write them. Each one is two lines.
+
+```haskell
+-- Is the list empty?
+null' :: [a] -> Bool
+null' []    = True
+null' (_:_) = False
+
+-- How many elements?
+length' :: [a] -> Int
+length' []     = 0
+length' (_:xs) = 1 + length' xs
+
+-- Add up the elements.
+sum' :: [Integer] -> Integer
+sum' []     = 0
+sum' (x:xs) = x + sum' xs
+
+-- Multiply the elements.
+product' :: [Integer] -> Integer
+product' []     = 1
+product' (x:xs) = x * product' xs
+```
+
+Note the base cases. `sum' [] = 0` and `product' [] = 1` are not arbitrary: they are the values that leave the result unchanged, so `sum' [5]` correctly gives `5 + 0`.
+
+`length'` uses `_` for the head because the *value* is irrelevant — only that an element exists.
+
+### Tracing `length' [4,7,2]`
+
+```text
+length' [4,7,2]
+= 1 + length' [7,2]
+= 1 + (1 + length' [2])
+= 1 + (1 + (1 + length' []))
+= 1 + (1 + (1 + 0))          <- base case reached
+= 1 + (1 + 1)
+= 1 + 2
+= 3
+```
+
+The same unwinding and rewinding as Chapter 5, with the list shrinking instead of a number.
+
+## 3. Returning a list
+
+So far the results were numbers. When the result is itself a list, the recursive step **conses** onto the result of the recursive call:
+
+```haskell
+-- Double every element.
+doubleAll :: [Integer] -> [Integer]
+doubleAll []     = []
+doubleAll (x:xs) = (x * 2) : doubleAll xs
+```
+
+```text
+ghci> doubleAll [1,2,3]
+[2,4,6]
+```
+
+```text
+doubleAll [1,2,3]
+= 2 : doubleAll [2,3]
+= 2 : (4 : doubleAll [3])
+= 2 : (4 : (6 : doubleAll []))
+= 2 : (4 : (6 : []))
+= [2,4,6]
+```
+
+The base case returns `[]` because the result of transforming nothing is nothing.
+
+## 4. Filtering: keeping some elements
+
+When only some elements belong in the result, the recursive step uses guards to decide whether to cons the head or skip it:
+
+```haskell
+-- Keep only the elements larger than y.
+largerY :: [Integer] -> Integer -> [Integer]
+largerY [] _ = []
+largerY (x:xs) y
+  | x > y     = x : largerY xs y
+  | otherwise = largerY xs y
+```
+
+```text
+ghci> largerY [3,1,7,10] 4
+[7,10]
+ghci> largerY [] 4
+[]
+```
+
+The two branches differ in one detail that is easy to miss: when the element is kept, it is consed on; when it is skipped, the recursive call is returned directly. Both branches still recurse on `xs`, so the list keeps shrinking either way.
+
+Applying the same shape to a different test:
+
+```haskell
+-- Keep only the positive elements.
+positiveNumbers :: [Integer] -> [Integer]
+positiveNumbers [] = []
+positiveNumbers (x:xs)
+  | x > 0     = x : positiveNumbers xs
+  | otherwise = positiveNumbers xs
+```
+
+```text
+ghci> positiveNumbers [-1,5,-3,8]
+[5,8]
+```
+
+<Callout type="info" title="You are writing filter">
+`largerY` and `positiveNumbers` share a shape: recurse down the list, keep elements passing a test. Chapter 7 introduces `filter`, which captures that shape once so you never write it again. Writing it by hand first is what makes `filter` obvious later.
+</Callout>
+
+## 5. Inspecting more than one element
+
+Some questions need two elements at a time. The pattern `(x:y:rest)` matches a list of **at least two** elements:
+
+```haskell
+-- Is the list sorted in descending order?
+isSorted :: [Integer] -> Bool
+isSorted []  = True
+isSorted [_] = True
+isSorted (x:y:rest)
+  | x >= y    = isSorted (y:rest)
+  | otherwise = False
+```
+
+```text
+ghci> isSorted [5,3,1]
+True
+ghci> isSorted [3,1,5]
+False
+ghci> isSorted []
+True
+```
+
+Three cases are needed, and all three come from the specification: an empty list is sorted; a one-element list is sorted; a longer list is sorted when its first two elements are in order **and** the rest is sorted.
+
+Notice the recursive call is `isSorted (y:rest)`, not `isSorted rest` — `y` must be compared against the element after it, so it stays in the list.
+
+## 6. Recursion with a position counter
+
+To find the element at position `y`, count down as you walk along:
+
+```haskell
+-- Return the element at position y paired with y. Lists index from 0.
+atPosition :: [a] -> Int -> (Int, a)
+atPosition [] _ = error "atPosition: index outside the list"
+atPosition (x:xs) y
+  | y < 0     = error "atPosition: negative index"
+  | y == 0    = (0, x)
+  | otherwise = (y, snd (atPosition xs (y - 1)))
+```
+
+Two things shrink here: the list loses its head, and `y` decreases. Reaching `y == 0` means the current head is the element wanted.
+
+A simpler version uses the built-in `!!` operator, which returns the element at position `y`:
+
+```haskell
+atPosition' :: [a] -> Int -> (Int, a)
+atPosition' xs y
+  | y < 0          = error "atPosition: negative index"
+  | y >= length xs = error "atPosition: index outside the list"
+  | otherwise      = (y, xs !! y)
+```
+
+Both are acceptable. The recursive version shows the mechanism; the second shows that recognising an existing Prelude function is also a skill.
+
+## 7. Common errors
+
+| Symptom | Cause | Repair |
+|---|---|---|
+| `Non-exhaustive patterns` | No `[]` equation | Every list recursion needs the empty case |
+| Hangs forever | The recursive call passes the same list | Recurse on `xs`, not on the original argument |
+| `x : recursiveCall` type error | Consing where the result is not a list | Check the signature's result type |
+| Result reversed | Consing onto the wrong end | `x : rest` puts `x` first; use `++` to append |
+| `Couldn't match [a] with a` | `x` used where `xs` was meant, or vice versa | `x` is an element, `xs` is a list |
+| Wrong total for an empty list | Base case is not the identity value | `sum` needs `0`, `product` needs `1` |
+
+## 8. Practice
+
+For each: specification, base case, recursive step, signature, implementation, dry run, and tests including the empty list.
+
+1. `countElem v lst` returns how many times `v` occurs.
+2. `myReverse lst` reverses a list without using `reverse`.
+3. `myMaximum lst` returns the largest element, reporting an error for `[]`.
+4. `evensOnly lst` keeps only the even elements.
+5. `myAppend lst1 lst2` joins two lists without using `++`. Which argument should you recurse on?
+
+<Accordions>
+<Accordion title="Check questions 2 and 5">
+
+**2.**
+
+```haskell
+myReverse :: [a] -> [a]
+myReverse []     = []
+myReverse (x:xs) = myReverse xs ++ [x]
+```
+
+The head must end up last, so the reversed tail is built first and `[x]` is appended. Note `[x]`, not `x` — `++` joins two *lists*.
+
+**5.**
+
+```haskell
+myAppend :: [a] -> [a] -> [a]
+myAppend [] ys     = ys
+myAppend (x:xs) ys = x : myAppend xs ys
+```
+
+Recurse on the **first** list. When it is exhausted, the answer is simply the second list, untouched. The second argument is carried along unchanged, exactly as the base value was in `power`.
+
+</Accordion>
+</Accordions>
+
+<Checklist title="Mastery check" rules={[
+  { type: 'must', text: 'I can state why [] and (x:xs) are an exhaustive split of any list.' },
+  { type: 'must', text: 'I can define length, sum, product, and null recursively.' },
+  { type: 'must', text: 'I can choose a base-case value that leaves the result unchanged.' },
+  { type: 'must', text: 'I can write a function that returns a list by consing in the recursive step.' },
+  { type: 'must', text: 'I can filter a list with guards that either cons the head or skip it.' },
+  { type: 'must', text: 'I can use (x:y:rest) to inspect two elements at once.' },
+  { type: 'avoid', text: 'Do not omit the [] equation; it is the base case and its absence crashes at run time.' }
+]} />
+
+Continue with [Tuples](/docs/sem3/csi243/06-lists-tuples/notes/tuples).
