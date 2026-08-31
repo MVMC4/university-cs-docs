@@ -1,28 +1,39 @@
 ---
 title: Practice Questions
-description: Practical questions and algorithmic analysis for Asymptotic Notation, Amortized Analysis, and Recurrences.
+description: Lecture 07 practice on primitive operations, cases, growth rates, and Big-O notation.
 ---
 
-# Practice Questions: Algorithm Analysis (Big-O)
+# Practice Questions: Algorithm Analysis & Big-O
 
-<ExamQuestion title="Question 1: Complex Loop Analysis [10 Marks]">
-  <SubQuestion part="a" prompt={<>Analyze the nested loops where outer loop <code>i</code> multiplies by 2, inner loop <code>j</code> runs up to <code>i</code>, and <code>k</code> divides <code>N</code> by 2. Break down the iterations. [6]</>} solution={<>Outer loop runs log(N) times. Inner j-loop runs 1 + 2 + 4 ... + N times (geometric series sum = 2N). Inner k-loop runs log(N) times per outer iteration.</>} />
-  <SubQuestion part="b" prompt={<>Formulate the mathematical summation and solve for the final Big-O complexity. [4]</>} solution={<>Sum of j-loop is O(N). Sum of k-loop is O(log^2 N). Total complexity is dominated by the j-loop: O(N).</>} />
+The questions move from definitions to short calculations. They match the level and scope of Lecture 07.
+
+<ExamQuestion title="Question 1: Measuring Efficiency [10 Marks]">
+  <SubQuestion part="a" prompt={<>Define time complexity and explain what input size <code>N</code> represents. [4]</>} solution={<>Time complexity describes how an algorithm's running time grows as the input grows. N is a measure of the amount of input, such as the number of elements in an array.</>} />
+  <SubQuestion part="b" prompt={<>Give two limitations of comparing algorithms only by timing Java programs. [4]</>} solution={<>Any two: the algorithms must first be implemented; results depend on hardware or software; programming style can affect time; and the tested datasets may not represent every possible input.</>} />
+  <SubQuestion part="c" prompt={<>What is the main benefit of the methodological approach? [2]</>} solution={<>It estimates scalability by counting operations, so it can compare algorithms independently of a particular machine and before full implementation.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 2: Amortized Analysis of a Custom Data Structure [12 Marks]">
-  <SubQuestion part="a" prompt={<>A DynamicArray resizes (cost O(N)) when full. Every 5th insertion costs 10*N for defragmentation. Calculate total cost of M insertions using Aggregate Method. [6]</>} solution={<>Standard inserts: M. Resizes: N + N/2 + N/4 ... = 2N. Defrag: happens M/5 times, cost is sum of 10*i. Total is O(M^2) due to defrag.</>} />
-  <SubQuestion part="b" prompt={<>What is the amortized time complexity per insertion? Show your proof. [4]</>} solution={<>Since total cost is O(M^2), amortized cost per insertion is O(M). It is not O(1) like a standard dynamic array.</>} />
-  <SubQuestion part="c" prompt={<>Would the Accounting Method be easier here? Explain credit assignment. [2]</>} solution={<>Yes, assign O(i) credits to each insertion to pay for the future defragmentation cost that scales with current size.</>} />
+<ExamQuestion title="Question 2: Best, Average, and Worst Cases [9 Marks]">
+  <SubQuestion part="a" prompt={<>Define the best case, average case, and worst case for an input of size N. [6]</>} solution={<>Best case is the shortest possible runtime, average case is the expected runtime across possible inputs, and worst case is the maximum runtime.</>} />
+  <SubQuestion part="b" prompt={<>Which case is most commonly used in this course, and why is it useful? [3]</>} solution={<>The worst case. It gives an upper limit on the work and is useful when we must plan for the slowest valid input.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 3: Recurrence Relations & Master Theorem [10 Marks]">
-  <SubQuestion part="a" prompt={<>Solve $T(n) = 4T(n/2) + O(n^2 log n)$ [4]</>} solution={<>Case 2 of Master Theorem (with log factor). n^(log_2 4) = n^2. f(n) = n^2 log n. Result: O(n^2 log^2 n).</>} />
-  <SubQuestion part="b" prompt={<>Solve $T(n) = 3T(n/4) + O(n)$ [3]</>} solution={<>Case 3. n^(log_4 3) ≈ n^0.79. f(n) = n is polynomially larger. Result: O(n).</>} />
-  <SubQuestion part="c" prompt={<>Solve $T(n) = T(n-1) + O(n)$ [3]</>} solution={<>Master theorem doesn't apply. Expansion yields n + (n-1) + ... + 1 = n(n+1)/2. Result: O(n^2).</>} />
+<ExamQuestion title="Question 3: Reading Code Structure [12 Marks]">
+  <SubQuestion part="a" prompt={<>A method contains four simple sequential statements and no loops. What is its Big-O complexity? Explain. [3]</>} solution={<>O(1). The number of operations is fixed and does not grow with N.</>} />
+  <SubQuestion part="b" prompt={<>A loop processes every element of an array once. What is its Big-O complexity? [3]</>} solution={<>O(N), because the loop body executes once per element.</>} />
+  <SubQuestion part="c" prompt={<>Two nested loops each run N times. How many times does the inner statement execute, and what is the Big-O complexity? [3]</>} solution={<>The inner statement executes N x N = N^2 times, so the complexity is O(N^2).</>} />
+  <SubQuestion part="d" prompt={<>For an <code>if</code>/<code>else</code>, which branch is counted in a worst-case estimate? [3]</>} solution={<>Count the condition and the branch with the greater runtime.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 4: Space Complexity Analysis [8 Marks]">
-  <SubQuestion part="a" prompt={<>Draw the call stack at max depth for a recursive function that creates a new array of size + 1 at each step. [4]</>} solution={<>Stack depth is N. At depth i, an array of size i is created.</>} />
-  <SubQuestion part="b" prompt={<>Calculate total heap memory. Is space O(N) or O(N^2)? Prove mathematically. [4]</>} solution={<>Sum of array sizes: 1 + 2 + ... + N = N(N+1)/2. Space complexity is O(N^2) because all arrays exist simultaneously in memory until garbage collected.</>} />
+<ExamQuestion title="Question 4: Simplifying Growth Functions [12 Marks]">
+  <SubQuestion part="a" prompt={<>Simplify <code>7N - 2</code> to Big-O notation. [3]</>} solution={<>O(N). Drop the constant coefficient and constant term.</>} />
+  <SubQuestion part="b" prompt={<>Simplify <code>3N^3 + 20N^2 + 5</code>. [3]</>} solution={<>O(N^3). The cubic term grows fastest.</>} />
+  <SubQuestion part="c" prompt={<>Simplify <code>3 log N + 5</code>. [3]</>} solution={<>O(log N). Drop the coefficient and constant term.</>} />
+  <SubQuestion part="d" prompt={<>Simplify <code>8N^2 log N + 5N^2 + N</code>. [3]</>} solution={<>O(N^2 log N). It is the dominant term.</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 5: Applying Big-O [9 Marks]">
+  <SubQuestion part="a" prompt={<>State the time complexity of an algorithm that computes the average of N numbers using one loop. [3]</>} solution={<>O(N), because every number must be read and added once.</>} />
+  <SubQuestion part="b" prompt={<>State the time complexity of printing every character in a string of length N. [3]</>} solution={<>O(N), because each of the N characters is processed once.</>} />
+  <SubQuestion part="c" prompt={<>State the time complexity of computing N factorial iteratively with one loop. [3]</>} solution={<>O(N), because the loop performs one multiplication for each value from 1 through N.</>} />
 </ExamQuestion>

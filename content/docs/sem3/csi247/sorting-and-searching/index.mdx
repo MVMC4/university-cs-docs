@@ -1,18 +1,31 @@
 ---
-title: Sorting & Searching
-description: Visual study map for fundamental search and sort algorithms.
+title: Notes
+description: Lecture-aligned notes for linear and binary search plus Bubble, Selection, Insertion, and Merge Sort.
 ---
 
 # Sorting & Searching
 
 <span className="inline-flex items-center rounded-xl bg-fd-muted px-2.5 text-sm font-medium text-fd-muted-foreground ring-1 ring-inset ring-fd-border ">
-  Last Updated: July 11, 2026
+  Last Updated: August 31, 2026
 </span>
 
-This comprehensive visual map covers Searching and Sorting, including:
+These notes cover the algorithms in the supplied Sorting & Searching study map:
 - **Searching Algorithms:** Linear search and Binary search mechanics.
 - **Sorting Algorithms:** Bubble sort, Selection sort, Insertion sort, and Merge sort.
-- **Algorithm Execution:** Step-by-step tracing and practical use-cases for each technique.
+- **Algorithm Choice:** Requirements, time complexity, stability, memory use, and suitable use cases.
+
+## Quick comparison
+
+| Algorithm | Requirement or main idea | Best time | Worst time | Extra space |
+| :--- | :--- | :---: | :---: | :---: |
+| Linear Search | Check each element in order | O(1) | O(N) | O(1) |
+| Binary Search | Data must be sorted; halve the range | O(1) | O(log N) | O(1) iterative |
+| Bubble Sort | Swap adjacent out-of-order values | O(N) optimized | O(N^2) | O(1) |
+| Selection Sort | Select the minimum remaining value | O(N^2) | O(N^2) | O(1) |
+| Insertion Sort | Insert each value into the sorted section | O(N) | O(N^2) | O(1) |
+| Merge Sort | Split, sort, and merge halves | O(N log N) | O(N log N) | O(N) for arrays |
+
+> Use linear search for one search in unsorted data. Use binary search when the data is already sorted and searched repeatedly.
 
 <ExcalidrawCanvas 
   src="/diagrams/sem3/csi247/canvases/sorting-searching.excalidraw" 

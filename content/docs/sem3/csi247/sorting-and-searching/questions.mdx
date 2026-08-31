@@ -1,26 +1,38 @@
 ---
 title: Practice Questions
-description: Practical questions on Sorting Algorithms, Searching, and Custom Comparators.
+description: Lecture-aligned practice on linear and binary search, Bubble Sort, Selection Sort, Insertion Sort, and Merge Sort.
 ---
 
 # Practice Questions: Sorting & Searching
 
-<ExamQuestion title="Question 1: Custom Multi-Key Sorting [12 Marks]">
-  <SubQuestion part="a" prompt={<>Write a <code>Comparator&lt;Flight&gt;</code> sorting by destination (A-Z), then departureTime (descending), then price (ascending). [6]</>} solution={<>Chain comparators: <code>Comparator.comparing(Flight::getDest).thenComparing(Flight::getTime, Comparator.reverseOrder()).thenComparingDouble(Flight::getPrice)</code>.</>} />
-  <SubQuestion part="b" prompt={<>Implement the <code>merge()</code> function of Merge Sort utilizing this custom Comparator. [6]</>} solution={<>Standard merge logic, but replace <code>arr[i] &lt;= arr[j]</code> with <code>comparator.compare(arr[i], arr[j]) &lt;= 0</code>.</>} />
+These questions stay within the algorithms covered by the Sorting & Searching notes. Start with the traces, then explain the choice and efficiency of each algorithm.
+
+<ExamQuestion title="Question 1: Linear and Binary Search [10 Marks]">
+  <SubQuestion part="a" prompt={<>Use linear search to find <code>23</code> in <code>[8, 14, 23, 31, 42]</code>. List the indices checked and state the returned index. [3]</>} solution={<>Check indices 0, 1, and 2. The value 23 is found at index 2, so the algorithm returns 2.</>} />
+  <SubQuestion part="b" prompt={<>Use binary search to find <code>31</code> in the same array. Show <code>low</code>, <code>mid</code>, and <code>high</code> for each step. [4]</>} solution={<>Start with low = 0 and high = 4. Mid = 2, so compare with 23 and move low to 3. Now mid = 3 and the value is 31, so return index 3.</>} />
+  <SubQuestion part="c" prompt={<>Why can binary search not be used directly on <code>[31, 8, 42, 14, 23]</code>? [3]</>} solution={<>Binary search relies on sorted order to decide which half can be discarded. In an unsorted array, that decision is not valid.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 2: Rotated Array Binary Search [10 Marks]">
-  <SubQuestion part="a" prompt={<>Write an O(log N) algorithm to find a target string in a lexicographically sorted but rotated array. [7]</>} solution={<>Find the pivot (minimum element) using binary search. Then determine which sorted half the target belongs to and run standard binary search on that half.</>} />
-  <SubQuestion part="b" prompt={<>How does it handle duplicates like [banana, apple, banana, banana]? Does it guarantee O(log N)? [3]</>} solution={<>No. With duplicates, you cannot reliably determine which half is sorted when arr[mid] == arr[high]. You must decrement high linearly, degrading worst-case to O(N).</>} />
+<ExamQuestion title="Question 2: Bubble Sort [10 Marks]">
+  <SubQuestion part="a" prompt={<>Perform the first complete ascending Bubble Sort pass on <code>[7, 3, 5, 2]</code>. Show the array after every swap. [5]</>} solution={<>Swap 7 and 3: [3, 7, 5, 2]. Swap 7 and 5: [3, 5, 7, 2]. Swap 7 and 2: [3, 5, 2, 7]. The largest value is now at the end.</>} />
+  <SubQuestion part="b" prompt={<>State the best-case and worst-case time complexities when an early-stop flag is used. [3]</>} solution={<>Best case: O(N) for an already sorted array. Worst case: O(N^2).</>} />
+  <SubQuestion part="c" prompt={<>Why is Bubble Sort stable? [2]</>} solution={<>It swaps only adjacent out-of-order elements, so equal elements do not need to pass one another.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 3: Quick Sort Worst-Case Mitigation [10 Marks]">
-  <SubQuestion part="a" prompt={<>Implement Median-of-Three pivot selection. Find median of low, mid, high, swap to high, return it. [6]</>} solution={<>Compare the three elements, sort them logically, and place the middle value at the high index.</>} />
-  <SubQuestion part="b" prompt={<>Trace partitioning on [45, 12, 89, 33, 77, 21, 50] using Median-of-Three. [4]</>} solution={<>Low=45, Mid=33, High=50. Median is 45. Swap 45 to end. Array becomes [12, 33, 21, 50, 77, 89, 45]. Partition around 45.</>} />
+<ExamQuestion title="Question 3: Selection Sort [10 Marks]">
+  <SubQuestion part="a" prompt={<>Show the array after the first two ascending Selection Sort passes on <code>[29, 10, 14, 37, 13]</code>. [5]</>} solution={<>Pass 1 selects 10 and swaps it with 29: [10, 29, 14, 37, 13]. Pass 2 selects 13 and swaps it with 29: [10, 13, 14, 37, 29].</>} />
+  <SubQuestion part="b" prompt={<>What are the best-case and worst-case time complexities? [2]</>} solution={<>Both are O(N^2) because Selection Sort still scans the remaining unsorted section on every pass.</>} />
+  <SubQuestion part="c" prompt={<>Give one reason to choose Selection Sort instead of Bubble Sort. [3]</>} solution={<>Selection Sort performs at most one swap per pass, so it makes O(N) swaps and can be useful when writes are expensive.</>} />
 </ExamQuestion>
 
-<ExamQuestion title="Question 4: Radix Sort vs Comparison Sorts [8 Marks]">
-  <SubQuestion part="a" prompt={<>Explain LSD Radix Sort for 10 million 9-digit IDs. Time complexity in terms of N and D? [5]</>} solution={<>Sort by least significant digit using Counting Sort as a stable subroutine. Repeat D times. Time: O(D * (N + k)) where k is base 10.</>} />
-  <SubQuestion part="b" prompt={<>Why is Radix theoretically faster here despite similar Big-O? [3]</>} solution={<>D is a small constant (9). Comparison sorts have a hidden constant factor for object comparisons and memory indirection, whereas Radix uses simple integer math and sequential memory access.</>} />
+<ExamQuestion title="Question 4: Insertion Sort [10 Marks]">
+  <SubQuestion part="a" prompt={<>Trace ascending Insertion Sort on <code>[8, 3, 5, 1]</code>. Show the array after each insertion. [6]</>} solution={<>Insert 3: [3, 8, 5, 1]. Insert 5: [3, 5, 8, 1]. Insert 1: [1, 3, 5, 8].</>} />
+  <SubQuestion part="b" prompt={<>When is Insertion Sort a good choice? [2]</>} solution={<>It is a good choice for small or nearly sorted datasets.</>} />
+  <SubQuestion part="c" prompt={<>State its best-case and worst-case time complexities. [2]</>} solution={<>Best case: O(N). Worst case: O(N^2).</>} />
+</ExamQuestion>
+
+<ExamQuestion title="Question 5: Merge Sort and Algorithm Choice [10 Marks]">
+  <SubQuestion part="a" prompt={<>Show how Merge Sort splits <code>[38, 27, 43, 3]</code> down to single elements and then merges them into ascending order. [5]</>} solution={<>Split into [38, 27] and [43, 3], then [38], [27], [43], [3]. Merge to [27, 38] and [3, 43], then merge to [3, 27, 38, 43].</>} />
+  <SubQuestion part="b" prompt={<>State Merge Sort's time complexity and the auxiliary space required for an array. [3]</>} solution={<>Its best, average, and worst-case time is O(N log N). An array implementation requires O(N) auxiliary space for merging.</>} />
+  <SubQuestion part="c" prompt={<>Choose an algorithm for each case: one search in unsorted data; many searches in sorted array data. [2]</>} solution={<>Use linear search for the one search in unsorted data. Use binary search for repeated searches in sorted array data.</>} />
 </ExamQuestion>
