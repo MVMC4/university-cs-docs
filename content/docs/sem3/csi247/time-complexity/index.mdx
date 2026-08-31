@@ -1,22 +1,119 @@
 ---
-title: Algorithm Analysis & Big-O
-description: Visual study map and comprehensive guide to asymptotic analysis, amortized complexity, and computational theory.
+title: Notes
+description: Lecture 07 notes on algorithm efficiency, runtime estimation, growth rates, and Big-O notation.
 ---
 
 # Algorithm Analysis & Big-O
 
 <span className="inline-flex items-center rounded-xl bg-fd-muted px-2.5 text-sm font-medium text-fd-muted-foreground ring-1 ring-inset ring-fd-border ">
-  Last Updated: July 11, 2026
+  Last Updated: August 31, 2026
 </span>
 
-This comprehensive visual map covers the entire Algorithm Analysis module, including:
-- **Asymptotic Notation:** Big-O, Big-Omega, Big-Theta, and Little-o bounds.
-- **Amortized Analysis:** Aggregate, Accounting, and Potential methods for dynamic arrays.
-- **Recurrence Relations:** Solving recursive time complexities using the Master Theorem and recursion trees.
-- **Space Complexity:** Auxiliary space vs. total space, and call stack memory analysis.
+These notes follow **Lecture 07: Time Complexity of Algorithms**. The goals are to determine an algorithm's growth rate and express that growth using Big-O notation.
 
-<ExcalidrawCanvas 
-  src="/diagrams/sem3/csi247/canvases/time-complexity.excalidraw" 
-  title="Visual Study Map: Time Complexity" 
+## 1. Algorithms and efficiency
+
+An **algorithm** is a well-defined sequence of instructions that solves a specific problem in a finite amount of time. A program is an implementation of an algorithm.
+
+More than one algorithm can solve the same problem, so we compare their efficiency:
+
+- **Time:** how the number of executed operations grows as the input grows.
+- **Space:** the storage required for the data and the algorithm's work.
+
+This topic focuses on time complexity.
+
+## 2. Time complexity and input size
+
+Let **N** be the size of the input. Time complexity estimates how an algorithm's runtime grows as N increases.
+
+Runtime can depend on the actual input. For example, linear search is faster when the target is first than when it is absent. Larger inputs also normally require more work: processing 1,000 array elements takes more operations than processing 10.
+
+## 3. Two ways to compare algorithms
+
+| Approach | What you do | Main limitation or benefit |
+| :--- | :--- | :--- |
+| Experimentation | Implement each algorithm, run identical datasets of different sizes, repeat the measurements, and compare average runtimes. | Results depend on hardware, software, programming style, and the limited test data. |
+| Methodological analysis | Count primitive operations and express runtime as a function of N. | Can be done before implementation and focuses on scalability rather than a particular machine. |
+
+A good theoretical comparison should be independent of hardware and a particular dataset.
+
+## 4. Primitive operations
+
+Primitive operations are basic actions such as declarations, assignments, arithmetic, comparisons, array indexing, and method calls. For introductory analysis, assume each primitive operation takes a constant amount of time.
+
+We write **T(N)** for the estimated running time on input size N.
+
+## 5. Best, average, and worst cases
+
+- **Best case:** the shortest possible runtime for an input of size N.
+- **Average case:** the expected runtime across possible inputs of size N; this is often difficult to calculate.
+- **Worst case:** the maximum runtime for an input of size N; this is the case most commonly used in this course.
+
+## 6. Counting rules
+
+| Code structure | Counting rule | Typical result |
+| :--- | :--- | :--- |
+| Sequential statements | Add the runtimes of the statements. | A fixed sequence is O(1). |
+| `if` / `else` | Count the condition plus the more expensive branch for the worst case. | Constant branches give O(1). |
+| Single loop | Multiply the body cost by the number of iterations. | N iterations give O(N). |
+| Nested loops | Multiply the iteration counts when the loops depend on N. | N by N iterations give O(N^2). |
+
+### Simple examples
+
+```java
+int total = 0;
+for (int i = 0; i < n; i++) {
+  total += i;
+}
+```
+
+The loop body executes N times, so the running time grows linearly: **O(N)**.
+
+```java
+for (int row = 0; row < n; row++) {
+  for (int col = 0; col < n; col++) {
+    System.out.println(row + "," + col);
+  }
+}
+```
+
+The statement runs N x N times, so the running time grows quadratically: **O(N^2)**.
+
+## 7. Growth rates and Big-O
+
+A growth rate describes how runtime increases as N increases. Big-O notation groups algorithms by that growth.
+
+To simplify a runtime expression:
+
+1. keep the fastest-growing, or **dominant**, term;
+2. drop constant coefficients;
+3. drop lower-order terms.
+
+Examples:
+
+- $7N - 3$ becomes **O(N)**.
+- $3N^2 + 5N$ becomes **O(N^2)**.
+- $8N^2\log N + 5N^2 + N$ becomes **O(N^2 log N)**.
+
+## 8. Common orders of growth
+
+From more scalable to less scalable:
+
+1. **O(1)** - constant
+2. **O(log N)** - logarithmic
+3. **O(N)** - linear
+4. **O(N log N)** - linearithmic
+5. **O(N^2)** - quadratic
+6. **O(N^3)** - cubic
+7. **O(2^N)** - exponential
+8. **O(N!)** - factorial
+
+> Big-O compares growth as N becomes large. It does not tell you an exact number of seconds.
+
+## Visual study map
+
+<ExcalidrawCanvas
+  src="/diagrams/sem3/csi247/canvases/time-complexity.excalidraw"
+  title="Visual Study Map: Time Complexity"
   expectedMB={1.9}
 />
