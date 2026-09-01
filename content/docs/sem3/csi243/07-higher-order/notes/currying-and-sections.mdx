@@ -1,6 +1,6 @@
 ---
 title: "2. Currying and Sections"
-description: "Understand every multi-argument function as a chain of one-argument functions, apply arguments partially, convert between operators and functions, and build sections."
+description: "Understand every multi-argument function as a chain of one-argument functions, apply arguments partially, convert between operators and functions, build sections, and choose useful interfaces."
 ---
 
 
@@ -64,6 +64,61 @@ Put the argument that varies *least* first. `add` is more useful as `Integer -> 
 </Callout>
 
 This is why Chapter 3 recommended the curried form over the tupled form. A tupled function cannot be partially applied: `addPair (3, 4)` needs the whole pair at once.
+
+## 2.1 Curried, tupled, and uncurried forms
+
+These three designs can calculate the same result, but they expose different interfaces:
+
+```haskell
+-- Curried: one argument at each stage
+rectangleArea :: Integer -> Integer -> Integer
+rectangleArea width height = width * height
+
+-- Tupled: one argument, which happens to be a pair
+rectangleAreaPair :: (Integer, Integer) -> Integer
+rectangleAreaPair (width, height) = width * height
+
+-- Uncurried: the library conversion of a curried function
+rectangleAreaUncurried :: (Integer, Integer) -> Integer
+rectangleAreaUncurried = uncurry rectangleArea
+```
+
+`curry` and `uncurry` convert between the two interfaces:
+
+```haskell
+curry   :: ((a, b) -> c) -> a -> b -> c
+uncurry :: (a -> b -> c) -> (a, b) -> c
+
+uncurry rectangleArea (5, 3) -- 15
+curry rectangleAreaPair 5 3 -- 15
+```
+
+The important difference is not the arithmetic; it is the **shape of the type**. A curried function can be stopped after any arrow. A tupled function receives one complete pair and therefore cannot produce a useful intermediate function.
+
+### Choosing the interface
+
+| Form | Best when | Trade-off |
+|---|---|---|
+| Curried | Arguments have a natural order and some values will be fixed and reused | The order of arguments matters, and a partially applied value can be mistaken for a finished result |
+| Tupled | The inputs belong together as one record-like value or are naturally rearranged as a unit | No ordinary partial application; callers must construct the tuple |
+| `curry` / `uncurry` adapter | A library or callback expects the other shape | The conversion changes the interface, not the underlying work |
+
+Do not curry merely to avoid a tuple. Use a tuple when the values form one meaningful piece of data; use currying when staged configuration or partial application is useful.
+
+## 2.2 Different arities are the same pattern
+
+Currying is not limited to two inputs. A three-stage function is just a longer chain:
+
+```haskell
+volume :: Integer -> Integer -> Integer -> Integer
+volume length width height = length * width * height
+
+volume 2       :: Integer -> Integer -> Integer
+volume 2 3     :: Integer -> Integer
+volume 2 3 4   :: Integer
+```
+
+The type `a -> b -> c -> d` means `a -> (b -> (c -> d))`. Every supplied argument removes one arrow and either returns another function or produces the final value. This is why a function can be used at several stages without special syntax.
 
 ## 3. Operators and functions are interchangeable
 
@@ -165,6 +220,40 @@ ghci> map (subtract 5) [10, 20]
 
 Left sections are fine: `(5-)` is the function that subtracts its argument from 5.
 
+## 4.1 Ways to make a partially applied function
+
+The same idea appears in several Haskell forms:
+
+```haskell
+-- Named function, then ordinary partial application
+addTen = add 10
+
+-- Lambda that makes the stages explicit
+addTenLambda = \y -> 10 + y
+
+-- Left section: fix the left operand
+timesThree = (3*)
+
+-- Right section: fix the right operand
+threeTimes = (*3)
+
+-- flip changes which argument is supplied first
+subtractTen = flip subtract 10 -- subtract 10 from its argument
+```
+
+`addTen`, `addTenLambda`, and `(10+)` have the same behaviour. The named version is often clearest in a larger program; a section is concise when the operation is obvious; and a lambda is useful when the function needs more than a simple operator section.
+
+`flip` is another higher-order helper:
+
+```haskell
+flip :: (a -> b -> c) -> b -> a -> c
+
+isAtMost10 = flip (<=) 10
+isAtMost10 8 -- True
+```
+
+It changes the order in which a curried function receives its first two arguments. This is useful when the value that varies most should be supplied first.
+
 ## 5. Sections as arguments
 
 Sections are often necessary when using operators as arguments to other functions. The Prelude's `and`, which returns `True` when every value in a list of Booleans is `True`, can be defined as:
@@ -176,7 +265,339 @@ and = foldr (&&) True
 
 Here `(&&)` is passed as a value. Written bare, `&&` would be a parse error. Folds are the subject of the fourth lesson in this chapter.
 
-## 6. Reading a curried type
+## 5.1 Currying and higher-order functions
+
+Currying and higher-order functions reinforce each other:
+
+- Currying turns a multi-stage calculation into a value that can return another function.
+- Partial application creates the small one-argument functions that `map`, `filter`, `zipWith`, and folds expect.
+- A higher-order function can receive a partially applied function as an argument, just like any other value.
+
+```haskell
+addTax :: Double -> Double -> Double
+addTax rate price = price * (1 + rate)
+
+withVat = addTax 0.15
+map withVat [100, 200, 50]
+-- [115.0, 230.0, 57.5]
+```
+
+The reusable `withVat` function is a small configuration: the tax rate is fixed once, while the price varies for each list element.
+
+## 5.2 Properties of curried functions
+
+Keep these properties in mind when reading or designing Haskell code:
+
+1. **Unary at the runtime level:** a function value consumes one argument and may return another function.
+2. **Right-associative types:** `a -> b -> c` means `a -> (b -> c)`.
+3. **Left-associative application:** `f x y` means `(f x) y`.
+4. **First-class values:** a partially applied function can be named, passed, returned, stored, or put in a list of functions.
+5. **Type-safe staging:** each stage has its own type, so GHC can catch an argument supplied at the wrong stage.
+6. **No automatic evaluation requirement:** creating a partial application does not mean all of its work has already run; Haskell may evaluate it lazily when its result is needed.
+7. **Argument order is part of the API:** putting stable configuration arguments first makes useful partial applications available.
+
+Currying does not make a function automatically faster, pure, or recursive. It is a way of representing the function's interface and composing it with other functions.
+
+## 5.3 Practical use cases
+
+| Use case | Example | Why currying helps |
+|---|---|---|
+| Reusable configuration | `addTax 0.15` | Fix a policy once and apply it to many values |
+| Predicates for filtering | `filter (> 5)` | Turn an operator into a one-argument test |
+| Transformations for mapping | `map (* 2)` | Supply the operation while the list remains to be provided |
+| Building pipelines | `map (trim prefix)` | Stage a transformation before composing it with another one |
+| Callbacks and handlers | `onClick userId` | Bind context first, leaving the event or payload for later |
+| Adapters | `uncurry f` or `curry g` | Match a library's expected tupled or curried interface |
+
+These are ordinary function values, not a separate object-oriented feature. A closure may retain the values already supplied, so the resulting function still remembers its configuration.
+
+## 5.4 Advantages and disadvantages
+
+### Advantages
+
+- **Reuse:** fix stable arguments once and call the resulting function many times.
+- **Composition:** small one-argument functions fit naturally into `map`, `filter`, folds, and `(.)`.
+- **Clear types:** each arrow documents what the next stage accepts and returns.
+- **Fewer temporary data structures:** staged functions can avoid wrapping values in a tuple just to pass them together.
+- **Good library design:** an API can expose a general function and let callers specialise it for their context.
+
+### Disadvantages and cautions
+
+- **Readability:** deeply nested partial applications can be harder to read than a named function.
+- **Argument-order pressure:** a poor order makes the useful partial application awkward or impossible.
+- **Accidental incompleteness:** `f x` may be a function when you expected a final value; check its type in GHCi.
+- **Operator ambiguity:** sections such as `(/2)`, `(2/)`, and `(-5)` are easy to misread; use a named function when clarity matters.
+- **Allocation and retention:** a partial application creates a function value that retains its captured arguments. In hot loops or large pipelines, that can have memory or performance costs.
+- **Not a replacement for records:** when many named fields travel together, a record or tuple can express the data relationship more clearly.
+
+## 6. Annotated examples
+
+The examples below show the result, the type, and the stage at which each argument is supplied.
+
+### Example 1: Fixing a width
+
+~~~haskell
+rectangleArea :: Integer -> Integer -> Integer
+rectangleArea width height = width * height
+
+areaForFive = rectangleArea 5
+~~~
+
+Read the definition in stages:
+
+1. **rectangleArea** accepts a width and returns a function waiting for a height.
+2. **rectangleArea 5** fixes the width and produces **areaForFive :: Integer -> Integer**.
+3. **areaForFive 3** supplies the remaining height and returns **15**.
+
+~~~text
+ghci> :type rectangleArea
+rectangleArea :: Integer -> Integer -> Integer
+ghci> :type areaForFive
+areaForFive :: Integer -> Integer
+ghci> areaForFive 3
+15
+~~~
+
+The intermediate function is useful when the same width occurs repeatedly:
+
+~~~haskell
+map areaForFive [2, 3, 10]
+-- [10, 15, 50]
+~~~
+
+### Example 2: A three-stage predicate
+
+~~~haskell
+between :: Ord a => a -> a -> a -> Bool
+between low high value = low <= value && value <= high
+
+validMark :: Integer -> Bool
+validMark = between 0 100
+
+passedMark :: Integer -> Bool
+passedMark = between 50 100
+~~~
+
+The first two arguments configure the range; the final argument is the value to test.
+
+~~~text
+ghci> validMark 73
+True
+ghci> passedMark 42
+False
+ghci> filter passedMark [35, 50, 67, 101]
+[50,67]
+~~~
+
+**between 50 100** has type **Integer -> Bool**, so it fits exactly where **filter** expects a predicate. This is a common use of currying: configure a rule once, then reuse the resulting function.
+
+### Example 3: Curried and tupled calculations side by side
+
+~~~haskell
+curriedAdd :: Integer -> Integer -> Integer
+curriedAdd x y = x + y
+
+tupledAdd :: (Integer, Integer) -> Integer
+tupledAdd (x, y) = x + y
+
+tupledAddViaCurry :: Integer -> Integer -> Integer
+tupledAddViaCurry = curry tupledAdd
+~~~
+
+The curried and tupled calls look different:
+
+~~~text
+ghci> curriedAdd 3 4
+7
+ghci> tupledAdd (3, 4)
+7
+ghci> (curry tupledAdd) 3 4
+7
+~~~
+
+**curry tupledAdd** changes the interface so it receives one value at a time. It does not change the calculation. Conversely, **uncurry curriedAdd** lets a caller provide the two values as one pair.
+
+### Example 4: Operators in all three forms
+
+Addition can be written as a named function, a parenthesised operator, or a section:
+
+~~~haskell
+addNamed :: Integer -> Integer -> Integer
+addNamed x y = x + y
+
+addOperator = (+)
+addTen = (10+)
+double = (*2)
+~~~
+
+~~~text
+ghci> addNamed 10 4
+14
+ghci> (+) 10 4
+14
+ghci> addTen 4
+14
+ghci> double 7
+14
+~~~
+
+The annotations are:
+
+- **(+)** takes both operands and is therefore still a two-stage function;
+- **(10+)** fixes the left operand and waits for the right operand;
+- **(*2)** fixes the right operand and waits for the left operand.
+
+For a non-commutative operator the side matters:
+
+~~~text
+ghci> (10-) 3
+7
+ghci> (-10) 3
+<interactive>: ... -- (-10) is negative ten, not a section
+ghci> (subtract 10) 13
+3
+~~~
+
+Use **subtract 10** when you mean “subtract ten from the next value.” Use **(10-)** when you mean “subtract the next value from ten.”
+
+### Example 5: Why sections work with list functions
+
+**map** needs a function from one element to one result. **filter** needs a function from one element to **Bool**. Sections produce exactly those types:
+
+~~~haskell
+map (*3) [1, 2, 3, 4]
+-- [3, 6, 9, 12]
+
+filter (> 5) [2, 7, 4, 9]
+-- [7, 9]
+
+zipWith (+) [1, 2, 3] [10, 20, 30]
+-- [11, 22, 33]
+~~~
+
+Step through **filter (> 5) [2,7,4,9]**:
+
+1. **(> 5)** is a function waiting for one number.
+2. **filter** applies it to **2**, **7**, **4**, and **9**.
+3. Only the values returning **True** are kept: **7** and **9**.
+
+The bare operator **>** would not be enough. Parentheses turn it into a value that can be passed to **filter**.
+
+### Example 6: Partial application and folds
+
+**foldr** receives an operator, a starting value, and a list. Supplying the first two arguments creates a complete list-processing function:
+
+~~~haskell
+sumFromRight :: Num a => [a] -> a
+sumFromRight = foldr (+) 0
+
+productFromRight :: Num a => [a] -> a
+productFromRight = foldr (*) 1
+~~~
+
+~~~text
+ghci> sumFromRight [4, 5, 6]
+15
+ghci> productFromRight [2, 3, 4]
+24
+~~~
+
+The list is the least-stable argument here, so it is left until the end. This lets the same configured fold be reused on many lists.
+
+### Example 7: Argument order and point-free style
+
+Put the stable configuration first when you want a short reusable name:
+
+~~~haskell
+raiseTo :: Integer -> Integer -> Integer
+raiseTo exponent base = base ^ exponent
+
+square :: Integer -> Integer
+square = raiseTo 2
+
+cube :: Integer -> Integer
+cube = raiseTo 3
+~~~
+
+~~~text
+ghci> square 5
+25
+ghci> map cube [1, 2, 3]
+[1,8,27]
+~~~
+
+This is **point-free** style: **square** is defined by saying what function it is, not by naming the final argument. The equivalent explicit definition is **square x = x ^ 2**. Use point-free style when the resulting expression stays easy to read; give the argument a name when it improves the explanation.
+
+### Example 8: flip and the other partial-application direction
+
+~~~haskell
+subtractTen :: Integer -> Integer
+subtractTen = flip subtract 10
+~~~
+
+**subtract** normally receives the value to subtract first. **flip** swaps its first two stages, so **flip subtract 10** means “take the next value and subtract 10 from it.”
+
+~~~text
+ghci> subtractTen 13
+3
+ghci> map subtractTen [10, 20, 30]
+[0,10,20]
+~~~
+
+For simple operators, a section is often clearer: **subtractTen = (subtract 10)** expresses the same behavior without **flip**.
+
+### Example 9: A closure remembers the earlier argument
+
+~~~haskell
+makeGreeting :: String -> String -> String
+makeGreeting greeting name = greeting ++ \", \" ++ name ++ \"!\"
+
+sayHello :: String -> String
+sayHello = makeGreeting \"Hello\"
+
+sayWelcome :: String -> String
+sayWelcome = makeGreeting \"Welcome\"
+~~~
+
+~~~text
+ghci> sayHello \"Ada\"
+\"Hello, Ada!\"
+ghci> sayWelcome \"Kago\"
+\"Welcome, Kago!\"
+~~~
+
+**sayHello** is a partially applied function. It retains the value **\"Hello\"** while waiting for a name; that retained environment is commonly called a **closure**. The function remains pure: calling it does not modify the captured text.
+
+### Example 10: Composing staged functions
+
+Partial application becomes especially useful when functions are composed:
+
+~~~haskell
+import Data.Char (toLower)
+
+cleanWords :: String -> [String]
+cleanWords = words . map toLower
+
+wordCount :: String -> Int
+wordCount = length . cleanWords
+~~~
+
+The expression **wordCount \"Pure Functions Are Composable\"** is evaluated from right to left:
+
+1. **map toLower** normalises the characters;
+2. **words** splits the resulting string;
+3. **length** counts the words.
+
+~~~text
+ghci> cleanWords \"Pure Functions Are Composable\"
+[\"pure\",\"functions\",\"are\",\"composable\"]
+ghci> wordCount \"Pure Functions Are Composable\"
+4
+~~~
+
+This is a higher-order pipeline: each function is a value, and currying lets functions such as **map** receive their operation before they receive the collection.
+
+## 7. Reading a curried type
 
 Given a type, count the arrows to see how many arguments can be supplied and what each stage produces:
 
@@ -191,7 +612,7 @@ f :: Int -> Int -> Int -> Int
 | `f 1 2` | `Int -> Int` | Needs one more |
 | `f 1 2 3` | `Int` | A finished value |
 
-## 7. Common errors
+## 8. Common errors
 
 | Attempt | Problem | Repair |
 |---|---|---|
@@ -202,7 +623,7 @@ f :: Int -> Int -> Int -> Int
 | `add (3, 4)` where `add` is curried | Curried functions take arguments separately | `add 3 4` |
 | Expecting `add 3` to be an error | Partial application is legal and produces a function | Use it, or supply the second argument |
 
-## 8. Practice
+## 9. Practice
 
 1. Give the fully parenthesised type of `f :: Int -> Int -> Bool`, and the type of `f 1`.
 2. Define `addThree` by partially applying `add`, then use it twice.
