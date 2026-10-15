@@ -39,6 +39,7 @@
     "audit:mat221-fidelity": "node scripts/audit-mat221-fidelity.mjs",
     "audit:quizzes": "node scripts/audit-quiz-data.mjs",
     "audit:playgrounds": "node scripts/audit-playground-data.mjs",
+    "audit:content-standard": "node scripts/audit-content-standard.mjs",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {

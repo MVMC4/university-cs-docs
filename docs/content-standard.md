@@ -59,10 +59,11 @@ semN/<course>/
     review.mdx            Review: flashcards and a scored quiz
     questions.mdx         Practice: guided questions with worked solutions
     exam.mdx              Exam practice: exam-style problems with marks
+    resources.mdx         Resources for this topic (optional)
   resources.mdx           Resources for the whole course
 ```
 
-The sidebar and the topic tabs use the same labels everywhere, in this order: Overview, Notes, Cheat sheet, Review, Practice, Exam practice. A topic may leave out the optional page; it may not invent another one.
+The sidebar and the topic tabs use the same labels everywhere, in this order: Overview, Notes, Cheat sheet, Review, Practice, Exam practice, Resources. Overview, Notes, Review, Practice and Exam practice are required; Cheat sheet and Resources are optional. A topic may leave out an optional page; it may not invent another one. A course folder holds only its overview, its numbered topics and its resources page.
 
 ### 2.2 Notes page template
 
@@ -107,12 +108,15 @@ Generated courses (Semesters I and II) render through the same four components.
 
 ### 2.5 Enforcement
 
-`npm run audit:content-standard` (to be written) fails when:
+`npm run audit:content-standard` reports every course against this standard (`--verbose` lists each finding, `--course <code>` narrows it to one course, `--json` is for tools, `--strict` exits 1 on any finding). It flags:
 
 - a topic folder contains a page outside the list in 2.1, or lists them out of order;
 - a notes page has no description, repeats its title as a heading, or uses a retired component;
 - a notes page has quiz components before its last section;
-- a review, practice or exam page uses a component other than the one in 2.4.
+- a review, practice or exam page uses a component other than the one in 2.4;
+- a page built by a generator or by the MAT221 source site (counted separately, fixed in phase 4).
+
+Baseline on 2026-10-15: 0 of 16 courses meet the standard, 1,184 findings. It joins `npm run audit:content` with `--strict` once every course passes.
 
 ## 3. Migration plan
 
