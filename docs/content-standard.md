@@ -1,6 +1,6 @@
 # Content standard
 
-One structure, one page template, one component vocabulary and one assessment format for every course, in the style of Google's developer documentation. This extends the chapter shape in [content-architecture.md](content-architecture.md); where the two disagree, this document wins.
+One structure, one page template, one component vocabulary and one assessment format for every course. The structure follows Google's developer documentation (top bar with section tabs, sidebar, "On this page", topic tabs, pager); the visual theme stays the site's paper-and-ink look (cream and navy, Inter and Fraunces, 2px ink frames, hard offset shadows). This extends the chapter shape in [content-architecture.md](content-architecture.md); where the two disagree, this document wins.
 
 ## 1. Diagnosis: why the notes feel like components smashed together
 
