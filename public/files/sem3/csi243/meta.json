@@ -1,18 +1,36 @@
 [
   {
-    "id": "current-lectures",
-    "title": "Current Course Material",
+    "id": "lectures-2026",
+    "title": "2026 Lecture Slides",
     "category": "Lectures",
     "type": "folder",
-    "description": "The supplied lecture material for the active course offering, organized by learning sequence.",
+    "description": "Lecture slides from 2026, organized by learning sequence.",
     "children": [
-      { "id": "current-functions-programs", "title": "Functions and Haskell Programs", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/01-foundations-functions/functions-and-haskell-programs.pdf", "description": "Functions, program structure, modules, Prelude, GHCi, and basic types.", "isNew": true },
-      { "id": "current-defining-guards", "title": "Defining Functions and Guards", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/01-foundations-functions/defining-functions-and-guards.pdf", "description": "Specifications, implementations, conditional expressions, and guarded equations.", "isNew": true },
-      { "id": "current-types", "title": "Definitions and Data Types", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/02-types-definitions/definitions-and-data-types.pdf", "description": "Definitions, syntax and type analysis, primitive types, lists, tuples, and functions.", "isNew": true },
-      { "id": "current-choices", "title": "Recursion and Making Choices", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/03-choices-recursion/recursion-and-making-choices.pdf", "description": "Recursion, dry runs, if expressions, pattern matching, guards, cases, and errors.", "isNew": true },
-      { "id": "current-patterns-lambdas", "title": "Patterns, Lambdas, and Sections", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/03-choices-recursion/patterns-lambdas-and-sections.pdf", "description": "Type synonyms, local definitions, recursion, patterns, lambda expressions, currying, and operator sections.", "isNew": true },
-      { "id": "current-modules-collections", "title": "Modules, Lists, Tuples, and Comprehensions", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/04-modules-collections/modules-lists-tuples-comprehensions.pdf", "description": "Module organization, imports, collection operations, tuples, and list comprehensions.", "isNew": true },
-      { "id": "current-hofs", "title": "Higher-Order Functions", "category": "Current", "type": "pdf", "url": "/files/sem3/csi243/current/lectures/05-higher-order-functions/higher-order-functions.pdf", "description": "Map, filter, folds, take/drop while, zipWith, iterate, and scans.", "isNew": true }
+      { "id": "2026-intro-fp", "title": "Introduction to Functional Programming", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/01-foundations-functions/introduction-to-functional-programming.pdf", "description": "Lecture 1 slides: introduction to functional programming.", "isNew": true },
+      { "id": "2026-using-haskell", "title": "Using Haskell", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/01-foundations-functions/using-haskell.pdf", "description": "Lecture 2 slides: using Haskell.", "isNew": true },
+      { "id": "2026-haskell-functions", "title": "Haskell Functions", "category": "Lectures", "type": "slides", "url": "/files/sem3/csi243/2026/lectures/01-foundations-functions/haskell-functions.pptx", "description": "Slides on writing functions in Haskell.", "isNew": true },
+      { "id": "2026-functions-programs", "title": "Functions and Haskell Programs", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/01-foundations-functions/functions-and-haskell-programs.pdf", "description": "Functions, program structure, modules, Prelude, GHCi, and basic types.", "isNew": true },
+      { "id": "2026-defining-guards", "title": "Defining Functions and Guards", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/01-foundations-functions/defining-functions-and-guards.pdf", "description": "Specifications, implementations, conditional expressions, and guarded equations.", "isNew": true },
+      { "id": "2026-types", "title": "Definitions and Data Types", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/02-types-definitions/definitions-and-data-types.pdf", "description": "Definitions, syntax and type analysis, primitive types, lists, tuples, and functions.", "isNew": true },
+      { "id": "2026-choices", "title": "Recursion and Making Choices", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/03-choices-recursion/recursion-and-making-choices.pdf", "description": "Recursion, dry runs, if expressions, pattern matching, guards, cases, and errors.", "isNew": true },
+      { "id": "2026-patterns-lambdas", "title": "Patterns, Lambdas, and Sections", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/03-choices-recursion/patterns-lambdas-and-sections.pdf", "description": "Type synonyms, local definitions, recursion, patterns, lambda expressions, currying, and operator sections.", "isNew": true },
+      { "id": "2026-modules-collections", "title": "Modules, Lists, Tuples, and Comprehensions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/04-modules-collections/modules-lists-tuples-comprehensions.pdf", "description": "Module organization, imports, collection operations, tuples, and list comprehensions.", "isNew": true },
+      { "id": "2026-functions-comprehensions", "title": "Functions and List Comprehensions", "category": "Lectures", "type": "slides", "url": "/files/sem3/csi243/2026/lectures/04-modules-collections/functions-and-list-comprehensions.pptx", "description": "Slides on functions and list comprehensions.", "isNew": true },
+      { "id": "2026-hofs", "title": "Higher-Order Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2026/lectures/05-higher-order-functions/higher-order-functions.pdf", "description": "Map, filter, folds, take/drop while, zipWith, iterate, and scans.", "isNew": true },
+      { "id": "2026-currying", "title": "Currying", "category": "Lectures", "type": "slides", "url": "/files/sem3/csi243/2026/lectures/05-higher-order-functions/currying.pptx", "description": "Slides on currying and partial application.", "isNew": true }
+    ]
+  },
+  {
+    "id": "lectures-2022",
+    "title": "2022 Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Lecture slides from 2022.",
+    "children": [
+      { "id": "2022-lecture-1", "title": "Lecture 1: Introduction to FP", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2022/lectures/Lecture 1 - Intro to FP.pdf", "description": "Earlier introductory lecture." },
+      { "id": "2022-lecture-2", "title": "Lecture 2: Functions", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2022/lectures/Lecture 2 - Functions.pdf", "description": "Earlier functions lecture." },
+      { "id": "2022-lecture-3", "title": "Lecture 3: A Haskell Program", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2022/lectures/Lecture 3 - A Haskell Program.pdf", "description": "Earlier complete-program lecture." },
+      { "id": "2022-recursion", "title": "Recursion Lecture", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi243/2022/lectures/Recursion.pdf", "description": "Earlier recursion material." }
     ]
   },
   {
@@ -31,13 +49,9 @@
     "title": "Archived Material",
     "category": "Lectures",
     "type": "folder",
-    "description": "Previous site notes, lecture PDFs, and labs retained for reference. These are not the default current route.",
+    "description": "Earlier course content, previous site notes, and labs retained for reference.",
     "children": [
       { "id": "archive-outline", "title": "Archived Course Content and Syllabus", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/course-materials/Course Content.pdf", "description": "Earlier course outline and assessment information." },
-      { "id": "archive-lecture-1", "title": "Archived Lecture 1: Introduction to FP", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Lecture 1 Intro to FP (1).pdf", "description": "Earlier introductory lecture." },
-      { "id": "archive-lecture-2", "title": "Archived Lecture 2: Functions", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Lecture 2 Functions  (1).pdf", "description": "Earlier functions lecture." },
-      { "id": "archive-lecture-3", "title": "Archived Lecture 3: A Haskell Program", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Lecture 3  A Haskell Program (1).pdf", "description": "Earlier complete-program lecture." },
-      { "id": "archive-recursion", "title": "Archived Recursion Lecture", "category": "Archive", "type": "pdf", "url": "/files/sem3/csi243/archive/lectures/Recursion.pdf", "description": "Earlier recursion material." },
       {
         "id": "archive-legacy-labs",
         "title": "Previous Labs and Starter Files",

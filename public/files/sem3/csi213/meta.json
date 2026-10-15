@@ -3,6 +3,25 @@
     "id": "lec-outline", "title": "Course Outline", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/CSI213-CourseOutline.pdf", "description": "Official syllabus and assessment structure.", "isNew": true
   },
   {
+    "id": "lectures-2026",
+    "title": "2026 Lecture Slides",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "Lecture slides from 2026.",
+    "children": [
+      { "id": "2026-intro-probability", "title": "Intro to Probability", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Intro to Probability.pdf", "description": "Slides introducing probability." },
+      { "id": "2026-basics-counting", "title": "Basics of Counting", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Basics of Counting.pdf", "description": "Slides on the basic counting principles." },
+      { "id": "2026-permutations-combinations", "title": "Permutations and Combinations", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Permutations and Combinations.pdf", "description": "Slides on permutations and combinations." },
+      { "id": "2026-tree-diagrams", "title": "Probability Tree Diagrams", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Probability Tree Diagrams.pdf", "description": "Slides on probability tree diagrams." },
+      { "id": "2026-bayes", "title": "Bayes Theorem", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Bayes Theorem.pdf", "description": "Slides on Bayes theorem." },
+      { "id": "2026-discrete-rv", "title": "Discrete Random Variables", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Discrete Random Variables.pdf", "description": "Slides on discrete random variables." },
+      { "id": "2026-discrete-rv-final", "title": "Discrete Random Variables (final version)", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Discrete Random Variables - Final.pdf", "description": "The final version of the discrete random variables slides." },
+      { "id": "2026-binomial", "title": "Binomial Examples", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Binomial Examples.pdf", "description": "Worked examples for the binomial distribution." },
+      { "id": "2026-negative-binomial", "title": "Negative Binomial", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Negative Binomial.pdf", "description": "Slides on the negative binomial distribution." },
+      { "id": "2026-poisson", "title": "Poisson Examples", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi213/2026/lectures/Poisson Examples.pdf", "description": "Worked examples for the Poisson distribution." }
+    ]
+  },
+  {
     "id": "textbooks", "title": "Recommended Textbooks", "category": "Books", "type": "folder", "description": "Core textbooks for Probability, Statistics, and Discrete Mathematics.",
     "children": [
       { "id": "book-devore", "title": "Probability and Statistics for Engineering", "category": "Books", "type": "link", "url": "https://www.amazon.com/Probability-Statistics-Engineering-Sciences-Jay/dp/1305253809", "description": "Jay L. Devore - The standard textbook for engineering statistics." },
