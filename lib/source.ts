@@ -2,13 +2,27 @@ import { docs } from 'collections/server';
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { topicPageLabel } from './topic-pages';
 import { getFullChapterMarkdown } from '@/features/courses/csi247/study-guides/markdown.mjs';
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
-  plugins: [lucideIconsPlugin()],
+  plugins: [
+    lucideIconsPlugin(),
+    {
+      // Every topic names its pages the same way in the sidebar, the tabs and the pager,
+      // whatever the page's own title says (docs/content-standard.md, section 2.1).
+      name: 'topic-page-labels',
+      transformPageTree: {
+        file(node, filePath) {
+          const label = topicPageLabel(filePath);
+          return label ? { ...node, name: label } : node;
+        },
+      },
+    },
+  ],
 });
 
 export function getPageImage(page: (typeof source)['$inferPage']) {

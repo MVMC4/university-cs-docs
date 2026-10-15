@@ -1,19 +1,7 @@
 import { findPath, flattenTree } from 'fumadocs-core/page-tree';
 import type * as PageTree from 'fumadocs-core/page-tree';
 import { source } from './source';
-
-/** Short labels for the standard pages every topic folder contains. */
-const stageLabels: Record<string, string> = {
-  index: 'Overview',
-  notes: 'Notes',
-  'cheat-sheet': 'Cheat sheet',
-  questions: 'Questions',
-  review: 'Review',
-  quiz: 'Quiz',
-  exam: 'Exam',
-  'exam-practice': 'Exam practice',
-  resources: 'Resources',
-};
+import { stageLabel } from './topic-pages';
 
 export type TopicTab = { label: string; url: string; active: boolean };
 
@@ -45,22 +33,24 @@ export function getTopicTabs(url: string): TopicTab[] {
 
   const topic = folders[topicIndex];
   const slugAt = topicIndex + 2;
+  const topicUrl = `/${segments.slice(0, slugAt).join('/')}`;
   const tabs: TopicTab[] = [];
 
   if (topic.index) {
-    tabs.push({ label: stageLabels.index, url: topic.index.url, active: topic.index.url === url });
+    tabs.push({ label: stageLabel('index') ?? 'Overview', url: topic.index.url, active: topic.index.url === url });
   }
 
   for (const child of topic.children) {
     if (child.type === 'page') {
-      const slug = child.url.split('/').filter(Boolean)[slugAt];
-      tabs.push({ label: stageLabels[slug] ?? String(child.name), url: child.url, active: child.url === url });
+      // The topic's own page is its Overview, even when meta.json lists it as an ordinary page.
+      const slug = child.url === topicUrl ? 'index' : child.url.split('/').filter(Boolean)[slugAt];
+      tabs.push({ label: stageLabel(slug) ?? String(child.name), url: child.url, active: child.url === url });
     } else if (child.type === 'folder') {
       const target = firstUrl(child);
       if (!target) continue;
       const slug = target.split('/').filter(Boolean)[slugAt];
       const inside = flattenTree([child]).some((page) => page.url === url);
-      tabs.push({ label: stageLabels[slug] ?? String(child.name), url: target, active: inside });
+      tabs.push({ label: stageLabel(slug) ?? String(child.name), url: target, active: inside });
     }
   }
 
