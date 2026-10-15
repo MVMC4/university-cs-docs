@@ -1,6 +1,4 @@
-'use client';
-
-import React from 'react';
+import type { ReactNode } from 'react';
 
 interface Column {
   header: string;
@@ -8,38 +6,32 @@ interface Column {
 }
 
 interface Row {
-  [key: string]: React.ReactNode;
+  [key: string]: ReactNode;
 }
 
-export function ComparisonTable({ 
-  columns, 
+/** A table built from data. It looks exactly like a Markdown table; `highlightCol` marks one column. */
+export function ComparisonTable({
+  columns,
   rows,
-  highlightCol 
-}: { 
-  columns: Column[]; 
+  highlightCol,
+}: {
+  columns: Column[];
   rows: Row[];
   highlightCol?: string;
 }) {
   return (
-    <div className="my-6 overflow-x-auto rounded-lg border border-fd-border">
-      <table className="w-full text-sm text-left">
-        <thead className="bg-fd-muted text-fd-muted-foreground font-semibold uppercase text-xs tracking-wider">
+    <div className="ui-table">
+      <table>
+        <thead>
           <tr>
-            {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3 border-b border-fd-border">
-                {col.header}
-              </th>
-            ))}
+            {columns.map((col) => <th key={col.key}>{col.header}</th>)}
           </tr>
         </thead>
-        <tbody className="divide-y divide-fd-border bg-fd-background">
+        <tbody>
           {rows.map((row, idx) => (
-            <tr key={idx} className="hover:bg-fd-muted/30 transition-colors">
+            <tr key={idx}>
               {columns.map((col) => (
-                <td 
-                  key={col.key} 
-                  className={`px-4 py-3 ${col.key === highlightCol ? 'bg-fd-primary/5 font-medium text-fd-primary' : 'text-fd-foreground'}`}
-                >
+                <td key={col.key} className={col.key === highlightCol ? 'ui-table-hl' : undefined}>
                   {row[col.key]}
                 </td>
               ))}

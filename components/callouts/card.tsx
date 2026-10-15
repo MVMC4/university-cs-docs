@@ -1,11 +1,10 @@
-'use client';
+import type { ReactNode } from 'react';
+import { KeyTerm } from '@/components/learning/key-term';
 
-import React from 'react';
-
-export function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`my-6 min-w-0 overflow-x-auto rounded-lg border border-fd-border bg-fd-muted/30 px-4 ${className}`}>
-      {children}
-    </div>
-  );
+/**
+ * Retired: notes used Card for definitions (a `###` heading followed by the statement).
+ * It now renders as a KeyTerm so those definitions match every other course.
+ */
+export function Card({ children }: { children: ReactNode; className?: string }) {
+  return <KeyTerm label={null}>{children}</KeyTerm>;
 }

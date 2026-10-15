@@ -74,7 +74,7 @@ Every notes page, in this order:
 3. **Sections**: each `##` section teaches one idea in this order: plain explanation → definition (`KeyTerm`) → why it works → example (code with output, figure or table) → at most one callout.
 4. **Common mistakes**: one section of `mistake` callouts, or a table.
 5. **Summary**: one `key` callout with the points to remember.
-6. **Check your understanding**: three to five questions that expand to show the answer, at the end of the page, not between sections.
+6. **Check your understanding**: a `## Check your understanding` heading, then `<CheckQuestions>` holding three to five `<CheckQuestion question="…">answer</CheckQuestion>` items, at the end of the page, not between sections.
 7. Pager (automatic).
 
 ### 2.3 Component vocabulary

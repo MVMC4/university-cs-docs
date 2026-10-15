@@ -14,7 +14,9 @@ import { MathEnv } from './math/math-env';
 import { EquationBreakdown, Equation, Term, TermGrid } from './math/equation-breakdown';
 import { FormulaBlock } from './math/formula-block';
 import { CaseAnalysis, Case } from './math/case-analysis';
-import { Step, StepByStep, StepByStepTitle, StepTitle } from './interactive/step-by-step';
+import { Step, StepByStep, StepByStepTitle, StepTitle, Steps } from './interactive/step-by-step';
+import { KeyTerm } from './learning/key-term';
+import { CheckQuestion, CheckQuestions } from './learning/check-questions';
 import { InteractiveStepper, StepperStep } from './interactive/interactive-stepper';
 import { Flashcard } from './interactive/flashcard';
 import { GraphViewer } from './visuals/graph-viewer';
@@ -84,6 +86,10 @@ export function getMDXComponents(components?: MDXComponents) {
     FormulaBlock,
     CaseAnalysis,
     Case,
+    KeyTerm,
+    Steps,
+    CheckQuestions,
+    CheckQuestion,
     StepByStep,
     Step,
     StepByStepTitle,

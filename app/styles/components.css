@@ -347,119 +347,92 @@ a.ui-card:focus-visible {
   text-transform: uppercase;
 }
 
-/* key-term box: a bordered card with a coloured rule on the left */
-.learning-block {
+/* ───────── KeyTerm: definitions and theorems ─────────
+   Also what Card, HighlightCard, ConceptBlock and TheoremBlock render as. */
+.ui-term {
   position: relative;
   overflow: hidden;
   margin: 24px 0;
   border: 1px solid var(--ui-line);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
-  padding: 16px 20px 6px 24px;
+  padding: 16px 20px 4px 24px;
 }
 
-.learning-block::before {
+.ui-term::before {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   width: 4px;
-  background: var(--learning-accent, var(--ui-blue));
+  background: var(--term-accent, var(--ui-blue));
 }
 
-.learning-block h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 6px !important;
-  font-size: 19px !important;
-  font-weight: 500 !important;
+.ui-term-blue { --term-accent: var(--ui-blue); }
+.ui-term-purple { --term-accent: var(--ui-purple); }
+.ui-term-green { --term-accent: var(--ui-green); }
+.ui-term-amber { --term-accent: var(--ui-amber); }
+.ui-term-red { --term-accent: var(--ui-red); }
+
+.ui-term-label {
+  display: block;
+  color: var(--term-accent, var(--ui-blue));
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
 }
 
-.learning-block h3 svg {
-  flex: none;
-  color: var(--learning-accent, var(--ui-blue));
-}
-
-.learning-block > div > :last-child { margin-bottom: 10px; }
-
-.learning-block-concept { --learning-accent: var(--ui-blue); }
-.learning-block-theorem { --learning-accent: var(--ui-purple); }
-
-/* recognition strategy and common mistake read as tinted callouts */
-.learning-block-recognition,
-.learning-block-mistake {
-  border: 0;
-  padding-left: 20px;
-}
-
-.learning-block-recognition::before,
-.learning-block-mistake::before { display: none; }
-
-.learning-block-recognition { --learning-accent: var(--ui-green); background: var(--ui-green-t); }
-.learning-block-mistake { --learning-accent: var(--ui-red); background: var(--ui-red-t); }
-
-.learning-block-recognition h3,
-.learning-block-mistake h3 {
-  color: var(--learning-accent);
-  font-size: 16px !important;
-  font-weight: 600 !important;
-}
-
-/* numbered method: circles joined by a vertical rule */
-.method-steps {
-  margin: 24px 0;
-}
-
-.method-steps h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 14px !important;
-  font-size: 19px !important;
-  font-weight: 500 !important;
-}
-
-.method-steps h3 svg { color: var(--ui-blue); }
-
-.method-steps ol,
-.ui-steps {
-  margin: 0 !important;
+.ui-term-title,
+.ui-term-body > :is(h2, h3, h4):first-child {
+  margin: 2px 0 6px !important;
   padding: 0 !important;
-  list-style: none;
+  font-size: 19px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
 }
 
-.method-steps li,
-.ui-steps > li {
+/* A heading inside a term box is its title, not a section: keep the anchor link quiet. */
+.ui-term-body > :is(h2, h3, h4):first-child [aria-label="Copy Anchor Link"] { display: none; }
+
+.ui-term-body > :is(p, ul, ol, figure, div, .katex-display) { margin-block: 0 12px !important; }
+.ui-term-body > :last-child { margin-bottom: 12px !important; }
+
+/* ───────── Steps: procedures and worked examples ─────────
+   Also what StepByStep, MethodSteps and the generated notes render as. */
+.ui-steps-block {
+  margin: 28px 0;
+}
+
+.ui-steps-title {
+  display: block;
+  margin: 0 0 14px;
+  color: var(--ui-text);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ui-steps {
+  counter-reset: ui-step;
+}
+
+.ui-step {
   position: relative;
-  margin: 0 0 0 15px !important;
+  margin-left: 15px;
   border-left: 2px solid var(--ui-line-soft);
-  padding: 2px 0 14px 30px !important;
+  padding: 3px 0 16px 30px;
+  counter-increment: ui-step;
 }
 
-.method-steps li:last-child,
-.ui-steps > li:last-child { border-left-color: transparent; }
-
-.method-steps li > span {
-  position: absolute;
-  top: 0;
-  left: -16px;
-  display: grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--ui-blue-t);
-  color: var(--ui-blue-d);
-  font-size: 13px;
-  font-weight: 600;
+.ui-step:last-child {
+  border-left-color: transparent;
+  padding-bottom: 2px;
 }
 
-.ui-steps { counter-reset: ui-step; }
-.ui-steps > li { counter-increment: ui-step; }
-
-.ui-steps > li::before {
+.ui-step::before {
   content: counter(ui-step);
   position: absolute;
   top: 0;
@@ -473,6 +446,578 @@ a.ui-card:focus-visible {
   color: var(--ui-blue-d);
   font-size: 13px;
   font-weight: 600;
+}
+
+.ui-step-title {
+  display: block;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.ui-step-body > :is(p, ul, ol, figure, div, .katex-display) { margin-block: 0 8px !important; }
+.ui-step-body > :last-child { margin-bottom: 0 !important; }
+
+/* A title helper placed inside the steps (StepByStepTitle) heads the list. */
+.ui-steps > .ui-steps-title,
+.ui-steps > p:has(> .ui-steps-title) {
+  margin: 0 0 14px !important;
+}
+
+/* ───────── Check your understanding ───────── */
+.ui-check {
+  margin: 12px 0 0;
+}
+
+.ui-q {
+  margin: 10px 0;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r);
+  background: var(--ui-bg);
+}
+
+.ui-q summary {
+  position: relative;
+  cursor: pointer;
+  padding: 14px 48px 14px 18px;
+  font-weight: 500;
+  list-style: none;
+}
+
+.ui-q summary::-webkit-details-marker { display: none; }
+
+.ui-q summary::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--ui-text-2);
+  border-bottom: 2px solid var(--ui-text-2);
+  transform: rotate(45deg);
+  transition: transform .2s;
+}
+
+.ui-q[open] summary { border-bottom: 1px solid var(--ui-line-soft); }
+
+.ui-q[open] summary::after {
+  top: 22px;
+  transform: rotate(-135deg);
+}
+
+.ui-q-answer {
+  padding: 14px 18px 2px;
+  color: var(--ui-text-2);
+}
+
+.ui-q-answer > :is(p, ul, ol, figure, div) { margin-block: 0 12px !important; }
+
+/* ───────── tables built from data (ComparisonTable) ───────── */
+.ui-table {
+  overflow-x: auto;
+  margin: 20px 0 24px;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r);
+}
+
+.ui-table table {
+  width: 100%;
+  margin: 0 !important;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.ui-table th {
+  border-bottom: 1px solid var(--ui-line-soft);
+  background: var(--ui-surface);
+  padding: 11px 14px;
+  color: var(--ui-text-2);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: start;
+  vertical-align: top;
+}
+
+.ui-table td {
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 11px 14px;
+  vertical-align: top;
+}
+
+.ui-table tr:last-child td { border-bottom: 0; }
+
+.ui-table-hl {
+  color: var(--ui-blue-d);
+  font-weight: 500;
+}
+
+/* ───────── two-column comparison (Columns) ───────── */
+.ui-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0 24px;
+}
+
+.ui-split-col {
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-lg);
+  padding: 16px 18px 4px;
+}
+
+.ui-split-col > :is(h3, h4):first-child {
+  margin: 0 0 8px !important;
+  font-size: 15px !important;
+}
+
+@media (max-width: 640px) {
+  .ui-split { grid-template-columns: 1fr; }
+}
+
+/* ───────── assessment: quiz, practice questions, flashcards ─────────
+   One look for every course's review, practice and exam pages. */
+.ui-quiz,
+.ui-deck,
+.ui-exam {
+  overflow: hidden;
+  margin: 28px 0;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+}
+
+.ui-quiz-head,
+.ui-deck-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 14px 20px;
+}
+
+.ui-quiz-head h3,
+.ui-deck-head h3,
+.ui-exam-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+}
+
+.ui-quiz-stats {
+  color: var(--ui-text-2);
+  font: 12px var(--font-mono);
+}
+
+.ui-quiz-empty {
+  margin: 0;
+  padding: 16px 20px;
+  color: var(--ui-text-2);
+}
+
+/* quiz */
+.ui-quiz-list {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  counter-reset: ui-quiz;
+}
+
+.ui-quiz-q {
+  margin: 0 !important;
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 18px 20px !important;
+  counter-increment: ui-quiz;
+}
+
+.ui-quiz-q:last-child { border-bottom: 0; }
+
+.ui-quiz-q[data-unanswered] { background: var(--ui-amber-t); }
+
+.ui-quiz-prompt {
+  margin: 0 0 12px !important;
+  font-weight: 500;
+}
+
+.ui-quiz-prompt::before {
+  content: counter(ui-quiz) '. ';
+  color: var(--ui-text-2);
+}
+
+.ui-quiz-code {
+  overflow-x: auto;
+  margin: 0 0 12px !important;
+  border: 1px solid var(--ui-line-soft);
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-code-bg);
+  padding: 12px 14px;
+  font: 13px/1.6 var(--font-mono);
+}
+
+.ui-quiz-code code {
+  border: 0 !important;
+  background: none !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+}
+
+.ui-quiz-options {
+  display: grid;
+  gap: 8px;
+}
+
+.ui-quiz-option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r);
+  background: var(--ui-bg);
+  padding: 10px 14px;
+  color: var(--ui-text);
+  font-size: 15px;
+  text-align: start;
+  transition: background .12s, border-color .12s;
+}
+
+.ui-quiz-option:not(:disabled):hover {
+  border-color: var(--ui-text-3);
+  background: var(--ui-surface);
+}
+
+.ui-quiz-option svg { flex: none; }
+
+.ui-quiz-option[data-state="selected"] {
+  border-color: var(--ui-blue);
+  background: var(--ui-blue-t);
+  color: var(--ui-blue-d);
+}
+
+.ui-quiz-option[data-state="correct"] {
+  border-color: var(--ui-green);
+  background: var(--ui-green-t);
+  color: var(--ui-green);
+  font-weight: 500;
+}
+
+.ui-quiz-option[data-state="wrong"] {
+  border-color: var(--ui-red);
+  background: var(--ui-red-t);
+  color: var(--ui-red);
+}
+
+.ui-quiz-option[data-state="dim"] { opacity: .55; }
+.ui-quiz-option:disabled { cursor: default; }
+
+.ui-quiz-feedback {
+  margin-top: 12px;
+  border-radius: var(--ui-r);
+  background: var(--ui-red-t);
+  padding: 12px 14px;
+  font-size: 14.5px;
+}
+
+.ui-quiz-feedback[data-correct] { background: var(--ui-green-t); }
+.ui-quiz-feedback strong { font-weight: 600; }
+
+.ui-quiz-foot,
+.ui-deck-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid var(--ui-line-soft);
+  padding: 12px 20px;
+}
+
+.ui-quiz-missing { color: var(--ui-amber); font-size: 13.5px; }
+.ui-quiz-score { font-size: 14px; }
+.ui-quiz-score[data-perfect] { color: var(--ui-green); font-weight: 500; }
+
+/* practice and exam questions */
+.ui-exam-title {
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 14px 20px !important;
+}
+
+.ui-exam-parts { padding: 4px 0; }
+
+.ui-subq {
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 16px 20px;
+}
+
+.ui-subq:last-child { border-bottom: 0; }
+
+/* A SubQuestion outside an ExamQuestion gets its own frame. */
+.prose > .ui-subq,
+.prose > p > .ui-subq {
+  margin: 20px 0;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-lg);
+}
+
+.ui-subq-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ui-subq-part {
+  display: grid;
+  min-width: 28px;
+  height: 28px;
+  flex: none;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ui-blue-t);
+  padding: 0 8px;
+  color: var(--ui-blue-d);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ui-subq-prompt {
+  min-width: 0;
+  flex: 1;
+  padding-top: 2px;
+}
+
+.ui-subq-prompt > :is(p, ul, ol, figure, div) { margin-block: 0 10px !important; }
+.ui-subq-prompt > :last-child { margin-bottom: 0 !important; }
+
+.ui-subq-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ui-flip { transform: rotate(180deg); }
+
+.ui-subq-panel {
+  margin-top: 12px;
+  border-radius: var(--ui-r);
+  background: var(--ui-surface);
+  padding: 14px 16px 4px;
+}
+
+.ui-subq-panel-alt { background: var(--ui-amber-t); }
+
+.ui-subq-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.ui-subq-body > :is(p, ul, ol, figure, div, .katex-display) { margin-block: 0 10px !important; }
+
+/* flashcards */
+.ui-deck-progress {
+  height: 3px;
+  background: var(--ui-surface-3);
+}
+
+.ui-deck-progress > div {
+  height: 100%;
+  background: var(--ui-blue);
+  transition: width .3s ease;
+}
+
+.ui-deck-stage {
+  background: var(--ui-surface);
+  padding: 24px 20px;
+}
+
+.ui-flip-single { margin: 24px 0; }
+
+.ui-flip-card {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  height: 15rem;
+  margin: 0 auto;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  border-radius: var(--ui-r-lg);
+}
+
+.ui-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.ui-flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+  padding: 14px 20px 12px;
+  box-shadow: var(--ui-shadow);
+}
+
+.ui-flip-back { border-color: var(--ui-blue); }
+
+/* In dark mode raised surfaces are lighter than the stage behind them. */
+.dark .ui-flip-face { background: var(--ui-surface-2); }
+
+.ui-flip-label {
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.ui-flip-back .ui-flip-label { color: var(--ui-blue); }
+
+.ui-flip-text {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 8px 4px;
+  font-size: 16px;
+  line-height: 1.55;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.ui-flip-front {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.ui-flip-hint {
+  color: var(--ui-text-3);
+  font-size: 12px;
+  text-align: center;
+}
+
+.ui-deck-dots {
+  display: flex;
+  max-height: 6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  overflow-y: auto;
+  border-top: 1px solid var(--ui-line-soft);
+  padding: 12px 20px;
+}
+
+.ui-deck-dots button {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  padding: 0 6px;
+  color: var(--ui-text-2);
+  font: 500 12px var(--font-mono);
+}
+
+.ui-deck-dots button:hover { background: var(--ui-surface-2); }
+
+.ui-deck-dots button[aria-current="true"] {
+  background: var(--ui-blue);
+  color: var(--ui-on-accent);
+}
+
+.ui-deck-foot > span {
+  color: var(--ui-text-3);
+  font-size: 13px;
+}
+
+@media (max-width: 560px) {
+  .ui-deck-foot > span { display: none; }
+}
+
+/* ───────── shared interactive frame (steppers, try-it editors, stories) ───────── */
+.ui-viz {
+  overflow: hidden;
+  margin: 28px 0;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+}
+
+.ui-viz-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 12px 16px;
+}
+
+.ui-viz-head b {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ui-viz-head b::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--ui-green);
+  vertical-align: 1px;
+}
+
+.ui-viz-stats {
+  color: var(--ui-text-2);
+  font: 12px var(--font-mono);
+}
+
+.ui-viz-progress {
+  height: 3px;
+  background: var(--ui-surface-3);
+}
+
+.ui-viz-progress > div {
+  height: 100%;
+  background: var(--ui-blue);
+  transition: width .3s ease;
+}
+
+.ui-viz-body {
+  overflow-x: auto;
+  background: var(--ui-surface);
+  padding: 16px 20px 4px;
+}
+
+.ui-viz-body > :is(p, ul, ol, figure, div, .katex-display) { margin-block: 0 12px; }
+
+.ui-viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--ui-line-soft);
+  padding: 12px 16px;
 }
 
 /* practice checkpoint */

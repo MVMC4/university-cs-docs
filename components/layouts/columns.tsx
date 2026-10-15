@@ -1,19 +1,10 @@
-'use client';
+import type { ReactNode } from 'react';
 
-import React from 'react';
-
-export function Columns({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="my-6 grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-      {children}
-    </div>
-  );
+/** Two side-by-side boxes for comparing things; stacks on narrow screens. */
+export function Columns({ children }: { children: ReactNode }) {
+  return <div className="ui-split">{children}</div>;
 }
 
-export function Column({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`min-w-0 overflow-x-auto rounded-lg border border-fd-border bg-fd-muted/30 p-4 ${className}`}>
-      {children}
-    </div>
-  );
+export function Column({ children }: { children: ReactNode; className?: string }) {
+  return <div className="ui-split-col">{children}</div>;
 }

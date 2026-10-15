@@ -1,12 +1,13 @@
-import { ArrowRight, CheckCircle2, ClipboardCheck, Link2, ListOrdered } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ClipboardCheck, Link2 } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { Step, StepByStep } from '@/components/interactive/step-by-step';
 
+/** Retired: a list of steps renders as the standard numbered Steps. */
 export function MethodSteps({ title = 'Method', steps }: { title?: string; steps: string[] }) {
   return (
-    <section className="method-steps">
-      <h3><ListOrdered size={18} /> {title}</h3>
-      <ol>{steps.map((step, index) => <li key={step}><span>{index + 1}</span>{step}</li>)}</ol>
-    </section>
+    <StepByStep title={title}>
+      {steps.map((step) => <Step key={step}>{step}</Step>)}
+    </StepByStep>
   );
 }
 
