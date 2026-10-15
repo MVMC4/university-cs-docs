@@ -36,7 +36,7 @@ import { MergeComplexityFigure, MergeFrontWorkbench, MergeRecursionExplorer } fr
 import { PackageBuildStory, PackageFolderStory, PackageImportStory } from './interactive/package-stories';
 
 
-import { Callout } from 'fumadocs-ui/components/callout';
+import { Callout } from './callouts/callout';
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { Steps as FumaSteps, Step as FumaStep } from 'fumadocs-ui/components/steps';

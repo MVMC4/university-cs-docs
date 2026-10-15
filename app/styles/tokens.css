@@ -1,0 +1,166 @@
+/* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   One set of semantic tokens (--ui-*) drives the whole site.
+   Fumadocs' own --color-fd-* variables and the older --university-*
+   names are mapped onto them, so every layer follows the same palette.
+   ════════════════════════════════════════════════════════════ */
+:root {
+  --ui-bg: #ffffff;
+  --ui-surface: #f8f9fa;
+  --ui-surface-2: #f1f3f4;
+  --ui-surface-3: #e8eaed;
+  --ui-line: #dadce0;
+  --ui-line-soft: #e8eaed;
+  --ui-text: #202124;
+  --ui-text-2: #5f6368;
+  --ui-text-3: #80868b;
+  --ui-on-accent: #ffffff;
+
+  --ui-blue: #1a73e8;   --ui-blue-t: #e8f0fe;   --ui-blue-d: #174ea6;
+  --ui-green: #188038;  --ui-green-t: #e6f4ea;
+  --ui-red: #d93025;    --ui-red-t: #fce8e6;
+  --ui-amber: #e37400;  --ui-amber-t: #fef7e0;
+  --ui-purple: #9334e6; --ui-purple-t: #f3e8fd;
+  --ui-teal: #007b83;   --ui-teal-t: #e4f7fb;
+  --ui-pink: #d01884;   --ui-pink-t: #fde7f3;
+
+  --ui-code-bg: #f8f9fa;
+  --ui-shadow: 0 1px 2px rgba(60, 64, 67, .12), 0 1px 3px 1px rgba(60, 64, 67, .08);
+  --ui-shadow-lg: 0 2px 6px 2px rgba(60, 64, 67, .12), 0 1px 2px rgba(60, 64, 67, .2);
+  --ui-scrim: rgba(32, 33, 36, .45);
+
+  --ui-r-sm: 8px;
+  --ui-r: 12px;
+  --ui-r-lg: 16px;
+  --ui-r-xl: 24px;
+
+  /* syntax */
+  --ui-tk-k: #a626a4; --ui-tk-s: #188038; --ui-tk-c: #80868b; --ui-tk-n: #c5221f;
+  --ui-tk-t: #1967d2; --ui-tk-a: #b06000; --ui-tk-f: #4e5bb4;
+
+  color-scheme: light;
+}
+
+.dark {
+  --ui-bg: #1f1f1f;
+  --ui-surface: #262626;
+  --ui-surface-2: #2d2e30;
+  --ui-surface-3: #3c4043;
+  --ui-line: #3c4043;
+  --ui-line-soft: #303134;
+  --ui-text: #e8eaed;
+  --ui-text-2: #bdc1c6;
+  --ui-text-3: #9aa0a6;
+  --ui-on-accent: #1f1f1f;
+
+  --ui-blue: #8ab4f8;   --ui-blue-t: rgba(138, 180, 248, .14); --ui-blue-d: #aecbfa;
+  --ui-green: #81c995;  --ui-green-t: rgba(129, 201, 149, .14);
+  --ui-red: #f28b82;    --ui-red-t: rgba(242, 139, 130, .14);
+  --ui-amber: #fdd663;  --ui-amber-t: rgba(253, 214, 99, .12);
+  --ui-purple: #c58af9; --ui-purple-t: rgba(197, 138, 249, .14);
+  --ui-teal: #78d9ec;   --ui-teal-t: rgba(120, 217, 236, .12);
+  --ui-pink: #ff8bcb;   --ui-pink-t: rgba(255, 139, 203, .13);
+
+  --ui-code-bg: #262626;
+  --ui-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 1px 3px 1px rgba(0, 0, 0, .25);
+  --ui-shadow-lg: 0 2px 6px 2px rgba(0, 0, 0, .35), 0 1px 2px rgba(0, 0, 0, .4);
+  --ui-scrim: rgba(0, 0, 0, .6);
+
+  --ui-tk-k: #d7aefb; --ui-tk-s: #a8dab5; --ui-tk-c: #9aa0a6; --ui-tk-n: #f6aea9;
+  --ui-tk-t: #8ab4f8; --ui-tk-a: #fdd663; --ui-tk-f: #aecbfa;
+
+  color-scheme: dark;
+}
+
+/* Fumadocs reads these. The sidebar override repeats them because
+   fumadocs-ui/css/neutral.css retints the dark sidebar on its own. */
+:root,
+.dark,
+.dark #nd-sidebar {
+  --color-fd-background: var(--ui-bg);
+  --color-fd-foreground: var(--ui-text);
+  --color-fd-card: var(--ui-bg);
+  --color-fd-card-foreground: var(--ui-text);
+  --color-fd-popover: var(--ui-bg);
+  --color-fd-popover-foreground: var(--ui-text);
+  --color-fd-muted: var(--ui-surface-2);
+  --color-fd-muted-foreground: var(--ui-text-2);
+  --color-fd-secondary: var(--ui-surface-2);
+  --color-fd-secondary-foreground: var(--ui-text);
+  --color-fd-accent: var(--ui-surface-2);
+  --color-fd-accent-foreground: var(--ui-text);
+  --color-fd-primary: var(--ui-blue);
+  --color-fd-primary-foreground: var(--ui-on-accent);
+  --color-fd-border: var(--ui-line);
+  --color-fd-ring: var(--ui-blue);
+  --color-fd-overlay: var(--ui-scrim);
+  --color-fd-info: var(--ui-blue);
+  --color-fd-warning: var(--ui-amber);
+  --color-fd-error: var(--ui-red);
+  --color-fd-success: var(--ui-green);
+  --color-fd-idea: var(--ui-purple);
+}
+
+.dark {
+  --color-fd-popover: var(--ui-surface);
+}
+
+/* Older names still used by course features (MAT221, CSI247 chapters). */
+:root,
+.dark {
+  --university-concept: var(--ui-blue-t);
+  --university-theorem: var(--ui-purple-t);
+  --university-example: var(--ui-bg);
+  --university-warning: var(--ui-amber-t);
+  --university-success: var(--ui-green);
+  --university-assessment: var(--ui-pink);
+  --university-focus: var(--ui-blue);
+  --university-radius: var(--ui-r-lg);
+  --university-shadow: none;
+  --mat221-axis: var(--ui-text);
+  --mat221-curve: var(--ui-blue);
+  --mat221-highlight: var(--ui-blue-t);
+  --mat221-formula-surface: var(--ui-surface);
+}
+
+/* Utilities: bg-ui-surface, text-ui-text-2, border-ui-line, bg-ui-blue-t, rounded-ui-lg … */
+@theme inline {
+  --font-sans: var(--font-roboto-flex), Roboto, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-serif: var(--font-roboto-flex), Roboto, system-ui, sans-serif;
+
+  --color-ui-bg: var(--ui-bg);
+  --color-ui-surface: var(--ui-surface);
+  --color-ui-surface-2: var(--ui-surface-2);
+  --color-ui-surface-3: var(--ui-surface-3);
+  --color-ui-line: var(--ui-line);
+  --color-ui-line-soft: var(--ui-line-soft);
+  --color-ui-text: var(--ui-text);
+  --color-ui-text-2: var(--ui-text-2);
+  --color-ui-text-3: var(--ui-text-3);
+  --color-ui-on-accent: var(--ui-on-accent);
+  --color-ui-blue: var(--ui-blue);
+  --color-ui-blue-t: var(--ui-blue-t);
+  --color-ui-blue-d: var(--ui-blue-d);
+  --color-ui-green: var(--ui-green);
+  --color-ui-green-t: var(--ui-green-t);
+  --color-ui-red: var(--ui-red);
+  --color-ui-red-t: var(--ui-red-t);
+  --color-ui-amber: var(--ui-amber);
+  --color-ui-amber-t: var(--ui-amber-t);
+  --color-ui-purple: var(--ui-purple);
+  --color-ui-purple-t: var(--ui-purple-t);
+  --color-ui-teal: var(--ui-teal);
+  --color-ui-teal-t: var(--ui-teal-t);
+  --color-ui-pink: var(--ui-pink);
+  --color-ui-pink-t: var(--ui-pink-t);
+  --color-ui-code: var(--ui-code-bg);
+
+  --radius-ui-sm: var(--ui-r-sm);
+  --radius-ui: var(--ui-r);
+  --radius-ui-lg: var(--ui-r-lg);
+  --radius-ui-xl: var(--ui-r-xl);
+
+  --shadow-ui: var(--ui-shadow);
+  --shadow-ui-lg: var(--ui-shadow-lg);
+}

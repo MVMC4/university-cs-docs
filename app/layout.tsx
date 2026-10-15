@@ -2,21 +2,24 @@ import type { Metadata } from 'next';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import './global.css';
 import 'katex/dist/katex.css';
-import { Fraunces, Inter } from 'next/font/google';
+import { Roboto_Flex, Roboto_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteConfig } from '@/lib/site';
 import { StudyTimerProvider, TimerOverlays } from '@/features/study-timer';
 
-const inter = Inter({
+// Roboto Flex is variable in weight and optical size, so headings and body text
+// share one family that adjusts its letterforms to the size it is set at.
+const robotoFlex = Roboto_Flex({
   subsets: ['latin'],
-  variable: '--font-inter',
+  axes: ['opsz'],
+  variable: '--font-roboto-flex',
   display: 'swap',
 });
 
-const fraunces = Fraunces({
+const robotoMono = Roboto_Mono({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  variable: '--font-roboto-mono',
   display: 'swap',
 });
 
@@ -105,7 +108,7 @@ const websiteJsonLd = {
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${fraunces.variable} flex min-h-screen flex-col font-sans`}>
+      <body className={`${robotoFlex.variable} ${robotoMono.variable} flex min-h-screen flex-col font-sans`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

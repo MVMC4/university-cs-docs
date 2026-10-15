@@ -1,0 +1,73 @@
+/* ════════════════════════════════════════════════════════════
+   BASE
+   ════════════════════════════════════════════════════════════ */
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+  scroll-padding-top: calc(var(--fd-docs-row-3, 6rem) + 1rem);
+}
+
+body {
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+::selection {
+  background: var(--ui-blue-t);
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ui-blue);
+  outline-offset: 2px;
+}
+
+kbd {
+  border: 1px solid var(--ui-line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--ui-surface);
+  padding: 1px 6px;
+  font: 500 12px var(--font-mono);
+}
+
+/* Scrollbars: thin grey thumbs on a transparent track, in light and dark. */
+:root {
+  --scrollbar-thumb: color-mix(in srgb, var(--ui-text) 22%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--ui-text) 40%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* Always-dark surfaces need a light thumb even when the page is light. */
+pre[class*="bg-zinc-9"],
+textarea[class*="bg-zinc-9"],
+[class*="bg-zinc-9"] pre,
+[class*="bg-zinc-9"] textarea {
+  scrollbar-color: rgba(255, 255, 255, .34) transparent;
+}
+
+/* Engines without the standard properties (older Safari) get the same look. */
+@supports not (scrollbar-color: auto) {
+  *::-webkit-scrollbar { width: .6rem; height: .6rem; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: var(--scrollbar-thumb); background-clip: content-box; }
+  *::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); background-clip: content-box; }
+  *::-webkit-scrollbar-corner { background: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
