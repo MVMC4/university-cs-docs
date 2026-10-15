@@ -41,7 +41,8 @@ Still open (ask the user when you reach them):
 | `3669f69` | `docs/content-standard.md` (diagnosis and standard) |
 | `51a7bdb` | `scripts/audit-content-standard.mjs` and `npm run audit:content-standard` |
 | `4fb60d2` | Overlapping components render through the standard elements (KeyTerm, Steps, Callout, one quiz/question/flashcard frame) |
-| (next commit) | Back to the paper-and-ink theme, keeping the structure; this handoff document |
+| `d324dbc` | Back to the paper-and-ink theme, keeping the structure (token values, Inter and Fraunces, default code highlighting) |
+| `a78ecbd` | This handoff document |
 
 - **Never stage these.** They are the user's own uncommitted work and local files: the `generateStaticParams` hunk in `app/docs/[[...slug]]/page.tsx`, `app/llms.mdx/docs/[[...slug]]/route.ts`, `app/og/docs/[...slug]/route.tsx`, `vercel.json`, `scripts/vercel-ignore-build.mjs`, `CLAUDE.md`, `.claude/`. To commit your own change to `page.tsx`, stage a version without the user's hunk (write it to a temp file, `git hash-object -w`, then `git update-index --cacheinfo 100644,<blob>,<path>`).
 - Remote: only Dependabot PRs #62 to #66 are open. Local `main` is 15 commits behind `origin/main`; branch from `origin/main`.
