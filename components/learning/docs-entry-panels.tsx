@@ -3,18 +3,14 @@
 import Link from 'next/link';
 import {
   ArrowRight,
-  Binary,
   BookOpenCheck,
   BrainCircuit,
-  CheckCircle2,
-  Clock3,
   Command,
   FileQuestion,
   Focus,
   GraduationCap,
   Layers3,
   Search,
-  Target,
   TimerReset,
 } from 'lucide-react';
 
@@ -105,24 +101,13 @@ export function DocsWelcome() {
 }
 
 export function StudyWorkspaceHeader() {
-  return <section className="study-workspace-header">
-    <div className="study-workspace-icon"><TimerReset size={24} /></div>
-    <div className="study-workspace-copy">
-      <div className="welcome-kicker"><Clock3 size={14} /> Personal focus workspace</div>
-      <h1 id="pomodoro-focus-timer">Protect one block of attention.</h1>
-      <p>Choose one task, start the timer, and keep the same countdown while you move through notes, questions, and review pages. Settings and today’s focus totals remain saved on this device.</p>
-      <div className="workspace-features">
-        <span><CheckCircle2 size={14} /> Persistent progress</span>
-        <span><CheckCircle2 size={14} /> Custom cycles</span>
-        <span><CheckCircle2 size={14} /> One global timer</span>
-      </div>
-    </div>
-    <div className="workspace-sequence" aria-label="Three-step workflow">
-      <div><span>01</span><strong>Choose one task</strong></div>
-      <ArrowRight size={15} />
-      <div><span>02</span><strong>Focus</strong></div>
-      <ArrowRight size={15} />
-      <div><span>03</span><strong>Take a break</strong></div>
-    </div>
-  </section>;
+  return (
+    <header className="study-workspace-header">
+      <h1 id="pomodoro-focus-timer">Pomodoro focus timer</h1>
+      <p className="ui-lede">
+        Choose one task, start the timer and stay with it until the break. The same countdown keeps running while you move
+        between pages, and your settings stay on this device.
+      </p>
+    </header>
+  );
 }

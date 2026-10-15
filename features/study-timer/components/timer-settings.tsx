@@ -22,7 +22,7 @@ export function TimerSettings() {
             <h2 id="timer-settings-title">Edit Pomodoro timer</h2>
             <p>Choose session lengths and automatic transitions. Changes save on this device.</p>
           </div>
-          <button autoFocus type="button" className="study-icon-button" aria-label="Close timer settings" onClick={() => setSettingsOpen(false)}><X size={19} /></button>
+          <button autoFocus type="button" className="timer-icon-button" aria-label="Close timer settings" onClick={() => setSettingsOpen(false)}><X size={19} /></button>
         </header>
 
         <div className="timer-settings">
@@ -65,8 +65,8 @@ export function TimerSettings() {
         </div>
 
         <footer className="study-modal-footer">
-          <button type="button" className="timer-secondary" onClick={restoreDefaults}>Restore defaults</button>
-          <button type="button" className="study-primary-button" onClick={() => setSettingsOpen(false)}><Check size={17} /> Done</button>
+          <button type="button" className="ui-btn" onClick={restoreDefaults}>Restore defaults</button>
+          <button type="button" className="ui-btn ui-btn-primary" onClick={() => setSettingsOpen(false)}><Check size={17} /> Done</button>
         </footer>
       </section>
     </div>
