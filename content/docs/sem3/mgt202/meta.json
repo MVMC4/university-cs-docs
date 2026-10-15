@@ -1,7 +1,8 @@
 {
-  "title": "MGT202: Management",
+  "title": "MGT202: Small Business Management",
   "pages": [
-    "index", 
+    "index",
+    "01-the-entrepreneurial-life",
     "resources"
   ]
 }
