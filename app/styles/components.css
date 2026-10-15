@@ -50,29 +50,32 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--ui-line);
-  border-radius: 999px;
-  background: var(--ui-bg);
-  padding: 0 22px;
-  color: var(--ui-blue) !important;
-  font-size: 14px;
-  font-weight: 500;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-surface);
+  padding: 0 18px;
+  color: var(--ui-text) !important;
+  font-size: 13.5px;
+  font-weight: 700;
   text-decoration: none !important;
   cursor: pointer;
-  transition: background .15s, box-shadow .15s;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--ui-line) 30%, transparent);
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 
-.ui-btn:hover { background: var(--ui-surface); }
+.ui-btn:not(:disabled):hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--ui-line) 30%, transparent);
+}
+
+.ui-btn:not(:disabled):active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
 
 .ui-btn-primary {
-  border-color: var(--ui-blue);
   background: var(--ui-blue);
   color: var(--ui-on-accent) !important;
-}
-
-.ui-btn-primary:hover {
-  background: var(--ui-blue);
-  box-shadow: var(--ui-shadow);
 }
 
 .ui-btn:disabled {
@@ -82,15 +85,17 @@
 
 .ui-btn-sm {
   height: 34px;
-  padding: 0 16px;
-  font-size: 13px;
+  padding: 0 14px;
+  font-size: 12.5px;
 }
 
 /* hero */
 .ui-hero {
   margin: 0 0 32px;
   border-radius: var(--ui-r-xl);
-  background: linear-gradient(135deg, var(--ui-blue-t), var(--ui-purple-t) 60%, var(--ui-teal-t));
+  border: var(--ui-frame);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
   padding: 40px 36px;
 }
 
@@ -98,7 +103,7 @@
   max-width: 720px;
   margin: 0 0 12px !important;
   font-size: clamp(30px, 4.6vw, 42px) !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   line-height: 1.18 !important;
   letter-spacing: -.02em !important;
 }
@@ -132,7 +137,7 @@
 .ui-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-xl);
   background: var(--ui-bg);
   padding: 20px;
@@ -143,7 +148,7 @@
 
 a.ui-card:hover,
 a.ui-card:focus-visible {
-  border-color: transparent;
+  transform: translate(-2px, -2px);
   box-shadow: var(--ui-shadow-lg);
 }
 
@@ -201,12 +206,13 @@ a.ui-card:focus-visible {
 .ui-section-head h2 {
   margin: 0 0 14px !important;
   font-size: clamp(22px, 3vw, 26px) !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   letter-spacing: -.01em !important;
 }
 
 /* ───────── callouts ───────── */
 .ui-callout {
+  border: var(--ui-frame);
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr);
   gap: 12px;
@@ -260,7 +266,7 @@ a.ui-card:focus-visible {
 /* "What you'll learn" and prerequisites */
 .learning-list {
   margin: 0 0 32px;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 20px 24px 8px;
@@ -353,7 +359,7 @@ a.ui-card:focus-visible {
   position: relative;
   overflow: hidden;
   margin: 24px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 16px 20px 4px 24px;
@@ -470,7 +476,7 @@ a.ui-card:focus-visible {
 
 .ui-q {
   margin: 10px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r);
   background: var(--ui-bg);
 }
@@ -516,7 +522,7 @@ a.ui-card:focus-visible {
 .ui-table {
   overflow-x: auto;
   margin: 20px 0 24px;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r);
 }
 
@@ -563,7 +569,7 @@ a.ui-card:focus-visible {
 .ui-split-col {
   min-width: 0;
   overflow-x: auto;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   padding: 16px 18px 4px;
 }
@@ -584,7 +590,7 @@ a.ui-card:focus-visible {
 .ui-exam {
   overflow: hidden;
   margin: 28px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
 }
@@ -763,7 +769,7 @@ a.ui-card:focus-visible {
 .prose > .ui-subq,
 .prose > p > .ui-subq {
   margin: 20px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
 }
 
@@ -869,7 +875,7 @@ a.ui-card:focus-visible {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 14px 20px 12px;
@@ -955,7 +961,7 @@ a.ui-card:focus-visible {
 .ui-viz {
   overflow: hidden;
   margin: 28px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
 }
@@ -1023,7 +1029,7 @@ a.ui-card:focus-visible {
 /* practice checkpoint */
 .practice-checkpoint {
   margin: 28px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 16px 20px 6px;
@@ -1082,7 +1088,7 @@ a.ui-card:focus-visible {
   gap: 14px;
   align-items: center;
   margin: 24px 0;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 16px 20px;
@@ -1092,7 +1098,7 @@ a.ui-card:focus-visible {
 }
 
 .lesson-connection:hover {
-  border-color: transparent;
+  transform: translate(-2px, -2px);
   box-shadow: var(--ui-shadow-lg);
 }
 
@@ -1120,7 +1126,7 @@ a.ui-card:focus-visible {
 
 .worked-example {
   overflow: hidden;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
 }
@@ -1307,7 +1313,7 @@ a.ui-card:focus-visible {
 .deep-section-heading h3 {
   margin: 4px 0 !important;
   font-size: clamp(22px, 3vw, 26px) !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   letter-spacing: -.01em;
 }
 
@@ -1323,7 +1329,7 @@ a.ui-card:focus-visible {
 
 .deep-worked-example {
   overflow: hidden;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
 }
@@ -1488,7 +1494,7 @@ a.ui-card:focus-visible {
 .doc-checklist {
   overflow: hidden;
   margin-block: 28px;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
 }
@@ -1644,7 +1650,9 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
   gap: 32px;
   align-items: center;
   border-radius: var(--ui-r-xl);
-  background: linear-gradient(135deg, var(--ui-blue-t), var(--ui-purple-t) 60%, var(--ui-teal-t));
+  border: var(--ui-frame);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
   padding: 40px 36px;
 }
 
@@ -1662,7 +1670,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 .docs-welcome .welcome-hero h1 {
   margin: 12px 0 14px !important;
   font-size: clamp(30px, 4.6vw, 42px) !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   line-height: 1.18 !important;
   letter-spacing: -.02em !important;
   text-wrap: balance;
@@ -1693,7 +1701,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
   height: 40px;
   align-items: center;
   gap: 8px;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: 999px;
   background: var(--ui-bg);
   padding: 0 20px;
@@ -1800,7 +1808,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   margin: 24px 0 48px;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
 }
 
@@ -1814,7 +1822,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 .welcome-stats strong {
   display: block;
   font-size: 28px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.2;
   letter-spacing: -.01em;
 }
@@ -1849,7 +1857,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
   margin: 4px 0 0 !important;
   padding: 0 !important;
   font-size: clamp(22px, 3vw, 26px) !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   letter-spacing: -.01em !important;
 }
 
@@ -1862,7 +1870,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 .semester-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-xl);
   background: var(--ui-bg);
   padding: 20px;
@@ -1873,7 +1881,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 
 .semester-card:hover,
 .semester-card:focus-visible {
-  border-color: transparent;
+  transform: translate(-2px, -2px);
   box-shadow: var(--ui-shadow-lg);
 }
 
@@ -2061,7 +2069,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 .study-workspace-header h1 {
   margin: 12px 0 12px !important;
   font-size: clamp(30px, 4.6vw, 42px) !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   line-height: 1.18 !important;
   letter-spacing: -.02em !important;
 }
@@ -2087,7 +2095,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 
 .component-state-card {
   min-height: 8rem;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 16px;
@@ -2102,7 +2110,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 
 .mat221-question-bank details {
   overflow: hidden;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r);
   background: var(--ui-bg);
 }
@@ -2154,7 +2162,7 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 .mat221-course-video {
   margin: 28px 0;
   overflow: hidden;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 16px;
@@ -2331,4 +2339,12 @@ label.doc-checklist-item:hover { background: var(--ui-surface); }
 @media (max-width: 1050px) {
   .insertion-pass-visual { grid-template-columns: 1fr; }
   .package-story-grid { grid-template-columns: 1fr; }
+}
+
+/* ───────── paper-and-ink frames ─────────
+   Every framed container carries the same hard offset shadow. */
+:is(.ui-card, .ui-term, .learning-list, .ui-exam, .ui-quiz, .ui-deck, .ui-viz, .ui-table, .practice-checkpoint,
+  .lesson-connection, .worked-example, .deep-worked-example, .doc-checklist, .welcome-stats, .semester-card,
+  .study-panel, .mat221-question-bank details, .mat221-course-video, .component-state-card) {
+  box-shadow: var(--ui-shadow);
 }

@@ -35,8 +35,8 @@
   position: absolute;
   inset: 0 calc(50% - 50vw);
   z-index: -1;
-  border-bottom: 1px solid var(--ui-line);
-  background: var(--ui-bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--ui-line) 55%, transparent);
+  background: color-mix(in srgb, var(--ui-bg) 93%, var(--ui-surface));
 }
 
 #nd-subnav [data-header-body] {
@@ -51,45 +51,41 @@
   #nd-subnav [data-header-body] { padding-inline: 16px 20px; }
 }
 
-/* search: a grey pill that lifts onto white when hovered */
+/* search */
 [data-search-full] {
-  height: 44px;
-  max-width: 560px !important;
-  gap: 12px;
-  border-color: transparent !important;
-  border-radius: 999px !important;
-  background: var(--ui-surface-2) !important;
-  padding-inline: 16px 8px !important;
-  color: var(--ui-text-3) !important;
-  font-size: 15px;
-  transition: background .15s, border-color .15s, box-shadow .15s;
+  height: 40px;
+  max-width: 520px !important;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--ui-line) 55%, transparent) !important;
+  border-radius: var(--ui-r-sm) !important;
+  background: var(--ui-surface) !important;
+  padding-inline: 14px 8px !important;
+  color: var(--ui-text-2) !important;
+  font-size: 14px;
+  transition: border-color .15s, box-shadow .15s;
 }
 
 [data-search-full]:hover,
 [data-search-full]:focus-visible {
   border-color: var(--ui-line) !important;
-  background: var(--ui-bg) !important;
-  box-shadow: var(--ui-shadow);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--ui-line) 25%, transparent);
 }
 
 [data-search-full] > svg {
-  width: 20px;
-  height: 20px;
-  color: var(--ui-text-2);
+  width: 18px;
+  height: 18px;
 }
 
 [data-search-full] kbd {
-  border-radius: 6px;
   background: var(--ui-bg);
   color: var(--ui-text-2);
 }
 
-/* round icon buttons (GitHub, theme, menu) */
+/* icon buttons (GitHub, theme, menu) */
 #nd-subnav [data-header-body] a[aria-label],
 #nd-subnav [data-header-body] button:not([data-search-full]):not(.timer-trigger),
 #nd-nav a[aria-label],
 #nd-nav button:not([data-search-full]):not(.timer-trigger) {
-  border-radius: 999px;
   color: var(--ui-text-2);
 }
 
@@ -97,12 +93,6 @@
 #nd-subnav [data-header-body] button:not([data-search-full]):not(.timer-trigger):hover {
   background: var(--ui-surface-2);
   color: var(--ui-text);
-}
-
-/* theme switch: a two-state pill */
-[data-theme-toggle] {
-  border-color: var(--ui-line) !important;
-  border-radius: 999px !important;
 }
 
 /* ───────── section tabs ───────── */
@@ -125,7 +115,7 @@
   padding: 0 14px 2px;
   color: var(--ui-text-2);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 #nd-subnav [data-header-tabs] > a:hover {
@@ -133,7 +123,7 @@
 }
 
 #nd-subnav [data-header-tabs] > a.text-fd-primary {
-  color: var(--ui-blue);
+  color: var(--ui-text);
 }
 
 #nd-subnav [data-header-tabs] > a.text-fd-primary::after {
@@ -144,12 +134,13 @@
   left: 10px;
   height: 3px;
   border-radius: 3px 3px 0 0;
-  background: var(--ui-blue);
+  background: var(--ui-pink);
 }
 
 /* ───────── sidebar ───────── */
 #nd-sidebar {
-  border-inline-end: 1px solid var(--ui-line-soft);
+  border-inline-end: 1px solid color-mix(in srgb, var(--ui-line) 55%, transparent);
+  background: color-mix(in srgb, var(--ui-bg) 93%, var(--ui-surface));
 }
 
 #nd-sidebar [data-radix-scroll-area-viewport] {
@@ -159,39 +150,39 @@
 /* group headings ("Study Flow", "Semesters") */
 #nd-sidebar p.inline-flex {
   margin: 0;
-  padding: 18px 16px 6px;
+  padding: 18px 8px 6px;
   color: var(--ui-text-2);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .06em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
   text-transform: uppercase;
 }
 
 #nd-sidebar p.inline-flex:first-child { padding-top: 4px; }
 
-/* items: pills flush with the sidebar's left edge */
-/* Fumadocs indents each depth with an inline padding; the transparent start
-   border adds the same 20px to every depth, and the pill paints beneath it. */
+/* items */
 #nd-sidebar [data-radix-scroll-area-viewport] :is(a, button).relative.flex {
-  margin-inline-start: -12px;
-  border-inline-start: 20px solid transparent;
-  border-radius: 0 999px 999px 0;
-  padding-block: 7px;
-  padding-inline-end: 12px;
-  color: var(--ui-text);
+  border: 1px solid transparent;
+  border-radius: var(--ui-r-sm);
+  padding-block: 6px;
+  padding-inline-end: 8px;
+  color: var(--ui-text-2);
   font-size: 14px;
   line-height: 1.4;
 }
 
 #nd-sidebar [data-radix-scroll-area-viewport] :is(a, button).relative.flex:hover {
-  background: var(--ui-surface-2);
+  background: color-mix(in srgb, var(--ui-surface-2) 70%, transparent);
   color: var(--ui-text);
 }
 
-#nd-sidebar [data-radix-scroll-area-viewport] a[data-active="true"] {
-  background: var(--ui-blue-t);
-  color: var(--ui-blue-d);
-  font-weight: 500;
+#nd-sidebar [data-radix-scroll-area-viewport] a[data-active="true"],
+[data-sidebar-drawer] [data-radix-scroll-area-viewport] a[data-active="true"] {
+  border-color: color-mix(in srgb, var(--ui-line) 45%, transparent);
+  background: var(--color-fd-accent);
+  color: var(--color-fd-accent-foreground);
+  font-weight: 600;
+  box-shadow: 2px 2px 0 rgba(48, 54, 77, .15);
 }
 
 #nd-sidebar [data-radix-scroll-area-viewport] a[data-active="true"]::before {
@@ -204,13 +195,7 @@
 
 /* nested folder guide line */
 #nd-sidebar .relative::before {
-  background: var(--ui-line-soft);
-}
-
-/* the mobile drawer reuses the same items */
-[data-sidebar-drawer] [data-radix-scroll-area-viewport] a[data-active="true"] {
-  background: var(--ui-blue-t);
-  color: var(--ui-blue-d);
+  background: color-mix(in srgb, var(--ui-line) 25%, transparent);
 }
 
 /* ───────── table of contents ───────── */
@@ -299,7 +284,7 @@
 #nd-page > h1 {
   margin: 0 0 14px;
   font-size: clamp(30px, 4.6vw, 42px);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.18;
   letter-spacing: -.02em;
 }
@@ -404,7 +389,7 @@
 
 .ui-pager > a {
   display: block;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   padding: 16px 20px;
   color: var(--ui-text);
@@ -413,7 +398,7 @@
 }
 
 .ui-pager > a:hover {
-  border-color: transparent;
+  transform: translate(-2px, -2px);
   box-shadow: var(--ui-shadow-lg);
 }
 

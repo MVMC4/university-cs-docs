@@ -54,7 +54,7 @@
 .timer-popover {
   position: fixed;
   z-index: 1000;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
   padding: 16px;
@@ -146,7 +146,7 @@
   --study-track: var(--ui-surface-3);
   overflow: hidden;
   margin: 24px 0 32px;
-  border: 1px solid var(--ui-line);
+  border: var(--ui-frame);
   border-radius: var(--ui-r-lg);
   background: var(--ui-bg);
 }
@@ -428,7 +428,7 @@
   margin: 4px 0 !important;
   padding: 0 !important;
   font-size: 24px !important;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   letter-spacing: -.01em !important;
 }
 

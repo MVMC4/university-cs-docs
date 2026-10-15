@@ -1,73 +1,72 @@
 /* ════════════════════════════════════════════════════════════
-   DESIGN TOKENS
-   One set of semantic tokens (--ui-*) drives the whole site.
-   Fumadocs' own --color-fd-* variables and the older --university-*
-   names are mapped onto them, so every layer follows the same palette.
+   DESIGN TOKENS: the paper-and-ink theme
+   Cream paper, navy ink, flat pastel fills, a 2px ink frame with an
+   irregular radius and a hard offset shadow. One set of semantic tokens
+   (--ui-*) drives the whole site; Fumadocs' --color-fd-* variables and
+   the older --university-* names are mapped onto them.
+   The tone names (blue, green, red …) are roles, not literal hues:
+   blue = primary/concept, purple = theorem, green = success,
+   red = mistake, amber = caution, teal = analogy.
    ════════════════════════════════════════════════════════════ */
 :root {
-  --ui-bg: #ffffff;
-  --ui-surface: #f8f9fa;
-  --ui-surface-2: #f1f3f4;
-  --ui-surface-3: #e8eaed;
-  --ui-line: #dadce0;
-  --ui-line-soft: #e8eaed;
-  --ui-text: #202124;
-  --ui-text-2: #5f6368;
-  --ui-text-3: #80868b;
-  --ui-on-accent: #ffffff;
+  --ui-bg: #f1ebdd;
+  --ui-surface: #fbf5e9;
+  --ui-surface-2: #e7dfcf;
+  --ui-surface-3: #ddd3bf;
+  --ui-line: #30364d;
+  --ui-line-soft: rgba(48, 54, 77, .16);
+  --ui-text: #273047;
+  --ui-text-2: #6e7180;
+  --ui-text-3: #8d8f9b;
+  --ui-on-accent: #fbf5e9;
 
-  --ui-blue: #1a73e8;   --ui-blue-t: #e8f0fe;   --ui-blue-d: #174ea6;
-  --ui-green: #188038;  --ui-green-t: #e6f4ea;
-  --ui-red: #d93025;    --ui-red-t: #fce8e6;
-  --ui-amber: #e37400;  --ui-amber-t: #fef7e0;
-  --ui-purple: #9334e6; --ui-purple-t: #f3e8fd;
-  --ui-teal: #007b83;   --ui-teal-t: #e4f7fb;
-  --ui-pink: #d01884;   --ui-pink-t: #fde7f3;
+  --ui-blue: #30364d;   --ui-blue-t: color-mix(in srgb, #b8c5df 45%, #fbf5e9);  --ui-blue-d: #273047;
+  --ui-green: #416c64;  --ui-green-t: color-mix(in srgb, #6d9c91 24%, #fbf5e9);
+  --ui-red: #9b4e58;    --ui-red-t: color-mix(in srgb, #c97f86 20%, #fbf5e9);
+  --ui-amber: #8a5236;  --ui-amber-t: color-mix(in srgb, #e7b6a7 38%, #fbf5e9);
+  --ui-purple: #7d4a5c; --ui-purple-t: color-mix(in srgb, #d9a9b0 36%, #fbf5e9);
+  --ui-teal: #45506d;   --ui-teal-t: color-mix(in srgb, #b8c5df 28%, #fbf5e9);
+  --ui-pink: #c97f86;   --ui-pink-t: color-mix(in srgb, #c97f86 16%, #fbf5e9);
 
-  --ui-code-bg: #f8f9fa;
-  --ui-shadow: 0 1px 2px rgba(60, 64, 67, .12), 0 1px 3px 1px rgba(60, 64, 67, .08);
-  --ui-shadow-lg: 0 2px 6px 2px rgba(60, 64, 67, .12), 0 1px 2px rgba(60, 64, 67, .2);
-  --ui-scrim: rgba(32, 33, 36, .45);
+  --ui-code-bg: #fbf5e9;
+  --ui-frame: 2px solid var(--ui-line);
+  --ui-shadow: 4px 4px 0 rgba(48, 54, 77, .18);
+  --ui-shadow-lg: 6px 6px 0 rgba(48, 54, 77, .24);
+  --ui-scrim: rgba(3, 7, 18, .55);
 
-  --ui-r-sm: 8px;
-  --ui-r: 12px;
-  --ui-r-lg: 16px;
-  --ui-r-xl: 24px;
+  --ui-r-sm: .5rem;
+  --ui-r: .65rem;
+  --ui-r-lg: .8rem .95rem .72rem 1rem;
+  --ui-r-xl: .8rem .95rem .72rem 1rem;
 
-  /* syntax */
-  --ui-tk-k: #a626a4; --ui-tk-s: #188038; --ui-tk-c: #80868b; --ui-tk-n: #c5221f;
-  --ui-tk-t: #1967d2; --ui-tk-a: #b06000; --ui-tk-f: #4e5bb4;
 
   color-scheme: light;
 }
 
 .dark {
-  --ui-bg: #1f1f1f;
-  --ui-surface: #262626;
-  --ui-surface-2: #2d2e30;
-  --ui-surface-3: #3c4043;
-  --ui-line: #3c4043;
-  --ui-line-soft: #303134;
-  --ui-text: #e8eaed;
-  --ui-text-2: #bdc1c6;
-  --ui-text-3: #9aa0a6;
-  --ui-on-accent: #1f1f1f;
+  --ui-bg: hsl(0, 0%, 7.04%);
+  --ui-surface: hsl(0, 0%, 9.8%);
+  --ui-surface-2: hsl(0, 0%, 12.9%);
+  --ui-surface-3: hsl(0, 0%, 17%);
+  --ui-line: hsla(0, 0%, 46%, .45);
+  --ui-line-soft: hsla(0, 0%, 40%, .2);
+  --ui-text: hsl(0, 0%, 92%);
+  --ui-text-2: hsla(0, 0%, 70%, .85);
+  --ui-text-3: hsla(0, 0%, 58%, .85);
+  --ui-on-accent: hsl(0, 0%, 9%);
 
-  --ui-blue: #8ab4f8;   --ui-blue-t: rgba(138, 180, 248, .14); --ui-blue-d: #aecbfa;
-  --ui-green: #81c995;  --ui-green-t: rgba(129, 201, 149, .14);
-  --ui-red: #f28b82;    --ui-red-t: rgba(242, 139, 130, .14);
-  --ui-amber: #fdd663;  --ui-amber-t: rgba(253, 214, 99, .12);
-  --ui-purple: #c58af9; --ui-purple-t: rgba(197, 138, 249, .14);
-  --ui-teal: #78d9ec;   --ui-teal-t: rgba(120, 217, 236, .12);
-  --ui-pink: #ff8bcb;   --ui-pink-t: rgba(255, 139, 203, .13);
+  --ui-blue: hsl(0, 0%, 96%);  --ui-blue-t: color-mix(in srgb, #45506d 55%, hsl(0, 0%, 9.8%)); --ui-blue-d: #d5ddef;
+  --ui-green: #8cc2b6;          --ui-green-t: color-mix(in srgb, #416c64 45%, hsl(0, 0%, 9.8%));
+  --ui-red: #e3a1aa;            --ui-red-t: color-mix(in srgb, #b56d78 32%, hsl(0, 0%, 9.8%));
+  --ui-amber: #e7b6a7;          --ui-amber-t: color-mix(in srgb, #704d3f 55%, hsl(0, 0%, 9.8%));
+  --ui-purple: #e3b9c1;         --ui-purple-t: color-mix(in srgb, #704d59 55%, hsl(0, 0%, 9.8%));
+  --ui-teal: #b8c5df;           --ui-teal-t: color-mix(in srgb, #45506d 40%, hsl(0, 0%, 9.8%));
+  --ui-pink: #e3a1aa;           --ui-pink-t: color-mix(in srgb, #b56d78 28%, hsl(0, 0%, 9.8%));
 
-  --ui-code-bg: #262626;
-  --ui-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 1px 3px 1px rgba(0, 0, 0, .25);
-  --ui-shadow-lg: 0 2px 6px 2px rgba(0, 0, 0, .35), 0 1px 2px rgba(0, 0, 0, .4);
-  --ui-scrim: rgba(0, 0, 0, .6);
-
-  --ui-tk-k: #d7aefb; --ui-tk-s: #a8dab5; --ui-tk-c: #9aa0a6; --ui-tk-n: #f6aea9;
-  --ui-tk-t: #8ab4f8; --ui-tk-a: #fdd663; --ui-tk-f: #aecbfa;
+  --ui-code-bg: hsl(0, 0%, 9.8%);
+  --ui-shadow: 4px 4px 0 rgba(0, 0, 0, .4);
+  --ui-shadow-lg: 6px 6px 0 rgba(0, 0, 0, .5);
+  --ui-scrim: rgba(0, 0, 0, .66);
 
   color-scheme: dark;
 }
@@ -79,55 +78,67 @@
 .dark #nd-sidebar {
   --color-fd-background: var(--ui-bg);
   --color-fd-foreground: var(--ui-text);
-  --color-fd-card: var(--ui-bg);
+  --color-fd-card: var(--ui-surface);
   --color-fd-card-foreground: var(--ui-text);
-  --color-fd-popover: var(--ui-bg);
+  --color-fd-popover: var(--ui-surface);
   --color-fd-popover-foreground: var(--ui-text);
   --color-fd-muted: var(--ui-surface-2);
   --color-fd-muted-foreground: var(--ui-text-2);
-  --color-fd-secondary: var(--ui-surface-2);
+  --color-fd-secondary: #b8c5df;
   --color-fd-secondary-foreground: var(--ui-text);
-  --color-fd-accent: var(--ui-surface-2);
-  --color-fd-accent-foreground: var(--ui-text);
+  --color-fd-accent: #d9a9b0;
+  --color-fd-accent-foreground: #273047;
   --color-fd-primary: var(--ui-blue);
   --color-fd-primary-foreground: var(--ui-on-accent);
   --color-fd-border: var(--ui-line);
-  --color-fd-ring: var(--ui-blue);
+  --color-fd-ring: #c97f86;
   --color-fd-overlay: var(--ui-scrim);
-  --color-fd-info: var(--ui-blue);
-  --color-fd-warning: var(--ui-amber);
-  --color-fd-error: var(--ui-red);
-  --color-fd-success: var(--ui-green);
-  --color-fd-idea: var(--ui-purple);
 }
 
-.dark {
-  --color-fd-popover: var(--ui-surface);
+.dark,
+.dark #nd-sidebar {
+  --color-fd-secondary: hsl(0, 0%, 12.9%);
+  --color-fd-accent: hsla(0, 0%, 40.9%, .3);
+  --color-fd-accent-foreground: hsl(0, 0%, 90%);
+  --color-fd-ring: hsl(0, 0%, 54.9%);
 }
 
 /* Older names still used by course features (MAT221, CSI247 chapters). */
-:root,
+:root {
+  --university-concept: #b8c5df;
+  --university-theorem: #d9a9b0;
+  --university-example: #fbf5e9;
+  --university-warning: #e7b6a7;
+  --university-success: #6d9c91;
+  --university-assessment: #c97f86;
+  --university-focus: #30364d;
+  --university-radius: .8rem .95rem .72rem 1rem;
+  --university-shadow: 4px 4px 0 rgba(48, 54, 77, .18);
+  --mat221-axis: #30364d;
+  --mat221-curve: #c97f86;
+  --mat221-highlight: #b8c5df;
+  --mat221-formula-surface: #fbf5e9;
+}
+
 .dark {
-  --university-concept: var(--ui-blue-t);
-  --university-theorem: var(--ui-purple-t);
-  --university-example: var(--ui-bg);
-  --university-warning: var(--ui-amber-t);
-  --university-success: var(--ui-green);
-  --university-assessment: var(--ui-pink);
-  --university-focus: var(--ui-blue);
-  --university-radius: var(--ui-r-lg);
-  --university-shadow: none;
-  --mat221-axis: var(--ui-text);
-  --mat221-curve: var(--ui-blue);
-  --mat221-highlight: var(--ui-blue-t);
-  --mat221-formula-surface: var(--ui-surface);
+  --university-concept: #45506d;
+  --university-theorem: #704d59;
+  --university-example: #17191f;
+  --university-warning: #704d3f;
+  --university-success: #416c64;
+  --university-assessment: #b56d78;
+  --university-focus: #f8fafc;
+  --university-shadow: 4px 4px 0 rgba(0, 0, 0, .4);
+  --mat221-axis: #f8fafc;
+  --mat221-curve: #e3a1aa;
+  --mat221-highlight: #64769a;
+  --mat221-formula-surface: #17191f;
 }
 
 /* Utilities: bg-ui-surface, text-ui-text-2, border-ui-line, bg-ui-blue-t, rounded-ui-lg … */
 @theme inline {
-  --font-sans: var(--font-roboto-flex), Roboto, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-serif: var(--font-roboto-flex), Roboto, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
 
   --color-ui-bg: var(--ui-bg);
   --color-ui-surface: var(--ui-surface);
