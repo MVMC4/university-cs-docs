@@ -2,7 +2,6 @@ import Image from 'next/image';
 import type { BaseLayoutProps, LayoutTab } from 'fumadocs-ui/layouts/shared';
 import type * as PageTree from 'fumadocs-core/page-tree';
 import { appName, docsRoute, gitConfig } from './shared';
-import { TimerTrigger } from '@/features/study-timer';
 import { StreakChip } from '@/features/progress';
 
 export function baseOptions(): BaseLayoutProps {
@@ -21,11 +20,6 @@ export function baseOptions(): BaseLayoutProps {
         type: 'custom',
         secondary: true,
         children: <StreakChip />,
-      },
-      {
-        type: 'custom',
-        secondary: true,
-        children: <TimerTrigger />,
       },
     ],
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,

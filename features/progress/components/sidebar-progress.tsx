@@ -2,16 +2,16 @@
 
 import { Flame, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { dayActivity } from '../core';
 import { useProgress } from '../progress-provider';
 import { Ring } from './charts';
-import { ResetProgress } from './reset-dialog';
 
 /**
  * A small panel at the top of the sidebar (and the mobile menu): the streak, today's goal and level at a glance, with
- * the dashboard and a confirmed reset one click away.
+ * the dashboard one click away. Whatever is passed as children (the focus timer) sits under the Dashboard button.
  */
-export function SidebarProgress() {
+export function SidebarProgress({ children }: { children?: ReactNode }) {
   const progress = useProgress();
   if (!progress) return null;
   const { ready, state, streak, level, today } = progress;
@@ -42,7 +42,7 @@ export function SidebarProgress() {
       </div>
       <div className="sp-actions">
         <Link href="/docs/dashboard" className="ui-btn ui-btn-sm"><LayoutDashboard size={14} aria-hidden="true" /> Dashboard</Link>
-        <ResetProgress label="Reset" className="ui-btn ui-btn-sm sp-reset" />
+        {children}
       </div>
     </section>
   );

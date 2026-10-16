@@ -1,0 +1,205 @@
+{
+  "$schema": "../../../quiz.schema.json",
+  "quizzes": {
+    "topic-3-review": {
+      "title": "Topic 3 review quiz",
+      "questions": [
+        {
+          "question": "According to the Chapter 3 activity, where should a start-up idea begin?",
+          "options": [
+            "With a product",
+            "With the customer's problem",
+            "With a financial forecast",
+            "With a competitor analysis"
+          ],
+          "correctIndex": 1,
+          "explanation": "The sheet says: do not begin by choosing a product; begin with the customer's problem.",
+          "group": "The framework",
+          "level": "foundation"
+        },
+        {
+          "question": "Which of these is a problem rather than a solution?",
+          "options": [
+            "A delivery app for student meals",
+            "Off-campus students arrive late to morning classes because transport is unreliable",
+            "A subscription laundry service",
+            "A mobile banking kiosk"
+          ],
+          "correctIndex": 1,
+          "explanation": "A problem describes a difficulty a customer group experiences. The others describe things a business might offer.",
+          "group": "The framework",
+          "level": "developing"
+        },
+        {
+          "question": "How many parts are in the five-part framework, and which comes first?",
+          "options": [
+            "Five; the identified problem and 4U",
+            "Four; the customer segment",
+            "Five; the problem statement",
+            "Six; the white space"
+          ],
+          "correctIndex": 0,
+          "explanation": "The parts are identified problem and 4U, customer segment, problem evidence, customer problem statement, and problem qualification.",
+          "group": "The framework",
+          "level": "foundation"
+        },
+        {
+          "question": "What does the \"Urgent\" U ask?",
+          "options": [
+            "Is the problem expensive?",
+            "Do customers need the problem addressed soon?",
+            "Is the problem ignored by competitors?",
+            "Is the problem new?"
+          ],
+          "correctIndex": 1,
+          "explanation": "Urgent asks whether customers need the problem addressed soon.",
+          "group": "The framework",
+          "level": "foundation"
+        },
+        {
+          "question": "Which is a valid minimum viable segment?",
+          "options": [
+            "All students",
+            "Everyone in Botswana",
+            "Second-year UB students who live off campus and depend on public transport to reach morning classes",
+            "All young people"
+          ],
+          "correctIndex": 2,
+          "explanation": "A segment should be narrow and profiled on location, role, behaviour, situation and need. The other options are labels the sheet says to avoid.",
+          "group": "The segment",
+          "level": "developing"
+        },
+        {
+          "question": "Which is NOT one of the five parameters for profiling a segment?",
+          "options": [
+            "Location",
+            "Occupation or role",
+            "Annual revenue of the proposed business",
+            "The common need or difficulty"
+          ],
+          "correctIndex": 2,
+          "explanation": "The five are location, occupation or role, relevant behaviour, the situation in which the problem occurs, and the common need or difficulty.",
+          "group": "The segment",
+          "level": "foundation"
+        },
+        {
+          "question": "What is the minimum number of potential customers the activity asks you to speak to?",
+          "options": [
+            "One",
+            "Three",
+            "Ten",
+            "Fifty"
+          ],
+          "correctIndex": 1,
+          "explanation": "Speak to at least three potential customers from the selected segment.",
+          "group": "Evidence and statement",
+          "level": "foundation"
+        },
+        {
+          "question": "How should customer answers be recorded?",
+          "options": [
+            "Rewritten to support the group's solution",
+            "Without trying to persuade respondents to accept your preferred solution",
+            "Only if they praise the idea",
+            "Summarised as a single score"
+          ],
+          "correctIndex": 1,
+          "explanation": "Record answers faithfully and do not lead respondents towards your preferred solution.",
+          "group": "Evidence and statement",
+          "level": "developing"
+        },
+        {
+          "question": "Which problem statement follows the required formula best?",
+          "options": [
+            "We will build an app to track food demand.",
+            "Small food vendors near offices in Gaborone struggle to estimate daily demand, resulting in food waste on some days and lost sales on others.",
+            "Food is wasted in Botswana.",
+            "Vendors need better technology."
+          ],
+          "correctIndex": 1,
+          "explanation": "It names a specific customer group, a specific problem, a situation and an observable consequence, with no solution.",
+          "group": "Evidence and statement",
+          "level": "developing"
+        },
+        {
+          "question": "In BLAC, which category describes a problem customers do not yet fully recognise?",
+          "options": [
+            "Blatant",
+            "Latent",
+            "Aspirational",
+            "Critical"
+          ],
+          "correctIndex": 1,
+          "explanation": "Latent means not yet fully recognised. Blatant means already recognised.",
+          "group": "BLAC and white space",
+          "level": "foundation"
+        },
+        {
+          "question": "What is the white space in this activity?",
+          "options": [
+            "A blank slide in the presentation",
+            "The open, underserved area for unique business positioning",
+            "The unused budget",
+            "The empty part of a competitor's store"
+          ],
+          "correctIndex": 1,
+          "explanation": "White space is the underserved area where a new offer could be positioned: what is missing from current alternatives and why that may be an opportunity.",
+          "group": "BLAC and white space",
+          "level": "developing"
+        },
+        {
+          "question": "Which of these is NOT allowed at this stage of the activity?",
+          "options": [
+            "A problem statement",
+            "A Business Model Canvas",
+            "A customer segment profile",
+            "A BLAC classification"
+          ],
+          "correctIndex": 1,
+          "explanation": "Business Model Canvases, financial forecasts, prototypes and feasibility conclusions are explicitly out of bounds for this activity.",
+          "group": "Boundaries and marking",
+          "level": "foundation"
+        },
+        {
+          "question": "How is the activity marked?",
+          "options": [
+            "Out of 100, with one mark for each slide",
+            "Out of 50: 10 marks for each of five parts",
+            "Pass or fail",
+            "Out of 20 for the final slide only"
+          ],
+          "correctIndex": 1,
+          "explanation": "The rubric is out of 50, with 10 marks for each of the five parts.",
+          "group": "Boundaries and marking",
+          "level": "foundation"
+        },
+        {
+          "question": "Which textbook idea says a niche shields a business from direct competition but can erode?",
+          "options": [
+            "Focus strategy",
+            "Cost-based strategy",
+            "SWOT analysis",
+            "Fatal flaw"
+          ],
+          "correctIndex": 0,
+          "explanation": "A focus strategy restricts attention to a subset of customers, a product or a region. A niche protects the firm, but it can erode if competitors imitate or the segment loses its uniqueness.",
+          "group": "Textbook ideas",
+          "level": "exam"
+        },
+        {
+          "question": "What is a fatal flaw in the textbook's feasibility discussion?",
+          "options": [
+            "A typing error in the plan",
+            "A circumstance that could by itself make a new business unsuccessful",
+            "A small cost overrun",
+            "A weak slide"
+          ],
+          "correctIndex": 1,
+          "explanation": "A fatal flaw is a circumstance or development that alone could make the venture unsuccessful, such as limited market potential or powerful competitors.",
+          "group": "Textbook ideas",
+          "level": "developing"
+        }
+      ]
+    }
+  }
+}
