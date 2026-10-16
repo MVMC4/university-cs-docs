@@ -1,6 +1,6 @@
 # Progress, streaks and rewards
 
-Status: built on 2026-10-16 (work orders PRG-01 to PRG-10 in [WORK_ORDERS.md](../../WORK_ORDERS.md)).
+Status: built on 2026-10-16, dashboard redesigned the same day (work orders PRG-01 to PRG-19 in [WORK_ORDERS.md](../../WORK_ORDERS.md)).
 
 The site is free content with no accounts, so progress is kept in the reader's browser. This document says how it works and, more importantly, how it keeps working while the content and the rules keep changing.
 
@@ -8,9 +8,26 @@ The site is free content with no accounts, so progress is kept in the reader's b
 
 - A **streak**: consecutive days with at least one counted activity, shown as a chip in the header. A **freeze** covers one missed day; one is earned every 7 days of streak (at most 2 are held).
 - **XP and levels** (Starter to Legend) for reading, quizzes, flashcards, check questions and focus time, with a daily cap so repeating cards cannot inflate it.
-- **Badges** for milestones (first page, 100 quiz answers, a seven-day streak, half a course read).
-- A **dashboard** at `/docs/dashboard`: streak, level, an activity calendar, progress through every course, topic by topic, and badges.
-- **Control**: export, import, reset, switch tracking off, switch the notices off.
+- A **daily goal** (15, 30, 60 or 100 XP, chosen in Settings) shown as a ring, with a notice and a badge when it is reached.
+- **Badges** for milestones (first page, 100 quiz answers, a seven-day streak, half a course read), each with its own artwork: a frame shape for its category and a tier colour for its difficulty (bronze, silver, gold, ink). Locked badges show how far away they are.
+- **Encouragement** that fits the moment: a greeting by time of day, a headline that reflects where the reader is (first visit, streak safe, streak at risk, welcome back, goal reached), streak milestone messages, a week-on-week comparison, and a message on every quiz result. All the wording is data in `content/progress/messages.json`.
+- **My courses**: the reader chooses the courses they take. The dashboard follows them with progress, the next page to read and quiz accuracy for each.
+- A **dashboard** at `/docs/dashboard`, in five sections (see below), and a **panel at the top of the sidebar** with the streak, today's goal and level.
+- **Control**: export, import, switch tracking off, switch the notices off, and a **reset that asks the reader to type RESET** (from the sidebar or Settings).
+
+## The dashboard
+
+Five sections, kept in the address (`#courses`) so each can be linked to:
+
+| Section | What is in it |
+|---|---|
+| Overview | A greeting and headline, today's goal ring, the week at a glance, four headline numbers, what to read next, this week's chart, badges the reader is close to, and quiz questions to revisit |
+| My courses | A course picker (by semester, with search), and a card per chosen course with progress, a "next" button and topic-by-topic dots |
+| Progress | XP over 7, 30 or 90 days with a 7-day average, quiz accuracy over time, weekly XP for eight weeks, an activity heat map and lifetime totals |
+| Badges | Every badge, filterable (all, earned, in progress, locked), with progress toward each and a tier legend |
+| Settings | A name for the greeting, the daily goal, tracking and notices, export and import, and the reset |
+
+The dashboard's numbers come from the engine's pure helpers (`weekSummary`, `lastDays`, `nextUp`, `missedQuestions`, `badgeProgress`), so they are unit-tested rather than computed inside components.
 
 ## What counts
 
@@ -33,10 +50,12 @@ features/progress/
   core.ts                  the engine: no imports, runs in the browser and in Node
   storage.ts               localStorage plus a summary cookie, defensive reads and writes
   progress-provider.tsx    React context: loads state, applies events, saves, syncs tabs
-  components/              streak chip, toasts, page tracker, dashboard
+  components/              streak chip, toasts, page tracker, sidebar panel, reset dialog, badge art, charts
+  dashboard/               the five dashboard sections (overview, courses, trends, badges, settings)
   icons.ts                 the icon names a badge may use
 content/progress/
-  rewards.json             XP rules, levels and badges (data, versioned)
+  rewards.json             XP rules, levels and badges with their art (data, versioned)
+  messages.json            greetings, headlines, milestone and quiz messages (data, versioned)
   aliases.json             old page paths mapped to new ones
 app/progress-manifest.json the course, topic and page list, built from the page tree
 tests/unit/progress.test.mjs   npm run test:progress
@@ -51,6 +70,13 @@ The engine is pure functions over plain data: `applyEvent(state, event, context)
 - Saves are debounced by 250 ms and flushed when the page is hidden. Another tab's save is picked up through the `storage` event, taking whichever state is newer.
 - Every read is wrapped: private mode, full storage or corrupt JSON gives a fresh state, never an error.
 - Nothing is sent to a server. The dashboard says so in plain words and offers export and reset.
+
+### Schema history
+
+| Version | Added |
+|---|---|
+| 1 | The first shape: days, streak, XP, counters, badges, pages, quiz answers, decks, check questions |
+| 2 | `activity` (totals for each of the last 120 days, for the trend graphs) and `settings.courses`, `settings.name`, `settings.goalXp`. Days studied under version 1 become days with one action, so the calendar and trends do not start empty |
 
 ## Designing for constant updates
 
@@ -69,8 +95,12 @@ This is the part to keep intact when changing anything.
 Edit `content/progress/rewards.json`:
 
 ```json
-{ "id": "quiz-1000", "title": "Thousand", "description": "Answer 1,000 quiz questions.", "icon": "target", "when": { "counter": "quizAnswers", "gte": 1000 } }
+{ "id": "quiz-1000", "title": "Thousand", "description": "Answer 1,000 quiz questions.", "icon": "target", "when": { "counter": "quizAnswers", "gte": 1000 }, "shape": "round", "tier": "gold" }
 ```
+
+`shape` picks the frame (`hex` reading, `shield` streaks, `round` quizzes, `burst` mastery, `square` practice, `crest` levels, courses and goals) and `tier` the colour (`bronze`, `silver`, `gold`, `ink`). Both are optional.
+
+To change the wording the site uses to encourage readers, edit `content/progress/messages.json`. Each list holds alternatives; one is chosen by the day, so the text does not flicker. `{name}`, `{streak}`, `{pct}` and `{xp}` are filled in where a message uses them. Keep it honest: it should be true of the reader's situation.
 
 Rules that exist today:
 
@@ -99,6 +129,7 @@ A new icon name needs one line in `features/progress/icons.ts`; an unknown name 
 
 ## Not built yet
 
-- Per-quiz history on the dashboard (accuracy by topic across quizzes).
-- A weekly summary and goal setting.
+- A browser test for the dashboard (the engine is unit-tested; the screens have been checked by hand).
+- Weekly goals and reminders. A browser cannot remind someone who is not on the site, so the dashboard relies on the streak, the daily goal and "next up" to bring readers back.
+- Per-topic quiz accuracy on the dashboard.
 - Syncing across devices (would need a backend; deliberately out of scope).

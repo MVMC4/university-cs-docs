@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/layouts/notebook/page';
-import { ProgressDashboard } from '@/features/progress/components/dashboard';
+import { ProgressDashboard } from '@/features/progress/dashboard/dashboard';
 
 export const metadata: Metadata = {
   title: 'Dashboard',

@@ -99,3 +99,5 @@
 .qz-brow { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(80px, 2fr) auto; gap: 12px; align-items: center; font-size: 13.5px; padding: 3px 0; }
 .qz-brow span:last-child { color: var(--ui-text-2); font: 12px var(--font-mono); }
 @media (max-width: 520px) { .qz-brow { grid-template-columns: 1fr auto; } .qz-brow .pg-bar { grid-column: 1 / -1; order: 3; } }
+
+.qz-affirm { margin: 0; color: var(--ui-text-2); font-size: 14.5px; line-height: 1.55; }

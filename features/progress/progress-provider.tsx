@@ -11,10 +11,12 @@ import {
   useState,
 } from 'react';
 import aliasData from '@/content/progress/aliases.json';
+import messageData from '@/content/progress/messages.json';
 import rewardData from '@/content/progress/rewards.json';
 import {
   STORAGE_KEY,
   applyEvent,
+  awardBadges,
   catchUpBadges,
   dayKey,
   effectiveStreak,
@@ -23,6 +25,7 @@ import {
   parseImport,
   serialize,
   type Manifest,
+  type MessagesConfig,
   type Notice,
   type ProgressEvent,
   type ProgressState,
@@ -31,6 +34,7 @@ import {
 import { clearSaved, loadState, readNewer, saveState } from './storage';
 
 export const rewards = rewardData as unknown as RewardsConfig;
+export const messages = messageData as unknown as MessagesConfig;
 const aliases = (aliasData as { pages: Record<string, string> }).pages;
 const MANIFEST_URL = '/progress-manifest.json';
 
@@ -49,6 +53,11 @@ export type ProgressContext = {
   record: (event: ProgressEvent) => void;
   setEnabled: (enabled: boolean) => void;
   setToasts: (toasts: boolean) => void;
+  /** Choose which courses the dashboard follows. */
+  setCourses: (ids: string[]) => void;
+  toggleCourse: (id: string) => void;
+  setName: (name: string) => void;
+  setGoal: (xp: number) => void;
   reset: () => void;
   exportJson: () => string;
   importJson: (text: string) => void;
@@ -79,6 +88,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const manifestRef = useRef<Manifest | null>(null);
   const noticeKey = useRef(0);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // True only while there is something new to save. Saving an unchanged state on page hide would overwrite
+  // progress another open tab has made since.
+  const dirty = useRef(false);
 
   const apply = useCallback((next: ProgressState) => {
     stateRef.current = next;
@@ -90,10 +102,13 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       clearTimeout(saveTimer.current);
       saveTimer.current = null;
     }
+    if (!dirty.current) return;
+    dirty.current = false;
     saveState(stateRef.current);
   }, []);
 
   const scheduleSave = useCallback(() => {
+    dirty.current = true;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(flush, 250);
   }, [flush]);
@@ -191,6 +206,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const setEnabled = useCallback(
     (enabled: boolean) => {
       apply({ ...stateRef.current, enabled, updatedAt: Date.now() });
+      dirty.current = true;
       flush();
     },
     [apply, flush],
@@ -204,11 +220,38 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [apply, scheduleSave],
   );
 
+  const changeSettings = useCallback(
+    (patch: Partial<ProgressState['settings']>) => {
+      const now = Date.now();
+      const next = { ...stateRef.current, settings: { ...stateRef.current.settings, ...patch }, updatedAt: now };
+      const awarded = awardBadges(next, { rewards, now, manifest: manifestRef.current });
+      apply(awarded.state);
+      scheduleSave();
+      if (awarded.notices.length > 0 && awarded.state.settings.toasts) {
+        const shown = awarded.notices.map((notice) => ({ ...notice, key: (noticeKey.current += 1) }));
+        setNotices((previous) => [...previous, ...shown].slice(-4));
+      }
+    },
+    [apply, scheduleSave],
+  );
+
+  const setCourses = useCallback((ids: string[]) => changeSettings({ courses: [...new Set(ids)] }), [changeSettings]);
+  const toggleCourse = useCallback(
+    (id: string) => {
+      const chosen = stateRef.current.settings.courses;
+      changeSettings({ courses: chosen.includes(id) ? chosen.filter((item) => item !== id) : [...chosen, id] });
+    },
+    [changeSettings],
+  );
+  const setName = useCallback((name: string) => changeSettings({ name: name.slice(0, 40) }), [changeSettings]);
+  const setGoal = useCallback((xp: number) => changeSettings({ goalXp: Math.max(5, Math.min(500, Math.round(xp))) }), [changeSettings]);
+
   const reset = useCallback(() => {
     const fresh = emptyState(Date.now());
     fresh.enabled = stateRef.current.enabled;
     apply(fresh);
     setNotices([]);
+    dirty.current = false;
     clearSaved();
     if (fresh.enabled) saveState(fresh);
   }, [apply]);
@@ -220,6 +263,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       const now = Date.now();
       const imported = parseImport(text, now);
       apply(catchUpBadges({ ...imported, updatedAt: now }, { rewards, now, manifest: manifestRef.current }));
+      dirty.current = true;
       flush();
     },
     [apply, flush],
@@ -238,11 +282,15 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       record,
       setEnabled,
       setToasts,
+      setCourses,
+      toggleCourse,
+      setName,
+      setGoal,
       reset,
       exportJson,
       importJson,
     }),
-    [ready, state, today, manifest, notices, dismiss, record, setEnabled, setToasts, reset, exportJson, importJson],
+    [ready, state, today, manifest, notices, dismiss, record, setEnabled, setToasts, setCourses, toggleCourse, setName, setGoal, reset, exportJson, importJson],
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

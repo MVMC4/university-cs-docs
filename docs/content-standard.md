@@ -139,8 +139,9 @@ Learning progress is tracked in the reader's browser, with no account and no bac
 
 - A streak counts the days on which the reader did something that counts: read a page, answered a quiz question, flipped a flashcard, opened a check question.
 - Experience points and badges reward the same actions. The rules live in `content/progress/rewards.json`, so a badge or a level can be added without changing code.
-- A dashboard at `/docs/dashboard` shows the streak, level, badges, and progress through every course.
-- State is stored in `localStorage` with a small summary in a first-party cookie. It is versioned and migrated, so a change to the format or to the content never loses a reader's history. The reader can export, import and reset it, or switch tracking off.
+- A dashboard at `/docs/dashboard` has five sections: an overview (a greeting, today's goal, what to read next), the courses the reader chose, trend graphs, badges (each with its own artwork) and settings. A panel at the top of the sidebar shows the streak and today's goal.
+- The site encourages without nagging: messages fit the reader's situation and are data in `content/progress/messages.json`.
+- State is stored in `localStorage` with a small summary in a first-party cookie. It is versioned and migrated, so a change to the format or to the content never loses a reader's history. The reader can export and import it, switch tracking off, or reset it by typing RESET to confirm.
 
 ### 2.7 Designing for constant updates
 

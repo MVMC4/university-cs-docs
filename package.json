@@ -40,7 +40,7 @@
     "audit:quizzes": "node scripts/audit-quiz-data.mjs",
     "audit:playgrounds": "node scripts/audit-playground-data.mjs",
     "audit:content-standard": "node scripts/audit-content-standard.mjs",
-    "test:progress": "node --no-warnings --experimental-strip-types --test tests/unit/progress.test.mjs",
+    "test:progress": "node --no-warnings --experimental-strip-types --test tests/unit/progress.test.mjs tests/unit/progress-dashboard.test.mjs",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {

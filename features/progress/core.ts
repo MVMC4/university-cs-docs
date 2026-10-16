@@ -12,11 +12,12 @@
  * - removing content never removes an earned badge.
  */
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const STORAGE_KEY = 'ucd-progress';
 export const COOKIE_NAME = 'ucd_progress';
 export const EXPORT_APP = 'university-cs-docs-progress';
 const DAY_LIMIT = 800;
+const ACTIVITY_DAYS = 120;
 
 /* ───────── types ───────── */
 
@@ -29,6 +30,21 @@ export type StreakState = {
 };
 
 export type QuizRecord = { choice: number; correct: boolean; at: number; tries: number };
+
+/** What happened on one day, for the trend graphs. Kept for the last 120 days. */
+export type DayActivity = { xp: number; actions: number; answers: number; correct: number; minutes: number };
+
+export type Settings = {
+  toasts: boolean;
+  /** Course ids the reader chose ("sem3/csi243"); the dashboard follows these. */
+  courses: string[];
+  /** A name to greet the reader by. Stays in this browser. */
+  name: string;
+  /** XP to earn each day to reach the daily goal. */
+  goalXp: number;
+};
+
+export const DEFAULT_SETTINGS: Settings = { toasts: true, courses: [], name: '', goalXp: 30 };
 
 export type ProgressState = {
   v: number;
@@ -49,7 +65,9 @@ export type ProgressState = {
   decks: Record<string, { seen: number; last: number }>;
   checks: Record<string, Record<string, number>>;
   last: { path: string; title: string; at: number } | null;
-  settings: { toasts: boolean };
+  /** Day by day totals for the last 120 days (added in version 2). */
+  activity: Record<string, DayActivity>;
+  settings: Settings;
   [unknown: string]: unknown;
 };
 
@@ -78,7 +96,7 @@ export type LevelDef = { level: number; xp: number; title: string };
  */
 export type When = Record<string, unknown>;
 
-export type BadgeDef = { id: string; title: string; description: string; icon?: string; when: When };
+export type BadgeDef = { id: string; title: string; description: string; icon?: string; when: When; shape?: string; tier?: string };
 
 export type RewardsConfig = {
   version: number;
@@ -108,7 +126,8 @@ export type Notice =
   | { kind: 'level'; level: number; title: string }
   | { kind: 'streak'; current: number }
   | { kind: 'freeze-earned' }
-  | { kind: 'freeze-used' };
+  | { kind: 'freeze-used' }
+  | { kind: 'goal'; xp: number };
 
 export type ManifestPage = { path: string; title: string; kind: string };
 export type ManifestTopic = { id: string; title: string; pages: ManifestPage[] };
@@ -193,7 +212,8 @@ export function emptyState(now: number): ProgressState {
     decks: {},
     checks: {},
     last: null,
-    settings: { toasts: true },
+    activity: {},
+    settings: { ...DEFAULT_SETTINGS, courses: [] },
   };
 }
 
@@ -206,6 +226,20 @@ function normalize(raw: Record<string, unknown>, now: number): ProgressState {
     : null;
   const days = Array.isArray(raw.days) ? raw.days.filter((day): day is string => typeof day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(day)) : [];
   const settings = toObject<unknown>(raw.settings);
+  const activity: Record<string, DayActivity> = {};
+  for (const [day, value] of Object.entries(toObject<unknown>(raw.activity))) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !isObject(value)) continue;
+    activity[day] = {
+      xp: toNumber(value.xp, 0),
+      actions: toNumber(value.actions, 0),
+      answers: toNumber(value.answers, 0),
+      correct: toNumber(value.correct, 0),
+      minutes: toNumber(value.minutes, 0),
+    };
+  }
+  const keptDays = Object.keys(activity).sort().slice(-ACTIVITY_DAYS);
+  const courses = Array.isArray(settings.courses) ? settings.courses.filter((id): id is string => typeof id === 'string') : [];
+  const goal = toNumber(settings.goalXp, DEFAULT_SETTINGS.goalXp);
   return {
     ...raw,
     v: SCHEMA_VERSION,
@@ -229,7 +263,14 @@ function normalize(raw: Record<string, unknown>, now: number): ProgressState {
     decks: toObject<{ seen: number; last: number }>(raw.decks),
     checks: toObject<Record<string, number>>(raw.checks),
     last,
-    settings: { ...base.settings, ...settings, toasts: settings.toasts === false ? false : true },
+    activity: Object.fromEntries(keptDays.map((day) => [day, activity[day]])),
+    settings: {
+      ...settings,
+      toasts: settings.toasts === false ? false : true,
+      courses: [...new Set(courses)],
+      name: typeof settings.name === 'string' ? settings.name.slice(0, 40) : '',
+      goalXp: goal >= 5 && goal <= 500 ? Math.round(goal) : DEFAULT_SETTINGS.goalXp,
+    },
   };
 }
 
@@ -245,6 +286,14 @@ export const MIGRATIONS: Record<number, (state: Record<string, unknown>) => Reco
       return { ...state, streak: { current: state.streak, best: state.streak, lastDay, freezes: 0, freezesUsed: 0 } };
     }
     return state;
+  },
+  // 1 -> 2: per-day activity for the trend graphs, and course, name and goal settings. Days studied before this
+  // version are kept as days with one action and no XP, so the calendar and trends do not start empty.
+  1: (state) => {
+    const days = Array.isArray(state.days) ? (state.days as unknown[]).filter((day): day is string => typeof day === 'string') : [];
+    const activity: Record<string, DayActivity> = {};
+    for (const day of days.slice(-ACTIVITY_DAYS)) activity[day] = { xp: 0, actions: 1, answers: 0, correct: 0, minutes: 0 };
+    return { ...state, activity: isObject(state.activity) ? state.activity : activity };
   },
 };
 
@@ -366,6 +415,7 @@ function stat(state: ProgressState, name: string, rewards: RewardsConfig): numbe
     case 'streakBest': return state.streak.best;
     case 'streakCurrent': return state.streak.current;
     case 'distinctPages': return Object.keys(state.pages).length;
+    case 'coursesChosen': return state.settings.courses.length;
     default: return Number.NaN;
   }
 }
@@ -526,6 +576,25 @@ export function applyEvent(previous: ProgressState, event: ProgressEvent, ctx: C
   state.daily = { day: today, xp: daily.xp + earned };
   const levelBefore = levelFor(previous.xp, rewards.levels);
   state.xp = previous.xp + earned + bonus;
+
+  // Day by day totals, for the trend graphs and the daily goal.
+  if (activity || earned + bonus > 0) {
+    const day = previous.activity[today] ?? { xp: 0, actions: 0, answers: 0, correct: 0, minutes: 0 };
+    const updated: DayActivity = {
+      xp: day.xp + earned + bonus,
+      actions: day.actions + (activity ? 1 : 0),
+      answers: day.answers + (event.type === 'quiz-answer' ? 1 : 0),
+      correct: day.correct + (event.type === 'quiz-answer' && event.correct ? 1 : 0),
+      minutes: day.minutes + (event.type === 'focus' ? Math.max(0, Math.min(180, Math.round(event.minutes))) : 0),
+    };
+    const kept = Object.keys(previous.activity).filter((key) => key !== today).sort().slice(-(ACTIVITY_DAYS - 1));
+    state.activity = { ...Object.fromEntries(kept.map((key) => [key, previous.activity[key]])), [today]: updated };
+    const goal = state.settings.goalXp;
+    if (goal > 0 && day.xp < goal && updated.xp >= goal) {
+      bump(state.counters, 'goalsReached');
+      notices.push({ kind: 'goal', xp: goal });
+    }
+  }
   const levelAfter = levelFor(state.xp, rewards.levels);
   if (levelAfter.level > levelBefore.level) notices.push({ kind: 'level', level: levelAfter.level, title: levelAfter.title });
 
@@ -535,6 +604,18 @@ export function applyEvent(previous: ProgressState, event: ProgressEvent, ctx: C
   }
 
   return { state, notices: ctx.silent ? [] : notices };
+}
+
+/** Award any badge the state now qualifies for and report each one, for changes that are not events (choosing courses). */
+export function awardBadges(state: ProgressState, ctx: Pick<Context, 'rewards' | 'manifest' | 'now'>): { state: ProgressState; notices: Notice[] } {
+  const earned = newBadges(state, ctx);
+  if (earned.length === 0) return { state, notices: [] };
+  const badges = { ...state.badges };
+  for (const badge of earned) badges[badge.id] = { at: ctx.now };
+  return {
+    state: { ...state, badges },
+    notices: earned.map((badge) => ({ kind: 'badge' as const, id: badge.id, title: badge.title, description: badge.description, icon: badge.icon })),
+  };
 }
 
 /** Award every badge already earned by the state, without notices. Used after import, migration or a rewards update. */
@@ -592,4 +673,166 @@ export function parseImport(text: string, now: number): ProgressState {
     throw new Error('That file does not look like exported progress.');
   }
   return migrate(candidate, now);
+}
+
+/* ───────── reading the state: trends, the week, recommendations, messages ───────── */
+
+const NO_ACTIVITY: DayActivity = { xp: 0, actions: 0, answers: 0, correct: 0, minutes: 0 };
+
+export function dayActivity(state: ProgressState, day: string): DayActivity {
+  return state.activity[day] ?? NO_ACTIVITY;
+}
+
+/** The last `count` days ending today, oldest first, each with its totals. */
+export function lastDays(state: ProgressState, today: string, count: number): ({ day: string } & DayActivity)[] {
+  return Array.from({ length: count }, (_, index) => {
+    const day = addDays(today, index - (count - 1));
+    return { day, ...dayActivity(state, day) };
+  });
+}
+
+function sumDays(days: ({ day: string } & DayActivity)[]) {
+  return days.reduce(
+    (total, item) => ({
+      xp: total.xp + item.xp,
+      actions: total.actions + item.actions,
+      answers: total.answers + item.answers,
+      correct: total.correct + item.correct,
+      minutes: total.minutes + item.minutes,
+      activeDays: total.activeDays + (item.actions > 0 ? 1 : 0),
+    }),
+    { xp: 0, actions: 0, answers: 0, correct: 0, minutes: 0, activeDays: 0 },
+  );
+}
+
+/** The last seven days against the seven before, for "up on last week" messages. */
+export function weekSummary(state: ProgressState, today: string) {
+  const fourteen = lastDays(state, today, 14);
+  const previous = sumDays(fourteen.slice(0, 7));
+  const current = sumDays(fourteen.slice(7));
+  const change = previous.xp > 0 ? Math.round(((current.xp - previous.xp) / previous.xp) * 100) : null;
+  return { current, previous, change };
+}
+
+/** Monday to Sunday of the current week, for the week strip. */
+export function weekDots(state: ProgressState, today: string) {
+  const [year, month, day] = today.split('-').map(Number);
+  const index = (new Date(Date.UTC(year, month - 1, day)).getUTCDay() + 6) % 7; // Monday = 0
+  const monday = addDays(today, -index);
+  return Array.from({ length: 7 }, (_, offset) => {
+    const key = addDays(monday, offset);
+    return {
+      day: key,
+      label: 'MTWTFSS'[offset],
+      active: (state.activity[key]?.actions ?? 0) > 0 || state.days.includes(key),
+      today: key === today,
+      future: key > today,
+    };
+  });
+}
+
+/** How far a badge is from being earned, when its rule is a simple count. */
+export function badgeProgress(badge: BadgeDef, state: ProgressState, ctx: Pick<Context, 'rewards' | 'manifest'>): { have: number; need: number } | null {
+  const rule = badge.when;
+  if (typeof rule.counter === 'string' && typeof rule.gte === 'number') {
+    return { have: Math.min(state.counters[rule.counter] ?? 0, rule.gte), need: rule.gte };
+  }
+  if (typeof rule.stat === 'string' && typeof rule.gte === 'number') {
+    const have = stat(state, rule.stat, ctx.rewards);
+    return Number.isFinite(have) ? { have: Math.min(have, rule.gte), need: rule.gte } : null;
+  }
+  if (isObject(rule.quizAccuracy)) {
+    const { minAnswers } = rule.quizAccuracy as { minAnswers: number };
+    return { have: Math.min(quizAccuracy(state).answered, minAnswers), need: minAnswers };
+  }
+  if (typeof rule.course === 'string' && typeof rule.gte === 'number' && ctx.manifest) {
+    const courses = rule.course === '*' ? ctx.manifest.courses : ctx.manifest.courses.filter((course) => course.id === rule.course);
+    const best = Math.max(0, ...courses.map((course) => courseProgress(state, course).fraction));
+    return { have: Math.round(Math.min(best, rule.gte) * 100), need: Math.round(rule.gte * 100) };
+  }
+  return null;
+}
+
+/** The first unread pages of the chosen courses, starting with the course the reader was in last. */
+export function nextUp(state: ProgressState, manifest: Manifest | null, limit = 3): { course: ManifestCourse; page: ManifestPage; topic: string }[] {
+  if (!manifest) return [];
+  const chosen = manifest.courses.filter((course) => state.settings.courses.includes(course.id));
+  const lastPath = state.last?.path;
+  const lastCourse = lastPath ? chosen.find((course) => lastPath.startsWith(`/docs/${course.id}`)) : undefined;
+  const ordered = lastCourse ? [lastCourse, ...chosen.filter((course) => course !== lastCourse)] : chosen;
+  const found: { course: ManifestCourse; page: ManifestPage; topic: string }[] = [];
+  for (const course of ordered) {
+    for (const topic of course.topics) {
+      const page = topic.pages.find((candidate) => !state.pages[candidate.path] && candidate.kind !== 'resources');
+      if (page) {
+        found.push({ course, page, topic: topic.title });
+        break;
+      }
+    }
+    if (found.length >= limit) break;
+  }
+  return found;
+}
+
+/** Quizzes with questions answered wrongly last time, most missed first, with the page to go back to. */
+export function missedQuestions(state: ProgressState): { key: string; path: string; missed: number; answered: number }[] {
+  const rows: { key: string; path: string; missed: number; answered: number }[] = [];
+  for (const [key, answers] of Object.entries(state.quizzes)) {
+    const records = Object.values(answers);
+    const missed = records.filter((record) => !record.correct).length;
+    if (missed === 0) continue;
+    const place = key.split('#')[0];
+    rows.push({ key, path: place.startsWith('/') ? place : `/docs/${place}`, missed, answered: records.length });
+  }
+  return rows.sort((a, b) => b.missed - a.missed);
+}
+
+/* ───────── encouraging messages (content/progress/messages.json) ───────── */
+
+export type MessagesConfig = {
+  version: number;
+  greeting: Record<'morning' | 'afternoon' | 'evening' | 'night', string[]>;
+  hero: Record<string, string[]>;
+  streakMilestones: Record<string, string>;
+  quiz: Record<'perfect' | 'strong' | 'steady' | 'tough', string[]>;
+  week: Record<'up' | 'same' | 'down' | 'first', string[]>;
+  goal: string[];
+};
+
+/** Pick one message the same way all day, so the page does not change under the reader on every render. */
+export function pickMessage(list: string[] | undefined, seed: string, vars: Record<string, string | number> = {}): string {
+  if (!list || list.length === 0) return '';
+  const text = list[parseInt(hashText(seed), 36) % list.length];
+  return text.replace(/\{(\w+)\}/g, (_, name: string) => String(vars[name] ?? ''));
+}
+
+export function timeOfDay(hour: number): 'morning' | 'afternoon' | 'evening' | 'night' {
+  if (hour >= 5 && hour < 12) return 'morning';
+  if (hour >= 12 && hour < 17) return 'afternoon';
+  if (hour >= 17 && hour < 22) return 'evening';
+  return 'night';
+}
+
+/** Which headline the dashboard shows, from what is true of the reader today. */
+export function heroSituation(state: ProgressState, today: string): string {
+  const goal = state.settings.goalXp;
+  const todayXp = dayActivity(state, today).xp;
+  if (state.days.length === 0) return 'firstVisit';
+  const { status } = effectiveStreak(state.streak, today);
+  const last = state.streak.lastDay;
+  const away = last ? daysBetween(last, today) : 0;
+  if (goal > 0 && todayXp >= goal) return 'goalReached';
+  if (status === 'done') return 'streakDone';
+  if (away >= 4) return 'welcomeBack';
+  if (status === 'at-risk') return 'streakAtRisk';
+  if (status === 'lost') return 'streakLost';
+  return 'noStreak';
+}
+
+export function quizTone(correct: number, total: number): 'perfect' | 'strong' | 'steady' | 'tough' {
+  if (total > 0 && correct === total) return 'perfect';
+  const fraction = total ? correct / total : 0;
+  if (fraction >= 0.8) return 'strong';
+  if (fraction >= 0.5) return 'steady';
+  return 'tough';
 }

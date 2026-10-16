@@ -1,6 +1,6 @@
 # Work orders
 
-This list records requested repository work, its verification target, and its current delivery state. Update it when a work order changes or is completed. Last updated 2026-10-16.
+This list records requested repository work, its verification target, and its current delivery state. Update it when a work order changes or is completed. Last updated 2026-10-16 (end of day).
 
 Status words: **Complete** (verified against the acceptance check), **In progress**, **Open** (not started), **Blocked** (waiting on a decision or another order), **Reopened**.
 
@@ -55,19 +55,19 @@ Decoding exam and lab language becomes a section of every review page (decision 
 
 | ID | Work order | Acceptance check | Status |
 |---|---|---|---|
-| DEC-01 | `CommandWords` and `DecodeQuestion` components with shared data in `content/decoding/` | Command words are listed once for every course; a course can add its own dictionary; command words are highlighted in a decoded question | Open |
-| DEC-02 | Roll the `## Decoding the questions` section out to every review page | Every `review.mdx` has the section; the generated reviews get it from `ChapterReview` | Open |
-| DEC-03 | Fold CSI243 `decoding-questions` into its reviews | The generic method and dictionary are in `content/decoding/`; the five worked decodings sit in the matching topic reviews; the page, its quiz data and links are removed; `/docs/sem3/csi243/decoding-questions` redirects | Open |
+| DEC-01 | `CommandWords` and `DecodeQuestion` components with shared data in `content/decoding/` | Command words are listed once for every course; a course can add its own dictionary; command words are highlighted in a decoded question | Complete |
+| DEC-02 | Roll the `## Decoding the questions` section out to every review page | Every `review.mdx` has the section; the generated reviews get it from `ChapterReview` | Complete (every review except MAT221, which is rebuilt in STD-12) |
+| DEC-03 | Fold CSI243 `decoding-questions` into its reviews | The generic method and dictionary are in `content/decoding/`; the five worked decodings sit in the matching topic reviews; the page, its quiz data and links are removed; `/docs/sem3/csi243/decoding-questions` redirects | Complete |
 
 ## Quizzes
 
 | ID | Work order | Acceptance check | Status |
 |---|---|---|---|
-| QZ-01 | Extend the quiz data with optional `group`, `level`, `steps`, `source` and `id` | The schema, the loader and the audit accept the fields; every existing quiz still passes `npm run audit:quizzes` unchanged | Open |
-| QZ-02 | A question chooser modelled on the CSI213 cram sheet: groups, levels, which questions, how many, order, and focus or all-questions mode, with a results summary and "retry missed" | Quizzes of six or more questions open with the chooser; smaller ones start directly; answers are remembered per question | Open |
-| QZ-03 | Document the new fields and behaviour | `components/README.md` and the quiz schema describe them | Open |
+| QZ-01 | Extend the quiz data with optional `group`, `level`, `steps`, `source` and `id` | The schema, the loader and the audit accept the fields; every existing quiz still passes `npm run audit:quizzes` unchanged | Complete |
+| QZ-02 | A question chooser modelled on the CSI213 cram sheet: groups, levels, which questions, how many, order, and focus or all-questions mode, with a results summary and "retry missed" | Quizzes of six or more questions open with the chooser; smaller ones start directly; answers are remembered per question | Complete |
+| QZ-03 | Document the new fields and behaviour | `components/README.md` and the quiz schema describe them | Complete |
 | QZ-04 | Import the CSI213 cram sheet bank (339 questions, 12 parts, three levels, per-option feedback and worked steps) as quiz data | The questions render with their maths in a CSI213 review page; `npm run audit:quizzes` passes | Open |
-| QZ-05 | Show each question's `source` when set, and use past papers as context for review questions | A question inspired by a paper shows its source | Open |
+| QZ-05 | Show each question's `source` when set, and use past papers as context for review questions | A question inspired by a paper shows its source | In progress: the source is shown when set; no past paper has been added yet (see RES-03) |
 
 ## Progress, streaks and rewards
 
@@ -75,16 +75,25 @@ Design: [docs/plans/progress-system.md](docs/plans/progress-system.md). Everythi
 
 | ID | Work order | Acceptance check | Status |
 |---|---|---|---|
-| PRG-01 | Write the design | The document covers storage, the schema and its migrations, events, streak rules, rewards data, the dashboard, privacy, and how it handles content updates | Open |
-| PRG-02 | Storage layer: versioned schema, migrations, `localStorage` plus a summary cookie, page aliases | An old stored state is migrated and an unknown field is kept; a corrupt value falls back to a fresh state | Open |
-| PRG-03 | Record events: page views, quiz answers and completions, flashcards, check questions, focus sessions | Each action updates the stored state once; nothing is recorded when tracking is off | Open |
-| PRG-04 | Streaks with freezes | A day with an activity extends the streak; one missed day is covered by a freeze; two reset it | Open |
-| PRG-05 | XP, levels and badges from `content/progress/rewards.json` | Adding a badge to the JSON awards it without a code change; unknown rule types are ignored | Open |
-| PRG-06 | A streak chip in the header and reward toasts | The chip shows the streak and links to the dashboard; a new badge or level shows a toast | Open |
-| PRG-07 | The dashboard at `/docs/dashboard`: streak calendar, level, badges, and progress through every course | Progress per course, topic and page is shown from the real page tree | Open |
-| PRG-08 | Export, import, reset, and switch tracking off | Export then import restores the state; reset and "off" clear the cookie and storage | Open |
-| PRG-09 | Tests | Unit tests for streaks, XP and migrations; a browser test for the dashboard | Open |
-| PRG-10 | Contributor notes | `components/README.md` explains how to add a badge and how to change the stored format | Open |
+| PRG-01 | Write the design | The document covers storage, the schema and its migrations, events, streak rules, rewards data, the dashboard, privacy, and how it handles content updates | Complete |
+| PRG-02 | Storage layer: versioned schema, migrations, `localStorage` plus a summary cookie, page aliases | An old stored state is migrated and an unknown field is kept; a corrupt value falls back to a fresh state | Complete (schema version 2, with a tested migration from version 1) |
+| PRG-03 | Record events: page views, quiz answers and completions, flashcards, check questions, focus sessions | Each action updates the stored state once; nothing is recorded when tracking is off | Complete |
+| PRG-04 | Streaks with freezes | A day with an activity extends the streak; one missed day is covered by a freeze; two reset it | Complete |
+| PRG-05 | XP, levels and badges from `content/progress/rewards.json` | Adding a badge to the JSON awards it without a code change; unknown rule types are ignored | Complete |
+| PRG-06 | A streak chip in the header and reward toasts | The chip shows the streak and links to the dashboard; a new badge or level shows a toast | Complete |
+| PRG-07 | The dashboard at `/docs/dashboard`: streak calendar, level, badges, and progress through every course | Progress per course, topic and page is shown from the real page tree | Complete (redesigned as five sections, see PRG-11) |
+| PRG-08 | Export, import, reset, and switch tracking off | Export then import restores the state; reset and "off" clear the cookie and storage | Complete |
+| PRG-09 | Tests | Unit tests for streaks, XP and migrations; a browser test for the dashboard | In progress: 36 engine tests pass (`npm run test:progress`); the screens were checked by hand, and a browser test is PRG-17 |
+| PRG-10 | Contributor notes | `components/README.md` explains how to add a badge and how to change the stored format | Complete |
+| PRG-11 | Rebuild the dashboard as five sections (Overview, My courses, Progress, Badges, Settings) in the look of the home pages, with a friendly greeting, today's goal and what to do next | Each section is linkable by its address; the Overview shows the goal ring, the week, next up, nearby badges and questions to revisit | Complete |
+| PRG-12 | Let readers choose their courses | The picker lists every course by semester with search; the dashboard follows the chosen courses with progress, the next page and quiz accuracy | Complete |
+| PRG-13 | A daily goal and encouraging messages | A goal of 15, 30, 60 or 100 XP with a ring, a notice and badges; headlines, milestone, week and quiz-result messages come from `content/progress/messages.json` | Complete |
+| PRG-14 | Custom badge artwork with tiers | Six frame shapes and four tiers drawn as SVG, in light and dark; locked badges show progress toward them | Complete |
+| PRG-15 | Trend graphs | XP over 7, 30 or 90 days with a 7-day average, quiz accuracy over time, weekly XP and an activity heat map, from per-day activity stored for 120 days | Complete |
+| PRG-16 | A reset behind typed confirmation, and a progress panel in the sidebar | The dialog lists what will be lost, offers an export, and enables the button only after RESET is typed; it is available from the sidebar and Settings | Complete |
+| PRG-17 | A browser test for the dashboard and the quiz chooser | A Playwright spec reads a page, sees the streak chip update, chooses a course and completes a quiz | Open |
+| PRG-18 | Weekly goals and per-topic quiz accuracy on the dashboard | A weekly goal can be set; accuracy is shown by topic across quizzes | Open |
+| PRG-19 | Finish the request that ended mid-sentence ("make the user ...") | The user says what was meant | Decision needed |
 
 ## Resources and file names
 
@@ -102,7 +111,7 @@ MGT202 is Small Business Management (it was labelled "Management"). Topic number
 | ID | Work order | Acceptance check | Status |
 |---|---|---|---|
 | MGT-01 | Rename the course and rewrite its overview | Sidebar, overview and Semester III page say Small Business Management | Complete |
-| MGT-02 | Topic 1: The Entrepreneurial Life | Overview, Notes, Review and Practice pages; zero audit findings | Complete (the generator still builds an exam page; remove it, see MGT-10) |
+| MGT-02 | Topic 1: The Entrepreneurial Life | Overview, Notes, Review and Practice pages; zero audit findings | Complete |
 | MGT-03 | Topic 2: Integrity and Ethics (Class 2 deck and Chapter 2 student notes) | Same pages; both six-step processes and the eight benefits as the sources give them | Open |
 | MGT-04 | Topic 3: Starting a Small Business (the group-activity framework: 4U, minimum viable segment, evidence, problem statement, BLAC, white space; textbook concepts marked) | Same pages | Open |
 | MGT-05 | Topic 4: Franchising and Buying an Existing Business (deck, notes and the Two Men and a Truck case) | Same pages; the worked royalty calculation checks | Open |
@@ -110,7 +119,7 @@ MGT202 is Small Business Management (it was labelled "Management"). Topic number
 | MGT-07 | Topic 7: Feasibility Analysis (student notes, including the laundry case calculations) | Same pages; every figure recomputed | Open |
 | MGT-08 | Vault: file the lecturer's decks and notes from the zip under `Current/MGT202` without mixing them with personal notes | Files in the right folders; nothing of classmates' work copied | Open |
 | MGT-09 | Vault: rebuild the study guide to cover every topic, with the audit corrections | A new HTML and PDF beside the old guide; the old files untouched | Open |
-| MGT-10 | Update the MGT202 page generator for the removed Exam section | No exam page is generated | Open |
+| MGT-10 | Update the MGT202 page generator for the removed Exam section | No exam page is generated | Complete |
 
 ## CSI243 notes and practice overhaul
 

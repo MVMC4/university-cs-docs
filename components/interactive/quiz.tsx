@@ -2,8 +2,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Check, ChevronLeft, ChevronRight, RotateCcw, X } from 'lucide-react';
-import { hashText } from '@/features/progress/core';
-import { useProgress, useRecord } from '@/features/progress';
+import { hashText, pickMessage, quizTone } from '@/features/progress/core';
+import { messages, useProgress, useRecord } from '@/features/progress';
 import { MathText } from './math-text';
 
 type Level = 'foundation' | 'developing' | 'exam';
@@ -399,6 +399,7 @@ export function Quiz({ title = 'Knowledge check', questions = [], quizKey }: Qui
               ? 'All correct.'
               : `${correctCount} of ${deck.length} correct (${Math.round(fraction * 100)}%).${answeredCount < deck.length ? ` ${deck.length - answeredCount} not answered.` : ''}`}
           </p>
+          <p className="qz-affirm">{pickMessage(messages.quiz[quizTone(correctCount, deck.length)], `${key}:${run}`)}</p>
           {[{ label: 'By topic', rows: byGroup }, { label: 'By level', rows: byLevel }].map(({ label, rows }) =>
             rows.length > 1 ? (
               <div key={label} className="qz-breakdown">
