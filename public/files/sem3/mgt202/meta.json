@@ -7,7 +7,24 @@
     "description": "Lecture slides from 2026.",
     "children": [
       { "id": "2026-class-01", "title": "Class 1: The Entrepreneurial Life", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Class 01 - The Entrepreneurial Life.pdf", "description": "Class 1 slides (Longenecker Ch 1, Botswana context)." },
-      { "id": "2026-chapter-02", "title": "Chapter 2: Integrity and Ethics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 02 - Integrity and Ethics.pdf", "description": "Chapter 2 slides on integrity, ethics and social entrepreneurship." }
+      { "id": "2026-chapter-02", "title": "Chapter 2: Integrity and Ethics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 02 - Integrity and Ethics.pdf", "description": "Chapter 2 slides on integrity, ethics and social entrepreneurship." },
+      { "id": "2026-chapter-04", "title": "Chapter 4: Franchising and Buying an Existing Business", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 04 - Franchising and Buying an Existing Business.pdf", "description": "Chapter 4 slides: franchising, the seven evaluation steps, buying a business, and the Two Men and a Truck case." },
+      { "id": "2026-topic-05", "title": "Topic 5: Navigating Family Business Dynamics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Topic 05 - Navigating Family Business Dynamics.pdf", "description": "Topic 5 class presentation on family businesses, governance and succession." }
+    ]
+  },
+  {
+    "id": "notes-2026",
+    "title": "2026 Student Notes and Handouts",
+    "category": "Lectures",
+    "type": "folder",
+    "description": "The lecturer's student notes and activity handouts from 2026.",
+    "children": [
+      { "id": "2026-notes-chapter-02", "title": "Chapter 2: Integrity and Ethics student notes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 02 - Integrity and Ethics Student Notes.pdf", "description": "Student notes for Chapter 2." },
+      { "id": "2026-handout-chapter-03", "title": "Chapter 3: Group activity handout and rubric", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 03 - Group Activity Handout and Rubric.pdf", "description": "The group activity brief and the 50-mark rubric for defining a customer problem." },
+      { "id": "2026-activity-chapter-03", "title": "Chapter 3: Lecture 1 group activity", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 03 - Lecture 1 Group Activity.pdf", "description": "The Lecture 1 activity sheet for the Chapter 3 problem-definition activity." },
+      { "id": "2026-notes-chapter-04", "title": "Chapter 4: Franchising and Buying an Existing Business student notes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 04 - Franchising and Buying an Existing Business Student Notes.pdf", "description": "Student notes for Chapter 4." },
+      { "id": "2026-notes-chapter-05", "title": "Chapter 5: The Family Business student notes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Chapter 05 - The Family Business Student Notes.pdf", "description": "Student notes for Chapter 5." },
+      { "id": "2026-notes-topic-07", "title": "Topic 7: Feasibility Analysis student notes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/mgt202/2026/lectures/Topic 07 - Feasibility Analysis Student Notes.pdf", "description": "Student notes for Topic 7, including the Campus Laundry Collect case." }
     ]
   },
   {
