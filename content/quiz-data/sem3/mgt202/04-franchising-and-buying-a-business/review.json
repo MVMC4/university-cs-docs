@@ -1,0 +1,283 @@
+{
+  "$schema": "../../../quiz.schema.json",
+  "quizzes": {
+    "topic-4-review": {
+      "title": "Topic 4 review quiz",
+      "questions": [
+        {
+          "question": "In a franchise, which party grants the rights to use the brand and business methods?",
+          "options": [
+            "The franchisee",
+            "The franchisor",
+            "The landlord",
+            "The supplier"
+          ],
+          "correctIndex": 1,
+          "explanation": "The franchisor owns the brand and system and grants the rights; the franchisee invests in and operates the local business.",
+          "group": "Franchising basics",
+          "level": "foundation"
+        },
+        {
+          "question": "A franchisor licenses its brand together with operating procedures, staff training, marketing support, service standards and reporting systems. Which arrangement is this?",
+          "options": [
+            "Business-format franchising",
+            "Product and trade-name franchising",
+            "Piggyback franchising",
+            "Independent contracting"
+          ],
+          "correctIndex": 0,
+          "explanation": "Business-format franchising licenses a broader system. Product and trade-name franchising licenses specified products under the franchisor's name, usually with less control over the whole operation.",
+          "group": "Franchising basics",
+          "level": "developing"
+        },
+        {
+          "question": "Which statement about the initial franchise fee is correct?",
+          "options": [
+            "It is the only cost of entering a franchise",
+            "It replaces the royalty",
+            "It is one part of the investment; premises, equipment, stock, staff and working capital may also be needed",
+            "It is refunded after the first year"
+          ],
+          "correctIndex": 2,
+          "explanation": "The fee is only one part of the investment, so a franchisee must estimate the complete commitment.",
+          "group": "Franchising basics",
+          "level": "foundation"
+        },
+        {
+          "question": "A new outlet opens close enough to an existing franchisee to take its customers. What is this called?",
+          "options": [
+            "Churning",
+            "Co-branding",
+            "Encroachment",
+            "Due diligence"
+          ],
+          "correctIndex": 2,
+          "explanation": "Encroachment is a new outlet or channel close enough to hurt an existing franchisee.",
+          "group": "Franchising basics",
+          "level": "developing"
+        },
+        {
+          "question": "What is churning?",
+          "options": [
+            "Terminating and reselling an operation to collect more fees",
+            "Opening two outlets in one area",
+            "Running franchises of different brands",
+            "Paying the royalty late"
+          ],
+          "correctIndex": 0,
+          "explanation": "Churning is terminating and reselling an operation in order to collect more fees. It is something to investigate, not something every franchise does.",
+          "group": "Franchising basics",
+          "level": "developing"
+        },
+        {
+          "question": "A franchise has monthly revenue of P100,000 and pays a 6% royalty. How much is the royalty?",
+          "options": [
+            "P1,000",
+            "P6,000",
+            "P7,000",
+            "P94,000"
+          ],
+          "correctIndex": 1,
+          "explanation": "P100,000 x 6% = P6,000.",
+          "group": "Franchise costs",
+          "level": "foundation"
+        },
+        {
+          "question": "The same franchise also pays a 1% advertising contribution. How much revenue remains after both payments?",
+          "options": [
+            "P7,000",
+            "P93,000",
+            "P94,000",
+            "P99,000"
+          ],
+          "correctIndex": 1,
+          "explanation": "The royalty is P6,000 and the advertising contribution P1,000, together P7,000. P100,000 - P7,000 = P93,000. This is not profit, because stock, wages, rent and other expenses still have to be paid from it.",
+          "group": "Franchise costs",
+          "level": "developing"
+        },
+        {
+          "question": "Why can a revenue-based royalty be a burden on a franchisee?",
+          "options": [
+            "It is due even when the outlet makes little profit or a loss",
+            "It is only paid in profitable years",
+            "It is paid by the customer",
+            "It is fixed for ever"
+          ],
+          "correctIndex": 0,
+          "explanation": "Royalties based on revenue are due whether or not the outlet is profitable.",
+          "group": "Franchise costs",
+          "level": "developing"
+        },
+        {
+          "question": "What range of royalty do the class slides give as typical?",
+          "options": [
+            "0.5% to 1%",
+            "20% to 30% of profit",
+            "50% of sales",
+            "4% to 8% of gross revenue"
+          ],
+          "correctIndex": 3,
+          "explanation": "The slides give 4% to 8% of gross revenue for royalties, and 1% to 3% for the advertising contribution.",
+          "group": "Franchise costs",
+          "level": "foundation"
+        },
+        {
+          "question": "A franchise has monthly revenue of P100,000 and pays 6% royalty and 1% advertising. Stock costs P55,000, wages P20,000, rent P10,000 and utilities P3,000, with no other costs. What is left after everything is paid?",
+          "options": [
+            "P5,000",
+            "P12,000",
+            "P88,000",
+            "P93,000"
+          ],
+          "correctIndex": 0,
+          "explanation": "After the fees P93,000 remains. Other costs are P55,000 + P20,000 + P10,000 + P3,000 = P88,000. P93,000 - P88,000 = P5,000.",
+          "group": "Franchise costs",
+          "level": "exam"
+        },
+        {
+          "question": "What is the first step in evaluating a franchise?",
+          "options": [
+            "Assessing personal suitability (self-assessment)",
+            "Reviewing the agreement",
+            "Obtaining independent review",
+            "Speaking to former franchisees"
+          ],
+          "correctIndex": 0,
+          "explanation": "The seven steps begin with an honest assessment of whether the franchise suits your abilities, capital and the independence you want.",
+          "group": "Evaluating a franchise",
+          "level": "foundation"
+        },
+        {
+          "question": "Why should a prospective franchisee speak to former franchisees as well as current ones?",
+          "options": [
+            "Former franchisees always give the best advice",
+            "It is a legal requirement everywhere",
+            "They can explain why they left, and several sources are better than one favourable account",
+            "It replaces reading the agreement"
+          ],
+          "correctIndex": 2,
+          "explanation": "Former franchisees can explain what went wrong or why they left. Use several sources, not one favourable account.",
+          "group": "Evaluating a franchise",
+          "level": "developing"
+        },
+        {
+          "question": "Which of these is NOT one of the four reasons for buying an existing business?",
+          "options": [
+            "Reducing uncertainties",
+            "Acquiring ongoing operations and relationships",
+            "A favourable price",
+            "A guaranteed profit"
+          ],
+          "correctIndex": 3,
+          "explanation": "The four reasons are reducing uncertainties, ongoing operations and relationships, a favourable price and faster entry. None of them guarantees a profit.",
+          "group": "Buying a business",
+          "level": "foundation"
+        },
+        {
+          "question": "What is due diligence?",
+          "options": [
+            "Signing the purchase agreement",
+            "A fee paid to a broker",
+            "The seller's asking price",
+            "The systematic investigation of a business opportunity before committing to it"
+          ],
+          "correctIndex": 3,
+          "explanation": "Due diligence helps the buyer verify the seller's claims, identify obligations and decide whether the business is worth the price.",
+          "group": "Buying a business",
+          "level": "foundation"
+        },
+        {
+          "question": "An existing business is offered at a very low price. What should the buyer do?",
+          "options": [
+            "Buy quickly before someone else does",
+            "Assume the seller is generous",
+            "Find out why the price is low, since it may reflect declining demand, damaged equipment or liabilities",
+            "Ignore the financial records"
+          ],
+          "correctIndex": 2,
+          "explanation": "A favourable price is a benefit only if the reason for it is understood.",
+          "group": "Buying a business",
+          "level": "developing"
+        },
+        {
+          "question": "A business shows rising profit because it sells on credit, but its customers are paying late. What is the main concern?",
+          "options": [
+            "None, because profit is cash",
+            "The business must be franchised",
+            "The price must be lower",
+            "A profitable business can still run short of cash, especially during a change of ownership"
+          ],
+          "correctIndex": 3,
+          "explanation": "A credit sale adds to reported profit before the customer pays, so profit and cash flow can differ.",
+          "group": "Buying a business",
+          "level": "exam"
+        },
+        {
+          "question": "A business has relevant assets with a fair value of P500,000 and liabilities of P180,000. What is its net asset value?",
+          "options": [
+            "P680,000",
+            "P320,000",
+            "P500,000",
+            "P180,000"
+          ],
+          "correctIndex": 1,
+          "explanation": "P500,000 - P180,000 = P320,000. Which liabilities count depends on what is being acquired.",
+          "group": "Valuation and closing",
+          "level": "developing"
+        },
+        {
+          "question": "Which valuation approach uses the prices paid for similar businesses?",
+          "options": [
+            "Asset-based",
+            "Cash-flow-based",
+            "Market-comparable",
+            "Replacement"
+          ],
+          "correctIndex": 2,
+          "explanation": "The market-comparable approach adjusts prices paid for similar businesses for size, location, profitability, assets and risk. Its limitation is that truly comparable deals can be hard to find.",
+          "group": "Valuation and closing",
+          "level": "foundation"
+        },
+        {
+          "question": "What is a main limitation of the asset-based approach?",
+          "options": [
+            "It ignores the balance sheet",
+            "It needs forecasts of cash flow",
+            "It may overlook earning capacity and goodwill",
+            "It only works for franchises"
+          ],
+          "correctIndex": 2,
+          "explanation": "Net asset value does not capture what the business can earn. The cash-flow-based approach does, but it is sensitive to forecasts.",
+          "group": "Valuation and closing",
+          "level": "developing"
+        },
+        {
+          "question": "Which closing step holds the buyer's funds until the agreed conditions are met?",
+          "options": [
+            "Bill of sale",
+            "Tax clearances",
+            "Lease assignment",
+            "Payment escrow"
+          ],
+          "correctIndex": 3,
+          "explanation": "Payment escrow holds the funds until conditions are met. The bill of sale transfers the assets, tax clearances confirm no tax obligations pass to the buyer, and lease assignment needs the landlord's consent.",
+          "group": "Valuation and closing",
+          "level": "developing"
+        },
+        {
+          "question": "In the Two Men and a Truck case, what continuing payments did franchisees make?",
+          "options": [
+            "A royalty of 6% of gross revenue plus 1% for advertising",
+            "A flat annual fee only",
+            "20% of profit",
+            "No continuing payments"
+          ],
+          "correctIndex": 0,
+          "explanation": "The case gives a royalty of 6% of gross revenue plus 1% for advertising, in addition to the initial fee. Treat the figures as historical case evidence, not current terms.",
+          "group": "The case",
+          "level": "foundation"
+        }
+      ]
+    }
+  }
+}

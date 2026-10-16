@@ -114,7 +114,7 @@ MGT202 is Small Business Management (it was labelled "Management"). Topic number
 | MGT-02 | Topic 1: The Entrepreneurial Life | Overview, Notes, Review and Practice pages; zero audit findings | Complete |
 | MGT-03 | Topic 2: Integrity and Ethics (Class 2 deck and Chapter 2 student notes) | Same pages; both six-step processes and the eight benefits as the sources give them | Complete |
 | MGT-04 | Topic 3: Starting a Small Business (the group-activity framework: 4U, minimum viable segment, evidence, problem statement, BLAC, white space; textbook concepts marked) | Same pages | Complete |
-| MGT-05 | Topic 4: Franchising and Buying an Existing Business (deck, notes and the Two Men and a Truck case) | Same pages; the worked royalty calculation checks | Open |
+| MGT-05 | Topic 4: Franchising and Buying an Existing Business (deck, notes and the Two Men and a Truck case) | Same pages; the worked royalty calculation checks | Complete |
 | MGT-06 | Topic 5: The Family Business (notes and class presentation) | Same pages | Open |
 | MGT-07 | Topic 7: Feasibility Analysis (student notes, including the laundry case calculations) | Same pages; every figure recomputed | Open |
 | MGT-08 | Vault: file the lecturer's decks and notes from the zip under `Current/MGT202` without mixing them with personal notes | Files in the right folders; nothing of classmates' work copied | Open |
