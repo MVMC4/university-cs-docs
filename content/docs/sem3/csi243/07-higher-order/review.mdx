@@ -17,3 +17,56 @@ The deck checks recall of the chapter's core distinctions. Every assessment answ
 ## Assessment
 
 <Quiz title="Higher-Order Functions Assessment" questions={higherOrderQuiz} />
+
+## Decoding the questions
+
+Lab and exam questions describe a function in wording that is precise but far denser than the function itself. The gap between "I do not understand this question" and "I do not understand Haskell" is often just that: the English needs decoding before the Haskell can start. Open the reference below, then work through the questions from this chapter.
+
+<CommandWords course="csi243" />
+
+<DecodeQuestion course="csi243" title="The flagship example — a transform applied three ways" source="CSI243 lab" question={"Write a function `add` that adds 1 to an even integer else it adds 2 to it. Write a generator/list comprehension that changes a given integer list using the function `add`. Write the generator above using a map function and function `add`."} plain={"Write `add`, which handles one number. Then apply `add` to *every* number in a list, using a comprehension. Then do the exact same thing again, using `map` instead of a comprehension."}>
+
+That is the whole question. "Changes a given integer list using the function add" is not a new, separate task — it is telling you to *apply the function you just wrote to each element*, nothing more. The sentence is long because it is precise about *how* (a comprehension, specifically), not because the underlying idea is complicated.
+
+**Signature and code:**
+
+```haskell
+add :: Int -> Int
+add x
+  | even x    = x + 1
+  | otherwise = x + 2
+
+addAllComp :: [Int] -> [Int]
+addAllComp xs = [add x | x <- xs]
+
+addAllMap :: [Int] -> [Int]
+addAllMap = map add
+```
+
+```haskell
+main :: IO ()
+main = do
+  print (addAllComp [1, 2, 3, 4])
+  print (addAllMap  [1, 2, 3, 4])
+```
+
+```text
+[3,3,5,5]
+[3,3,5,5]
+```
+
+Full worked version, with a hand-trace and a quiz: [A conditional transform, three ways](/docs/sem3/csi243/07-higher-order/notes/map-and-filter#a-conditional-transform-three-ways-recursion-comprehension-map).
+
+</DecodeQuestion>
+
+<DecodeQuestion course="csi243" title="Practice: isEmpty and len" source="practice" question={"Write a function `isEmpty` that checks if a character is an empty character/space or not. Then write a function `len` that given a string `xs` counts the number of empty characters in the string. Use in-built functions `length` and `filter`. Use `isEmpty` as a predicate for the filter."} plain={"`isEmpty` answers one yes/no question about one character. `len` counts how many characters in a string answer yes to it, by filtering and then measuring the result. Do not hand-write a counting loop."}>
+
+`isEmpty :: Char -> Bool` is a predicate (the dictionary row "checks if / whether"). `len :: String -> Int` is the "using the in-built function(s) X and Y" row: compose them, `length (filter isEmpty xs)`. Full worked version: [`filter`'s result doesn't have to be printed](/docs/sem3/csi243/07-higher-order/notes/map-and-filter#filters-result-doesnt-have-to-be-printed--it-can-feed-straight-into-another-function).
+
+</DecodeQuestion>
+
+<DecodeQuestion course="csi243" title="Practice: largerY" source="practice" question={"Given a list of integers and the integer `y`, the function `largerY` returns a list of all elements in the list which are larger than `y`. Assume the items can be arranged in some order."} plain={"Keep only the elements greater than `y`."}>
+
+That is one yes/no test per element (the "checks if / whether" row), used to keep or drop each element, which is exactly what `filter` does: `largerY xs y = filter (> y) xs`. "Assume the items can be arranged in some order" is the `Ord a =>` row: the element type needs ordering for `>` to be defined. It is not a new task.
+
+</DecodeQuestion>

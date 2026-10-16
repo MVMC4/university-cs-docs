@@ -3,7 +3,6 @@
     "pages":  [
                   "notes",
                   "review",
-                  "questions",
-                  "exam"
+                  "questions"
               ]
 }

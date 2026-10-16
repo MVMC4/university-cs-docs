@@ -3,18 +3,13 @@
 import Link from 'next/link';
 import {
   ArrowRight,
-  Binary,
   BookOpenCheck,
   BrainCircuit,
-  CheckCircle2,
-  Clock3,
   Command,
   FileQuestion,
   Focus,
-  GraduationCap,
   Layers3,
   Search,
-  Target,
   TimerReset,
 } from 'lucide-react';
 
@@ -59,19 +54,18 @@ export function DocsWelcome() {
       <div className="welcome-hero-copy">
         <div className="welcome-kicker">University of Botswana Computer Science study system</div>
         <h1 id="welcome-to-university-docs"><span className="welcome-title-line">Learn the course.</span><span className="welcome-title-line welcome-title-muted">Prove you know it.</span></h1>
-        <p>Complete notes, active-recall review, guided questions, difficult mock exams, and original lecture resources—organized into one dependable route from first contact to exam readiness.</p>
+        <p>Complete notes, active-recall review, guided questions, and original lecture resources—organized into one dependable route from first contact to exam readiness.</p>
         <div className="welcome-actions">
           <Link className="welcome-primary" href="/docs/sem1">Browse courses <ArrowRight size={17} /></Link>
           <Link className="welcome-secondary" href="/docs/study-tools"><TimerReset size={17} /> Start a focus block</Link>
         </div>
       </div>
       <div className="welcome-system-card" aria-label="Study flow overview">
-        <div className="system-card-head"><div><span>Study flow</span><strong>One topic. Four stages.</strong></div><Focus size={19} /></div>
+        <div className="system-card-head"><div><span>Study flow</span><strong>One topic. Three stages.</strong></div><Focus size={19} /></div>
         <div className="system-stages">
           <div><span>01</span><BookOpenCheck size={18} /><strong>Notes</strong><small>Build the full model</small></div>
           <div><span>02</span><BrainCircuit size={18} /><strong>Review</strong><small>18 flashcards + quiz</small></div>
-          <div><span>03</span><FileQuestion size={18} /><strong>Questions</strong><small>15 guided problems</small></div>
-          <div><span>04</span><GraduationCap size={18} /><strong>Exam</strong><small>30 advanced problems</small></div>
+          <div><span>03</span><FileQuestion size={18} /><strong>Practice</strong><small>15 guided problems</small></div>
         </div>
       </div>
     </section>
@@ -105,24 +99,13 @@ export function DocsWelcome() {
 }
 
 export function StudyWorkspaceHeader() {
-  return <section className="study-workspace-header">
-    <div className="study-workspace-icon"><TimerReset size={24} /></div>
-    <div className="study-workspace-copy">
-      <div className="welcome-kicker"><Clock3 size={14} /> Personal focus workspace</div>
-      <h1 id="pomodoro-focus-timer">Protect one block of attention.</h1>
-      <p>Choose one task, start the timer, and keep the same countdown while you move through notes, questions, and review pages. Settings and today’s focus totals remain saved on this device.</p>
-      <div className="workspace-features">
-        <span><CheckCircle2 size={14} /> Persistent progress</span>
-        <span><CheckCircle2 size={14} /> Custom cycles</span>
-        <span><CheckCircle2 size={14} /> One global timer</span>
-      </div>
-    </div>
-    <div className="workspace-sequence" aria-label="Three-step workflow">
-      <div><span>01</span><strong>Choose one task</strong></div>
-      <ArrowRight size={15} />
-      <div><span>02</span><strong>Focus</strong></div>
-      <ArrowRight size={15} />
-      <div><span>03</span><strong>Take a break</strong></div>
-    </div>
-  </section>;
+  return (
+    <header className="study-workspace-header">
+      <h1 id="pomodoro-focus-timer">Pomodoro focus timer</h1>
+      <p className="ui-lede">
+        Choose one task, start the timer and stay with it until the break. The same countdown keeps running while you move
+        between pages, and your settings stay on this device.
+      </p>
+    </header>
+  );
 }

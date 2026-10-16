@@ -9,6 +9,7 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
+import { useRecord } from '@/features/progress';
 import { playTimerCompletionSound } from './timer-audio';
 import { timerReducer } from './timer-reducer';
 import { createInitialTimerState, hydrateTimer, readPersistedTimer, writePersistedTimer } from './timer-storage';
@@ -34,6 +35,8 @@ const TimerContext = createContext<TimerContextValue | null>(null);
 export function StudyTimerProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(timerReducer, undefined, createInitialTimerState);
   const lastCompletion = useRef(0);
+  const lastFocused = useRef<number | null>(null);
+  const record = useRecord();
   const pageTitle = useRef('University Docs');
 
   useEffect(() => {
@@ -62,6 +65,18 @@ export function StudyTimerProvider({ children }: { children: ReactNode }) {
     const interval = window.setInterval(tick, 250);
     return () => window.clearInterval(interval);
   }, [state.endAt]);
+
+  // Minutes of finished focus blocks count towards the study streak and rewards.
+  useEffect(() => {
+    if (!state.ready) return;
+    if (lastFocused.current === null) {
+      lastFocused.current = state.focusedMinutes;
+      return;
+    }
+    const added = state.focusedMinutes - lastFocused.current;
+    lastFocused.current = state.focusedMinutes;
+    if (added > 0) record({ type: 'focus', minutes: added });
+  }, [state.focusedMinutes, state.ready, record]);
 
   useEffect(() => {
     if (!state.ready || state.completionCount === lastCompletion.current) return;

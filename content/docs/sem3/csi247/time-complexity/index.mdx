@@ -9,6 +9,16 @@ description: Lecture 07 notes on algorithm efficiency, runtime estimation, growt
 
 These notes follow **Lecture 07: Time Complexity of Algorithms**. The goals are to determine an algorithm's growth rate and express that growth using Big-O notation.
 
+## Visual study map
+
+The whole topic on one canvas. Drag to pan, scroll to zoom, and use full screen to read the small print.
+
+<ExcalidrawCanvas
+  src="/diagrams/sem3/csi247/canvases/time-complexity.excalidraw"
+  title="Visual Study Map: Time Complexity"
+  expectedMB={1.8}
+/>
+
 ## 1. Algorithms and efficiency
 
 An **algorithm** is a well-defined sequence of instructions that solves a specific problem in a finite amount of time. A program is an implementation of an algorithm.
@@ -132,11 +142,3 @@ From more scalable to less scalable:
     {[['8','3','8','24','64'],['32','5','32','160','1,024'],['1,024','10','1,024','10,240','1,048,576']].flatMap((row,r) => row.map((cell,c) => <div key={`${r}-${c}`} className={`rounded-lg p-2 font-mono ${c===4?'bg-red-500/10':c===1?'bg-emerald-500/10':'bg-fd-muted'}`}>{cell}</div>))}
   </div>
 </div>
-
-## Visual study map
-
-<ExcalidrawCanvas
-  src="/diagrams/sem3/csi247/canvases/time-complexity.excalidraw"
-  title="Visual Study Map: Time Complexity"
-  expectedMB={1.9}
-/>

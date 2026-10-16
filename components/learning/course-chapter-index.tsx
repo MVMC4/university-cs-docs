@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Card } from '@/components/callouts/card';
+import { ArrowRight } from 'lucide-react';
 
 type Topic = { slug: string; title: string; description: string };
 
@@ -85,13 +85,23 @@ const courseTopics: Record<string, Topic[]> = {
   ],
 };
 
+const tones = ['ui-ci-b', 'ui-ci-p', 'ui-ci-g', 'ui-ci-a', 'ui-ci-t', 'ui-ci-r'];
+
+/** The course's topics as a grid of cards, each opening the topic's notes. */
 export function CourseChapterIndex({ course, base }: { course: string; base: string }) {
   const topics = courseTopics[course] ?? [];
   return <section className="course-chapter-index" aria-labelledby={`${course.toLowerCase()}-chapter-index`}>
-    <h2 id={`${course.toLowerCase()}-chapter-index`}>Chapter Index</h2>
-    {topics.map((topic) => <Card key={topic.slug} className="chapter-index-card">
-      <h3><Link href={`${base}/${topic.slug}/notes`}>{topic.title}</Link></h3>
-      <p>{topic.description}</p>
-    </Card>)}
+    <h2 id={`${course.toLowerCase()}-chapter-index`}>Topics</h2>
+    <div className="ui-cards">
+      {topics.map((topic, index) => {
+        const [, label] = /^\d+\.\s*(.*)$/.exec(topic.title) ?? [null, topic.title];
+        return <Link key={topic.slug} className="ui-card" href={`${base}/${topic.slug}/notes`}>
+          <div className={`ui-ci ${tones[index % tones.length]}`}>{String(index + 1).padStart(2, '0')}</div>
+          <h3>{label}</h3>
+          <p>{topic.description}</p>
+          <span className="ui-more">Open notes <ArrowRight size={15} /></span>
+        </Link>;
+      })}
+    </div>
   </section>;
 }

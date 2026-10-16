@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "greeting": {
+    "morning": ["Good morning", "Morning", "Hello"],
+    "afternoon": ["Good afternoon", "Afternoon", "Hello"],
+    "evening": ["Good evening", "Evening", "Hello"],
+    "night": ["Still up", "Hello", "Good evening"]
+  },
+  "hero": {
+    "firstVisit": [
+      "Welcome. Pick your courses, read a page, and your streak starts today.",
+      "This is your space. Choose your courses and take one small step today.",
+      "Every course here is free, and your progress stays with you. Start with one page."
+    ],
+    "noStreak": [
+      "Ready when you are. One page or one quiz question gets today started.",
+      "A small start is enough. Open any page and today counts.",
+      "No streak yet, and that is fine. Today is a good day to begin one."
+    ],
+    "streakDone": [
+      "You have studied today. That is what builds a streak: showing up.",
+      "Today is done and your streak is safe. Anything more is a bonus.",
+      "Nicely done. Consistency beats cramming, and you just proved it."
+    ],
+    "streakAtRisk": [
+      "Your {streak}-day streak is waiting. One page or one question keeps it going.",
+      "A few minutes today keeps your {streak}-day streak alive.",
+      "You have built {streak} days so far. Keep it going with one small step."
+    ],
+    "streakLost": [
+      "Your last streak ended, but what you learned stays. Start a new one today.",
+      "Breaks happen to everyone. One page today starts a fresh streak.",
+      "Welcome back. Everything you studied before still counts. Begin again with one page."
+    ],
+    "welcomeBack": [
+      "Welcome back. Pick up where you left off, a little at a time.",
+      "Good to see you again. There is no catching up to do, only the next page.",
+      "You are back, and that is the hard part done. Start with something small."
+    ],
+    "goalReached": [
+      "You reached today's goal. Everything from here is extra.",
+      "Daily goal done. That is a solid day of studying.",
+      "Goal reached. Rest if you like, or keep going while it is flowing."
+    ]
+  },
+  "streakMilestones": {
+    "3": "Three days in a row. A habit is starting to form.",
+    "7": "A full week. Studying a little each day really does add up.",
+    "14": "Two weeks in a row. That is real consistency.",
+    "30": "A month of daily study. That is a serious achievement.",
+    "100": "One hundred days. You have made studying part of your life."
+  },
+  "quiz": {
+    "perfect": [
+      "Every answer correct. That knowledge is solid.",
+      "A clean sheet. You clearly know this topic.",
+      "Perfect score. Well earned."
+    ],
+    "strong": [
+      "Strong result. The few you missed are the best ones to revisit.",
+      "Well done. You understand most of this already.",
+      "A good score. Check the ones you missed and you will have it."
+    ],
+    "steady": [
+      "A solid base. Missing some is how you find what to work on.",
+      "Good progress. Retry the missed ones and see how many you turn around.",
+      "You are partway there. The explanations below are where the learning happens."
+    ],
+    "tough": [
+      "That was a hard one, and trying it was worth it. Read the explanations, then try again.",
+      "Not yet, and that is useful to know. Go back to the notes, then retry the missed questions.",
+      "Tough round. Everyone has these. The missed ones now tell you exactly what to review."
+    ]
+  },
+  "week": {
+    "up": [
+      "You earned {pct}% more XP this week than last week. Good momentum.",
+      "Up {pct}% on last week. Keep building on it."
+    ],
+    "same": [
+      "About the same as last week. Steady is good.",
+      "A steady week, level with the last one."
+    ],
+    "down": [
+      "A quieter week than last. Even a little each day brings it back.",
+      "Lighter than last week. One short session is enough to turn it around."
+    ],
+    "first": [
+      "Your first week of activity. Come back tomorrow to start a trend.",
+      "This is where your trend begins."
+    ]
+  },
+  "goal": [
+    "Daily goal reached: {xp} XP today.",
+    "You hit your goal of {xp} XP.",
+    "Goal met. That is today's work done."
+  ]
+}

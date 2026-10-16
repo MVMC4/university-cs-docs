@@ -1,7 +1,13 @@
 {
-  "title": "MGT202: Management",
+  "title": "MGT202: Small Business Management",
   "pages": [
-    "index", 
+    "index",
+    "01-the-entrepreneurial-life",
+    "02-integrity-and-ethics",
+    "03-starting-a-small-business",
+    "04-franchising-and-buying-a-business",
+    "05-the-family-business",
+    "07-feasibility-analysis",
     "resources"
   ]
 }

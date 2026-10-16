@@ -1,55 +1,81 @@
-# MDX Design System: Implementation Guide
+# Components for MDX content
 
-This guide defines the exact architecture, component usage rules, and MDX syntax protocols for building the CSI213 digital textbook. It is engineered for **human developers** and **AI code generators** to follow deterministically.
+Every course page is built from the same small set of components. The page structure, the notes template and the rules for which component goes where are in [docs/content-standard.md](../docs/content-standard.md); read that first. This file is the reference for the components themselves.
 
----
+## Rules
 
-## 🚨 Phase 1: The Zero-Import Rule & Global Registry
+1. **Never import components in MDX.** Every component is registered once, in [`components/mdx.tsx`](mdx.tsx), and the MDX compiler resolves it by name. To add a component, create it and register it there.
+2. **Data imports are the one exception.** A review page imports its flashcards as data (`import { flashcardData } from '@/content/flashcard-data/...'` at the top of `review.mdx`), never a component.
+3. **Questions stay out of the MDX.** Quiz questions live in JSON under `content/quiz-data` and are referenced with `<QuizRef />`; flashcards live in a TypeScript module under `content/flashcard-data`; playground examples and seed datasets live under `content/playground-data`. Older quizzes that are still TypeScript modules (`quizData`, passed to `<Quiz questions={quizData} />`) keep working until their course is migrated.
+4. **No emojis in the interface or in headings.** Use plain labels or lucide icons.
+5. **Style through tokens.** Components use the `--ui-*` tokens in `app/styles/tokens.css` and the rules in `app/styles/components.css`. Do not add per-component colours or per-course stylesheets.
 
-### 1.1 Core Architecture
-All custom and native UI components are **globally registered** in `components/mdx-components.tsx`. 
-Because of this, **you must NEVER import UI components inside `.mdx` files.** The MDX compiler automatically resolves them via the `MDXProvidedComponents` TypeScript declaration.
+## The standard elements
 
-### 1.2 The Only Allowed Import: Quiz Data
-The **sole exception** to the zero-import rule is quiz data. Quiz questions are stored externally to keep MDX files lightweight and focused on pedagogy.
+| Element | Use | Props |
+|---|---|---|
+| `LearningObjectives`, `Prerequisites` | Open a notes page | `items` (array of strings) |
+| `KeyTerm` | A definition or theorem | `label` (default "Key term"), `title`, `tone` (`blue`, `purple`, `green`, `amber`, `red`) |
+| `Steps` and `Step` | A procedure or a worked example | `title` on `Steps`; `title` on each `Step` |
+| `Callout` | An aside with one meaning | `type`: `note`, `tip`, `caution`, `mistake`, `key`, `analogy`; optional `title` |
+| `CheckQuestions` and `CheckQuestion` | "Check your understanding" at the end of a notes page | `question` on each `CheckQuestion`; the answer is its children |
+| `SiteDiagram`, `Mermaid`, `SafeImage` | Figures | see the component |
+| `ExcalidrawCanvas` | A drawn map of a whole topic, read-only, with pan, zoom and full screen. Overview pages only | `src` (a file under `public/diagrams`), `title`, `expectedMB` (the file size). At 3 MB or more it loads on a click; smaller files load as they scroll into view |
+| `ComparisonTable` | A comparison (renders as a table) | |
+| `JavaTryIt`, `HaskellTryIt`, `CodeTryIt` and the algorithm stories | Running or watching code | see the component |
 
-**Import Path Structure:**
-```ts
-import { quizData } from '@/content/quiz-data/sem3/csi213/[chapter-slug]-quiz';
-```
+`Callout` also accepts the Fumadocs names `info`, `warning`, `error`, `success` and `idea`, and maps them onto the six kinds above.
 
-**Correct MDX File Header:**
 ```mdx
----
-title: "01. Combinatorics and Counting Principles"
-description: "Formal treatment of permutations, combinations, and algorithmic complexity."
----
-import { quizData } from '@/content/quiz-data/sem3/csi213/01-combinatorics-quiz';
+<LearningObjectives items={['Define a recursive function', 'Trace a call by hand']} />
 
-# Chapter 1: Combinatorics and Counting Principles
-...
+<KeyTerm title="Recursive function">A function that calls itself on a smaller input until it reaches a base case.</KeyTerm>
+
+<Steps title="Tracing factorial 3">
+  <Step title="Expand">`factorial 3 = 3 * factorial 2`</Step>
+  <Step title="Reach the base case">`factorial 0 = 1`</Step>
+</Steps>
+
+<Callout type="key">Every recursive definition needs a base case and a smaller recursive call.</Callout>
+
+## Check your understanding
+
+<CheckQuestions>
+  <CheckQuestion question="Why does the base case matter?">Without it the calls never stop.</CheckQuestion>
+</CheckQuestions>
 ```
 
-**❌ NEVER DO THIS:**
+## Assessment components
+
+| Page | Components | Data |
+|---|---|---|
+| Notes | `CheckQuestions` at the end, nothing else | in the MDX, three to five items |
+| `review.mdx` | `FlashcardDeck`, then `QuizRef` | `content/flashcard-data/<page path>.ts`, `content/quiz-data/<page path>.json` |
+| `questions.mdx` | `ExamQuestion` containing `SubQuestion` with worked solutions | in the MDX |
+
 ```mdx
-import { Columns, MathEnv, Quiz, Callout } from '@/components/...'; // BREAKS GLOBAL REGISTRY
+<QuizRef src="sem3/csi243/01-functional-thinking/review" id="chapter-quiz" />
+
+<ExamQuestion title="Question 1: Pure functions [10 marks]">
+  <SubQuestion part="a" prompt={<>Define a pure function. [3]</>} solution={<>Its result depends only on its arguments and it has no side effects. [3]</>} />
+</ExamQuestion>
 ```
 
-### 1.3 Preferred for New Quizzes: JSON Data and `<QuizRef />`
+### Quiz data
 
-Quiz questions never go inline in an `.mdx` file. For new quizzes, put them in a JSON file whose path mirrors the page path, and reference each quiz by id. This needs no import, so the zero-import rule is untouched.
+A quiz data file mirrors the path of the page that uses it:
 
-```
-content/docs/sem3/csi243/01-functional-thinking/notes/functional-thinking.mdx
-content/quiz-data/sem3/csi243/01-functional-thinking/notes/functional-thinking.json
+```text
+content/docs/sem3/csi243/01-functional-thinking/review.mdx
+content/quiz-data/sem3/csi243/01-functional-thinking/review.json
 ```
 
 ```json
 {
-  "$schema": "../../../../quiz.schema.json",
+  "$schema": "../../../quiz.schema.json",
   "quizzes": {
-    "check-pure-functions": {
-      "title": "Check: pure functions",
+    "chapter-quiz": {
+      "title": "Functional thinking",
       "questions": [
         {
           "question": "What makes a function pure?",
@@ -65,209 +91,62 @@ content/quiz-data/sem3/csi243/01-functional-thinking/notes/functional-thinking.j
 }
 ```
 
-```mdx
-<QuizRef src="sem3/csi243/01-functional-thinking/notes/functional-thinking" id="check-pure-functions" />
-```
+`code` is optional (one array entry per line) and so is `optionFeedback` (one entry per option, in order). Run `npm run audit:quizzes`: it fails on a malformed question, a reference to a missing file or id, and a quiz that no page uses. The `$schema` path depends on how deep the file is.
 
-- `code` is optional and shown in a code block under the question; an array is one entry per line.
-- `optionFeedback` is optional, with one entry per option, in the same order.
-- Run `npm run audit:quizzes` to check every data file and every reference. The audit fails on a malformed question, a reference to a missing file or id, or a quiz that no page uses.
-- The older `quizData` TypeScript modules (section 1.2) remain valid. `<QuizRef />` and `<Quiz questions={...} />` render the same component.
+### Quiz fields
 
----
+The quiz shows one question at a time. When the questions have more than one `group` it first offers topic chips and, past ten questions, a "how many" menu; otherwise it starts straight away. These fields are all optional, so older quizzes keep working:
 
-## 📦 Phase 2: Component Implementation & Expanded Examples
+| Field | Meaning |
+|---|---|
+| `group` | The topic or section the question belongs to. A chip in the chooser, and a bar in the results. |
+| `level` | `foundation`, `developing` or `exam`. A tag in the data only; the quiz does not use it. |
+| `steps` | A short worked solution, one step per entry, shown after answering |
+| `source` | Where the question comes from, for example `"CSI247 2018 paper, Q3"`. Use it when a past paper inspired the question. |
+| `id` | A stable id (lowercase words with hyphens), unique in the quiz. Saved answers and progress follow it, so set one when you might reword the question. Without it, an id is derived from the text. |
 
-Every component below is globally available. Use them directly in MDX. Each section includes usage, rationale, and common pitfalls.
+## Decoding the questions
 
-### 2.1 Highlight Card (`<HighlightCard>`)
-Wraps a core concept description around a critical formula or code block. Uses a card-in-card layout with thematic color outlines.
+Every review page ends with a `## Decoding the questions` section that teaches how to read a question before answering it. `<CommandWords />` shows the shared table of command words (define, explain, compare and so on), and `<DecodeQuestion>` works through a real question from the topic. Course-specific dictionaries live in `content/decoding/<course>.json`.
 
-**Usage:**
-```mdx
-<HighlightCard 
-  variant="danger"
-  title="The False Positive Paradox"
-  description="Even with a highly accurate test, if the base rate is extremely low, most positives are false. Critical for Bayesian inference."
->
-  $$ P(Leak|Flag) = \frac{0.019}{0.068} \approx 0.2794 \quad \text{(Only 28\% chance of actual leak!)} $$
-</HighlightCard>
-```
-**Variants:** `primary` | `success` | `warning` | `danger` | `info` | `neutral`
-**⚠️ Pitfall:** Do not put markdown headings (`###`) inside the card. Use the `title` prop instead.
+## Progress
 
-### 2.2 Preset Card (`<PresetCard>`)
-Color-coded callouts for exam traps, intuition, and cumulative links.
+Interactive components report what the reader does so the streak, XP and badges stay current. Call `useRecord()` from `@/features/progress` and record an event; it does nothing outside the provider. The events are `page`, `quiz-answer`, `quiz-complete`, `quiz-reset`, `card`, `check` and `focus`. Rewards, levels and badges are data in `content/progress/rewards.json`. See [docs/plans/progress-system.md](../docs/plans/progress-system.md) for the design, how to add a badge or an event, and the rules for keeping saved progress working as the content changes (stable ids, `content/progress/aliases.json` for renamed pages, versioned storage with migrations).
 
-**Usage:**
-```mdx
-<PresetCard type="trap">
-  **Exam Warning:** Students confuse Geometric PMF $P(X=x) = q^{x-1}p$ with the Survival Function $P(X \ge x) = q^{x-1}$. If the question says *"at least"*, you **must** use the survival function.
-</PresetCard>
-```
-**Types:** `trap` (red) | `exam` (green) | `builds` (blue) | `intuition` (yellow)
+## Retired components
 
-### 2.3 Columns (`<Columns>` & `<Column>`)
-Pairs formalism with intuition side-by-side. Automatically handles horizontal overflow for wide math.
+These still work, because each one renders through a standard element, but new content should not use them. `npm run audit:content-standard` flags every use so the content can be migrated.
 
-**Usage:**
-```mdx
-<Columns>
-  <Column>
-    ### 📐 Formal Definition
-    $$ f(x) = \frac{1}{b - a} $$
-  </Column>
-  <Column>
-    ### 🧠 Plain-English Translation
-    Probability is simply the width of the sub-interval divided by the total width. It is a "flat" baseline distribution.
-  </Column>
-</Columns>
-```
-**⚠️ Pitfall:** Never exceed 2 columns. Mobile fallback is automatic. Do not nest `<Columns>` inside other flex containers.
+| Retired | Use instead |
+|---|---|
+| `Card`, `HighlightCard`, `ConceptBlock`, `TheoremBlock` | `KeyTerm` (`label="Theorem" tone="purple"` for a theorem) |
+| `PresetCard`, `CommonMistake`, `RecognitionStrategy` | `Callout` |
+| `StepByStep`, `MethodSteps`, `InteractiveStepper`, `FumaSteps` | `Steps` |
+| `Checklist`, `PracticeCheckpoint` | `LearningObjectives` and `CheckQuestions` |
+| `Accordion`, `Accordions` | A plain section, or `CheckQuestions` |
+| `Columns`, `Column` | A table, or two sections |
+| `WorkedExample`, `WorkedExampleSet` | `Steps` |
+| `LessonIntroduction`, `LessonSummary`, `LessonConnection` | The page description, `LearningObjectives`, a `key` callout, the pager |
 
-### 2.4 Math Environments (`<MathEnv>`)
-Mimics LaTeX `amsthm`. Provides typographical hierarchy for definitions, theorems, lemmas, corollaries, and examples.
+## Writing math in MDX
 
-**Usage:**
-```mdx
-<MathEnv type="theorem" number="1.2" title="The Memoryless Property">
-  The Exponential distribution is the *unique* continuous distribution possessing the memoryless property:
-  $$ P(X \gt s + t \mid X \gt s) = P(X \gt t) \quad \text{for all } s, t \ge 0 $$
-</MathEnv>
-```
+The MDX compiler parses JSX before KaTeX reads the LaTeX, so a few habits keep the build from breaking.
 
-### 2.5 Formula Block (`<FormulaBlock>`)
-Highlights canonical formulas with a copy-to-clipboard button.
+- **Math goes in children, never in props.** `<Step title="Setup">$x^2$</Step>`, not `<Step content="$x^2$" />`. A prop is a plain string and is never typeset.
+- **No raw `<` or `>` inside JSX.** Write `\lt` and `\gt` in LaTeX, or `&lt;` and `&gt;` in text, for example `<Callout>$P(X \gt 5)$</Callout>`.
+- **Use `$...$` for inline math and `$$...$$` for display math.** Do not wrap math in backticks.
+- **Wide formulas scroll; they do not wrap.** The layout components already allow horizontal overflow, so do not override it.
+- **Keep SVG coordinates rounded.** `GraphViewer` rounds every coordinate with `.toFixed(2)` so the server and the browser render the same markup; do not remove that.
 
-**Usage:**
-```mdx
-<FormulaBlock title="Method of Least Squares (Slope)" latex="\beta_1 = \frac{n(\sum xy) - (\sum x)(\sum y)}{n(\sum x^2) - (\sum x)^2}">
-  $$ \beta_1 = \frac{n(\sum xy) - (\sum x)(\sum y)}{n(\sum x^2) - (\sum x)^2} $$
-</FormulaBlock>
-```
-**⚠️ Critical Rule:** The `latex` prop is **only** for the copy button. The actual rendered math **must** be passed as `children` so the host KaTeX pipeline can parse it natively.
+## Where things live
 
-### 2.6 Interactive Stepper (`<InteractiveStepper>` & `<StepperStep>`)
-Guides students through multi-stage proofs or algorithms. Prevents cognitive overload by revealing one step at a time.
-
-**Usage:**
-```mdx
-<InteractiveStepper>
-  <StepperStep title="Step 1: Identify the Distribution">
-    Since we need *at least* $k$ successes out of $n$ independent trials, this is a **k-out-of-n system**. $X \sim \text{Bin}(5, 0.80)$.
-  </StepperStep>
-  <StepperStep title="Step 2: Formulate the Summation">
-    $$ R_{3/5} = P(X=3) + P(X=4) + P(X=5) $$
-  </StepperStep>
-</InteractiveStepper>
-```
-**⚠️ Pitfall:** Never pass math or markdown inside a `content` prop. Always use `<StepperStep>` as a wrapper so MDX parses the children natively.
-
-### 2.7 Flashcard (`<Flashcard>`)
-3D-flipping card for rapid-fire memorization. Dynamically adjusts height to prevent text clipping.
-
-**Usage:**
-```mdx
-<Flashcard 
-  front={<span>State the <strong>Symmetry Axiom</strong> for the Z-Table.</span>}
-  back={<span>$P(Z \lt -z) = 1 - P(Z \lt z)$<br/>The area left of $-z$ equals the area right of $+z$.</span>}
-/>
-```
-
-### 2.8 Native Fumadocs Components
-These are globally available and require zero configuration.
-
-**Accordions:**
-```mdx
-<Accordions type="single" collapsible>
-  <Accordion title="When to use Hypergeometric?">
-    When sampling is **without replacement** from a **finite population**.
-  </Accordion>
-</Accordions>
-```
-
-**Tabs:**
-```mdx
-<Tabs items={['Intuition', 'Proof']}>
-  <Tab>The system "forgets" how long it has been waiting.</Tab>
-  <Tab>$$ \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} \quad \blacksquare $$</Tab>
-</Tabs>
-```
-
-**Steps:**
-```mdx
-<Steps>
-  <Step>Navigate to `STAT` mode on your calculator.</Step>
-  <Step>Select `2-VAR` and input $x$ and $y$ datasets.</Step>
-</Steps>
-```
-
----
-
-## 🛡️ Phase 3: MDX + Math Syntax Guardrails
-
-The MDX compiler parses JSX **before** KaTeX processes LaTeX. Violating these rules will cause build crashes or hydration mismatches.
-
-### Rule 1: Never Put Math Inside Component Props
-Props are evaluated as raw JavaScript strings. KaTeX will not render inside them.
-* ❌ **Wrong:** `<StepperStep title="Step 1" content="$x^2$" />`
-* ✅ **Right:** Use children.
-  ```mdx
-  <StepperStep title="Step 1">$$ x^2 $$</StepperStep>
-  ```
-
-### Rule 2: Never Use Raw `<` or `>` Inside JSX
-The Acorn JSX parser interprets `<` and `>` as tag boundaries and throws `SyntaxError: Unexpected token`.
-* ❌ **Wrong:** `<Tab> $P(X > 5)$ </Tab>`
-* ✅ **Right:** Use LaTeX commands or HTML entities.
-  ```mdx
-  <Tab> $$ P(X \gt 5) $$ </Tab>
-  <!-- OR -->
-  <Tab> P(X &gt; 5) </Tab>
-  ```
-
-### Rule 3: Prevent Grid/Flex Blowout
-Math formulas do not wrap. If placed in a constrained container without overflow handling, they will break the viewport.
-* **Fix:** All layout components (`<Column>`, `<HighlightCard>`, etc.) already include `min-w-0`, `overflow-x-auto`, and `break-words`. Do not override these classes.
-
-### Rule 4: Hydration-Safe Math Graphing
-Server (Node.js) and Client (V8) calculate floating-point math slightly differently. This causes React Hydration Mismatch warnings.
-* **Fix:** The `<GraphViewer>` component strictly rounds all SVG coordinates to `.toFixed(2)`. Never remove this rounding logic.
-
----
-
-## 🤖 Phase 4: AI & Developer Enforcement Rules
-
-If you are prompting an AI to generate or refactor MDX content for this system, paste these guardrails to prevent hallucination:
-
-```text
-AI GUARDRAILS FOR CSI213 MDX GENERATION:
-1. ZERO COMPONENT IMPORTS: Never generate `import { Component } from ...` for UI elements. All components are globally registered. The ONLY allowed import is quiz data: `import { quizData } from '@/content/quiz-data/sem3/csi213/[slug]-quiz';`
-2. CHILDREN OVER PROPS: Never pass markdown, LaTeX, or JSX inside component props. Always use component children so the MDX compiler parses them natively.
-3. ESCAPE COMPARISON OPERATORS: Never use raw `<` or `>` inside JSX tags. Always use `\lt`, `\gt`, `&lt;`, or `&gt;`.
-4. MATH BLOCKS: Use `$$ ... $$` for display math and `$ ... $` for inline math. Never wrap math in backticks inside JSX.
-5. QUIZ PLACEMENT: Always place `<Quiz title="Chapter X Assessment" questions={quizData} />` at the very end of the chapter.
-6. NO FLUFF: Delete academic filler. Use direct, active voice. Focus on exam mechanics, definitions, and cumulative links.
-7. STRUCTURE: Maintain strict heading hierarchy (`##` for sections, `###` for subsections) to ensure the Fumadocs TOC renders correctly.
-```
-
----
-
-## 📋 Quick Reference Cheat Sheet
-
-| Component | Purpose | Key Prop(s) | Children? |
-|-----------|---------|-------------|-----------|
-| `<HighlightCard>` | Concept + Math/Code wrapper | `variant`, `title`, `description` | ✅ Required |
-| `<PresetCard>` | Exam traps & intuition | `type` (`trap`/`exam`/`builds`/`intuition`) | ✅ Required |
-| `<Columns>` / `<Column>` | Side-by-side layout | `className` (optional) | ✅ Required |
-| `<MathEnv>` | Definitions & Theorems | `type`, `number`, `title` | ✅ Required |
-| `<FormulaBlock>` | Canonical formula + copy | `title`, `latex` (for clipboard) | ✅ Required |
-| `<InteractiveStepper>` | Multi-step walkthrough | None | ✅ `<StepperStep>` |
-| `<Flashcard>` | Active recall memorization | `front`, `back` (ReactNode) | ❌ Props only |
-| `<GraphViewer>` | Function plotting & integrals | `functions`, `integrals`, `domain`, `range` | ❌ Props only |
-| `<Quiz>` | Chapter assessment | `title`, `questions={quizData}` | ❌ Props only |
-
-**Import Rule:** `import { quizData } from '@/content/quiz-data/sem3/csi213/[chapter]-quiz';` → **Everything else is zero-import.**
-
----
-
+| What | Where |
+|---|---|
+| Page content | `content/docs/semN/<course>/` |
+| Quiz questions | `content/quiz-data/` |
+| Flashcards | `content/flashcard-data/` |
+| Playground examples | `content/playground-data/` |
+| Component registry | `components/mdx.tsx` |
+| Styles | `app/styles/` (`tokens.css`, `base.css`, `chrome.css`, `prose.css`, `components.css`, `study-timer.css`) |
+| Page chrome (tabs, pager, keys) | `components/layouts/`, `lib/page-navigation.ts`, `lib/topic-pages.ts` |
+| The audit | `npm run audit:content-standard` |

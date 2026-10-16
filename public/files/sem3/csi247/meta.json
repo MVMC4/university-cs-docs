@@ -1,24 +1,34 @@
 [
   {
     "id": "current-course-materials",
-    "title": "Current Course Outline & Rules (2026/27)",
+    "title": "2026/27 Course Outline & Rules",
     "category": "Lectures",
     "type": "folder",
-    "description": "Official course information for the current academic year.",
+    "description": "Official course information for the 2026/27 academic year.",
     "children": [
       { "id": "current-outline-2026", "title": "CSI247 Course Outline 2026/27", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/current/course-materials/CSI247 course outline_2026.pdf", "description": "Current topics, timetable, readings, and assessment structure.", "isNew": true },
       { "id": "current-rules-2026", "title": "CSI247 Course Rules 2026", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/current/course-materials/CSI247 Course Rules 2026.pdf", "description": "Current course expectations and rules.", "isNew": true }
     ]
   },
   {
-    "id": "current-lecture-notes",
-    "title": "Current Lecture Notes",
+    "id": "lectures-2026",
+    "title": "2026 Lecture Slides",
     "category": "Lectures",
     "type": "folder",
-    "description": "Lecture material released for the current 2026/27 offering. New notes will be added here over time.",
+    "description": "Lecture slides from 2026.",
     "children": [
-      { "id": "current-lec01", "title": "Lecture 1: CSI247 Introduction", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/current/lectures/Lec01 - CSI247 Intro.pdf", "description": "Current module introduction.", "isNew": true },
-      { "id": "current-lec02", "title": "Lecture 2: Reviewing Java Basics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/current/lectures/Lec02 - Reviewing Java Basics.pdf", "description": "Current Java fundamentals review.", "isNew": true }
+      { "id": "2026-lec01", "title": "Lecture 1: CSI247 Introduction", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec01 - CSI247 Intro.pdf", "description": "Current module introduction.", "isNew": true },
+      { "id": "2026-lec02", "title": "Lecture 2: Reviewing Java Basics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec02 - Reviewing Java Basics.pdf", "description": "Current Java fundamentals review.", "isNew": true },
+      { "id": "2026-lec03", "title": "Lecture 3: Java Methods", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec03 - Java Methods.pdf", "description": "Slides on Java methods.", "isNew": true },
+      { "id": "2026-lec04", "title": "Lecture 4: Java User-Defined Classes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec04 - Java User Defined Classes.pdf", "description": "Slides on writing your own classes in Java.", "isNew": true },
+      { "id": "2026-lec05", "title": "Lecture 5: Java Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec05 - Java Arrays.pdf", "description": "Slides on Java arrays.", "isNew": true },
+      { "id": "2026-lec06", "title": "Lecture 6: Recursion", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec06 - Recursion.pdf", "description": "Slides on recursion.", "isNew": true },
+      { "id": "2026-lec07", "title": "Lecture 7: Algorithm Analysis", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec07 - Algorithm analysis.pdf", "description": "Slides on analysing algorithms.", "isNew": true },
+      { "id": "2026-lec08", "title": "Lecture 8: Searching Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec08 - Searching Arrays.pdf", "description": "Slides on searching arrays.", "isNew": true },
+      { "id": "2026-lec09", "title": "Lecture 9: Sorting Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec09 - Sorting Arrays.pdf", "description": "Slides on sorting arrays.", "isNew": true },
+      { "id": "2026-lec10", "title": "Lecture 10: Packages", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec10 - Packages.pdf", "description": "Slides on Java packages.", "isNew": true },
+      { "id": "2026-lec11", "title": "Lecture 11: Object-Oriented Programming", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec11 - OOP.pdf", "description": "Slides on object-oriented programming in Java.", "isNew": true },
+      { "id": "2026-lec12", "title": "Lecture 12: Generics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2026/lectures/Lec12 - Generics.pdf", "description": "Slides on Java generics.", "isNew": true }
     ]
   },
   {
@@ -33,27 +43,27 @@
     ]
   },
   {
-    "id": "archived-lecture-notes",
-    "title": "Archived Lecture Notes",
+    "id": "lectures-2025",
+    "title": "2025 Lecture Slides",
     "category": "Lectures",
     "type": "folder",
-    "description": "Lecture material from an earlier CSI247 offering, retained as supplementary reference.",
+    "description": "Lecture slides from 2025.",
     "children": [
-      { "id": "archived-lec01", "title": "Archived Lec 01: Intro to CSI247", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec01- CSI247 Intro.pdf", "description": "Earlier module introduction." },
-      { "id": "archived-lec02a", "title": "Archived Lec 02a: Java Basics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec02a- Review - Java Basics.pdf", "description": "Earlier Java basics review." },
-      { "id": "archived-lec02b", "title": "Archived Lec 02b: User-Defined Classes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec02b- Review - Java User Defined Classes.pdf", "description": "Earlier user-defined classes review." },
-      { "id": "archived-lec02c", "title": "Archived Lec 02c: Java Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec02c- Review - Java Arrays.pdf", "description": "Earlier Java arrays review." },
-      { "id": "archived-lec06", "title": "Archived Lec 06: Recursion", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec06 - Recursion.pdf", "description": "Earlier recursion lecture." },
-      { "id": "archived-lec07", "title": "Archived Lec 07: Algorithm Analysis", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec07 - Algorithm analysis.pdf", "description": "Earlier Big-O lecture." },
-      { "id": "archived-lec08", "title": "Archived Lec 08: Packages", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec08 - Packages.pdf", "description": "Earlier Java packages lecture." },
-      { "id": "archived-lec09", "title": "Archived Lec 09: Searching Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec09 - Searching Arrays.pdf", "description": "Earlier searching lecture." },
-      { "id": "archived-lec10", "title": "Archived Lec 10: Sorting Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec10 - Sorting Arrays.pdf", "description": "Earlier sorting lecture." },
-      { "id": "archived-lec11", "title": "Archived Lec 11: OOP", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec11 - OOP.pdf", "description": "Earlier object-oriented programming lecture." },
-      { "id": "archived-lec12", "title": "Archived Lec 12: Generics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec12  - Generics.pdf", "description": "Earlier generics lecture." },
-      { "id": "archived-lec13", "title": "Archived Lec 13: Java Collections", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec13 - Java Collection Framework.pdf", "description": "Earlier Collections Framework lecture." },
-      { "id": "archived-lec14", "title": "Archived Lec 14: LinkedList Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec14 - LinkedList Implementation.pdf", "description": "Earlier linked-list implementation lecture." },
-      { "id": "archived-lec15", "title": "Archived Lec 15: Queue Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec15 - Queue Implementation.pdf", "description": "Earlier queue implementation lecture." },
-      { "id": "archived-lec16", "title": "Archived Lec 16: Stack Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/archive/lectures/Lec16 - Stack Implementation.pdf", "description": "Earlier stack implementation lecture." }
+      { "id": "2025-lec01", "title": "Lec 01: Intro to CSI247", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec01 - CSI247 Intro.pdf", "description": "Earlier module introduction." },
+      { "id": "2025-lec02a", "title": "Lec 02a: Java Basics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec02a - Review - Java Basics.pdf", "description": "Earlier Java basics review." },
+      { "id": "2025-lec02b", "title": "Lec 02b: User-Defined Classes", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec02b - Review - Java User Defined Classes.pdf", "description": "Earlier user-defined classes review." },
+      { "id": "2025-lec02c", "title": "Lec 02c: Java Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec02c - Review - Java Arrays.pdf", "description": "Earlier Java arrays review." },
+      { "id": "2025-lec06", "title": "Lec 06: Recursion", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec06 - Recursion.pdf", "description": "Earlier recursion lecture." },
+      { "id": "2025-lec07", "title": "Lec 07: Algorithm Analysis", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec07 - Algorithm analysis.pdf", "description": "Earlier Big-O lecture." },
+      { "id": "2025-lec08", "title": "Lec 08: Packages", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec08 - Packages.pdf", "description": "Earlier Java packages lecture." },
+      { "id": "2025-lec09", "title": "Lec 09: Searching Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec09 - Searching Arrays.pdf", "description": "Earlier searching lecture." },
+      { "id": "2025-lec10", "title": "Lec 10: Sorting Arrays", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec10 - Sorting Arrays.pdf", "description": "Earlier sorting lecture." },
+      { "id": "2025-lec11", "title": "Lec 11: OOP", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec11 - OOP.pdf", "description": "Earlier object-oriented programming lecture." },
+      { "id": "2025-lec12", "title": "Lec 12: Generics", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec12 - Generics.pdf", "description": "Earlier generics lecture." },
+      { "id": "2025-lec13", "title": "Lec 13: Java Collections", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec13 - Java Collection Framework.pdf", "description": "Earlier Collections Framework lecture." },
+      { "id": "2025-lec14", "title": "Lec 14: LinkedList Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec14 - LinkedList Implementation.pdf", "description": "Earlier linked-list implementation lecture." },
+      { "id": "2025-lec15", "title": "Lec 15: Queue Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec15 - Queue Implementation.pdf", "description": "Earlier queue implementation lecture." },
+      { "id": "2025-lec16", "title": "Lec 16: Stack Implementation", "category": "Lectures", "type": "pdf", "url": "/files/sem3/csi247/2025/lectures/Lec16 - Stack Implementation.pdf", "description": "Earlier stack implementation lecture." }
     ]
   },
   {
@@ -63,12 +73,12 @@
     "type": "folder",
     "description": "Weekly practical lab exercises.",
     "children": [
-      { "id": "lab1", "title": "Lab 1: Introduction", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/lab1 (1).pdf", "description": "Setup and Java review." },
-      { "id": "lab2", "title": "Lab 2: Objects & Comparisons", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab2 - Objects and Comparisons (1).pdf", "description": "Comparable and Comparator." },
-      { "id": "lab3", "title": "Lab 3: Objects & Arrays", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab3 - Objects and Arrays.pdf", "description": "Array manipulation." },
-      { "id": "lab4", "title": "Lab 4: Sorting", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab4 - Sorting.pdf", "description": "Sorting algorithms." },
-      { "id": "lab5", "title": "Lab 5: List Comprehensions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 5 List Comprehensions.pdf", "description": "Advanced list processing." },
-      { "id": "lab6", "title": "Lab 6: Polymorphism", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 6 Polymorphism and Overloading.pdf", "description": "OOP polymorphism." }
+      { "id": "lab1", "title": "Lab 1: Introduction", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 1 - Introduction.pdf", "description": "Setup and Java review." },
+      { "id": "lab2", "title": "Lab 2: Objects & Comparisons", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 2 - Objects and Comparisons.pdf", "description": "Comparable and Comparator." },
+      { "id": "lab3", "title": "Lab 3: Objects & Arrays", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 3 - Objects and Arrays.pdf", "description": "Array manipulation." },
+      { "id": "lab4", "title": "Lab 4: Sorting", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 4 - Sorting.pdf", "description": "Sorting algorithms." },
+      { "id": "lab5", "title": "Lab 5: List Comprehensions", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 5 - List Comprehensions.pdf", "description": "Advanced list processing." },
+      { "id": "lab6", "title": "Lab 6: Polymorphism", "category": "Labs", "type": "pdf", "url": "/files/sem3/csi247/labs/Lab 6 - Polymorphism and Overloading.pdf", "description": "OOP polymorphism." }
     ]
   },
   {

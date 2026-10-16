@@ -1,0 +1,64 @@
+/* ───────── Quiz: choosing topics, one question at a time, and the results ─────────
+   Builds on the .ui-quiz frame in components.css. Class names: qz-*. */
+
+.qz:focus-visible { outline: 2px solid var(--ui-line); outline-offset: 3px; }
+
+/* choosing topics */
+.qz-chooser { display: grid; gap: 14px; padding: 16px 20px; }
+.qz-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.qz-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--ui-line);
+  border-radius: 999px;
+  background: var(--ui-bg);
+  padding: 5px 13px;
+  color: var(--ui-text);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-align: left;
+}
+.qz-chip span { color: var(--ui-text-2); font: 11.5px var(--font-mono); }
+.qz-chip:hover { background: var(--ui-surface-2); }
+.qz-chip[aria-pressed="true"] { background: var(--ui-blue); border-color: var(--ui-blue); color: var(--ui-on-accent); }
+.qz-chip[aria-pressed="true"] span { color: inherit; opacity: .8; }
+
+.qz-count { display: inline-flex; align-items: center; gap: 10px; color: var(--ui-text-2); font-size: 14px; }
+.qz-count select {
+  border: 1.5px solid var(--ui-line);
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-bg);
+  padding: 5px 10px;
+  color: var(--ui-text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.qz-actions { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+
+/* one question at a time */
+.qz-progress { height: 4px; background: var(--ui-surface-3); }
+.qz-progress div { height: 100%; background: var(--ui-green); transition: width .25s; }
+.qz-focus { padding: 18px 20px; }
+
+.qz-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-bottom: 8px; color: var(--ui-text-2); font-size: 12px; }
+.qz-source { font-style: italic; }
+
+/* feedback extras */
+.qz-answer { margin: 8px 0 0 !important; }
+.qz-steps { margin: 10px 0 0 !important; padding-left: 22px !important; }
+.qz-steps li { margin: 3px 0 !important; }
+.qz-why { margin-top: 10px; font-size: 14px; }
+.qz-why summary { cursor: pointer; color: var(--ui-text-2); }
+.qz-why ul { margin: 8px 0 0 !important; padding-left: 18px !important; }
+
+/* results */
+.qz-result { display: grid; gap: 14px; padding: 16px 20px; }
+.qz-result .ui-quiz-score { margin: 0; font-size: 16px; }
+.qz-brow { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(80px, 2fr) auto; gap: 12px; align-items: center; font-size: 13.5px; padding: 3px 0; }
+.qz-brow span:last-child { color: var(--ui-text-2); font: 12px var(--font-mono); }
+@media (max-width: 520px) { .qz-brow { grid-template-columns: 1fr auto; } .qz-brow .pg-bar { grid-column: 1 / -1; order: 3; } }
+
+.qz-affirm { margin: 0; color: var(--ui-text-2); font-size: 14.5px; line-height: 1.55; }

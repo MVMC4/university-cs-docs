@@ -205,7 +205,7 @@ Because the classes are separate, you sometimes need an explicit conversion:
 | `ceiling` | `(RealFrac a, Integral b) => a -> b` | Closest integer greater than or equal |
 | `truncate` | `(RealFrac a, Integral b) => a -> b` | Discard the fractional part |
 
-**In plain English:** each of these four signatures names *two* independent type variables, each with its own constraint — read exactly as [decoding a signature](/docs/sem3/csi243/decoding-questions) teaches: constraint(s) first, then the arrows. `round :: (RealFrac a, Integral b) => a -> b` says "for any fractional type `a` and any whole-number type `b`, take one value of the fractional type and give back the nearest value of the whole-number type." `fromIntegral` reads the same way in reverse — whole number in, any numeric type out.
+**In plain English:** each of these four signatures names *two* independent type variables, each with its own constraint — read exactly as [decoding a signature](/docs/sem3/csi243/01-functional-thinking/review#decoding-the-questions) teaches: constraint(s) first, then the arrows. `round :: (RealFrac a, Integral b) => a -> b` says "for any fractional type `a` and any whole-number type `b`, take one value of the fractional type and give back the nearest value of the whole-number type." `fromIntegral` reads the same way in reverse — whole number in, any numeric type out.
 
 ```haskell
 main :: IO ()

@@ -3,11 +3,11 @@
 import { useState, useEffect, useMemo, Fragment } from "react";
 import { 
   Search, AlertCircle, Loader2, Folder, ChevronRight, Home, 
-  FileText, Video, Link2, HelpCircle, FileCode, X, Download, Maximize2, Plus
+  FileText, Presentation, Video, Link2, HelpCircle, FileCode, X, Download, Maximize2, Plus
 } from "lucide-react";
 
 // --- Types ---
-type ResourceType = "pdf" | "docx" | "code" | "video" | "link" | "quiz";
+type ResourceType = "pdf" | "docx" | "slides" | "code" | "video" | "link" | "quiz";
 type Category = "Lectures" | "Labs" | "Videos" | "Past Papers" | "Tools" | "Books" | "Practice";
 
 interface BaseItem {
@@ -39,6 +39,7 @@ const getIcon = (type: ResourceType) => {
   switch (type) {
     case "pdf": return <FileText className="h-6 w-6" />;
     case "docx": return <FileText className="h-6 w-6" />;
+    case "slides": return <Presentation className="h-6 w-6" />;
     case "code": return <FileCode className="h-6 w-6" />;
     case "video": return <Video className="h-6 w-6" />;
     case "link": return <Link2 className="h-6 w-6" />;
@@ -50,6 +51,7 @@ const getTypeStyles = (type: ResourceType) => {
   switch (type) {
     case "pdf": return "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20";
     case "docx": return "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20";
+    case "slides": return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
     case "code": return "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20";
     case "video": return "bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20";
     case "link": return "bg-fd-primary/10 text-fd-primary border-fd-primary/20";

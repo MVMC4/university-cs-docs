@@ -7,6 +7,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteConfig } from '@/lib/site';
 import { StudyTimerProvider, TimerOverlays } from '@/features/study-timer';
+import { PageTracker, ProgressProvider, ProgressToasts } from '@/features/progress';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -113,10 +114,14 @@ export default function Layout({ children }: LayoutProps<'/'>) {
           }}
         />
         <RootProvider>
-          <StudyTimerProvider>
-            {children}
-            <TimerOverlays />
-          </StudyTimerProvider>
+          <ProgressProvider>
+            <StudyTimerProvider>
+              {children}
+              <TimerOverlays />
+            </StudyTimerProvider>
+            <PageTracker />
+            <ProgressToasts />
+          </ProgressProvider>
         </RootProvider>
         <Analytics />
         <SpeedInsights />

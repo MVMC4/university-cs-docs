@@ -303,7 +303,7 @@ dayName.hs:2:1: warning: [-Wincomplete-patterns]
 
 ## 5. Tuple patterns
 
-A tuple of patterns is itself a pattern. It matches any tuple of the same arity whose components all match in order. In plain English: line up the pattern's slots against the tuple's slots one by one, and the whole thing matches only if every slot's own piece matches whatever is sitting in that same slot — [Decoding Exam and Lab Language](/docs/sem3/csi243/decoding-questions) works through several dense definitions exactly this way, one phrase at a time. This is how the Prelude defines `fst` and `snd`:
+A tuple of patterns is itself a pattern. It matches any tuple of the same arity whose components all match in order. In plain English: line up the pattern's slots against the tuple's slots one by one, and the whole thing matches only if every slot's own piece matches whatever is sitting in that same slot — [Decoding Exam and Lab Language](/docs/sem3/csi243/01-functional-thinking/review#decoding-the-questions) works through several dense definitions exactly this way, one phrase at a time. This is how the Prelude defines `fst` and `snd`:
 
 ```haskell
 fst :: (a, b) -> a

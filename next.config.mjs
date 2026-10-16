@@ -30,9 +30,25 @@ const config = {
     return [
       ...mat221Topics.flatMap(([sourceSlug, destinationSlug]) => mat221Pages.map((suffix) => ({
         source: `/topics/${sourceSlug}${suffix}`,
-        destination: `/docs/sem3/mat221/${destinationSlug}/${suffix ? suffix.slice(1) : 'notes'}`,
+        destination: `/docs/sem3/mat221/${destinationSlug}/${suffix === '/exam-practice' ? 'review' : suffix ? suffix.slice(1) : 'notes'}`,
         permanent: true,
       }))),
+      // The Exam section was removed: its pages sent readers to Review, which now holds the exam-style questions.
+      {
+        source: '/docs/:semester/:course/:topic/exam',
+        destination: '/docs/:semester/:course/:topic/review',
+        permanent: true,
+      },
+      {
+        source: '/docs/:semester/:course/:topic/exam-practice',
+        destination: '/docs/:semester/:course/:topic/review',
+        permanent: true,
+      },
+      {
+        source: '/docs/sem3/csi243/decoding-questions',
+        destination: '/docs/sem3/csi243/01-functional-thinking/review',
+        permanent: true,
+      },
       {
         source: '/docs/sem3/csi243/01-functional-thinking/programming-model',
         destination: '/docs/sem3/csi243/01-functional-thinking/notes/programming-model',

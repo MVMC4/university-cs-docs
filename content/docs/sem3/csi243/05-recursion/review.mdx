@@ -17,3 +17,36 @@ The deck checks recall of the chapter's core distinctions. Every assessment answ
 ## Assessment
 
 <Quiz title="Recursion Assessment" questions={recursionQuiz} />
+
+## Decoding the questions
+
+Lab and exam questions describe a function in wording that is precise but far denser than the function itself. The gap between "I do not understand this question" and "I do not understand Haskell" is often just that: the English needs decoding before the Haskell can start. Open the reference below, then work through the questions from this chapter.
+
+<CommandWords course="csi243" />
+
+<DecodeQuestion course="csi243" title="Edge cases stacked into one sentence" source="CSI243 lab" question={"The function `isSorted` should return `True` if the list is sorted in descending order, `False` otherwise. Calling `isSorted` on an empty list should always return `True`. Also, a list with only one element is sorted."} plain={"Descending order, checked pairwise. Two special cases are declared `True` by definition, not because you can check them: nothing to compare (empty), and nothing to compare *against* (one element)."}>
+
+The phrase "should always return True" for the empty list is a **vacuous truth**, not a computed answer — there is no pair of out-of-order elements in `[]`, so the claim "every adjacent pair is in order" holds automatically. Recognising a vacuous-truth base case (as opposed to one you'd derive by testing something) is exactly why this lab's own callout warns "this one needs three cases": `[]`, a singleton, and everything else are three genuinely different patterns, not one pattern with two exceptions bolted on.
+
+```haskell
+isSorted :: [Integer] -> Bool
+isSorted []       = True
+isSorted [_]      = True
+isSorted (x:y:ys) = x >= y && isSorted (y:ys)
+```
+```haskell
+main :: IO ()
+main = do
+  print (isSorted [5, 3, 1])
+  print (isSorted [3, 1, 5])
+  print (isSorted ([] :: [Integer]))
+  print (isSorted [7])
+```
+```text
+True
+False
+True
+True
+```
+
+</DecodeQuestion>

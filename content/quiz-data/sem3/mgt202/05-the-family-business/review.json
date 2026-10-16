@@ -1,0 +1,309 @@
+{
+  "$schema": "../../../quiz.schema.json",
+  "quizzes": {
+    "topic-5-review": {
+      "title": "Topic 5 review quiz",
+      "questions": [
+        {
+          "question": "In which stage is leadership shared among the founder's children?",
+          "options": [
+            "Owner-managed business",
+            "Sibling partnership",
+            "Cousin consortium",
+            "Co-preneurship"
+          ],
+          "correctIndex": 1,
+          "explanation": "In a sibling partnership (second generation) ownership and management are shared among brothers and sisters, so leadership moves from one decision-maker to a group of peers.",
+          "group": "Definitions and stages",
+          "level": "foundation"
+        },
+        {
+          "question": "A third or later generation business owned and managed by cousins is called a...",
+          "options": [
+            "Sibling partnership",
+            "Owner-managed business",
+            "Family council",
+            "Cousin consortium"
+          ],
+          "correctIndex": 3,
+          "explanation": "A cousin consortium has fragmented ownership and needs formal corporate governance to avoid deadlock.",
+          "group": "Definitions and stages",
+          "level": "foundation"
+        },
+        {
+          "question": "Why does conflict arise when family principles are applied to business decisions?",
+          "options": [
+            "The family system rewards unconditional loyalty, while the business needs accountability for performance",
+            "The family system is always wrong",
+            "Business rules never apply to relatives",
+            "Families have no interest in profit"
+          ],
+          "correctIndex": 0,
+          "explanation": "The family system is organised around nurturing and loyalty whatever a member contributes. The business system runs on efficiency, profitability and merit, so applying one to the other creates friction.",
+          "group": "Definitions and stages",
+          "level": "developing"
+        },
+        {
+          "question": "Which three sub-systems make up the Three-Circle Model?",
+          "options": [
+            "Family, employees and customers",
+            "Owners, suppliers and lenders",
+            "Family, ownership and management",
+            "Founders, heirs and advisers"
+          ],
+          "correctIndex": 2,
+          "explanation": "Tagiuri and Davis described a family firm as three overlapping sub-systems: family, ownership and management.",
+          "group": "Three-Circle Model",
+          "level": "foundation"
+        },
+        {
+          "question": "How many stakeholder sectors does the Three-Circle Model produce?",
+          "options": [
+            "Three",
+            "Five",
+            "Seven",
+            "Nine"
+          ],
+          "correctIndex": 2,
+          "explanation": "The overlap of the three circles creates seven sectors, each with its own priorities and potential conflicts.",
+          "group": "Three-Circle Model",
+          "level": "foundation"
+        },
+        {
+          "question": "In the lecturer's numbering, which sector holds family members who own shares, sit on the board and work as managers?",
+          "options": [
+            "Sector 1",
+            "Sector 4",
+            "Sector 5",
+            "Sector 7"
+          ],
+          "correctIndex": 3,
+          "explanation": "Sector 7, family owner-employees, is the nexus of control. Sources number the sectors differently, so name the group as well as the number.",
+          "group": "Three-Circle Model",
+          "level": "developing"
+        },
+        {
+          "question": "A family member works in the business but holds no shares. Which sector is this, in the lecturer's numbering?",
+          "options": [
+            "Sector 4, family employees",
+            "Sector 5, family owners",
+            "Sector 2, employees only",
+            "Sector 3, owners only"
+          ],
+          "correctIndex": 0,
+          "explanation": "Family employees work in the business without equity. Family owners (sector 5) hold shares without working day to day.",
+          "group": "Three-Circle Model",
+          "level": "developing"
+        },
+        {
+          "question": "What is socio-emotional wealth?",
+          "options": [
+            "The money a family earns from dividends",
+            "The non-financial value and emotional returns family members get from the firm",
+            "The total salary paid to relatives",
+            "The value of the firm's property"
+          ],
+          "correctIndex": 1,
+          "explanation": "Socio-emotional wealth is the non-financial value and emotional returns family members get from owning and running the firm.",
+          "group": "SEW and commitment",
+          "level": "foundation"
+        },
+        {
+          "question": "In the FIBER model, what does the B stand for?",
+          "options": [
+            "Business growth",
+            "Binding social ties",
+            "Board control",
+            "Brand identity"
+          ],
+          "correctIndex": 1,
+          "explanation": "FIBER: family control and influence, identification of the family, binding social ties, emotional attachment, and renewal of family bonds.",
+          "group": "SEW and commitment",
+          "level": "developing"
+        },
+        {
+          "question": "A successor stays in the firm mainly from fear of financial loss. Which commitment type is this?",
+          "options": [
+            "Desire-based",
+            "Obligation-based",
+            "Need-based",
+            "Cost-based"
+          ],
+          "correctIndex": 3,
+          "explanation": "Cost-based commitment ('have to') comes from fear of financial loss and leads to passive compliance. Need-based commitment comes from desperation or having no outside job.",
+          "group": "SEW and commitment",
+          "level": "developing"
+        },
+        {
+          "question": "Which commitment type gives the best performance and proactive innovation?",
+          "options": [
+            "Desire-based ('want to')",
+            "Obligation-based ('ought to')",
+            "Cost-based ('have to')",
+            "Need-based ('need to')"
+          ],
+          "correctIndex": 0,
+          "explanation": "Desire-based commitment comes from real passion for the business and its goals.",
+          "group": "SEW and commitment",
+          "level": "foundation"
+        },
+        {
+          "question": "What are co-preneurs?",
+          "options": [
+            "Two unrelated partners",
+            "A parent and child in the same firm",
+            "A married couple who jointly own and manage a business",
+            "Two siblings who inherit a firm"
+          ],
+          "correctIndex": 2,
+          "explanation": "Co-preneurs are husband-and-wife teams. They share trust and a financial vision, but disputes can spill into home life.",
+          "group": "Roles and conflicts",
+          "level": "foundation"
+        },
+        {
+          "question": "According to the notes, how long should prospective successors work outside the family firm first?",
+          "options": [
+            "Six months",
+            "Two to five years",
+            "Ten years",
+            "Not at all"
+          ],
+          "correctIndex": 1,
+          "explanation": "Working outside for two to five years builds objective skills, confidence and credibility.",
+          "group": "Roles and conflicts",
+          "level": "developing"
+        },
+        {
+          "question": "In the predator/parasite conflict, who sees the active managers as predators?",
+          "options": [
+            "The non-family employees",
+            "The firm's bankers",
+            "The founder's spouse",
+            "The non-working family shareholders"
+          ],
+          "correctIndex": 3,
+          "explanation": "Non-working shareholders see active managers as predators who take profit through salaries, bonuses and perks. The managers see them as parasites who want dividends without working.",
+          "group": "Roles and conflicts",
+          "level": "developing"
+        },
+        {
+          "question": "What is the recommended way to handle in-laws who join the business?",
+          "options": [
+            "Assign them to separate branches or roles that do not overlap",
+            "Give them the most senior roles",
+            "Keep them out of the family council only",
+            "Pay them more than other staff"
+          ],
+          "correctIndex": 0,
+          "explanation": "Separate branches or non-overlapping roles reduce jealousy and claims of favouritism.",
+          "group": "Roles and conflicts",
+          "level": "developing"
+        },
+        {
+          "question": "Which of these is NOT one of Lansky's five guidelines for a family retreat?",
+          "options": [
+            "Clear purpose",
+            "Attainable goals",
+            "Exclude younger members until they hold shares",
+            "Structured agenda"
+          ],
+          "correctIndex": 2,
+          "explanation": "The guidelines are clear purpose, attainable goals, structured agenda, inclusive participation (every member may speak) and consensus rather than mere agreement.",
+          "group": "Governance",
+          "level": "foundation"
+        },
+        {
+          "question": "Which of these is NOT one of the six core components of a family constitution?",
+          "options": [
+            "Core family values",
+            "Annual sales targets",
+            "Dispute resolution procedures",
+            "Philanthropic ambitions"
+          ],
+          "correctIndex": 1,
+          "explanation": "The six components are core values, decision-making protocols, family benefits, next-generation onboarding, dispute resolution and philanthropic ambitions.",
+          "group": "Governance",
+          "level": "foundation"
+        },
+        {
+          "question": "What is a family council?",
+          "options": [
+            "A group of non-family directors",
+            "A tax body for family firms",
+            "A meeting held once at a retreat",
+            "A formal body of family representatives that meets periodically to coordinate family-business policy"
+          ],
+          "correctIndex": 3,
+          "explanation": "A family council coordinates family-business policy, represents the family to the board and, according to the notes, drafts and enforces the constitution.",
+          "group": "Governance",
+          "level": "developing"
+        },
+        {
+          "question": "Which is NOT an alternative succession pathway when family succession is not viable?",
+          "options": [
+            "Automatic transfer to the eldest child",
+            "Professional non-family general manager",
+            "Interim management",
+            "Outright sale"
+          ],
+          "correctIndex": 0,
+          "explanation": "The alternatives are a professional non-family general manager, interim management until heirs are ready, and an outright sale. Transfer should depend on competence, not birth order.",
+          "group": "Succession and cases",
+          "level": "developing"
+        },
+        {
+          "question": "Why should tax minimisation not decide how ownership is transferred?",
+          "options": [
+            "Tax does not matter in family firms",
+            "Gradual transfer is always illegal",
+            "Operating effectiveness must come first; tax savings should not create an unworkable ownership structure",
+            "Tax rules only apply to non-family owners"
+          ],
+          "correctIndex": 2,
+          "explanation": "Minimising tax matters, but the ownership structure has to work for the business.",
+          "group": "Succession and cases",
+          "level": "exam"
+        },
+        {
+          "question": "Which is a responsibility of the senior generation in succession planning?",
+          "options": [
+            "Mastering the firm's balance sheets",
+            "Communicating openly about retirement timing",
+            "Designing life plans around the firm",
+            "Preparing a personal action plan to gain skills"
+          ],
+          "correctIndex": 1,
+          "explanation": "The senior generation communicates about retirement, plans in writing, enforces accountability, develops owners and designs an exit. The other options are junior-generation responsibilities.",
+          "group": "Succession and cases",
+          "level": "foundation"
+        },
+        {
+          "question": "In the Iaccarino & Son case, what had Fran failed to do when he joined the firm?",
+          "options": [
+            "Study for an MBA",
+            "Sell his own business",
+            "Meet the long-time employees",
+            "Negotiate an ownership position"
+          ],
+          "correctIndex": 3,
+          "explanation": "Fran joined without an ownership position and later found that his father would not let go of power.",
+          "group": "Succession and cases",
+          "level": "developing"
+        },
+        {
+          "question": "Which statement best matches what the Iaccarino & Son case says about the recession?",
+          "options": [
+            "It reached the firm late, in 2010 and 2011, and the firm could not shrink fast enough to absorb the shock",
+            "The firm felt it at once and recovered quickly",
+            "The firm was unaffected and closed for other reasons",
+            "Sales fell in 2008 and never recovered"
+          ],
+          "correctIndex": 0,
+          "explanation": "The firm was a lagging indicator of the downturn. It lost three projects in a day, cut margins to win work and filed for bankruptcy in 2012, a year after its highest sales.",
+          "group": "Succession and cases",
+          "level": "exam"
+        }
+      ]
+    }
+  }
+}

@@ -6,7 +6,7 @@ import {
   DocsTitle,
   MarkdownCopyButton,
   ViewOptionsPopover,
-} from 'fumadocs-ui/layouts/docs/page';
+} from 'fumadocs-ui/layouts/notebook/page';
 import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
@@ -14,7 +14,8 @@ import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
 import { Quiz } from '@/components/interactive/quiz';
 import { siteConfig } from '@/lib/site';
-import { flattenTree } from 'fumadocs-core/page-tree';
+import { getPageNeighbours, getTopicTabs } from '@/lib/page-navigation';
+import { DocsPager, TopicTabs } from '@/components/layouts/page-navigation';
 import { Mat221SourceShell } from '@/features/courses/mat221/compat/source-shell';
 import { PageDownloadActions } from '@/components/learning/page-download-actions';
 import { FullStudyChapters, getFullChapters, getChapterToc } from '@/features/courses/csi247/study-guides/chapter';
@@ -27,23 +28,6 @@ import {
   WorkedExample as Mat221SourceWorkedExample,
   WorkedExampleSet as Mat221SourceWorkedExampleSet,
 } from '@/features/courses/mat221/source/components/MDXPrimitives';
-
-function getCourseFooterItems(pageUrl: string) {
-  const segments = pageUrl.split('/').filter(Boolean);
-  if (segments.length < 3 || segments[0] !== 'docs') return undefined;
-
-  const courseUrl = `/${segments.slice(0, 3).join('/')}`;
-  const pages = flattenTree(source.getPageTree().children).filter(
-    (item) => item.url === courseUrl || item.url.startsWith(`${courseUrl}/`),
-  );
-  const currentIndex = pages.findIndex((item) => item.url === pageUrl);
-  if (currentIndex === -1) return undefined;
-
-  return {
-    previous: pages[currentIndex - 1],
-    next: pages[currentIndex + 1],
-  };
-}
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -58,6 +42,16 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const isCsi247 = page.url === '/docs/sem3/csi247' || page.url.startsWith('/docs/sem3/csi247/');
   const fullChapters = isCsi247 ? getFullChapters(page.url) : [];
   const hasCustomEntryHeader = page.url === '/docs' || page.url === '/docs/study-tools' || isMat221;
+  const pageActions = hasCustomEntryHeader ? undefined : (
+    <div className="ui-page-actions">
+      <MarkdownCopyButton markdownUrl={markdownUrl} />
+      <ViewOptionsPopover
+        markdownUrl={markdownUrl}
+        githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/docs/${page.path}`}
+      />
+      {isCsi247 && <PageDownloadActions pageUrl={page.url} />}
+    </div>
+  );
   const mdxComponents = getMDXComponents({
     Quiz,
     a: createRelativeLink(source, page),
@@ -92,7 +86,9 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
     <DocsPage
       toc={isMat221 ? [] : fullChapters.length ? getChapterToc(fullChapters) : page.data.toc}
       full={isMat221 || page.data.full}
-      footer={isMat221 ? { enabled: false } : { items: getCourseFooterItems(page.url) }}
+      footer={{ enabled: false }}
+      tableOfContent={{ footer: pageActions }}
+      tableOfContentPopover={{ footer: pageActions }}
     >
       <script
         type="application/ld+json"
@@ -100,19 +96,13 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           __html: JSON.stringify(learningResourceJsonLd).replace(/</g, '\\u003c'),
         }}
       />
+      <TopicTabs tabs={getTopicTabs(page.url)} />
       {!hasCustomEntryHeader && <>
         <DocsTitle>{page.data.title}</DocsTitle>
-        <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
-        <div className="flex flex-row gap-2 items-center border-b pb-6">
-          <MarkdownCopyButton markdownUrl={markdownUrl} />
-          <ViewOptionsPopover
-            markdownUrl={markdownUrl}
-            githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/docs/${page.path}`}
-          />
-          {isCsi247 && <PageDownloadActions pageUrl={page.url} />}
-        </div>
+        <DocsDescription>{page.data.description}</DocsDescription>
       </>}
       {isMat221 ? <Mat221SourceShell pageUrl={page.url}><MDX components={mdxComponents} /></Mat221SourceShell> : fullChapters.length ? <FullStudyChapters chapters={fullChapters} /> : <DocsBody><MDX components={mdxComponents} /></DocsBody>}
+      <DocsPager neighbours={getPageNeighbours(page.url)} />
     </DocsPage>
   );
 }

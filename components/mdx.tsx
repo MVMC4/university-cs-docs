@@ -14,7 +14,10 @@ import { MathEnv } from './math/math-env';
 import { EquationBreakdown, Equation, Term, TermGrid } from './math/equation-breakdown';
 import { FormulaBlock } from './math/formula-block';
 import { CaseAnalysis, Case } from './math/case-analysis';
-import { Step, StepByStep, StepByStepTitle, StepTitle } from './interactive/step-by-step';
+import { Step, StepByStep, StepByStepTitle, StepTitle, Steps } from './interactive/step-by-step';
+import { KeyTerm } from './learning/key-term';
+import { CheckQuestion, CheckQuestions } from './learning/check-questions';
+import { CommandWords, DecodeQuestion } from './learning/decoding';
 import { InteractiveStepper, StepperStep } from './interactive/interactive-stepper';
 import { Flashcard } from './interactive/flashcard';
 import { GraphViewer } from './visuals/graph-viewer';
@@ -36,7 +39,7 @@ import { MergeComplexityFigure, MergeFrontWorkbench, MergeRecursionExplorer } fr
 import { PackageBuildStory, PackageFolderStory, PackageImportStory } from './interactive/package-stories';
 
 
-import { Callout } from 'fumadocs-ui/components/callout';
+import { Callout } from './callouts/callout';
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { Steps as FumaSteps, Step as FumaStep } from 'fumadocs-ui/components/steps';
@@ -51,7 +54,7 @@ import { TopicNotesFlow } from './learning/topic-notes-flow';
 import { PomodoroTimer, TimerSummary } from './learning/study-tools';
 import { DocsWelcome, StudyWorkspaceHeader } from './learning/docs-entry-panels';
 import { SemesterWorkInProgress } from './learning/semester-status';
-import { ChapterExam, ChapterQuestions, ChapterReview } from './learning/chapter-study-pages';
+import { ChapterQuestions, ChapterReview } from './learning/chapter-study-pages';
 import { CourseChapterIndex } from './learning/course-chapter-index';
 import { LessonIntroduction, LearningObjectives, Prerequisites } from './learning/lesson-introduction';
 import { CommonMistake, ConceptBlock, RecognitionStrategy, TheoremBlock } from './learning/concept-block';
@@ -84,6 +87,12 @@ export function getMDXComponents(components?: MDXComponents) {
     FormulaBlock,
     CaseAnalysis,
     Case,
+    KeyTerm,
+    Steps,
+    CheckQuestions,
+    CheckQuestion,
+    CommandWords,
+    DecodeQuestion,
     StepByStep,
     Step,
     StepByStepTitle,
@@ -135,7 +144,6 @@ export function getMDXComponents(components?: MDXComponents) {
     SemesterWorkInProgress,
     ChapterReview,
     ChapterQuestions,
-    ChapterExam,
     CourseChapterIndex,
     LessonIntroduction,
     LearningObjectives,

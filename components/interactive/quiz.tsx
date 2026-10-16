@@ -1,19 +1,33 @@
 'use client';
-import { useState } from 'react';
-import { Check, X, RotateCcw, AlertCircle } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Check, ChevronLeft, ChevronRight, RotateCcw, X } from 'lucide-react';
+import { hashText, pickMessage, quizTone } from '@/features/progress/core';
+import { messages, useRecord } from '@/features/progress';
 import { MathText } from './math-text';
 
 type Question = {
+  /** A stable id. Without one, an id is derived from the question text. */
+  id?: string;
   question: string;
   /** Optional program or snippet shown in a code block beneath the question text. */
   code?: string;
   options: string[];
   correctIndex: number;
   explanation?: string;
-  /** Optional per-option feedback, same length/order as `options`. Shown for
-   *  whichever option the student picked instead of the shared `explanation`. */
+  /** Optional per-option feedback, same length/order as `options`. Shown for whichever option the student picked. */
   optionFeedback?: string[];
+  /** The topic or section. A quiz with more than one group lets the reader pick which to practise. */
+  group?: string;
+  /** Optional tag kept in the data (foundation, developing, exam). The quiz does not use it. */
+  level?: string;
+  /** A short worked solution shown after answering. */
+  steps?: string[];
+  /** Where the question comes from, for example a past paper and question number. */
+  source?: string;
 };
+
+type Prepared = Question & { qid: string; groupName: string };
 
 /** Renders `inline code` spans as <code> and passes everything else through MathText. */
 const RichText = ({ text }: { text: string }) => {
@@ -22,7 +36,7 @@ const RichText = ({ text }: { text: string }) => {
     <>
       {parts.map((part, index) =>
         part.length > 2 && part.startsWith('`') && part.endsWith('`') ? (
-          <code key={index} className="rounded bg-fd-muted px-1.5 py-0.5 font-mono text-[0.85em] text-fd-foreground">{part.slice(1, -1)}</code>
+          <code key={index}>{part.slice(1, -1)}</code>
         ) : (
           <MathText key={index} text={part} />
         ),
@@ -31,132 +45,299 @@ const RichText = ({ text }: { text: string }) => {
   );
 };
 
+const DEFAULT_GROUP = 'All questions';
+/** The "how many" menu appears only for quizzes longer than this. */
+const COUNT_MIN = 10;
+
+type Phase = 'choose' | 'run' | 'done';
+
+function prepare(questions: Question[]): Prepared[] {
+  const seen = new Set<string>();
+  return questions.map((question, index) => {
+    let qid = question.id ?? hashText(`${question.question}|${question.options.join('|')}`);
+    if (seen.has(qid)) qid = `${qid}-${index}`;
+    seen.add(qid);
+    return { ...question, qid, groupName: question.group ?? DEFAULT_GROUP };
+  });
+}
+
+/** A random subset of `count` questions, kept in the order they were written. */
+function sample<T>(items: T[], count: number): T[] {
+  if (count <= 0 || count >= items.length) return items;
+  const picked = new Set<number>();
+  while (picked.size < count) picked.add(Math.floor(Math.random() * items.length));
+  return items.filter((_, index) => picked.has(index));
+}
+
 type QuizProps = {
   title?: string;
   questions?: Question[];
+  /** Identifies this quiz in saved progress. QuizRef sets it; otherwise the page path and title are used. */
+  quizKey?: string;
 };
 
-export function Quiz({ title = "Knowledge Check", questions }: QuizProps) {
-  if (!questions || questions.length === 0) {
+/**
+ * The one multiple-choice quiz used on review pages in every course: one question at a time, with a Check button.
+ * A quiz with more than one group first lets the reader choose topics (and, for a long quiz, how many questions).
+ */
+export function Quiz({ title = 'Knowledge check', questions = [], quizKey }: QuizProps) {
+  const pathname = usePathname();
+  const record = useRecord();
+  const key = quizKey ?? `${pathname}#${title}`;
+  const prepared = useMemo(() => prepare(questions), [questions]);
+  const groups = useMemo(() => [...new Set(prepared.map((question) => question.groupName))], [prepared]);
+  const chooser = groups.length > 1;
+
+  const [phase, setPhase] = useState<Phase>(chooser ? 'choose' : 'run');
+  const [selected, setSelected] = useState<string[]>(groups);
+  const [count, setCount] = useState(0);
+  const [deck, setDeck] = useState<Prepared[]>(() => (chooser ? [] : prepared));
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
+  const [position, setPosition] = useState(0);
+  const [run, setRun] = useState(1);
+  const reported = useRef(0);
+
+  // Tell the progress system once per run when the results are shown.
+  useEffect(() => {
+    if (phase !== 'done' || reported.current === run) return;
+    reported.current = run;
+    const correct = deck.filter((question) => revealed[question.qid] && answers[question.qid] === question.correctIndex).length;
+    record({ type: 'quiz-complete', quiz: key, total: deck.length, correct });
+  }, [phase, run, deck, revealed, answers, key, record]);
+
+  if (questions.length === 0) {
     return (
-      <div className="my-8 rounded-xl border border-fd-border bg-fd-muted/30 p-6 shadow-sm">
-        <div className="flex items-center gap-3 text-fd-muted-foreground">
-          <AlertCircle className="h-5 w-5" />
-          <div>
-            <h3 className="text-lg font-semibold text-fd-foreground">{title}</h3>
-            <p className="text-sm mt-1">No questions available for this section yet.</p>
-          </div>
-        </div>
-      </div>
+      <section className="ui-quiz">
+        <header className="ui-quiz-head"><h3>{title}</h3></header>
+        <p className="ui-quiz-empty">No questions for this section yet.</p>
+      </section>
     );
   }
 
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const isCorrect = (question: Prepared) => answers[question.qid] === question.correctIndex;
 
-  const handleSelect = (qIndex: number, optIndex: number) => {
-    if (isSubmitted) return;
-    setAnswers(prev => ({ ...prev, [qIndex]: optIndex }));
-  };
-
-  const handleSubmit = () => {
-    if (Object.keys(answers).length < questions.length) {
-      alert("Please answer all questions before submitting!");
-      return;
-    }
-    setIsSubmitted(true);
-  };
-
-  const handleReset = () => {
+  const start = (list: Prepared[]) => {
+    setDeck(list);
     setAnswers({});
-    setIsSubmitted(false);
+    setRevealed({});
+    setPosition(0);
+    setRun((value) => value + 1);
+    setPhase('run');
   };
 
-  const score = isSubmitted
-    ? questions.reduce((acc, q, i) => acc + (answers[i] === q.correctIndex ? 1 : 0), 0)
-    : 0;
+  /* ───── choosing topics ───── */
 
-  const ScoreDisplay = () => (
-    <div className="text-lg font-semibold text-fd-foreground flex items-center gap-2">
-      Score: <span className={score === questions.length ? "text-emerald-500" : "text-fd-primary"}>{score}/{questions.length}</span>
-    </div>
-  );
+  const matching = prepared.filter((question) => selected.includes(question.groupName));
+  const chosen = count > 0 ? Math.min(count, matching.length) : matching.length;
+
+  if (phase === 'choose') {
+    const counts = [10, 20].filter((option) => option < matching.length);
+    return (
+      <section className="ui-quiz qz">
+        <header className="ui-quiz-head">
+          <h3>{title}</h3>
+          <span className="ui-quiz-stats">{prepared.length} questions</span>
+        </header>
+        <div className="qz-chooser">
+          <div className="qz-chips" aria-label="Topics">
+            {groups.map((group) => (
+              <button
+                key={group}
+                type="button"
+                className="qz-chip"
+                aria-pressed={selected.includes(group)}
+                onClick={() => setSelected((previous) => (previous.includes(group) ? previous.filter((item) => item !== group) : [...previous, group]))}
+              >
+                {group}
+                <span>{prepared.filter((question) => question.groupName === group).length}</span>
+              </button>
+            ))}
+          </div>
+          {matching.length > COUNT_MIN && (
+            <label className="qz-count">
+              How many
+              <select value={count} onChange={(event) => setCount(Number(event.target.value))}>
+                <option value={0}>All of them</option>
+                {counts.map((option) => <option key={option} value={option}>{option} questions</option>)}
+              </select>
+            </label>
+          )}
+        </div>
+        <footer className="ui-quiz-foot">
+          <span className="ui-quiz-stats" aria-live="polite">{chosen} {chosen === 1 ? 'question' : 'questions'}</span>
+          <button type="button" className="ui-btn ui-btn-primary ui-btn-sm" disabled={chosen === 0} onClick={() => start(sample(matching, count))}>Start</button>
+        </footer>
+      </section>
+    );
+  }
+
+  /* ───── results ───── */
+
+  const answeredCount = deck.filter((question) => revealed[question.qid]).length;
+  const correctCount = deck.filter((question) => revealed[question.qid] && isCorrect(question)).length;
+
+  if (phase === 'done') {
+    const missed = deck.filter((question) => revealed[question.qid] && !isCorrect(question));
+    const byGroup = new Map<string, { total: number; right: number }>();
+    for (const question of deck) {
+      const row = byGroup.get(question.groupName) ?? { total: 0, right: 0 };
+      row.total += 1;
+      if (revealed[question.qid] && isCorrect(question)) row.right += 1;
+      byGroup.set(question.groupName, row);
+    }
+    return (
+      <section className="ui-quiz qz">
+        <header className="ui-quiz-head">
+          <h3>{title}</h3>
+          <span className="ui-quiz-stats">Score {correctCount} / {deck.length}</span>
+        </header>
+        <div className="qz-result">
+          <p className="ui-quiz-score" data-perfect={correctCount === deck.length || undefined}>
+            {correctCount === deck.length
+              ? 'All correct.'
+              : `${correctCount} of ${deck.length} correct (${Math.round((correctCount / deck.length) * 100)}%).${answeredCount < deck.length ? ` ${deck.length - answeredCount} not answered.` : ''}`}
+          </p>
+          <p className="qz-affirm">{pickMessage(messages.quiz[quizTone(correctCount, deck.length)], `${key}:${run}`)}</p>
+          {byGroup.size > 1 && (
+            <div className="qz-breakdown">
+              {[...byGroup.entries()].map(([name, row]) => (
+                <div key={name} className="qz-brow">
+                  <span>{name}</span>
+                  <div className="pg-bar" role="progressbar" aria-label={name} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round((row.right / row.total) * 100)}>
+                    <div style={{ width: `${(row.right / row.total) * 100}%` }} />
+                  </div>
+                  <span>{row.right}/{row.total}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <footer className="ui-quiz-foot">
+          <span />
+          <span className="qz-actions">
+            {missed.length > 0 && (
+              <button type="button" className="ui-btn ui-btn-primary ui-btn-sm" onClick={() => start(missed)}><RotateCcw size={15} /> Retry the {missed.length} missed</button>
+            )}
+            <button type="button" className="ui-btn ui-btn-sm" onClick={() => (chooser ? setPhase('choose') : start(prepared))}>
+              {chooser ? 'Choose topics' : 'Start again'}
+            </button>
+          </span>
+        </footer>
+      </section>
+    );
+  }
+
+  /* ───── answering, one question at a time ───── */
+
+  const question = deck[Math.min(position, deck.length - 1)];
+  const done = revealed[question.qid];
+  const last = position >= deck.length - 1;
+
+  const reveal = (choice: number) => {
+    if (revealed[question.qid]) return;
+    setAnswers((previous) => ({ ...previous, [question.qid]: choice }));
+    setRevealed((previous) => ({ ...previous, [question.qid]: true }));
+    record({ type: 'quiz-answer', quiz: key, qid: question.qid, choice, correct: choice === question.correctIndex });
+  };
+
+  const pick = (choice: number) => {
+    if (!revealed[question.qid]) setAnswers((previous) => ({ ...previous, [question.qid]: choice }));
+  };
+
+  const optionState = (optionIndex: number) => {
+    if (!done) return answers[question.qid] === optionIndex ? 'selected' : 'idle';
+    if (optionIndex === question.correctIndex) return 'correct';
+    if (answers[question.qid] === optionIndex) return 'wrong';
+    return 'dim';
+  };
+
+  const right = done && isCorrect(question);
+  const note = right ? question.explanation : question.optionFeedback?.[answers[question.qid]] || question.explanation;
 
   return (
-    <div className="my-8 rounded-xl border border-fd-border bg-fd-muted/30 p-6 shadow-sm">
-      <div className="mb-6 flex items-center justify-between border-b border-fd-border pb-4">
-        <h3 className="text-2xl font-bold text-fd-foreground">{title}</h3>
-        {isSubmitted && <ScoreDisplay />}
-      </div>
-
-      <div className="space-y-8">
-        {questions.map((q, qIndex) => (
-          <div key={qIndex} className="space-y-3">
-            <p className="text-lg font-semibold text-fd-foreground">
-              {qIndex + 1}. <RichText text={q.question} />
-            </p>
-            {q.code && (
-              <pre className="not-prose my-0 mb-3 overflow-x-auto rounded-lg border border-l-[6px] border-fd-border border-l-[var(--university-concept)] bg-fd-card px-4 py-3 font-mono text-[13px] leading-6 text-fd-foreground">
-                <code style={{ background: 'none', border: 0, padding: 0, borderRadius: 0, color: 'inherit', fontSize: 'inherit' }}>{q.code}</code>
-              </pre>
-            )}
-            <div className="space-y-2 pl-2">
-              {q.options.map((option, optIndex) => {
-                let btnClass = 'w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between text-sm ';
-                if (!isSubmitted) {
-                  if (answers[qIndex] === optIndex) btnClass += 'border-fd-primary bg-fd-primary/10 text-fd-primary font-medium';
-                  else btnClass += 'border-fd-border bg-fd-background hover:border-fd-primary/50 hover:bg-fd-muted text-fd-foreground';
-                } else {
-                  if (optIndex === q.correctIndex) btnClass += 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium';
-                  else if (answers[qIndex] === optIndex) btnClass += 'border-red-500 bg-red-500/10 text-red-600 dark:text-red-400';
-                  else btnClass += 'border-fd-border bg-fd-background opacity-50 text-fd-muted-foreground';
-                }
-                return (
-                  <button key={optIndex} onClick={() => handleSelect(qIndex, optIndex)} className={btnClass} disabled={isSubmitted}>
-                    <span><RichText text={option} /></span>
-                    {isSubmitted && optIndex === q.correctIndex && <Check className="h-4 w-4 shrink-0 ml-2" />}
-                    {isSubmitted && answers[qIndex] === optIndex && optIndex !== q.correctIndex && <X className="h-4 w-4 shrink-0 ml-2" />}
-                  </button>
-                );
-              })}
-            </div>
-            {isSubmitted && (() => {
-              const selected = answers[qIndex];
-              const isCorrect = selected === q.correctIndex;
-              if (isCorrect) {
-                return q.explanation ? (
-                  <div className="mt-3 p-4 rounded-lg bg-fd-muted border border-fd-border text-sm text-fd-muted-foreground">
-                    <span className="font-semibold text-fd-foreground">Why:</span> <RichText text={q.explanation} />
-                  </div>
-                ) : null;
-              }
-              const feedback = q.optionFeedback?.[selected] || q.explanation;
-              return feedback ? (
-                <div className="mt-3 p-4 rounded-lg bg-fd-muted border border-fd-border text-sm text-fd-muted-foreground">
-                  <span className="font-semibold text-fd-foreground">What went wrong:</span> <RichText text={feedback} />
-                </div>
-              ) : null;
-            })()}
+    <section
+      className="ui-quiz qz"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
+        const number = Number(event.key);
+        if (number >= 1 && number <= question.options.length) pick(number - 1);
+        if (event.key === 'Enter') {
+          if (!done && answers[question.qid] !== undefined) reveal(answers[question.qid]);
+          else if (done) last ? setPhase('done') : setPosition(position + 1);
+        }
+      }}
+    >
+      <header className="ui-quiz-head">
+        <h3>{title}</h3>
+        <span className="ui-quiz-stats">Question {position + 1} of {deck.length}</span>
+      </header>
+      <div className="qz-progress" aria-hidden="true"><div style={{ width: `${((position + (done ? 1 : 0)) / deck.length) * 100}%` }} /></div>
+      <div className="qz-focus">
+        {(chooser || question.source) && (
+          <div className="qz-meta">
+            {chooser && <span>{question.groupName}</span>}
+            {question.source && <span className="qz-source">Source: {question.source}</span>}
           </div>
-        ))}
-      </div>
-
-      <div className="mt-8 flex justify-between items-center border-t border-fd-border pt-4">
-        {isSubmitted ? (
-          <>
-            <ScoreDisplay />
-            <button onClick={handleReset} className="px-6 py-2 rounded-lg bg-fd-muted border border-fd-border text-fd-foreground font-medium hover:bg-fd-background transition-colors flex items-center gap-2">
-              <RotateCcw className="h-4 w-4" /> Retake Quiz
-            </button>
-          </>
-        ) : (
-          <div className="w-full flex justify-end">
-            <button onClick={handleSubmit} className="px-6 py-2 rounded-lg bg-fd-primary text-fd-primary-foreground font-medium hover:bg-fd-primary/90 transition-colors shadow-sm">
-              Submit Answers
-            </button>
+        )}
+        <p className="ui-quiz-prompt qz-prompt"><RichText text={question.question} /></p>
+        {question.code && <pre className="ui-quiz-code"><code>{question.code}</code></pre>}
+        <div className="ui-quiz-options" role="radiogroup" aria-label={`Question ${position + 1}`}>
+          {question.options.map((option, optionIndex) => {
+            const state = optionState(optionIndex);
+            return (
+              <button
+                key={optionIndex}
+                type="button"
+                role="radio"
+                aria-checked={answers[question.qid] === optionIndex}
+                className="ui-quiz-option"
+                data-state={state}
+                onClick={() => pick(optionIndex)}
+                disabled={Boolean(done)}
+              >
+                <span><RichText text={option} /></span>
+                {state === 'correct' && <Check size={16} aria-label="Correct answer" />}
+                {state === 'wrong' && <X size={16} aria-label="Your answer" />}
+              </button>
+            );
+          })}
+        </div>
+        {done && (
+          <div className="ui-quiz-feedback" data-correct={right || undefined}>
+            <strong>{right ? 'Correct.' : 'Not quite.'}</strong>
+            {note && <> <RichText text={note} /></>}
+            {!right && question.explanation && question.optionFeedback?.[answers[question.qid]] && (
+              <p className="qz-answer"><strong>Answer:</strong> <RichText text={question.explanation} /></p>
+            )}
+            {question.steps && question.steps.length > 0 && (
+              <ol className="qz-steps">{question.steps.map((step, stepIndex) => <li key={stepIndex}><RichText text={step} /></li>)}</ol>
+            )}
+            {question.optionFeedback && (
+              <details className="qz-why">
+                <summary>Why each option is right or wrong</summary>
+                <ul>
+                  {question.optionFeedback.map((text, optionIndex) => (
+                    <li key={optionIndex}><strong>{String.fromCharCode(65 + optionIndex)}.</strong> <RichText text={text} /></li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </div>
         )}
       </div>
-    </div>
+      <footer className="ui-quiz-foot">
+        <button type="button" className="ui-btn ui-btn-sm" disabled={position === 0} onClick={() => setPosition(position - 1)}><ChevronLeft size={15} /> Previous</button>
+        <span className="ui-quiz-stats">{answeredCount} answered · {correctCount} correct</span>
+        {!done ? (
+          <button type="button" className="ui-btn ui-btn-primary ui-btn-sm" disabled={answers[question.qid] === undefined} onClick={() => reveal(answers[question.qid])}>Check answer</button>
+        ) : last ? (
+          <button type="button" className="ui-btn ui-btn-primary ui-btn-sm" onClick={() => setPhase('done')}>See results</button>
+        ) : (
+          <button type="button" className="ui-btn ui-btn-primary ui-btn-sm" onClick={() => setPosition(position + 1)}>Next <ChevronRight size={15} /></button>
+        )}
+      </footer>
+    </section>
   );
 }

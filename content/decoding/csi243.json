@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "title": "CSI243: the word-to-Haskell dictionary",
+  "intro": "Lab and exam questions describe a function in dense wording. This table turns the phrases that come up most into what they mean and what you write.",
+  "method": [
+    {
+      "title": "Find the verbs, and what each one is really asking for",
+      "text": "Underline every instruction verb, such as \"write\", \"changes\", \"returns\" or \"using\", and match each to a Haskell construct in the dictionary below. Ignore adjectives and scene-setting for now."
+    },
+    {
+      "title": "Rewrite the whole question as one or two short, plain sentences",
+      "text": "If your plain-English rewrite is longer than the original, you have not decoded it yet. A correct decoding is almost always shorter than the original, because formal phrasing repeats structure (\"using the function X\" after already naming X) that plain English drops."
+    },
+    {
+      "title": "Turn the plain sentence into a signature, then the signature into equations",
+      "text": "Only once you can say what the function does in one plain sentence should you write `funcName :: InputType -> OutputType`. The signature falls out of the plain sentence almost mechanically. See [Cheat Sheet 1](/docs/sem3/csi243/04-making-choices/cheat-sheet) for the placeholder vocabulary this step reuses."
+    }
+  ],
+  "ignore": ["list", "name"],
+  "highlight": ["write", "adds", "returns", "takes", "accepts", "given", "checks", "determines", "else", "otherwise", "recursively", "using", "together with", "should only work if", "generator", "changes", "counts", "assume", "must work"],
+  "dictionary": [
+    { "says": "\"returns\", \"gives back\", \"produces\"", "means": "The function's result", "write": "The right-hand side of `=`, or the type after the last `->`" },
+    { "says": "\"takes\", \"accepts\", \"given\"", "means": "An argument", "write": "A parameter in the signature and in the equation" },
+    { "says": "\"checks if / whether ...\"", "means": "A predicate: a yes/no question", "write": "A function returning `Bool`" },
+    { "says": "\"else\", \"otherwise\"", "means": "The remaining case(s)", "write": "`otherwise` in a guard, or the final pattern or `else` branch" },
+    { "says": "\"for every element ...\", \"changes a given list using ...\"", "means": "Apply one function to each element, keeping the list's length", "write": "`map` (Chapter 7), or a comprehension with no filter" },
+    { "says": "\"recursively\"", "means": "Built from a base case and a recursive case, not a Prelude shortcut", "write": "The `[]` / `(x:xs)` template. See the [Chapter 6 cheat sheet](/docs/sem3/csi243/06-lists-tuples/cheat-sheet)" },
+    { "says": "\"using the in-built function(s) X and Y\"", "means": "Compose two existing functions; do not hand-write their logic", "write": "`Y (X ...)`, for example `length (filter p xs)`" },
+    { "says": "\"together with ... as a pair\"", "means": "Bundle two results", "write": "A tuple in the return type and the return expression" },
+    { "says": "\"should only work if ...\"", "means": "A precondition: it decides guard order, not just guard presence", "write": "The condition guarding that case must be checked before any guard whose body assumes it" },
+    { "says": "\"generator\" (this course's use)", "means": "A list comprehension", "write": "`[expr | x <- xs]`, optionally with `, condition` clauses" },
+    { "says": "\"assume the items can be arranged in some order\"", "means": "The element type needs `Ord`, not just any type", "write": "Add `Ord a =>` to the signature" },
+    { "says": "\"for any type that ...\", or a constraint before `=>`", "means": "Every value of that type variable must support the named operation", "write": "`ClassName a =>` before the rest of the signature" }
+  ]
+}

@@ -1,0 +1,551 @@
+/* ════════════════════════════════════════════════════════════
+   STUDY TIMER
+   Header trigger, its popover, the Pomodoro panel (study tools
+   page and full screen) and the settings dialog.
+   ════════════════════════════════════════════════════════════ */
+
+/* ───────── header trigger ───────── */
+.timer-trigger-root {
+  position: relative;
+  flex: none;
+}
+
+.timer-trigger {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--ui-line);
+  border-radius: 999px;
+  background: var(--ui-bg);
+  padding: 0 14px 0 12px;
+  color: var(--ui-text-2);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.timer-trigger:hover {
+  background: var(--ui-surface-2);
+  color: var(--ui-text);
+}
+
+.timer-trigger-running {
+  border-color: transparent;
+  background: var(--ui-blue-t);
+  color: var(--ui-blue-d);
+  font-family: var(--font-mono);
+}
+
+.timer-trigger-running:hover {
+  background: var(--ui-blue-t);
+  color: var(--ui-blue-d);
+}
+
+/* In the mobile drawer the trigger sits in the link list; keep it left-aligned and whole. */
+#nd-sidebar .timer-trigger-root,
+[data-sidebar-drawer] .timer-trigger-root {
+  align-self: flex-start;
+}
+
+/* ───────── popover (positioned under the trigger by timer-trigger.tsx) ───────── */
+.timer-popover {
+  position: fixed;
+  z-index: 1000;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+  padding: 16px;
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-lg);
+  animation: timer-pop .12s ease-out;
+}
+
+.timer-popover-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.timer-popover-head span {
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.timer-popover-head small {
+  color: var(--ui-text-3);
+  font-size: 12px;
+}
+
+.timer-popover-time {
+  display: block;
+  margin: 4px 0 12px;
+  font-size: 36px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.timer-popover-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.timer-popover-controls .ui-btn { flex: 1; }
+
+.timer-popover > a {
+  display: block;
+  border-top: 1px solid var(--ui-line-soft);
+  padding-top: 10px;
+  color: var(--ui-blue);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.timer-popover > a:hover { text-decoration: underline; }
+
+@keyframes timer-pop {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+/* shared round icon button */
+.timer-icon-button {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--ui-text-2);
+  transition: background .15s, color .15s;
+}
+
+.timer-icon-button:hover {
+  background: var(--ui-surface-2);
+  color: var(--ui-text);
+}
+
+.timer-icon-button[aria-pressed="true"] {
+  background: var(--ui-blue-t);
+  color: var(--ui-blue-d);
+}
+
+/* ───────── panel ───────── */
+.study-panel {
+  --study-accent: var(--ui-blue);
+  --study-track: var(--ui-surface-3);
+  overflow: hidden;
+  margin: 24px 0 32px;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+}
+
+.study-panel.phase-short,
+.study-panel.phase-long { --study-accent: var(--ui-green); }
+
+.study-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 12px 16px;
+}
+
+.study-panel-title {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+}
+
+.study-panel-title::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--study-accent);
+}
+
+.study-panel-stats {
+  color: var(--ui-text-2);
+  font: 12px var(--font-mono);
+}
+
+.pomodoro-stage {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  background: var(--ui-surface);
+  padding: 20px 16px 28px;
+}
+
+/* phase selector: a segmented pill */
+.pomodoro-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 999px;
+  background: var(--ui-surface-2);
+  padding: 4px;
+}
+
+.pomodoro-tabs button {
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: var(--ui-text-2);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+
+.pomodoro-tabs button small {
+  margin-left: 2px;
+  color: var(--ui-text-3);
+  font: 11.5px var(--font-mono);
+}
+
+.pomodoro-tabs button:hover { color: var(--ui-text); }
+
+.pomodoro-tabs button.active {
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow);
+}
+
+.pomodoro-clock-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.pomodoro-ring {
+  width: min(16rem, 64vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 8px;
+  transition: background .3s ease;
+}
+
+.pomodoro-face {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: var(--ui-bg);
+}
+
+.pomodoro-face > span {
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.pomodoro-face > strong {
+  margin: 4px 0;
+  font-size: clamp(2.8rem, 8vw, 3.8rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.pomodoro-face > small {
+  color: var(--ui-text-3);
+  font-size: 13px;
+}
+
+.pomodoro-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--ui-line-soft);
+  padding: 12px 16px;
+}
+
+.pomodoro-controls .ui-btn {
+  height: 36px;
+  padding: 0 16px;
+  font-size: 13.5px;
+}
+
+.pomodoro-tools {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.pomodoro-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--ui-line-soft);
+  padding: 10px 16px 12px;
+  color: var(--ui-text-2);
+  font-size: 12.5px;
+}
+
+.round-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.round-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ui-surface-3);
+}
+
+.round-dots i.current {
+  outline: 1.5px solid var(--study-accent);
+  outline-offset: 2px;
+}
+
+.round-dots i.complete { background: var(--study-accent); }
+
+.timer-loading {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  color: var(--ui-text-2);
+}
+
+/* full screen */
+.pomodoro-panel.pomodoro-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  margin: 0;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.pomodoro-fullscreen .pomodoro-stage {
+  flex: 1;
+  align-content: center;
+}
+
+.pomodoro-fullscreen .pomodoro-ring { width: min(24rem, 72vw, 50vh); }
+
+.pomodoro-fullscreen .pomodoro-face > strong { font-size: clamp(3.5rem, 10vw, 5.5rem); }
+
+.pomodoro-fullscreen :is(.study-panel-header, .pomodoro-controls, .pomodoro-footer) {
+  padding-inline: max(16px, calc((100vw - 64rem) / 2));
+}
+
+/* summary (kept for older pages that still place it) */
+.timer-summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.timer-summary-grid > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: var(--ui-surface-2);
+  padding: 5px 12px;
+  color: var(--ui-text-2);
+  font-size: 12.5px;
+}
+
+.timer-summary-grid strong {
+  color: var(--ui-text);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* ───────── settings dialog ───────── */
+.study-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  background: var(--ui-scrim);
+  padding: 16px;
+  animation: study-modal-fade .16s ease-out;
+}
+
+.study-modal {
+  width: min(36rem, 100%);
+  overflow: hidden;
+  border-radius: var(--ui-r-xl);
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow-lg);
+  animation: study-modal-rise .18s ease-out;
+}
+
+.study-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 24px 8px;
+}
+
+.study-modal-header > div > span {
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.study-modal-header h2 {
+  margin: 4px 0 !important;
+  padding: 0 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: -.01em !important;
+}
+
+.study-modal-header p {
+  margin: 0 !important;
+  color: var(--ui-text-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.timer-settings { padding: 16px 24px; }
+
+.duration-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.duration-grid label > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ui-text-2);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.duration-grid label > div {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-r-sm);
+  background: var(--ui-bg);
+}
+
+.duration-grid label > div:focus-within {
+  border-color: var(--ui-blue);
+  box-shadow: 0 0 0 1px var(--ui-blue);
+}
+
+.duration-grid input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  padding: 8px 10px;
+  font: 500 14px var(--font-mono);
+  outline: none;
+}
+
+.duration-grid small {
+  padding-right: 10px;
+  color: var(--ui-text-3);
+  font-size: 12px;
+}
+
+.settings-toggle-list {
+  display: grid;
+  margin-top: 16px;
+  border-top: 1px solid var(--ui-line-soft);
+}
+
+.setting-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--ui-line-soft);
+  padding: 12px 0;
+  cursor: pointer;
+}
+
+.setting-toggle:last-child { border-bottom: 0; }
+
+.setting-toggle > span strong,
+.setting-toggle > span small { display: block; }
+
+.setting-toggle > span strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.setting-toggle > span small {
+  margin-top: 2px;
+  color: var(--ui-text-2);
+  font-size: 13px;
+}
+
+.setting-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ui-blue);
+}
+
+.study-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 24px 24px;
+}
+
+@keyframes study-modal-fade { from { opacity: 0; } }
+@keyframes study-modal-rise { from { opacity: 0; transform: translateY(10px) scale(.985); } }
+
+@media (max-width: 560px) {
+  .duration-grid { grid-template-columns: repeat(2, 1fr); }
+  .pomodoro-controls .ui-btn span { display: none; }
+  .study-modal-backdrop { align-items: end; padding: 0; }
+  .study-modal { max-height: 92dvh; overflow-y: auto; border-radius: var(--ui-r-xl) var(--ui-r-xl) 0 0; }
+  .study-modal-footer { position: sticky; bottom: 0; background: var(--ui-bg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer-popover,
+  .study-modal-backdrop,
+  .study-modal,
+  .pomodoro-ring {
+    animation: none;
+    transition: none;
+  }
+}
