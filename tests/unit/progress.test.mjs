@@ -220,3 +220,12 @@ test('question ids are stable for the same text and differ for different text', 
   assert.equal(hashText('What is a pure function?'), hashText('What is a pure function?'));
   assert.notEqual(hashText('a'), hashText('b'));
 });
+
+test('resetting a quiz forgets its answers without counting as activity', () => {
+  const answered = applyEvent(emptyState(NOW), { type: 'quiz-answer', quiz: 'q', qid: 'a', choice: 0, correct: true }, ctxFor('2026-10-16')).state;
+  const cleared = applyEvent(answered, { type: 'quiz-reset', quiz: 'q' }, ctxFor('2026-10-17'));
+  assert.equal(cleared.state.quizzes.q, undefined);
+  assert.equal(cleared.state.xp, answered.xp, 'no XP for a reset');
+  assert.equal(cleared.state.streak.lastDay, '2026-10-16', 'a reset does not extend the streak');
+  assert.equal(cleared.state.counters.quizAnswers, 1, 'the earlier answer still counts in the totals');
+});

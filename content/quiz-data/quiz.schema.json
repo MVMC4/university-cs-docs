@@ -47,7 +47,16 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "Same length and order as options. Shown for whichever wrong option the student chose."
-        }
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "A stable question id, unique within the quiz. If missing, one is derived from the question text. Set it so that editing the wording keeps a reader's saved answer."
+        },
+        "group": { "type": "string", "description": "The topic or section the question belongs to. The question chooser lets a reader pick groups." },
+        "level": { "enum": ["foundation", "developing", "exam"], "description": "How hard the question is. exam means exam-style." },
+        "steps": { "type": "array", "items": { "type": "string" }, "description": "A short worked solution, one step per entry, shown after answering." },
+        "source": { "type": "string", "description": "Where the question comes from, for example a past paper and question number." }
       },
       "additionalProperties": false
     }

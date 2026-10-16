@@ -29,6 +29,7 @@ function walk(directory, extension) {
 
 const rel = (file, base) => path.relative(base, file).replace(/\\/g, '/');
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const LEVELS = new Set(['foundation', 'developing', 'exam']);
 
 // 1. Data files
 const definedQuizzes = new Map(); // "src#id" -> true
@@ -62,6 +63,7 @@ for (const file of walk(dataRoot, '.json')) {
       continue;
     }
 
+    const seenIds = new Set();
     quiz.questions.forEach((question, index) => {
       const at = `${where} question ${index + 1}`;
       questionCount += 1;
@@ -81,6 +83,18 @@ for (const file of walk(dataRoot, '.json')) {
       if (question.code !== undefined && typeof question.code !== 'string' && !(Array.isArray(question.code) && question.code.every((line) => typeof line === 'string'))) {
         report(at, 'code must be a string or an array of strings');
       }
+      // Optional fields for the question chooser.
+      if (question.id !== undefined) {
+        if (typeof question.id !== 'string' || !ID_PATTERN.test(question.id)) report(at, 'id must be lowercase words joined by hyphens');
+        else if (seenIds.has(question.id)) report(at, `id "${question.id}" is used twice in this quiz`);
+        else seenIds.add(question.id);
+      }
+      if (question.group !== undefined && (typeof question.group !== 'string' || !question.group.trim())) report(at, 'group must be a non-empty string');
+      if (question.level !== undefined && !LEVELS.has(question.level)) report(at, 'level must be foundation, developing or exam');
+      if (question.steps !== undefined && !(Array.isArray(question.steps) && question.steps.every((step) => typeof step === 'string' && step.trim()))) {
+        report(at, 'steps must be an array of non-empty strings');
+      }
+      if (question.source !== undefined && (typeof question.source !== 'string' || !question.source.trim())) report(at, 'source must be a non-empty string');
     });
   }
 }

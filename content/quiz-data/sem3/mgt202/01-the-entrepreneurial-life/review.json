@@ -13,7 +13,9 @@
             "There is no difference between the two terms."
           ],
           "correctIndex": 1,
-          "explanation": "Class 1 slide 7: small business describes nature and size; an entrepreneurial opportunity is economically attractive and timely and creates value for customers and owners."
+          "explanation": "Class 1 slide 7: small business describes nature and size; an entrepreneurial opportunity is economically attractive and timely and creates value for customers and owners.",
+          "group": "Opportunity",
+          "level": "foundation"
         },
         {
           "question": "Which is NOT one of the five contributions of entrepreneurship named in the Class 1 deck?",
@@ -24,7 +26,9 @@
             "Citizen participation"
           ],
           "correctIndex": 2,
-          "explanation": "The five are employment, diversification, innovation, citizen participation and value creation."
+          "explanation": "The five are employment, diversification, innovation, citizen participation and value creation.",
+          "group": "Why it matters",
+          "level": "foundation"
         },
         {
           "question": "Why does the deck warn against copying statistics from the textbook?",
@@ -35,7 +39,9 @@
             "The textbook is written in a different language."
           ],
           "correctIndex": 1,
-          "explanation": "The manager's rule is evidence first: ask what the source is, whether it is current, and whether it applies to Botswana."
+          "explanation": "The manager's rule is evidence first: ask what the source is, whether it is current, and whether it applies to Botswana.",
+          "group": "Why it matters",
+          "level": "developing"
         },
         {
           "question": "Which is the FIRST step in turning a problem into an opportunity?",
@@ -46,7 +52,9 @@
             "Determine whether customers will pay"
           ],
           "correctIndex": 2,
-          "explanation": "The sequence begins with the problem, then who experiences it, then a solution, then testing value and willingness to pay, then a sustainable business model."
+          "explanation": "The sequence begins with the problem, then who experiences it, then a solution, then testing value and willingness to pay, then a sustainable business model.",
+          "group": "Opportunity",
+          "level": "foundation"
         },
         {
           "question": "A home bakery that supports the owner's preferred lifestyle with modest returns is best classified as which type of small firm?",
@@ -57,7 +65,9 @@
             "Franchise"
           ],
           "correctIndex": 2,
-          "explanation": "Class 1 slide 9 gives a home bakery, a salon and a freelance service as examples of micro or lifestyle businesses."
+          "explanation": "Class 1 slide 9 gives a home bakery, a salon and a freelance service as examples of micro or lifestyle businesses.",
+          "group": "Types of firm",
+          "level": "foundation"
         },
         {
           "question": "What separates entrepreneurial risk-taking from gambling?",
@@ -68,7 +78,9 @@
             "Entrepreneurs take larger risks."
           ],
           "correctIndex": 1,
-          "explanation": "The deck defines gambling as committing resources without understanding the odds or the downside."
+          "explanation": "The deck defines gambling as committing resources without understanding the odds or the downside.",
+          "group": "Risk and motivation",
+          "level": "developing"
         },
         {
           "question": "Which list contains the four motivations for owning a business from Class 1?",
@@ -79,7 +91,9 @@
             "Competition, regulation, tax and debt"
           ],
           "correctIndex": 1,
-          "explanation": "Class 1 slide 13 names personal fulfilment, personal satisfaction, independence and financial rewards."
+          "explanation": "Class 1 slide 13 names personal fulfilment, personal satisfaction, independence and financial rewards.",
+          "group": "Risk and motivation",
+          "level": "foundation"
         },
         {
           "question": "Which is one of the five potential competitive strengths of small entrepreneurial firms?",
@@ -90,7 +104,9 @@
             "Market power"
           ],
           "correctIndex": 1,
-          "explanation": "The five are integrity and responsibility, customer focus, quality performance, innovation and niche markets. Money and market power are what large firms usually have."
+          "explanation": "The five are integrity and responsibility, customer focus, quality performance, innovation and niche markets. Money and market power are what large firms usually have.",
+          "group": "Competitive edge",
+          "level": "developing"
         }
       ]
     }

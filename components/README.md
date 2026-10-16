@@ -51,7 +51,6 @@ Every course page is built from the same small set of components. The page struc
 | Notes | `CheckQuestions` at the end, nothing else | in the MDX, three to five items |
 | `review.mdx` | `FlashcardDeck`, then `QuizRef` | `content/flashcard-data/<page path>.ts`, `content/quiz-data/<page path>.json` |
 | `questions.mdx` | `ExamQuestion` containing `SubQuestion` with worked solutions | in the MDX |
-| `exam.mdx` | `ExamQuestion` containing `SubQuestion` with marks | in the MDX |
 
 ```mdx
 <QuizRef src="sem3/csi243/01-functional-thinking/review" id="chapter-quiz" />
@@ -92,6 +91,26 @@ content/quiz-data/sem3/csi243/01-functional-thinking/review.json
 ```
 
 `code` is optional (one array entry per line) and so is `optionFeedback` (one entry per option, in order). Run `npm run audit:quizzes`: it fails on a malformed question, a reference to a missing file or id, and a quiz that no page uses. The `$schema` path depends on how deep the file is.
+
+### Quiz chooser fields
+
+A quiz of six or more questions opens with a chooser (topics, levels, which questions, how many, order, mode); shorter quizzes start straight away. These fields are all optional, so older quizzes keep working:
+
+| Field | Meaning |
+|---|---|
+| `group` | The topic or section the question belongs to. Chips in the chooser, and a breakdown in the results. |
+| `level` | `foundation`, `developing` or `exam` (shown as Exam-style) |
+| `steps` | A short worked solution, one step per entry, shown after answering |
+| `source` | Where the question comes from, for example `"CSI247 2018 paper, Q3"`. Use it when a past paper inspired the question. |
+| `id` | A stable id (lowercase words with hyphens), unique in the quiz. Saved answers and progress follow it, so set one when you might reword the question. Without it, an id is derived from the text. |
+
+## Decoding the questions
+
+Every review page ends with a `## Decoding the questions` section that teaches how to read a question before answering it. `<CommandWords />` shows the shared table of command words (define, explain, compare and so on), and `<DecodeQuestion>` works through a real question from the topic. Course-specific dictionaries live in `content/decoding/<course>.json`.
+
+## Progress
+
+Interactive components report what the reader does so the streak, XP and badges stay current. Call `useRecord()` from `@/features/progress` and record an event; it does nothing outside the provider. The events are `page`, `quiz-answer`, `quiz-complete`, `quiz-reset`, `card`, `check` and `focus`. Rewards, levels and badges are data in `content/progress/rewards.json`. See [docs/plans/progress-system.md](../docs/plans/progress-system.md) for the design, how to add a badge or an event, and the rules for keeping saved progress working as the content changes (stable ids, `content/progress/aliases.json` for renamed pages, versioned storage with migrations).
 
 ## Retired components
 

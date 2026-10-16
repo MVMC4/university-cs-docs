@@ -98,6 +98,7 @@ export type ProgressEvent =
   | { type: 'page'; path: string; title?: string }
   | { type: 'quiz-answer'; quiz: string; qid: string; choice: number; correct: boolean }
   | { type: 'quiz-complete'; quiz: string; total: number; correct: number }
+  | { type: 'quiz-reset'; quiz: string }
   | { type: 'card'; deck: string }
   | { type: 'check'; page: string; key: string }
   | { type: 'focus'; minutes: number };
@@ -455,6 +456,13 @@ export function applyEvent(previous: ProgressState, event: ProgressEvent, ctx: C
       // XP only the first time a question is answered, so retrying cannot farm points.
       if (!record) gain += xpRules.quizAnswer + (event.correct ? xpRules.quizCorrect : 0);
       activity = true;
+      break;
+    }
+    case 'quiz-reset': {
+      // Forget the saved answers of one quiz so it can be taken fresh. Not an activity, and it earns nothing.
+      const rest = { ...state.quizzes };
+      delete rest[event.quiz];
+      state.quizzes = rest;
       break;
     }
     case 'quiz-complete': {
