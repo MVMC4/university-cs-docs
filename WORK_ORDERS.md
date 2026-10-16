@@ -100,7 +100,7 @@ Design: [docs/plans/progress-system.md](docs/plans/progress-system.md). Everythi
 | ID | Work order | Acceptance check | Status |
 |---|---|---|---|
 | RES-01 | Lecture slides in folders named by year, tidy file names in the vault and on the site, one shape for every resources page | No "Current" or "Archived" lecture folder; every `meta.json` URL resolves; every slide file is listed | Complete |
-| RES-02 | Add the lecturer's MGT202 decks and student notes from the zip to Resources | Listed under the year; publisher decks, reprints and classmates' work are not published | Open |
+| RES-02 | Add the lecturer's MGT202 decks and student notes from the zip to Resources | Listed under the year; publisher decks, reprints and classmates' work are not published | Complete (two more decks and a "2026 Student Notes and Handouts" folder with six files; the textbook chapters, cases, reprinted articles, readings and classmates' work were left out) |
 | RES-03 | Add past papers to each course's Resources page when a paper exists | The CSI247 2018 paper and the MAT111, MAT122 and STA122 papers are listed under Past papers | Open |
 | RES-04 | Finish the file renames: labs, outlines and the remaining `current/` and `archive/` folders named by year | No `(1)`, double spaces or "current" in a published folder name | Open |
 
@@ -117,8 +117,8 @@ MGT202 is Small Business Management (it was labelled "Management"). Topic number
 | MGT-05 | Topic 4: Franchising and Buying an Existing Business (deck, notes and the Two Men and a Truck case) | Same pages; the worked royalty calculation checks | Complete |
 | MGT-06 | Topic 5: The Family Business (notes and class presentation) | Same pages; where the student notes, slides and textbook differ, the notes say so | Complete |
 | MGT-07 | Topic 7: Feasibility Analysis (student notes, including the laundry case calculations) | Same pages; every figure recomputed | Complete |
-| MGT-08 | Vault: file the lecturer's decks and notes from the zip under `Current/MGT202` without mixing them with personal notes | Files in the right folders; nothing of classmates' work copied | Open |
-| MGT-09 | Vault: rebuild the study guide to cover every topic, with the audit corrections | A new HTML and PDF beside the old guide; the old files untouched | Open |
+| MGT-08 | Vault: file the lecturer's decks and notes from the zip under `Current/MGT202` without mixing them with personal notes | Files in the right folders; nothing of classmates' work copied | Complete (ten files with clean names in `Current/MGT202/Lectures`; the `OneDrive_2_06-09-2026` folder is left as it was, because the earlier verification prompt refers to it) |
+| MGT-09 | Vault: rebuild the study guide to cover every topic, with the audit corrections | A new HTML and PDF beside the old guide; the old files untouched | Complete. Regenerate it with `npm run build:study-guide -- --course mgt202 --front docs/guides/mgt202-study-guide-front.md --out "<vault>/Current/MGT202/Claude outputs" --name MGT202_Study_Guide_Topics_1-5_and_7 --pdf` whenever a topic is added (Topic 6 is waiting for lecturer material) |
 | MGT-10 | Update the MGT202 page generator for the removed Exam section | No exam page is generated | Complete |
 
 ## CSI243 notes and practice overhaul
