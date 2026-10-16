@@ -1,0 +1,205 @@
+{
+  "$schema": "../../../quiz.schema.json",
+  "quizzes": {
+    "topic-2-review": {
+      "title": "Topic 2 review quiz",
+      "questions": [
+        {
+          "question": "Which statement best distinguishes ethics from integrity?",
+          "options": [
+            "They mean exactly the same thing.",
+            "Ethics gives principles for right and wrong; integrity is consistently acting on them.",
+            "Integrity is about laws and ethics is about feelings.",
+            "Ethics applies to employees and integrity applies to owners."
+          ],
+          "correctIndex": 1,
+          "explanation": "The notes: ethics helps us understand what we should do; integrity is demonstrated when we consistently act according to those principles.",
+          "group": "Integrity",
+          "level": "foundation"
+        },
+        {
+          "question": "An owner knows falsifying records is wrong but falsifies them under financial pressure. What does this show?",
+          "options": [
+            "The owner lacks ethical knowledge.",
+            "The owner understands the ethics but fails the test of integrity.",
+            "The owner has acted ethically because the business survived.",
+            "Falsifying records is only a legal problem."
+          ],
+          "correctIndex": 1,
+          "explanation": "Knowing the principle (ethics) and acting on it consistently (integrity) are different. Integrity is tested when the right decision is costly.",
+          "group": "Integrity",
+          "level": "developing"
+        },
+        {
+          "question": "In the small factory dilemma, how many jobs are at risk if nothing changes, and how many would retrenching preserve?",
+          "options": [
+            "10 jobs at risk; 5 preserved",
+            "20 jobs at risk; 15 preserved",
+            "20 jobs at risk; 5 preserved",
+            "15 jobs at risk; 10 preserved"
+          ],
+          "correctIndex": 1,
+          "explanation": "All 20 employees may lose their jobs; retrenching 5 would keep the business alive and preserve 15 jobs.",
+          "group": "Ethical reasoning",
+          "level": "foundation"
+        },
+        {
+          "question": "Selling customer data would save jobs but the customers never gave permission. Which lens objects most directly?",
+          "options": [
+            "Outcomes, because jobs would be lost",
+            "Principles and rights, because it violates consent, privacy and trust",
+            "Neither lens applies to data",
+            "Profit, because the data has no value"
+          ],
+          "correctIndex": 1,
+          "explanation": "The outcomes lens may support the sale (it saves jobs), but the principles and rights lens points to privacy, consent and customer trust.",
+          "group": "Ethical reasoning",
+          "level": "developing"
+        },
+        {
+          "question": "Which of these is NOT one of the four factors that push people towards unethical behaviour in the notes?",
+          "options": [
+            "Pressure",
+            "Opportunity",
+            "Justification",
+            "Seniority"
+          ],
+          "correctIndex": 3,
+          "explanation": "The notes give pressure, opportunity, justification and incentives.",
+          "group": "Pressure and misconduct",
+          "level": "foundation"
+        },
+        {
+          "question": "A business receives P10,000 cash and records only P6,000. Which is a likely consequence listed in the class?",
+          "options": [
+            "Better internal controls",
+            "Accurate financial information",
+            "Poor management decisions and loss of trust",
+            "Lower compliance risk"
+          ],
+          "correctIndex": 2,
+          "explanation": "The consequences listed are inaccurate financial information, poor management decisions, weak internal controls, loss of trust and compliance problems.",
+          "group": "Pressure and misconduct",
+          "level": "foundation"
+        },
+        {
+          "question": "Which group does the chapter treat as primary stakeholders?",
+          "options": [
+            "Government, suppliers and communities",
+            "Owners, customers and employees",
+            "Competitors, banks and the media",
+            "Only the owners"
+          ],
+          "correctIndex": 1,
+          "explanation": "Owners, customers and employees interact directly with the business, so they are the primary stakeholders.",
+          "group": "Stakeholders and responsibilities",
+          "level": "foundation"
+        },
+        {
+          "question": "A business delays paying a small supplier for six months without telling it. What is the main ethical concern in the notes?",
+          "options": [
+            "It may simply move financial pressure from one business to another.",
+            "Suppliers do not matter to a business.",
+            "It is always illegal.",
+            "It increases the supplier's profit."
+          ],
+          "correctIndex": 0,
+          "explanation": "Suppliers may themselves be small businesses; delaying payment without communication can transfer the pressure and may harm them.",
+          "group": "Stakeholders and responsibilities",
+          "level": "developing"
+        },
+        {
+          "question": "Which pair correctly describes legal and ethical responsibility?",
+          "options": [
+            "Legal is the minimum standard; ethical goes further than the law.",
+            "Ethical is the minimum standard; legal goes further.",
+            "They are always identical.",
+            "Legal applies to big firms only."
+          ],
+          "correctIndex": 0,
+          "explanation": "Legal responsibility sets a minimum standard of conduct. An action can be legal and still raise ethical concerns.",
+          "group": "Stakeholders and responsibilities",
+          "level": "developing"
+        },
+        {
+          "question": "What do the PRO factors stand for?",
+          "options": [
+            "Profit, Revenue, Output",
+            "Product, Representatives, Organisation",
+            "People, Resources, Operations",
+            "Purpose, Respect, Openness"
+          ],
+          "correctIndex": 1,
+          "explanation": "Product, Representatives and Organisation are the legitimate ways to build confidence instead of using a legitimacy lie.",
+          "group": "Challenges",
+          "level": "foundation"
+        },
+        {
+          "question": "Which is a benefit of integrity in the lecturer's list of eight?",
+          "options": [
+            "Trust",
+            "Reduced employee turnover",
+            "Higher taxes",
+            "Lower quality"
+          ],
+          "correctIndex": 1,
+          "explanation": "Reduced employee turnover is on the list. Trust is the mechanism in the integrity chain, not one of the eight benefits.",
+          "group": "The integrity edge",
+          "level": "developing"
+        },
+        {
+          "question": "Which sequence matches the Class 2 integrity chain?",
+          "options": [
+            "Reputation, trust, integrity, loyalty",
+            "Integrity, trust, stronger relationships, loyalty, reputation, long-term sustainability",
+            "Trust, integrity, sales, profit",
+            "Loyalty, integrity, trust, reputation"
+          ],
+          "correctIndex": 1,
+          "explanation": "Integrity can strengthen trust, relationships, loyalty and reputation, which support long-term sustainability.",
+          "group": "The integrity edge",
+          "level": "foundation"
+        },
+        {
+          "question": "The textbook and the notes list six steps in one cut, and Class 2 slide 28 in another. What is the difference at step 4 and step 5?",
+          "options": [
+            "There is no difference.",
+            "The notes separate \"make the decision\" and \"implement it\"; slide 28 has a separate principles, fairness and rights step and merges make and implement.",
+            "Slide 28 has more than six steps.",
+            "The notes leave out evaluation."
+          ],
+          "correctIndex": 1,
+          "explanation": "Notes and textbook: define, alternatives, evaluate, make, implement, evaluate. Slide 28: define, alternatives, consequences and stakeholders, principles fairness and rights, make and implement, review.",
+          "group": "Deciding well",
+          "level": "exam"
+        },
+        {
+          "question": "Which question belongs to the Class 2 quick ethical test?",
+          "options": [
+            "Would I be comfortable explaining the decision publicly?",
+            "Will this maximise profit?",
+            "Is it the cheapest option?",
+            "Will competitors copy it?"
+          ],
+          "correctIndex": 0,
+          "explanation": "The quick test asks: is it truthful, fair to those affected, would I be comfortable explaining it publicly, will it strengthen or damage relationships, and have I considered alternatives that reduce harm.",
+          "group": "Deciding well",
+          "level": "developing"
+        },
+        {
+          "question": "What are the three parts of the triple bottom line?",
+          "options": [
+            "People, Profit, Planet",
+            "Price, Product, Place",
+            "Plan, Process, Performance",
+            "Purpose, Pride, Patience"
+          ],
+          "correctIndex": 0,
+          "explanation": "People, Profit and Planet. Purpose, Pride and Patience belong to the five principles of an ethical culture.",
+          "group": "Social entrepreneurship",
+          "level": "foundation"
+        }
+      ]
+    }
+  }
+}
