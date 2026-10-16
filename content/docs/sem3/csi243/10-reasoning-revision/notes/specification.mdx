@@ -176,7 +176,7 @@ True
 ghci> containsValue 5 [1,2,3 :: Int]
 False
 ```
-This one is worth pausing on, because it is tempting to write `Prec: none` and stop there — no numeric range or list-emptiness condition restricts `v` or `xs` the way `average`'s precondition restricts its list. But `Eq a =>` is restricting something all the same: not which *values* are acceptable, but which *types* are — the same constraint-first reading [Decoding Exam and Lab Language](/docs/sem3/csi243/decoding-questions) and Chapter 9 both build on. A specification's `Prec` line can state a condition on the type variable itself, not only on the values that variable's arguments happen to take.
+This one is worth pausing on, because it is tempting to write `Prec: none` and stop there — no numeric range or list-emptiness condition restricts `v` or `xs` the way `average`'s precondition restricts its list. But `Eq a =>` is restricting something all the same: not which *values* are acceptable, but which *types* are — the same constraint-first reading [Decoding Exam and Lab Language](/docs/sem3/csi243/01-functional-thinking/review#decoding-the-questions) and Chapter 9 both build on. A specification's `Prec` line can state a condition on the type variable itself, not only on the values that variable's arguments happen to take.
 
 ## 2. Partitioning the input and output
 

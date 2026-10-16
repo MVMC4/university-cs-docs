@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "method": [
+    {
+      "title": "Find the command words and what each one asks for",
+      "text": "Underline every instruction word, such as \"define\", \"explain\" or \"calculate\", and look it up in the table below. Ignore adjectives and scene-setting for now; they matter later, not first."
+    },
+    {
+      "title": "Rewrite the question in one or two short, plain sentences",
+      "text": "If your rewrite is longer than the original, you have only paraphrased it. A good decoding is usually shorter, because formal wording repeats itself. Say what is being asked, of what, and how much."
+    },
+    {
+      "title": "Plan the answer before writing it",
+      "text": "Match the answer to the command word and the marks: how many points, in what order, and what a complete answer must show. Then write."
+    }
+  ],
+  "words": [
+    { "word": "state", "means": "Give the fact or answer, with no explanation.", "answer": "One short sentence or phrase. About one mark." },
+    { "word": "list", "means": "Give several items, with no explanation.", "answer": "The right number of items. One mark each." },
+    { "word": "name", "means": "Give the term for something.", "answer": "The exact term." },
+    { "word": "identify", "means": "Pick out the thing being asked about.", "answer": "Name it, and point to where you found it if there is a case or a program." },
+    { "word": "define", "means": "Give the precise meaning of a term.", "answer": "The term, what it is, and the feature that sets it apart. Use the course's wording." },
+    { "word": "describe", "means": "Say what something is like or how it happens.", "answer": "The main features or the steps in order. Include an example if one helps." },
+    { "word": "outline", "means": "Give the main points briefly.", "answer": "A short list of points, each in a sentence." },
+    { "word": "explain", "means": "Say how or why, not only what.", "answer": "A point, then the reason that connects it to the question. A list of facts is not an explanation." },
+    { "word": "illustrate", "means": "Make the idea clear with an example.", "answer": "A specific example, and a sentence linking it back to the idea." },
+    { "word": "give an example", "means": "Provide one case that fits.", "answer": "A concrete case from the topic, not a general statement." },
+    { "word": "compare", "means": "Say how two or more things are alike and how they differ.", "answer": "Both sides, point by point. A table works well." },
+    { "word": "distinguish", "means": "Say what separates one thing from another.", "answer": "The difference between them, stated for both." },
+    { "word": "calculate", "means": "Work out a number from the data given.", "answer": "The formula, the substitution, the working and the answer with its units." },
+    { "word": "show", "means": "Demonstrate that a result is true.", "answer": "Steps from what you are given to the result, each one justified." },
+    { "word": "trace", "means": "Follow a process step by step and record what happens.", "answer": "A table or list of values after each step, ending with the result." },
+    { "word": "justify", "means": "Give reasons for a decision or answer.", "answer": "The decision, then the evidence or principle that supports it." },
+    { "word": "evaluate", "means": "Weigh strengths and weaknesses and reach a judgement.", "answer": "Points for and against, then a conclusion that follows from them." },
+    { "word": "discuss", "means": "Look at more than one side of an issue.", "answer": "Several viewpoints with reasons, and a short conclusion." },
+    { "word": "apply", "means": "Use an idea on the case in front of you.", "answer": "The idea, then its effect on this specific case. Do not restate theory alone." },
+    { "word": "analyse", "means": "Break something into parts and say how they relate.", "answer": "The parts, what each does, and how they affect the whole." },
+    { "word": "write", "means": "Produce the code, sentence or text asked for.", "answer": "Complete, correct output in the form requested, such as a signature and a body." }
+  ]
+}

@@ -1,0 +1,47 @@
+/* ───────── Decoding the questions ─────────
+   CommandWords (a collapsible reference) and DecodeQuestion (one worked decoding). Class names: ui-decode*. */
+
+.ui-decode {
+  margin: 20px 0;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+}
+.ui-decode > summary {
+  padding: 12px 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ui-decode[open] > summary { border-bottom: 1px solid var(--ui-line-soft); }
+.ui-decode-body { padding: 4px 18px 16px; overflow-x: auto; }
+.ui-decode-body h4 { margin: 18px 0 8px; font-size: 14px; color: var(--ui-text-2); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.ui-decode-body table { font-size: 14px; }
+.ui-decode-body td:first-child { white-space: nowrap; }
+
+.ui-decode-q {
+  margin: 22px 0;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-bg);
+  padding: 14px 18px 16px;
+}
+.ui-decode-q h3 { margin: 0 0 8px !important; font-size: 17px !important; font-weight: 500 !important; }
+.ui-decode-label {
+  display: block;
+  margin: 12px 0 4px;
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.ui-decode-q blockquote {
+  margin: 0;
+  border-left: 3px solid var(--ui-line);
+  padding: 2px 0 2px 14px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.ui-decode-q mark { background: var(--ui-amber-t); color: inherit; border-radius: 3px; padding: 0 3px; font-weight: 500; }
+.ui-decode-plain { margin: 0 !important; font-weight: 500; }
+.ui-decode-answer > :first-child { margin-top: 0; }

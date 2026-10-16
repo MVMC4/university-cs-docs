@@ -1,5 +1,5 @@
 {
-  "$schema": "../../quiz.schema.json",
+  "$schema": "../../../quiz.schema.json",
   "quizzes": {
     "check-decoding-technique": {
       "title": "Check: decoding technique",
@@ -36,28 +36,6 @@
             "Ignoring it silently is exactly the 'guessing without stating' failure mode this example warns against — the grader has no way to tell you understood the issue.",
             "Correct — name the mismatch explicitly and make a deliberate, stated choice; that is what distinguishes a decoded answer from a guessed one.",
             "Editing the question itself is not an available move in an exam or a lab; the task is to decide how to handle the specification as given, not to rewrite it."
-          ]
-        }
-      ]
-    },
-    "check-decoding-a-constrained-signature": {
-      "title": "Check: decoding a constrained signature",
-      "questions": [
-        {
-          "question": "Reading Eq a => [a] -> a -> Bool by the method above, what should you read FIRST?",
-          "options": [
-            "[a], because it's the first thing after the arrow",
-            "Eq a =>, in isolation, before applying the ordinary arrow-by-arrow rule to anything after it",
-            "Bool, because the result is the most important part",
-            "It doesn't matter what order you read the pieces in"
-          ],
-          "correctIndex": 1,
-          "explanation": "The template states this as a fixed first step: the constraint is read as its own sentence — 'for any type a that supports ClassName's operations' — before the ordinary left-to-right arrow rule is applied to the rest of the signature.",
-          "optionFeedback": [
-            "[a] is the first ordinary argument, but it comes after the constraint has already been read and set aside as a precondition on a, not as an argument itself.",
-            "Correct — this is the fixed order: constraint first, in isolation, then the arrows.",
-            "The result type matters, but reading it first without first knowing what a is allowed to be skips necessary context.",
-            "Order matters precisely because => and -> are different kinds of thing — mixing up which is read as a constraint and which as an argument produces a wrong reading of the whole signature."
           ]
         }
       ]

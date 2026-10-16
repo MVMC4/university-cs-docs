@@ -81,7 +81,7 @@ const RETIRED = {
 const GENERATED = new Set(['TopicNotesFlow', 'ChapterReview', 'ChapterQuestions']);
 
 const ASSESSMENT_COMPONENTS = {
-  review: new Set(['FlashcardDeck', 'QuizRef', 'Quiz', 'Callout']),
+  review: new Set(['FlashcardDeck', 'QuizRef', 'Quiz', 'Callout', 'CommandWords', 'DecodeQuestion', 'KeyTerm', 'Steps', 'Step']),
   questions: new Set(['ExamQuestion', 'SubQuestion', 'Callout', 'KeyTerm', 'Steps', 'Step', 'SiteDiagram', 'ComparisonTable', 'FormulaBlock']),
 };
 

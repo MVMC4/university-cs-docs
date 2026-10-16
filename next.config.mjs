@@ -45,6 +45,11 @@ const config = {
         permanent: true,
       },
       {
+        source: '/docs/sem3/csi243/decoding-questions',
+        destination: '/docs/sem3/csi243/01-functional-thinking/review',
+        permanent: true,
+      },
+      {
         source: '/docs/sem3/csi243/01-functional-thinking/programming-model',
         destination: '/docs/sem3/csi243/01-functional-thinking/notes/programming-model',
         permanent: true,

@@ -247,7 +247,7 @@ concat' = foldr (++) []
 foldl :: (b -> a -> b) -> b -> [a] -> b
 ```
 
-In plain English: `foldl` takes the same three things `foldr` does — a combining function, a starting value, and a list — but the combining function's argument order is flipped (`b -> a -> b` instead of `a -> b -> b`), because the accumulated result now sits on the *left* and each new list element arrives on the right, feeding in from the left end of the list instead of the right. See [Decoding Exam and Lab Language](/docs/sem3/csi243/decoding-questions) for the general method behind reading a signature like this piece by piece.
+In plain English: `foldl` takes the same three things `foldr` does — a combining function, a starting value, and a list — but the combining function's argument order is flipped (`b -> a -> b` instead of `a -> b -> b`), because the accumulated result now sits on the *left* and each new list element arrives on the right, feeding in from the left end of the list instead of the right. See [Decoding Exam and Lab Language](/docs/sem3/csi243/01-functional-thinking/review#decoding-the-questions) for the general method behind reading a signature like this piece by piece.
 
 ```text
      1 : (2 : (3 : []))

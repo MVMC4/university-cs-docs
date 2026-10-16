@@ -17,6 +17,7 @@ import { CaseAnalysis, Case } from './math/case-analysis';
 import { Step, StepByStep, StepByStepTitle, StepTitle, Steps } from './interactive/step-by-step';
 import { KeyTerm } from './learning/key-term';
 import { CheckQuestion, CheckQuestions } from './learning/check-questions';
+import { CommandWords, DecodeQuestion } from './learning/decoding';
 import { InteractiveStepper, StepperStep } from './interactive/interactive-stepper';
 import { Flashcard } from './interactive/flashcard';
 import { GraphViewer } from './visuals/graph-viewer';
@@ -90,6 +91,8 @@ export function getMDXComponents(components?: MDXComponents) {
     Steps,
     CheckQuestions,
     CheckQuestion,
+    CommandWords,
+    DecodeQuestion,
     StepByStep,
     Step,
     StepByStepTitle,

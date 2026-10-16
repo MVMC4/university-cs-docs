@@ -146,7 +146,7 @@ ghci> isDiv 8 4
 ghci> isDiv 3 8
 "m should be greater than n"
 ```
-Guard **order** encodes the precondition: `m == n` and `m < n` must be checked *before* `` m `mod` n == 0 `` — not because the question listed them first, but because the divisibility test only makes sense once you already know `m > n`. See the full decode of exactly this question: [Decoding Exam and Lab Language §3](/docs/sem3/csi243/decoding-questions#3-a-precondition-disguised-as-a-side-comment).
+Guard **order** encodes the precondition: `m == n` and `m < n` must be checked *before* `` m `mod` n == 0 `` — not because the question listed them first, but because the divisibility test only makes sense once you already know `m > n`. See the full decode of exactly this question: [Decoding Exam and Lab Language §3](/docs/sem3/csi243/01-functional-thinking/review#decoding-the-questions#3-a-precondition-disguised-as-a-side-comment).
 
 ### `case ... of`
 

@@ -17,3 +17,61 @@ The deck checks recall of the chapter's core distinctions. Every assessment answ
 ## Assessment
 
 <Quiz title="Making Choices Assessment" questions={makingChoicesQuiz} />
+
+## Decoding the questions
+
+Lab and exam questions describe a function in wording that is precise but far denser than the function itself. The gap between "I do not understand this question" and "I do not understand Haskell" is often just that: the English needs decoding before the Haskell can start. Open the reference below, then work through the questions from this chapter.
+
+<CommandWords course="csi243" />
+
+<DecodeQuestion course="csi243" title="A specification that seems to need a case that cannot exist" source="CSI243 lab" question={"The function `isEven` is used to check if an integer is even or not. It returns 'The number is even' if the number is even and returns 'The number is odd' if the number is odd. Otherwise, it should return 'Invalid input'."} plain={"`isEven` takes a whole number and reports which of two things it is. There is also an instruction for a third case, \"otherwise\" — check whether that case can actually happen."}>
+
+This is a genuinely useful trap to recognise, not just decode: for `isEven :: Integer -> String`, **every** `Integer` is either even or odd — there is no third possibility, so the "Invalid input" branch is unreachable dead code for that signature. A lecturer's "otherwise" does not automatically mean a real case exists; it is a defensive habit that sometimes outlives the specification it was written for.
+
+**What to actually do:** state this in your answer rather than silently guessing. Either argue explicitly that the case cannot arise given `Integer -> String` (and omit it, or include a `_ -> error "unreachable"` equation with a comment saying why), or change the signature to one where an invalid case genuinely exists (e.g. taking a `String` that might not parse as a number) and say that is what you did. Guessing silently, either way, loses marks a decoded, stated answer would not.
+
+</DecodeQuestion>
+
+<DecodeQuestion course="csi243" title="A precondition disguised as a side comment" source="CSI243 lab" question={"Create a function `isDiv` that accepts two integers `m` and `n` and determines if `m` is indeed divisible by `n`... The function should only work if `m` is greater than `n`."} plain={"Check divisibility with `mod`. But first, handle the case where `m` is not greater than `n` — separately, with its own message."}>
+
+"Should only work if" is a precondition (Chapter 10's vocabulary for exactly this), and a precondition changes **guard order**, not just guard presence: the `m <= n` case must be checked, and must come *before* the `m `mod` n == 0` guard, or `mod` runs on a pair the specification never intended to reach that check.
+
+```haskell
+isDiv :: Int -> Int -> String
+isDiv m n
+  | m == n          = "m and n are equal"
+  | m < n           = "m should be greater than n"
+  | m `mod` n == 0  = "Yes, m is divisible by n"
+  | otherwise       = "No, m is not divisible by n"
+```
+
+```haskell
+main :: IO ()
+main = do
+  putStrLn (isDiv 8 4)
+  putStrLn (isDiv 8 3)
+  putStrLn (isDiv 3 8)
+  putStrLn (isDiv 4 4)
+```
+```text
+Yes, m is divisible by n
+No, m is not divisible by n
+m should be greater than n
+m and n are equal
+```
+
+Notice the guard order in the code does **not** match the order the four outcomes were listed in the question — the equal and less-than cases had to move to the front, because they are the precondition, and a precondition is always checked first regardless of where in the prose it was mentioned.
+
+</DecodeQuestion>
+
+<DecodeQuestion course="csi243" title="Practice: bothEven" source="practice" question={"`bothEven` is another function that takes two integers and determines if one, both or none are even. If none of the numbers is even, the function should return 0, if only one is even, the function should return 1, if both numbers are even, it should return 2."} plain={"Count how many of the two numbers are even, and use the count (0, 1 or 2) as the result directly, not as a message."}>
+
+This is the "returns" row applied to a number result instead of a string. The temptation is three separate guard branches for the combinations, but the plain decoding suggests a shorter route: `bothEven a b = (if even a then 1 else 0) + (if even b then 1 else 0)`. Compare it with the guard-based version [already worked in Chapter 4](/docs/sem3/csi243/04-making-choices/notes/guards).
+
+</DecodeQuestion>
+
+<DecodeQuestion course="csi243" title="Practice: a case-insensitive isVowel" source="practice" question={"The function must work for both lowercase and uppercase."} plain={"Double the patterns, or normalise the input first, then check."}>
+
+The function cannot just list `'a','e','i','o','u'`: it must also match `'A','E','I','O','U'`, or convert the input first (for example with `toLower` from `Data.Char`) and check against the lowercase five. "Must work for both lowercase and uppercase" is about coverage of cases, not a new capability of `isVowel`.
+
+</DecodeQuestion>

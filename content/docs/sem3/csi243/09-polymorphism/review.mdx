@@ -17,3 +17,54 @@ The deck checks recall of the chapter's core distinctions. Every assessment answ
 ## Assessment
 
 <Quiz title="Polymorphism and Type Classes Assessment" questions={polymorphismQuiz} />
+
+## Decoding the questions
+
+Lab and exam questions describe a function in wording that is precise but far denser than the function itself. The gap between "I do not understand this question" and "I do not understand Haskell" is often just that: the English needs decoding before the Haskell can start. Open the reference below, then work through the questions from this chapter.
+
+<CommandWords course="csi243" />
+
+<QuizRef src="sem3/csi243/09-polymorphism/review" id="check-decoding-a-constrained-signature" />
+
+### Decoding a signature: `Eq a => [a] -> a -> Bool`
+
+Signatures are also written in a dense notation that decodes the same way prose does — one piece at a time, in a fixed order.
+
+**Template for reading any constrained signature:**
+
+```haskell
+ClassName a => RestOfSignature
+--    ^              ^
+--    |              `-- read exactly as any ordinary signature (Chapter 2's -> rule)
+--    `-- read FIRST, in isolation, before anything else
+```
+
+Read `ClassName a =>` as its own sentence: **"for any type `a` that supports `ClassName`'s operations."** Only once that is out of the way do you apply the ordinary left-to-right arrow rule to what remains.
+
+**Applied to `Eq a => [a] -> a -> Bool`, one piece at a time:**
+
+| Piece | Read as |
+|---|---|
+| `Eq a =>` | "For any type `a` that supports `==` and `/=`," |
+| `[a]` | "...takes a list of that type," |
+| `-> a` | "...then one more value of that same type," |
+| `-> Bool` | "...and gives back a `Bool`." |
+
+Chained into one sentence: *"For any type that can be compared for equality, take a list of it and one more value of it, and answer yes or no."* That sentence alone should be enough to recognise this as a **search** — "is this value in this list?" — before reading a single line of implementation.
+
+**Why the constraint is there at all:** the function's body almost certainly uses `==` to compare elements, and `==` is not defined for every possible type (Chapter 9). Any function that uses `==` on a value of type `a` must declare, in its own signature, that `a` is limited to types where `==` exists — otherwise GHC refuses to compile it, with `No instance for (Eq a) arising from a use of '=='`.
+
+**More constraint templates, for when one class is not enough:**
+
+```haskell
+-- Two constraints on the same type variable, as a tuple:
+funcName :: (Eq a, Show a) => a -> a -> String
+
+-- A constraint that already implies another (Ord implies Eq):
+funcName :: Ord a => [a] -> a   -- == is available too; (Eq a, Ord a) => would be redundant
+
+-- Two DIFFERENT type variables, each with its own constraint:
+funcName :: (Eq a, Show b) => a -> b -> String
+```
+
+Full worked version with a real GHC-verified example in both argument orders: [Reading `Eq a => [a] -> a -> Bool`](/docs/sem3/csi243/06-lists-tuples/notes/list-recursion#reading-eq-a--a---a---bool--the-constraint-and-the-argument-order). Every class, what it provides, and one example each: [Chapter 9 Cheat Sheet §4](/docs/sem3/csi243/09-polymorphism/cheat-sheet).
