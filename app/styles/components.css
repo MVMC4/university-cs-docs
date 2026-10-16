@@ -629,32 +629,9 @@ a.ui-card:focus-visible {
 }
 
 /* quiz */
-.ui-quiz-list {
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none !important;
-  counter-reset: ui-quiz;
-}
-
-.ui-quiz-q {
-  margin: 0 !important;
-  border-bottom: 1px solid var(--ui-line-soft);
-  padding: 18px 20px !important;
-  counter-increment: ui-quiz;
-}
-
-.ui-quiz-q:last-child { border-bottom: 0; }
-
-.ui-quiz-q[data-unanswered] { background: var(--ui-amber-t); }
-
 .ui-quiz-prompt {
   margin: 0 0 12px !important;
   font-weight: 500;
-}
-
-.ui-quiz-prompt::before {
-  content: counter(ui-quiz) '. ';
-  color: var(--ui-text-2);
 }
 
 .ui-quiz-code {

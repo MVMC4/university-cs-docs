@@ -64,7 +64,7 @@ Decoding exam and lab language becomes a section of every review page (decision 
 | ID | Work order | Acceptance check | Status |
 |---|---|---|---|
 | QZ-01 | Extend the quiz data with optional `group`, `level`, `steps`, `source` and `id` | The schema, the loader and the audit accept the fields; every existing quiz still passes `npm run audit:quizzes` unchanged | Complete |
-| QZ-02 | A question chooser modelled on the CSI213 cram sheet: groups, levels, which questions, how many, order, and focus or all-questions mode, with a results summary and "retry missed" | Quizzes of six or more questions open with the chooser; smaller ones start directly; answers are remembered per question | Complete |
+| QZ-02 | A small question chooser: topic chips and a "how many" menu, then one question at a time, with a results summary and "retry missed". Simplified on request from the first version, which also filtered by level, answered or missed questions, order and mode | A quiz with more than one group opens with the chooser; others start directly; the quiz has one mode | Complete |
 | QZ-03 | Document the new fields and behaviour | `components/README.md` and the quiz schema describe them | Complete |
 | QZ-04 | Import the CSI213 cram sheet bank (339 questions, 12 parts, three levels, per-option feedback and worked steps) as quiz data | The questions render with their maths in a CSI213 review page; `npm run audit:quizzes` passes | Open |
 | QZ-05 | Show each question's `source` when set, and use past papers as context for review questions | A question inspired by a paper shows its source | In progress: the source is shown when set; no past paper has been added yet (see RES-03) |

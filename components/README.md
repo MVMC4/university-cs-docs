@@ -93,14 +93,14 @@ content/quiz-data/sem3/csi243/01-functional-thinking/review.json
 
 `code` is optional (one array entry per line) and so is `optionFeedback` (one entry per option, in order). Run `npm run audit:quizzes`: it fails on a malformed question, a reference to a missing file or id, and a quiz that no page uses. The `$schema` path depends on how deep the file is.
 
-### Quiz chooser fields
+### Quiz fields
 
-A quiz of six or more questions opens with a chooser (topics, levels, which questions, how many, order, mode); shorter quizzes start straight away. These fields are all optional, so older quizzes keep working:
+The quiz shows one question at a time. When the questions have more than one `group` it first offers topic chips and, past ten questions, a "how many" menu; otherwise it starts straight away. These fields are all optional, so older quizzes keep working:
 
 | Field | Meaning |
 |---|---|
-| `group` | The topic or section the question belongs to. Chips in the chooser, and a breakdown in the results. |
-| `level` | `foundation`, `developing` or `exam` (shown as Exam-style) |
+| `group` | The topic or section the question belongs to. A chip in the chooser, and a bar in the results. |
+| `level` | `foundation`, `developing` or `exam`. A tag in the data only; the quiz does not use it. |
 | `steps` | A short worked solution, one step per entry, shown after answering |
 | `source` | Where the question comes from, for example `"CSI247 2018 paper, Q3"`. Use it when a past paper inspired the question. |
 | `id` | A stable id (lowercase words with hyphens), unique in the quiz. Saved answers and progress follow it, so set one when you might reword the question. Without it, an id is derived from the text. |

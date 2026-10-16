@@ -109,12 +109,12 @@ Retired components keep working: they render through the standard element, so ol
 
 Generated courses (Semesters I and II) render through the same components.
 
-**Quizzes you can tailor.** A quiz with six or more questions opens with a chooser instead of starting at question one. The learner picks the groups (topics or sections) to include, the levels (foundation, developing, exam-style), which questions (all, not yet answered, previously missed), how many, the order, and the mode: one question at a time with a Check button, or the whole set answerable in place. After the last question the quiz shows the score by group and level and offers to retry the missed ones. Smaller quizzes skip the chooser. The design follows the CSI213 cram sheet. Quiz data stays in JSON, and the extra fields are optional so every existing quiz keeps working:
+**Quizzes you can tailor.** A quiz is one question at a time with a Check button, and a score at the end with a bar for each topic and a button to retry the missed questions. A quiz whose questions fall into more than one group first lets the learner pick the topics to practise and, for a long quiz, how many questions. A quiz with one group starts straight away. The chooser is deliberately small: topics and a count, nothing else. Quiz data stays in JSON, and the extra fields are optional so every existing quiz keeps working:
 
 | Field | Meaning |
 |---|---|
-| `group` | The topic or section the question belongs to (for the chooser) |
-| `level` | `foundation`, `developing` or `exam` |
+| `group` | The topic or section the question belongs to (a chip in the chooser, a bar in the results) |
+| `level` | `foundation`, `developing` or `exam`. A tag in the data only; the quiz does not show or filter by it |
 | `steps` | A short worked solution shown after answering |
 | `source` | Where the question comes from, for example a past paper and question number |
 | `id` | A stable question id; if missing, one is derived from the question text |
@@ -180,5 +180,5 @@ Added on 2026-10-16:
 5. **No Exam section.** There are no exam papers to build one from, so Exam pages are removed from every course (75 pages) and redirect to Review. This also removes the question of writing missing exam pages for CSI243, CSI247, CSI323 and CSI213.
 6. **Past papers.** When a paper exists, it is added to Resources and used as context for review questions through each question's `source` field.
 7. **Decoding.** Decoding exam and lab language becomes a section of every review page, not a course-level page. CSI243's `decoding-questions` page is folded into its reviews.
-8. **Quizzes.** Quizzes get a question chooser, modelled on the CSI213 cram sheet.
+8. **Quizzes.** Quizzes let the learner pick topics and how many questions, kept to those two choices so the quiz stays simple.
 9. **Progress.** Streaks, rewards and a dashboard are tracked in the browser, designed for constant updates and backward compatibility.
