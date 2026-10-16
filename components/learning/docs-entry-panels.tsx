@@ -8,7 +8,6 @@ import {
   Command,
   FileQuestion,
   Focus,
-  GraduationCap,
   Layers3,
   Search,
   TimerReset,
@@ -55,19 +54,18 @@ export function DocsWelcome() {
       <div className="welcome-hero-copy">
         <div className="welcome-kicker">University of Botswana Computer Science study system</div>
         <h1 id="welcome-to-university-docs"><span className="welcome-title-line">Learn the course.</span><span className="welcome-title-line welcome-title-muted">Prove you know it.</span></h1>
-        <p>Complete notes, active-recall review, guided questions, difficult mock exams, and original lecture resources—organized into one dependable route from first contact to exam readiness.</p>
+        <p>Complete notes, active-recall review, guided questions, and original lecture resources—organized into one dependable route from first contact to exam readiness.</p>
         <div className="welcome-actions">
           <Link className="welcome-primary" href="/docs/sem1">Browse courses <ArrowRight size={17} /></Link>
           <Link className="welcome-secondary" href="/docs/study-tools"><TimerReset size={17} /> Start a focus block</Link>
         </div>
       </div>
       <div className="welcome-system-card" aria-label="Study flow overview">
-        <div className="system-card-head"><div><span>Study flow</span><strong>One topic. Four stages.</strong></div><Focus size={19} /></div>
+        <div className="system-card-head"><div><span>Study flow</span><strong>One topic. Three stages.</strong></div><Focus size={19} /></div>
         <div className="system-stages">
           <div><span>01</span><BookOpenCheck size={18} /><strong>Notes</strong><small>Build the full model</small></div>
           <div><span>02</span><BrainCircuit size={18} /><strong>Review</strong><small>18 flashcards + quiz</small></div>
-          <div><span>03</span><FileQuestion size={18} /><strong>Questions</strong><small>15 guided problems</small></div>
-          <div><span>04</span><GraduationCap size={18} /><strong>Exam</strong><small>30 advanced problems</small></div>
+          <div><span>03</span><FileQuestion size={18} /><strong>Practice</strong><small>15 guided problems</small></div>
         </div>
       </div>
     </section>

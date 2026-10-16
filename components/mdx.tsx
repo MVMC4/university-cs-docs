@@ -53,7 +53,7 @@ import { TopicNotesFlow } from './learning/topic-notes-flow';
 import { PomodoroTimer, TimerSummary } from './learning/study-tools';
 import { DocsWelcome, StudyWorkspaceHeader } from './learning/docs-entry-panels';
 import { SemesterWorkInProgress } from './learning/semester-status';
-import { ChapterExam, ChapterQuestions, ChapterReview } from './learning/chapter-study-pages';
+import { ChapterQuestions, ChapterReview } from './learning/chapter-study-pages';
 import { CourseChapterIndex } from './learning/course-chapter-index';
 import { LessonIntroduction, LearningObjectives, Prerequisites } from './learning/lesson-introduction';
 import { CommonMistake, ConceptBlock, RecognitionStrategy, TheoremBlock } from './learning/concept-block';
@@ -141,7 +141,6 @@ export function getMDXComponents(components?: MDXComponents) {
     SemesterWorkInProgress,
     ChapterReview,
     ChapterQuestions,
-    ChapterExam,
     CourseChapterIndex,
     LessonIntroduction,
     LearningObjectives,

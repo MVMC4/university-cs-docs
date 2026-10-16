@@ -2,6 +2,8 @@
 
 Written 2026-10-15 at the end of an Opus session, for the next session (Sonnet 5.5) to pick up without re-deriving anything. Read this file, then [docs/content-standard.md](../content-standard.md), which is the authoritative standard.
 
+> **Update 2026-10-16.** The tracked list of work is now [WORK_ORDERS.md](../../WORK_ORDERS.md); read it first. Changes since this handoff was written: the Exam section is removed from every course (so the "missing exam pages" question is closed and `exam.mdx` is no longer a topic page); decoding exam and lab language becomes a section of every review page (so the CSI243 `decoding-questions` extra folds into Review); quizzes get a question chooser; progress, streaks and rewards are tracked in the browser; MGT202 is Small Business Management and is being written topic by topic; lecture slides are listed by year. Where this file mentions an Exam page, ignore it.
+
 ## 1. What the user wants
 
 In their words: "standardise everything start to finish". Every course currently has its own note structure, sidebar shape and assessment format, so the notes read as "random components smashed together".

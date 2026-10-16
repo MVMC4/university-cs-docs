@@ -45,13 +45,6 @@ foreach ($notesFile in $notesFiles) {
       Description = "Guided practice questions with worked answer guidance for $topic."
       Heading = "$topic Questions"
       Component = 'ChapterQuestions'
-    },
-    @{
-      File = 'exam.mdx'
-      Title = 'Exam'
-      Description = "A timed, marked mock examination and marking guidance for $topic."
-      Heading = "$topic Exam"
-      Component = 'ChapterExam'
     }
   )
 
@@ -77,9 +70,9 @@ description: "$($page.Description)"
   $meta = [System.IO.File]::ReadAllText($metaPath) | ConvertFrom-Json
   $orderedMeta = [ordered]@{
     title = $meta.title
-    pages = @('notes', 'review', 'questions', 'exam')
+    pages = @('notes', 'review', 'questions')
   }
   Write-Utf8 $metaPath ($orderedMeta | ConvertTo-Json -Depth 4)
 }
 
-Write-Output "Scaffolded Review, Questions, and Exam pages for $($notesFiles.Count) chapters."
+Write-Output "Scaffolded Review and Questions pages for $($notesFiles.Count) chapters."

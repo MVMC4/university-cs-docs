@@ -1,6 +1,6 @@
 # Content standard
 
-One structure, one page template, one component vocabulary and one assessment format for every course. The structure follows Google's developer documentation (top bar with section tabs, sidebar, "On this page", topic tabs, pager); the visual theme stays the site's paper-and-ink look (cream and navy, Inter and Fraunces, 2px ink frames, hard offset shadows). This extends the chapter shape in [content-architecture.md](content-architecture.md); where the two disagree, this document wins.
+One structure, one page template, one component vocabulary and one assessment format for every course. Updated 2026-10-16: the Exam section is removed, Review gains a Decoding section, quizzes let the learner choose questions, and learning progress is tracked in the browser (sections 2.4 to 2.7). The structure follows Google's developer documentation (top bar with section tabs, sidebar, "On this page", topic tabs, pager); the visual theme stays the site's paper-and-ink look (cream and navy, Inter and Fraunces, 2px ink frames, hard offset shadows). This extends the chapter shape in [content-architecture.md](content-architecture.md); where the two disagree, this document wins.
 
 ## 1. Diagnosis: why the notes feel like components smashed together
 
@@ -56,14 +56,15 @@ semN/<course>/
     index.mdx             Overview: what you'll learn, prerequisites, the pages below
     notes.mdx | notes/    Notes: one page, or a folder of lessons for a large topic
     cheat-sheet.mdx       Cheat sheet (optional)
-    review.mdx            Review: flashcards and a scored quiz
+    review.mdx            Review: flashcards, a quiz you can tailor, and decoding the questions
     questions.mdx         Practice: guided questions with worked solutions
-    exam.mdx              Exam practice: exam-style problems with marks
     resources.mdx         Resources for this topic (optional)
   resources.mdx           Resources for the whole course
 ```
 
-The sidebar and the topic tabs use the same labels everywhere, in this order: Overview, Notes, Cheat sheet, Review, Practice, Exam practice, Resources. Overview, Notes, Review, Practice and Exam practice are required; Cheat sheet and Resources are optional. A topic may leave out an optional page; it may not invent another one. A course folder holds only its overview, its numbered topics and its resources page.
+The sidebar and the topic tabs use the same labels everywhere, in this order: Overview, Notes, Cheat sheet, Review, Practice, Resources. Overview, Notes, Review and Practice are required; Cheat sheet and Resources are optional. A topic may leave out an optional page; it may not invent another one. A course folder holds only its overview, its numbered topics and its resources page; course-level extras such as a playground or a decoding guide move to `/docs/playgrounds` and into Review.
+
+There is no Exam page. The site has no exam papers to build one from, and a mock exam written without a paper would be invented. When a course does have a past paper, it is used as context for review questions and listed in Resources (section 2.4). `exam.mdx` and `exam-practice.mdx` redirect to Review.
 
 ### 2.2 Notes page template
 
@@ -100,23 +101,55 @@ Retired components keep working: they render through the standard element, so ol
 | Kind | Where | Component | Data |
 |---|---|---|---|
 | Check your understanding | End of each notes page | `CheckQuestions` (expand to reveal, not scored) | in the MDX, three to five items |
-| Review | `review.mdx` | `FlashcardDeck` then `QuizRef` | `content/flashcard-data`, `content/quiz-data` |
+| Review: recall | `review.mdx` | `FlashcardDeck`, then `QuizRef` | `content/flashcard-data`, `content/quiz-data` |
+| Review: decoding | `review.mdx`, a `## Decoding the questions` section | `CommandWords`, `DecodeQuestion` | `content/decoding/*.json` |
 | Practice | `questions.mdx` | `ExamQuestion` / `SubQuestion` with worked solutions | in the MDX |
-| Exam practice | `exam.mdx` | `ExamQuestion` / `SubQuestion` with marks | in the MDX |
 
-Generated courses (Semesters I and II) render through the same four components.
+Generated courses (Semesters I and II) render through the same components.
+
+**Quizzes you can tailor.** A quiz with six or more questions opens with a chooser instead of starting at question one. The learner picks the groups (topics or sections) to include, the levels (foundation, developing, exam-style), which questions (all, not yet answered, previously missed), how many, the order, and the mode: one question at a time with a Check button, or the whole set answerable in place. After the last question the quiz shows the score by group and level and offers to retry the missed ones. Smaller quizzes skip the chooser. The design follows the CSI213 cram sheet. Quiz data stays in JSON, and the extra fields are optional so every existing quiz keeps working:
+
+| Field | Meaning |
+|---|---|
+| `group` | The topic or section the question belongs to (for the chooser) |
+| `level` | `foundation`, `developing` or `exam` |
+| `steps` | A short worked solution shown after answering |
+| `source` | Where the question comes from, for example a past paper and question number |
+| `id` | A stable question id; if missing, one is derived from the question text |
+
+**Decoding the questions.** The `## Decoding the questions` section of a review page teaches how to read a question before answering it. It has the three-step method, a collapsible table of command words (define, explain, compare, calculate and so on) that says what each one asks for, and worked decodings of real questions from that topic: the question as written, the plain-English rewrite, and how to answer. The generic command words are shared by every course. A course can add its own dictionary, as CSI243 does for Haskell, in `content/decoding/<course>.json`.
+
+**Past papers.** When a course has a past paper, add it to the course's Resources page and use it when writing review questions: set `source` on each question it inspired. No page presents a paper as a mock exam.
 
 ### 2.5 Enforcement
 
 `npm run audit:content-standard` reports every course against this standard (`--verbose` lists each finding, `--course <code>` narrows it to one course, `--json` is for tools, `--strict` exits 1 on any finding). It flags:
 
-- a topic folder contains a page outside the list in 2.1, or lists them out of order;
+- a topic folder contains a page outside the list in 2.1, or lists them out of order; an `exam` or `exam-practice` page is an error;
 - a notes page has no description, repeats its title as a heading, or uses a retired component;
 - a notes page has quiz components before its last section;
 - a review, practice or exam page uses a component other than the one in 2.4;
 - a page built by a generator or by the MAT221 source site (counted separately, fixed in phase 4).
 
-Baseline on 2026-10-15: 0 of 16 courses meet the standard, 1,184 findings. It joins `npm run audit:content` with `--strict` once every course passes.
+Baseline on 2026-10-15: 0 of 16 courses met the standard, 1,184 findings. After the Exam section was removed on 2026-10-16: 1 of 16 (MGT202), 1,030 findings. It joins `npm run audit:content` with `--strict` once every course passes.
+
+### 2.6 Progress, streaks and rewards
+
+Learning progress is tracked in the reader's browser, with no account and no backend, because the content is free. The design is in [plans/progress-system.md](plans/progress-system.md). In short:
+
+- A streak counts the days on which the reader did something that counts: read a page, answered a quiz question, flipped a flashcard, opened a check question.
+- Experience points and badges reward the same actions. The rules live in `content/progress/rewards.json`, so a badge or a level can be added without changing code.
+- A dashboard at `/docs/dashboard` shows the streak, level, badges, and progress through every course.
+- State is stored in `localStorage` with a small summary in a first-party cookie. It is versioned and migrated, so a change to the format or to the content never loses a reader's history. The reader can export, import and reset it, or switch tracking off.
+
+### 2.7 Designing for constant updates
+
+Content changes every week, so everything that records history follows these rules:
+
+- Identifiers are stable. A page is keyed by its path, a quiz question by its `id` (or a hash of its text), a badge by its `id`. Renamed pages are listed in `content/progress/aliases.json` so earlier progress follows them.
+- Storage is versioned. Each change to the stored shape adds a migration; nothing reads a field that an older version might lack without a default.
+- Rules are data. XP values, levels and badges are JSON, with a version number, and unknown rule types are ignored rather than failing.
+- Removing content never removes earned rewards.
 
 ## 3. Migration plan
 
@@ -138,3 +171,11 @@ Agreed on 2026-10-15:
 2. **MAT221.** Rebuilt on the standard template, sidebar shape and assessment components; the embedded source site is retired once its content has moved.
 3. **CSI247 and CSI243.** The ownership notes in `WORK_ORDERS.md` are out of date; this work may change both courses.
 4. **Renamed pages.** Every renamed or moved page gets a permanent redirect from its old URL.
+
+Added on 2026-10-16:
+
+5. **No Exam section.** There are no exam papers to build one from, so Exam pages are removed from every course (75 pages) and redirect to Review. This also removes the question of writing missing exam pages for CSI243, CSI247, CSI323 and CSI213.
+6. **Past papers.** When a paper exists, it is added to Resources and used as context for review questions through each question's `source` field.
+7. **Decoding.** Decoding exam and lab language becomes a section of every review page, not a course-level page. CSI243's `decoding-questions` page is folded into its reviews.
+8. **Quizzes.** Quizzes get a question chooser, modelled on the CSI213 cram sheet.
+9. **Progress.** Streaks, rewards and a dashboard are tracked in the browser, designed for constant updates and backward compatibility.

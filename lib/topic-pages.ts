@@ -9,13 +9,11 @@ export const topicStages = [
   { slug: 'cheat-sheet', label: 'Cheat sheet' },
   { slug: 'review', label: 'Review' },
   { slug: 'questions', label: 'Practice' },
-  { slug: 'exam', label: 'Exam practice' },
   { slug: 'resources', label: 'Resources' },
 ] as const;
 
 /** Old slugs that still exist until their course is migrated; they share a label with the standard page. */
 const legacyStageLabels: Record<string, string> = {
-  'exam-practice': 'Exam practice',
   quiz: 'Quiz',
 };
 

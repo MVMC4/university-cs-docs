@@ -27,8 +27,10 @@ const courseFilter = args.includes('--course') ? args[args.indexOf('--course') +
 /* ───────── the standard ───────── */
 
 // Topic pages in their required order. Optional pages may be absent.
-const TOPIC_PAGES = ['index', 'notes', 'cheat-sheet', 'review', 'questions', 'exam', 'resources'];
-const REQUIRED_TOPIC_PAGES = ['index', 'notes', 'review', 'questions', 'exam'];
+const TOPIC_PAGES = ['index', 'notes', 'cheat-sheet', 'review', 'questions', 'resources'];
+const REQUIRED_TOPIC_PAGES = ['index', 'notes', 'review', 'questions'];
+// The Exam section was removed (no exam papers are available). These page names must not come back.
+const REMOVED_TOPIC_PAGES = ['exam', 'exam-practice'];
 const COURSE_PAGES = ['index', 'resources'];
 const TOPIC_FOLDER = /^\d{2}-[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -76,12 +78,11 @@ const RETIRED = {
 };
 
 // Generated pages are fixed in their generators (phase 4 of the plan).
-const GENERATED = new Set(['TopicNotesFlow', 'ChapterReview', 'ChapterQuestions', 'ChapterExam']);
+const GENERATED = new Set(['TopicNotesFlow', 'ChapterReview', 'ChapterQuestions']);
 
 const ASSESSMENT_COMPONENTS = {
   review: new Set(['FlashcardDeck', 'QuizRef', 'Quiz', 'Callout']),
   questions: new Set(['ExamQuestion', 'SubQuestion', 'Callout', 'KeyTerm', 'Steps', 'Step', 'SiteDiagram', 'ComparisonTable', 'FormulaBlock']),
-  exam: new Set(['ExamQuestion', 'SubQuestion', 'Callout', 'KeyTerm', 'Steps', 'Step', 'SiteDiagram', 'ComparisonTable', 'FormulaBlock']),
 };
 
 // MDX components that exist: the global registry plus the MAT221 page overrides.
@@ -93,7 +94,7 @@ const MAT221_SOURCE = new Set(['LessonIntro', 'Concept', 'Theorem', 'CheckpointQ
 for (const name of [...MAT221_SOURCE, 'Accordion', 'Accordions', 'Callout', 'Tabs', 'Tab']) REGISTERED.add(name);
 const isMat221Source = (name) => MAT221_SOURCE.has(name) || name.startsWith('Mat221');
 
-const GENERIC_TITLES = new Set(['notes', 'review', 'questions', 'exam', 'exam practice', 'quiz', 'practice']);
+const GENERIC_TITLES = new Set(['notes', 'review', 'questions', 'quiz', 'practice']);
 
 /* ───────── helpers ───────── */
 
@@ -175,7 +176,11 @@ function auditTopic(course, directory) {
   }
   const known = pages.filter((page) => TOPIC_PAGES.includes(page.replace(/\.mdx$/, '')));
   for (const page of pages) {
-    if (!TOPIC_PAGES.includes(page)) add(course, 'topic-extra-page', where, `"${page}" is not a standard topic page`);
+    if (REMOVED_TOPIC_PAGES.includes(page)) add(course, 'topic-extra-page', where, `"${page}": the Exam section was removed`);
+    else if (!TOPIC_PAGES.includes(page)) add(course, 'topic-extra-page', where, `"${page}" is not a standard topic page`);
+  }
+  for (const page of REMOVED_TOPIC_PAGES) {
+    if (fs.existsSync(path.join(directory, `${page}.mdx`))) add(course, 'topic-extra-page', where, `${page}.mdx exists, but the Exam section was removed`);
   }
   for (const page of REQUIRED_TOPIC_PAGES) {
     if (!pages.includes(page)) add(course, 'topic-missing-page', where, `missing ${page}`);
@@ -193,9 +198,9 @@ function auditTopic(course, directory) {
   // Non-standard pages that hold teaching content are audited as notes too.
   for (const page of pages) {
     const file = path.join(directory, `${page}.mdx`);
-    if (!TOPIC_PAGES.includes(page) && fs.existsSync(file)) auditNotesPage(course, file);
+    if (!TOPIC_PAGES.includes(page) && !REMOVED_TOPIC_PAGES.includes(page) && fs.existsSync(file)) auditNotesPage(course, file);
   }
-  for (const [page, kind] of [['review', 'review'], ['questions', 'questions'], ['exam', 'exam']]) {
+  for (const [page, kind] of [['review', 'review'], ['questions', 'questions']]) {
     const file = path.join(directory, `${page}.mdx`);
     if (fs.existsSync(file)) auditAssessmentPage(course, file, kind);
   }
