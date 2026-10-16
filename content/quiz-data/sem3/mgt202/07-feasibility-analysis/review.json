@@ -1,0 +1,348 @@
+{
+  "$schema": "../../../quiz.schema.json",
+  "quizzes": {
+    "topic-7-review": {
+      "title": "Topic 7 review quiz",
+      "questions": [
+        {
+          "question": "Which of these is NOT one of the four areas of a feasibility analysis?",
+          "options": [
+            "Product or service",
+            "Advertising",
+            "Organizational",
+            "Financial"
+          ],
+          "correctIndex": 1,
+          "explanation": "The four areas are product or service, industry and target market, organizational and financial feasibility.",
+          "group": "Feasibility basics",
+          "level": "foundation"
+        },
+        {
+          "question": "When should feasibility analysis be done?",
+          "options": [
+            "After signing a long lease",
+            "Only once the business is already profitable",
+            "Early, before substantial commitments such as specialised equipment, a long lease or a full team",
+            "Only when applying for a loan"
+          ],
+          "correctIndex": 2,
+          "explanation": "Do it early, then revisit it as the concept develops and new evidence arrives.",
+          "group": "Feasibility basics",
+          "level": "foundation"
+        },
+        {
+          "question": "A dated supplier quotation, a claim that customers will buy weekly and a monthly sales estimate are best described as...",
+          "options": [
+            "Fact, assumption and forecast",
+            "Forecast, fact and assumption",
+            "Assumption, forecast and fact",
+            "Fact, forecast and assumption"
+          ],
+          "correctIndex": 0,
+          "explanation": "The quotation is evidence of an offered price (a fact, though its terms may expire). The weekly claim is an assumption until investigated. The monthly estimate is a forecast built from assumptions and evidence.",
+          "group": "Feasibility basics",
+          "level": "developing"
+        },
+        {
+          "question": "Which set lists the three possible recommendations at the end of a feasibility analysis?",
+          "options": [
+            "Buy, sell or hold",
+            "Launch now, wait a year or borrow",
+            "Franchise, buy or sell",
+            "Proceed to further development, revise and retest, or discontinue"
+          ],
+          "correctIndex": 3,
+          "explanation": "The recommendation is to proceed, to revise and retest, or to discontinue, with reasons.",
+          "group": "Feasibility basics",
+          "level": "developing"
+        },
+        {
+          "question": "Why can a decision to stop an idea be a good outcome of a feasibility analysis?",
+          "options": [
+            "It proves the entrepreneur failed",
+            "It avoids spending money and time on an unsuitable idea",
+            "It guarantees a better idea next time",
+            "It removes the need for any research"
+          ],
+          "correctIndex": 1,
+          "explanation": "Better use of money and time is one reason to analyse feasibility. Stopping an unsuitable idea is a sound entrepreneurial decision.",
+          "group": "Feasibility basics",
+          "level": "developing"
+        },
+        {
+          "question": "What does product or service desirability ask?",
+          "options": [
+            "Whether intended customers recognise a worthwhile benefit",
+            "Whether the price is below competitors",
+            "Whether the founder likes the idea",
+            "How many outlets are needed"
+          ],
+          "correctIndex": 0,
+          "explanation": "Desirability is the appeal and usefulness of the offering. Demand is a separate question about buying.",
+          "group": "Product or service",
+          "level": "foundation"
+        },
+        {
+          "question": "Product or service demand is concerned with...",
+          "options": [
+            "The founder's passion for the idea",
+            "How attractive the logo is",
+            "The size of the industry in the whole country",
+            "The willingness and ability of customers to buy under stated conditions"
+          ],
+          "correctIndex": 3,
+          "explanation": "Demand is the willingness and ability to buy at a stated price, frequency and channel.",
+          "group": "Product or service",
+          "level": "foundation"
+        },
+        {
+          "question": "Which of these is a benefit rather than a feature?",
+          "options": [
+            "WhatsApp ordering",
+            "A booking form",
+            "Arranging collection without travelling to a shop",
+            "A partner laundry"
+          ],
+          "correctIndex": 2,
+          "explanation": "A benefit is what the customer gains. WhatsApp ordering is a feature; being able to arrange collection without travelling is the possible benefit.",
+          "group": "Product or service",
+          "level": "developing"
+        },
+        {
+          "question": "Why is a buying-intentions survey limited evidence of future sales?",
+          "options": [
+            "It is always illegal",
+            "Respondents may overstate what they will actually do",
+            "It only measures prices",
+            "It cannot ask about price"
+          ],
+          "correctIndex": 1,
+          "explanation": "Stated likelihood is not purchase. People may be polite, unable to pay or unrepresentative.",
+          "group": "Product or service",
+          "level": "developing"
+        },
+        {
+          "question": "Twenty acquaintances answer a survey: twelve like the idea and eight would consider paying P60. What follows?",
+          "options": [
+            "Some initial appeal and stated intention, but not regular demand or a purchase rate for all students",
+            "Eight regular customers are guaranteed",
+            "Forty percent of all UB students will buy",
+            "The idea has failed"
+          ],
+          "correctIndex": 0,
+          "explanation": "Eight of twenty is 40% of this small sample, but \"would consider paying\" does not say when or how often, and the sample may not represent the market. A paid trial is the next step.",
+          "group": "Product or service",
+          "level": "developing"
+        },
+        {
+          "question": "What is a target market?",
+          "options": [
+            "Every business in the sector",
+            "The sector in which the venture competes",
+            "The venture's suppliers",
+            "The particular group of customers the venture chooses to serve"
+          ],
+          "correctIndex": 3,
+          "explanation": "An industry is the wider group of businesses; the target market is the chosen group of customers.",
+          "group": "Industry and market",
+          "level": "foundation"
+        },
+        {
+          "question": "Which is a substitute for a laundry collection service?",
+          "options": [
+            "A competing laundry that collects clothes",
+            "Washing clothes at home",
+            "A cheaper detergent supplier",
+            "A second collection service from the same founder"
+          ],
+          "correctIndex": 1,
+          "explanation": "A substitute meets the same need in a different way. A competing collection laundry is a direct rival.",
+          "group": "Industry and market",
+          "level": "developing"
+        },
+        {
+          "question": "A founder finds 300 suitable students. If 10% buy and each buyer places two orders a month, how many orders a month are forecast?",
+          "options": [
+            "20",
+            "30",
+            "60",
+            "600"
+          ],
+          "correctIndex": 2,
+          "explanation": "300 x 10% = 30 customers, and 30 x 2 = 60 orders. The rate and frequency are assumptions that still need evidence.",
+          "group": "Industry and market",
+          "level": "developing"
+        },
+        {
+          "question": "The venture needs 100 orders a month but the market forecast is 60. What is the right response?",
+          "options": [
+            "Investigate the segment, test acquisition and repeat use, or revise the operating model",
+            "Raise the assumed purchase rate until the forecast reaches 100",
+            "Ignore the forecast",
+            "Open in a larger area without research"
+          ],
+          "correctIndex": 0,
+          "explanation": "Raising an assumption just to reach break-even is poor analysis. Find evidence or change the model.",
+          "group": "Industry and market",
+          "level": "exam"
+        },
+        {
+          "question": "What are the two primary issues in organizational feasibility?",
+          "options": [
+            "Price and promotion",
+            "Product and place",
+            "Management prowess and resource sufficiency",
+            "Desirability and demand"
+          ],
+          "correctIndex": 2,
+          "explanation": "Management prowess is the people's ability; resource sufficiency is access to the resources needed to deliver.",
+          "group": "Organizational",
+          "level": "foundation"
+        },
+        {
+          "question": "A founder has strong management skills but fails the resource sufficiency check. What is the likely reason?",
+          "options": [
+            "The founder lacks passion",
+            "Management skills do not matter",
+            "The market is too large",
+            "Essential resources such as transport, premises or partner capacity are not confirmed"
+          ],
+          "correctIndex": 3,
+          "explanation": "Skills concern the people. Sufficiency concerns access to resources, which skills cannot replace.",
+          "group": "Organizational",
+          "level": "developing"
+        },
+        {
+          "question": "Which gives more assurance that a resource will be available?",
+          "options": [
+            "A documented arrangement with clear capacity and service terms",
+            "An unconfirmed verbal promise",
+            "The founder's confidence",
+            "A competitor's advert"
+          ],
+          "correctIndex": 0,
+          "explanation": "A documented arrangement with clear capacity and terms gives more assurance than a verbal promise.",
+          "group": "Organizational",
+          "level": "developing"
+        },
+        {
+          "question": "The price is P60 and the variable cost is P40 per order. What is the contribution per order?",
+          "options": [
+            "P20",
+            "P40",
+            "P60",
+            "P100"
+          ],
+          "correctIndex": 0,
+          "explanation": "Contribution is price less variable cost per unit: P60 - P40 = P20.",
+          "group": "Financial calculations",
+          "level": "foundation"
+        },
+        {
+          "question": "Fixed monthly costs are P2,000 and the contribution is P20 per order. What is the operating break-even volume?",
+          "options": [
+            "50 orders",
+            "100 orders",
+            "200 orders",
+            "2,000 orders"
+          ],
+          "correctIndex": 1,
+          "explanation": "Fixed costs divided by contribution: P2,000 divided by P20 = 100 orders. At P60 an order that is P6,000 of sales.",
+          "group": "Financial calculations",
+          "level": "developing"
+        },
+        {
+          "question": "With a price of P60, a variable cost of P40 and fixed costs of P2,000, what is the operating result at 80 orders?",
+          "options": [
+            "P1,600 loss",
+            "P400 surplus",
+            "P400 loss",
+            "P0"
+          ],
+          "correctIndex": 2,
+          "explanation": "Contribution is 80 x P20 = P1,600. P1,600 - P2,000 = a P400 loss.",
+          "group": "Financial calculations",
+          "level": "developing"
+        },
+        {
+          "question": "The price falls to P55, the variable cost stays at P40 and fixed costs at P2,000. What is the break-even volume in whole orders?",
+          "options": [
+            "100 orders",
+            "125 orders",
+            "133 orders",
+            "134 orders"
+          ],
+          "correctIndex": 3,
+          "explanation": "Contribution is P15. P2,000 divided by P15 = 133.33, which rounds up to 134 whole orders.",
+          "group": "Financial calculations",
+          "level": "exam"
+        },
+        {
+          "question": "Fixed costs rise to P2,500 while the contribution stays at P20. What is the break-even volume?",
+          "options": [
+            "100 orders",
+            "125 orders",
+            "134 orders",
+            "150 orders"
+          ],
+          "correctIndex": 1,
+          "explanation": "P2,500 divided by P20 = 125 orders.",
+          "group": "Financial calculations",
+          "level": "exam"
+        },
+        {
+          "question": "Setup costs are P3,000, the opening buffer is P2,000 and available savings are P5,000. What does this show?",
+          "options": [
+            "The venture is certainly fully funded",
+            "The buffer is not needed",
+            "The savings match the estimate, but sufficiency still has to be tested against payment timing and lower sales",
+            "The savings are P3,000 short"
+          ],
+          "correctIndex": 2,
+          "explanation": "P3,000 + P2,000 = P5,000, so the difference is P0. The figures match, but a missing cost, a dearer partner or slower receipts could still cause a shortfall.",
+          "group": "Cash, templates and the case",
+          "level": "developing"
+        },
+        {
+          "question": "In a month with 120 orders, revenue is P7,200 and operating payments total P6,800, but only P3,600 is collected. What is the operating cash movement?",
+          "options": [
+            "A P400 surplus",
+            "Negative P3,200",
+            "Negative P400",
+            "A P3,600 surplus"
+          ],
+          "correctIndex": 1,
+          "explanation": "The operating surplus is P7,200 - P6,800 = P400, but cash is P3,600 - P6,800 = negative P3,200. The other P3,600 is still owed by customers.",
+          "group": "Cash, templates and the case",
+          "level": "exam"
+        },
+        {
+          "question": "In a feasibility template, what does \"insufficient evidence\" mean?",
+          "options": [
+            "The business will fail",
+            "The idea is illegal",
+            "The founder should stop at once",
+            "The question is still unanswered, which is not proof that the business will fail"
+          ],
+          "correctIndex": 3,
+          "explanation": "It separates unknowns from unfavourable findings. The next action is the research or test that would answer the question.",
+          "group": "Cash, templates and the case",
+          "level": "developing"
+        },
+        {
+          "question": "What preliminary recommendation does the Campus Laundry Collect case support?",
+          "options": [
+            "Revise and retest",
+            "Proceed and sign a long lease",
+            "Discontinue immediately",
+            "Expand to the whole city"
+          ],
+          "correctIndex": 0,
+          "explanation": "Paid demand is untested, delivery resources are unconfirmed and the 80-order forecast is below the 100-order break-even.",
+          "group": "Cash, templates and the case",
+          "level": "developing"
+        }
+      ]
+    }
+  }
+}

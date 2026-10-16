@@ -116,7 +116,7 @@ MGT202 is Small Business Management (it was labelled "Management"). Topic number
 | MGT-04 | Topic 3: Starting a Small Business (the group-activity framework: 4U, minimum viable segment, evidence, problem statement, BLAC, white space; textbook concepts marked) | Same pages | Complete |
 | MGT-05 | Topic 4: Franchising and Buying an Existing Business (deck, notes and the Two Men and a Truck case) | Same pages; the worked royalty calculation checks | Complete |
 | MGT-06 | Topic 5: The Family Business (notes and class presentation) | Same pages; where the student notes, slides and textbook differ, the notes say so | Complete |
-| MGT-07 | Topic 7: Feasibility Analysis (student notes, including the laundry case calculations) | Same pages; every figure recomputed | Open |
+| MGT-07 | Topic 7: Feasibility Analysis (student notes, including the laundry case calculations) | Same pages; every figure recomputed | Complete |
 | MGT-08 | Vault: file the lecturer's decks and notes from the zip under `Current/MGT202` without mixing them with personal notes | Files in the right folders; nothing of classmates' work copied | Open |
 | MGT-09 | Vault: rebuild the study guide to cover every topic, with the audit corrections | A new HTML and PDF beside the old guide; the old files untouched | Open |
 | MGT-10 | Update the MGT202 page generator for the removed Exam section | No exam page is generated | Complete |
