@@ -112,8 +112,8 @@ MGT202 is Small Business Management (it was labelled "Management"). Topic number
 |---|---|---|---|
 | MGT-01 | Rename the course and rewrite its overview | Sidebar, overview and Semester III page say Small Business Management | Complete |
 | MGT-02 | Topic 1: The Entrepreneurial Life | Overview, Notes, Review and Practice pages; zero audit findings | Complete |
-| MGT-03 | Topic 2: Integrity and Ethics (Class 2 deck and Chapter 2 student notes) | Same pages; both six-step processes and the eight benefits as the sources give them | Open |
-| MGT-04 | Topic 3: Starting a Small Business (the group-activity framework: 4U, minimum viable segment, evidence, problem statement, BLAC, white space; textbook concepts marked) | Same pages | Open |
+| MGT-03 | Topic 2: Integrity and Ethics (Class 2 deck and Chapter 2 student notes) | Same pages; both six-step processes and the eight benefits as the sources give them | Complete |
+| MGT-04 | Topic 3: Starting a Small Business (the group-activity framework: 4U, minimum viable segment, evidence, problem statement, BLAC, white space; textbook concepts marked) | Same pages | Complete |
 | MGT-05 | Topic 4: Franchising and Buying an Existing Business (deck, notes and the Two Men and a Truck case) | Same pages; the worked royalty calculation checks | Open |
 | MGT-06 | Topic 5: The Family Business (notes and class presentation) | Same pages | Open |
 | MGT-07 | Topic 7: Feasibility Analysis (student notes, including the laundry case calculations) | Same pages; every figure recomputed | Open |
@@ -161,6 +161,7 @@ Follow the [CSI247 notes guide](docs/guides/csi247-notes-guide.md), which descri
 | CSI247-04 | Upgrade practice questions, flashcards and quizzes | Questions show marks and model answers, flashcards test distinctions rather than definitions, and quizzes have per-option feedback and scenario questions with verified code | Open |
 | CSI247-05 | Refresh resources pages | Each topic links authoritative references (Java Language Specification, official tutorials, API documentation) with a one-line description of what each is good for | Open |
 | CSI247-06 | Verify the course end to end | `npm run check` passes, every internal link resolves, every page is in a `meta.json`, and no duplicate or hidden legacy page remains live | Open |
+| CSI247-07 | Restore the Excalidraw visual study maps on the topic Overview pages | Each topic that has a canvas file embeds it under `## Visual study map` (java-fundamentals, recursion, time-complexity, sorting-and-searching, collections, linked-lists-traversals, stacks-and-queues, hash-tables, trees, graphs); canvases of 3 MB or more load on a click; `linear-structures` points at real files; the audit fails on a missing canvas file. Still without a canvas: packages, object-oriented-programming, generics | Complete |
 
 ## Notes
 

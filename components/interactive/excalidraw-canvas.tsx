@@ -24,16 +24,25 @@ import '@excalidraw/excalidraw/index.css';
 
 type Status = 'idle' | 'downloading' | 'parsing' | 'error' | 'ready';
 
+// Canvases at or above this size wait for a click instead of loading as the reader scrolls past, so nobody on mobile
+// data is sent 20 MB by accident. Smaller ones still load as they come into view.
+const LOAD_ON_REQUEST_MB = 3;
+
 // 🛠️ FIX: Added expectedMB prop to bypass Vercel CDN compression math
 export function ExcalidrawCanvas({ src, title, expectedMB }: { src: string; title: string; expectedMB?: number }) {
+  const loadOnRequest = (expectedMB ?? 0) >= LOAD_ON_REQUEST_MB;
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
   const { resolvedTheme } = useTheme();
-  
+  // The server cannot know the reader's theme, so use it only after mount; otherwise the header icon differs between
+  // the server HTML and the first client render in dark mode.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const [localTheme, setLocalTheme] = useState<'light' | 'dark' | null>(null);
-  const excalidrawTheme = localTheme || (resolvedTheme === 'dark' ? 'dark' : 'light');
+  const excalidrawTheme = localTheme || (mounted && resolvedTheme === 'dark' ? 'dark' : 'light');
   
   const [progress, setProgress] = useState(0);
   const [loadedBytes, setLoadedBytes] = useState(0);
@@ -47,7 +56,7 @@ export function ExcalidrawCanvas({ src, title, expectedMB }: { src: string; titl
 
   useEffect(() => {
     const node = containerRef.current;
-    if (!node) return;
+    if (!node || loadOnRequest) return;
 
     const triggerLoad = () => setStatus((prev) => (prev === 'idle' ? 'downloading' : prev));
     const rect = node.getBoundingClientRect();
@@ -62,7 +71,7 @@ export function ExcalidrawCanvas({ src, title, expectedMB }: { src: string; titl
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [loadOnRequest]);
 
   useEffect(() => {
     if (status === 'downloading') {
@@ -230,11 +239,22 @@ export function ExcalidrawCanvas({ src, title, expectedMB }: { src: string; titl
       <div ref={containerRef} className={wrapperClass}>
         {Header}
         <div className={isFullscreen ? "flex-1 w-full relative" : "h-[600px] w-full relative"}>
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-fd-muted/20 animate-pulse">
-            <Map className="h-12 w-12 text-fd-muted-foreground mb-3" />
-            <p className="text-sm font-medium text-fd-muted-foreground">Interactive Canvas</p>
-            <p className="text-xs text-fd-muted-foreground mt-1">Scroll to load diagram...</p>
-          </div>
+          {loadOnRequest ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-fd-muted/20 p-6 text-center">
+              <Map className="h-12 w-12 text-fd-muted-foreground" />
+              <p className="text-sm font-medium text-fd-foreground">Interactive canvas</p>
+              <button type="button" className="ui-btn ui-btn-primary" onClick={() => setStatus('downloading')}>
+                <Download className="h-4 w-4" aria-hidden="true" /> Load the map ({expectedMB?.toFixed(1)} MB)
+              </button>
+              <p className="text-xs text-fd-muted-foreground">Large file, so it loads only when you ask.</p>
+            </div>
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-fd-muted/20 animate-pulse">
+              <Map className="h-12 w-12 text-fd-muted-foreground mb-3" />
+              <p className="text-sm font-medium text-fd-muted-foreground">Interactive Canvas</p>
+              <p className="text-xs text-fd-muted-foreground mt-1">Scroll to load diagram...</p>
+            </div>
+          )}
         </div>
       </div>
     );

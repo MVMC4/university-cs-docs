@@ -53,7 +53,7 @@ Measured on 2026-10-15 across `content/docs`.
 semN/<course>/
   index.mdx               Overview: what the course covers, topic cards, how it is assessed
   01-<topic>/             Numbered folder; meta.json title "1. Topic name"
-    index.mdx             Overview: what you'll learn, prerequisites, the pages below
+    index.mdx             Overview: what you'll learn, prerequisites, the pages below, an optional visual study map
     notes.mdx | notes/    Notes: one page, or a folder of lessons for a large topic
     cheat-sheet.mdx       Cheat sheet (optional)
     review.mdx            Review: flashcards, a quiz you can tailor, and decoding the questions
@@ -95,6 +95,8 @@ Notes use only these. Everything else is either retired or rendered through one 
 | Interactive pieces (`JavaTryIt`, `HaskellTryIt`, algorithm stories) | Running or watching code | one shared frame: title bar, stage, controls |
 
 Retired components keep working: they render through the standard element, so old pages look consistent before their content is migrated.
+
+**Visual study maps.** A topic with an Excalidraw canvas (`public/diagrams/<semester>/<course>/canvases/`) embeds it on its Overview page, under a `## Visual study map` heading below the opening paragraph, as `ExcalidrawCanvas` with `src`, `title` and `expectedMB`. Notes pages do not embed canvases. At 3 MB or more the canvas loads when the reader clicks, so a large file is never downloaded by scrolling past it. The audit fails when a canvas points at a file that does not exist.
 
 ### 2.4 Assessment
 

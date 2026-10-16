@@ -8,9 +8,10 @@
  *   npm run audit:content-standard -- --json       machine-readable findings
  *   npm run audit:content-standard -- --strict     exit 1 when anything fails
  *
- * Checks: the topic shape (folder names, page set and order), the notes template
- * (title, description, repeated title, retired components, quizzes inside notes),
- * and the assessment pages (which components review, practice and exam pages use).
+ * Checks: the topic shape (folder names, page set and order, and that every Excalidraw canvas
+ * points at a real file), the notes template (title, description, repeated title, retired
+ * components, quizzes inside notes), and the assessment pages (which components review and
+ * practice pages use).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -206,6 +207,22 @@ function auditTopic(course, directory) {
   }
 }
 
+/** Every Excalidraw canvas a course embeds must point at a file under public/. */
+function auditCanvases(course, directory) {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const full = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      auditCanvases(course, full);
+      continue;
+    }
+    if (!entry.name.endsWith('.mdx')) continue;
+    const source = fs.readFileSync(full, 'utf8');
+    for (const [, src] of source.matchAll(/<ExcalidrawCanvas\b[^>]*?\bsrc="([^"]+)"/g)) {
+      if (!fs.existsSync(path.join(root, 'public', src))) add(course, 'canvas-file', rel(full), `canvas file ${src} does not exist`);
+    }
+  }
+}
+
 const courses = [];
 for (const semester of fs.readdirSync(docsRoot).filter((entry) => /^sem\d+$/.test(entry)).sort()) {
   const semesterDir = path.join(docsRoot, semester);
@@ -232,6 +249,7 @@ for (const semester of fs.readdirSync(docsRoot).filter((entry) => /^sem\d+$/.tes
     }
     if (topics.length === 0) add(course, 'course-no-topics', course, 'no topic folders');
     for (const topic of topics) auditTopic(course, topic);
+    auditCanvases(course, courseDir);
   }
 }
 
@@ -241,7 +259,7 @@ if (asJson) {
   process.stdout.write(`${JSON.stringify({ courses, findings }, null, 2)}\n`);
 } else {
   const groups = {
-    structure: ['topic-folder-name', 'topic-meta', 'topic-extra-page', 'topic-missing-page', 'topic-order', 'course-extra-page', 'course-missing-page', 'course-separator', 'course-no-topics'],
+    structure: ['topic-folder-name', 'topic-meta', 'topic-extra-page', 'topic-missing-page', 'topic-order', 'course-extra-page', 'course-missing-page', 'course-separator', 'course-no-topics', 'canvas-file'],
     notes: ['notes-title', 'notes-description', 'notes-repeated-title', 'notes-quiz', 'retired-component', 'unlisted-component'],
     assessment: ['assessment-component'],
     generated: ['generated'],
