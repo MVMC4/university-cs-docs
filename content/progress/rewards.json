@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "rules": {
+    "pageDwellSeconds": 10,
+    "freezeEveryDays": 7,
+    "maxFreezes": 2,
+    "dailyXpCap": 150,
+    "xp": {
+      "page": 5,
+      "quizAnswer": 1,
+      "quizCorrect": 2,
+      "quizComplete": 5,
+      "perfectQuiz": 15,
+      "card": 1,
+      "check": 2,
+      "focusMinute": 1,
+      "firstActivityOfDay": 10
+    }
+  },
+  "levels": [
+    { "level": 1, "xp": 0, "title": "Starter" },
+    { "level": 2, "xp": 50, "title": "Reader" },
+    { "level": 3, "xp": 150, "title": "Learner" },
+    { "level": 4, "xp": 350, "title": "Student" },
+    { "level": 5, "xp": 700, "title": "Scholar" },
+    { "level": 6, "xp": 1200, "title": "Analyst" },
+    { "level": 7, "xp": 2000, "title": "Specialist" },
+    { "level": 8, "xp": 3200, "title": "Expert" },
+    { "level": 9, "xp": 5000, "title": "Master" },
+    { "level": 10, "xp": 8000, "title": "Legend" }
+  ],
+  "badges": [
+    { "id": "first-steps", "title": "First steps", "description": "Read your first page.", "icon": "footprints", "when": { "counter": "pages", "gte": 1 } },
+    { "id": "reader-10", "title": "Getting going", "description": "Read 10 different pages.", "icon": "book-open", "when": { "counter": "pages", "gte": 10 } },
+    { "id": "reader-50", "title": "Well read", "description": "Read 50 different pages.", "icon": "book-open", "when": { "counter": "pages", "gte": 50 } },
+    { "id": "reader-150", "title": "Bookworm", "description": "Read 150 different pages.", "icon": "library", "when": { "counter": "pages", "gte": 150 } },
+
+    { "id": "quiz-first", "title": "First answer", "description": "Answer your first quiz question.", "icon": "circle-help", "when": { "counter": "quizAnswers", "gte": 1 } },
+    { "id": "quiz-25", "title": "Warming up", "description": "Answer 25 quiz questions.", "icon": "circle-help", "when": { "counter": "quizAnswers", "gte": 25 } },
+    { "id": "quiz-100", "title": "Century", "description": "Answer 100 quiz questions.", "icon": "target", "when": { "counter": "quizAnswers", "gte": 100 } },
+    { "id": "quiz-500", "title": "Question machine", "description": "Answer 500 quiz questions.", "icon": "target", "when": { "counter": "quizAnswers", "gte": 500 } },
+    { "id": "sharp", "title": "Sharp", "description": "Keep at least 80% correct over 30 or more answers.", "icon": "crosshair", "when": { "quizAccuracy": { "minAnswers": 30, "gte": 0.8 } } },
+    { "id": "perfect-1", "title": "Clean sheet", "description": "Finish a quiz of three or more questions with every answer correct.", "icon": "badge-check", "when": { "counter": "perfectQuizzes", "gte": 1 } },
+    { "id": "perfect-5", "title": "Flawless five", "description": "Finish five quizzes with every answer correct.", "icon": "badge-check", "when": { "counter": "perfectQuizzes", "gte": 5 } },
+
+    { "id": "cards-20", "title": "Flipping through", "description": "Turn 20 flashcards.", "icon": "layers", "when": { "counter": "cards", "gte": 20 } },
+    { "id": "cards-200", "title": "Deck master", "description": "Turn 200 flashcards.", "icon": "layers", "when": { "counter": "cards", "gte": 200 } },
+    { "id": "checks-10", "title": "Self-checker", "description": "Open 10 check-your-understanding answers.", "icon": "list-checks", "when": { "counter": "checks", "gte": 10 } },
+    { "id": "focus-60", "title": "Focused hour", "description": "Complete 60 minutes of focus time.", "icon": "timer", "when": { "counter": "focusMinutes", "gte": 60 } },
+
+    { "id": "streak-3", "title": "Three in a row", "description": "Study three days in a row.", "icon": "flame", "when": { "stat": "streakBest", "gte": 3 } },
+    { "id": "streak-7", "title": "One week", "description": "Study seven days in a row.", "icon": "flame", "when": { "stat": "streakBest", "gte": 7 } },
+    { "id": "streak-14", "title": "Fortnight", "description": "Study 14 days in a row.", "icon": "flame", "when": { "stat": "streakBest", "gte": 14 } },
+    { "id": "streak-30", "title": "One month", "description": "Study 30 days in a row.", "icon": "flame", "when": { "stat": "streakBest", "gte": 30 } },
+    { "id": "streak-100", "title": "Unstoppable", "description": "Study 100 days in a row.", "icon": "flame", "when": { "stat": "streakBest", "gte": 100 } },
+    { "id": "days-30", "title": "Regular", "description": "Study on 30 different days.", "icon": "calendar-days", "when": { "stat": "days", "gte": 30 } },
+
+    { "id": "level-3", "title": "Level 3", "description": "Reach level 3.", "icon": "award", "when": { "stat": "level", "gte": 3 } },
+    { "id": "level-5", "title": "Level 5", "description": "Reach level 5.", "icon": "award", "when": { "stat": "level", "gte": 5 } },
+    { "id": "level-8", "title": "Level 8", "description": "Reach level 8.", "icon": "trophy", "when": { "stat": "level", "gte": 8 } },
+
+    { "id": "course-half", "title": "Halfway there", "description": "Read half the pages of any course.", "icon": "milestone", "when": { "course": "*", "gte": 0.5 } },
+    { "id": "course-done", "title": "Course complete", "description": "Read every page of any course.", "icon": "graduation-cap", "when": { "course": "*", "gte": 1 } }
+  ]
+}

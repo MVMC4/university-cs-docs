@@ -1,0 +1,168 @@
+/* ───────── Progress: the streak chip, reward notices and the dashboard ─────────
+   Paper-and-ink look from the --ui-* tokens. Class names: ui-streak, ui-toast(s), pg-* (dashboard). */
+
+/* the streak in the header */
+.ui-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border: 1.5px solid var(--ui-line);
+  border-radius: 999px;
+  background: var(--ui-surface);
+  color: var(--ui-text-2);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  line-height: 1.4;
+  transition: background .15s;
+}
+.ui-streak:hover { background: var(--ui-surface-2); text-decoration: none; }
+.ui-streak svg { flex: none; }
+.ui-streak[data-status="done"] { color: var(--ui-amber); border-color: var(--ui-amber); }
+.ui-streak[data-status="done"] svg { fill: currentColor; }
+.ui-streak[data-status="at-risk"] { color: var(--ui-text); }
+.ui-streak[data-status="lost"],
+.ui-streak[data-status="off"] { color: var(--ui-text-3); }
+
+/* notices for badges, levels and streaks */
+.ui-toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: grid;
+  gap: 8px;
+  width: min(340px, calc(100vw - 32px));
+  pointer-events: none;
+}
+.ui-toast {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
+  font-size: 14px;
+  animation: ui-toast-in .25s ease-out;
+}
+.ui-toast-icon { color: var(--ui-amber); margin-top: 2px; }
+.ui-toast div { display: grid; gap: 1px; }
+.ui-toast strong { font-weight: 600; }
+.ui-toast div span { color: var(--ui-text-2); font-size: 13px; }
+.ui-toast button { border: 0; background: none; color: var(--ui-text-3); cursor: pointer; padding: 2px; }
+.ui-toast button:hover { color: var(--ui-text); }
+@keyframes ui-toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ui-toast { animation: none; } }
+
+/* dashboard */
+.pg { display: grid; gap: 28px; margin-top: 8px; }
+.pg-off {
+  margin: 0;
+  padding: 10px 14px;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r);
+  background: var(--ui-amber-t);
+  font-size: 14px;
+}
+.pg-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.pg-card {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 14px 16px;
+  border: var(--ui-frame);
+  border-radius: var(--ui-r-lg);
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
+}
+.pg-card small { color: var(--ui-text-2); font-size: 13px; line-height: 1.45; }
+.pg-card small { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.pg-card small svg { flex: none; }
+.pg-card[data-status="done"] .pg-big { color: var(--ui-amber); }
+.pg-card[data-status="lost"] .pg-big { color: var(--ui-text-3); }
+.pg-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ui-text-2);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.pg-big { font-family: var(--font-fraunces), serif; font-size: 28px; font-weight: 600; line-height: 1.15; }
+
+.pg-section h2 { margin: 0 0 4px; font-size: 22px; }
+.pg-section h3 { margin: 18px 0 8px; font-size: 15px; color: var(--ui-text-2); font-weight: 600; }
+.pg-note { margin: 4px 0 12px; color: var(--ui-text-2); font-size: 14px; line-height: 1.55; }
+
+.pg-bar { height: 8px; border: 1.5px solid var(--ui-line); border-radius: 999px; background: var(--ui-surface-2); overflow: hidden; }
+.pg-bar div { height: 100%; background: var(--ui-green); border-radius: 999px; transition: width .3s; }
+
+/* activity calendar: columns are weeks, rows are Monday to Sunday */
+.pg-calendar {
+  display: grid;
+  grid-template-rows: repeat(7, 14px);
+  grid-auto-flow: column;
+  grid-auto-columns: 14px;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+}
+.pg-cell { border-radius: 3px; background: var(--ui-surface-3); }
+.pg-cell[data-active] { background: var(--ui-green); }
+.pg-cell[data-future] { visibility: hidden; }
+.pg-cell[data-today] { outline: 2px solid var(--ui-line); outline-offset: 1px; }
+
+/* courses */
+.pg-courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.pg-course {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--ui-line);
+  border-radius: var(--ui-r);
+  background: var(--ui-surface);
+}
+.pg-course header { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.pg-course h4 { margin: 0; font-size: 15px; font-weight: 600; }
+.pg-course h4 a { color: inherit; text-decoration: none; }
+.pg-course h4 a:hover { text-decoration: underline; }
+.pg-course header span { color: var(--ui-text-2); font-size: 12.5px; }
+.pg-course summary { cursor: pointer; color: var(--ui-text-2); font-size: 13px; }
+.pg-topics { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.pg-topics li { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: 13px; }
+.pg-dots { display: inline-flex; gap: 3px; flex-wrap: wrap; justify-content: flex-end; }
+.pg-dots a { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ui-line); background: transparent; }
+.pg-dots a[data-read] { background: var(--ui-green); border-color: var(--ui-green); }
+
+/* badges */
+.pg-badges { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+.pg-badges li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1.5px solid var(--ui-line-soft);
+  border-radius: var(--ui-r);
+  opacity: .55;
+}
+.pg-badges li[data-earned] { opacity: 1; border-color: var(--ui-line); background: var(--ui-surface); }
+.pg-badge-icon { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--ui-surface-3); color: var(--ui-text-2); }
+.pg-badges li[data-earned] .pg-badge-icon { background: var(--ui-amber-t); color: var(--ui-amber); }
+.pg-badges div { display: grid; gap: 1px; font-size: 13.5px; line-height: 1.4; }
+.pg-badges strong { font-weight: 600; }
+.pg-badges span { color: var(--ui-text-2); }
+.pg-badges small { color: var(--ui-green); font-size: 12px; }
+
+/* data controls */
+.pg-data { display: grid; gap: 10px; font-size: 14px; }
+.pg-data label { display: flex; gap: 8px; align-items: center; }
+.pg-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.pg-message { margin: 0; min-height: 1.4em; color: var(--ui-text-2); font-size: 13px; }

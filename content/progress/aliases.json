@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "pages": {
+    "/docs/sem3/csi243/01-functional-thinking/programming-model": "/docs/sem3/csi243/01-functional-thinking/notes/programming-model",
+    "/docs/sem3/csi243/01-functional-thinking/functional-thinking": "/docs/sem3/csi243/01-functional-thinking/notes/functional-thinking",
+    "/docs/sem3/csi243/02-expressions-types/ghci": "/docs/sem3/csi243/02-expressions-types/notes/ghci",
+    "/docs/sem3/csi243/02-expressions-types/values-text": "/docs/sem3/csi243/02-expressions-types/notes/values-text",
+    "/docs/sem3/csi243/02-expressions-types/expressions-types": "/docs/sem3/csi243/02-expressions-types/notes/expressions-types",
+    "/docs/sem3/csi243/03-defining-functions/defining-functions": "/docs/sem3/csi243/03-defining-functions/notes/defining-functions",
+    "/docs/sem3/csi243/03-defining-functions/output": "/docs/sem3/csi243/03-defining-functions/notes/output",
+    "/docs/sem3/csi243/03-defining-functions/complete-program": "/docs/sem3/csi243/03-defining-functions/notes/complete-program",
+    "/docs/sem3/csi243/03-defining-functions/input-processing": "/docs/sem3/csi243/03-defining-functions/notes/input-processing"
+  }
+}

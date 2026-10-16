@@ -3,6 +3,7 @@ import type { BaseLayoutProps, LayoutTab } from 'fumadocs-ui/layouts/shared';
 import type * as PageTree from 'fumadocs-core/page-tree';
 import { appName, docsRoute, gitConfig } from './shared';
 import { TimerTrigger } from '@/features/study-timer';
+import { StreakChip } from '@/features/progress';
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -16,6 +17,11 @@ export function baseOptions(): BaseLayoutProps {
       ),
     },
     links: [
+      {
+        type: 'custom',
+        secondary: true,
+        children: <StreakChip />,
+      },
       {
         type: 'custom',
         secondary: true,
@@ -42,6 +48,7 @@ const tabTitles: Record<string, string> = {
  */
 export function docsTabs(tree: PageTree.Root): LayoutTab[] {
   const tabs: LayoutTab[] = [{ title: 'Overview', url: docsRoute, urls: new Set([docsRoute]) }];
+  const dashboardUrl = `${docsRoute}/dashboard`;
 
   for (const node of tree.children) {
     if (node.type === 'folder') {
@@ -55,5 +62,6 @@ export function docsTabs(tree: PageTree.Root): LayoutTab[] {
     }
   }
 
+  tabs.push({ title: 'Dashboard', url: dashboardUrl, urls: new Set([dashboardUrl]) });
   return tabs;
 }

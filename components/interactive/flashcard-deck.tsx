@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useRecord } from '@/features/progress';
 import { FlipCard } from './flashcard';
 
 type Card = { front: string; back: string };
@@ -10,6 +12,8 @@ type Card = { front: string; back: string };
 export function FlashcardDeck({ cards, title = 'Flashcards' }: { cards: Card[]; title?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const record = useRecord();
+  const pathname = usePathname();
 
   if (!cards || cards.length === 0) return <p className="ui-quiz-empty">No flashcards for this section yet.</p>;
 
@@ -17,9 +21,15 @@ export function FlashcardDeck({ cards, title = 'Flashcards' }: { cards: Card[]; 
   const index = ((currentIndex % total) + total) % total;
   const card = cards[index];
 
+  // Turning a card to its answer counts as studying it.
+  const flip = () => {
+    if (!isFlipped) record({ type: 'card', deck: `${pathname}#${title}` });
+    setIsFlipped((value) => !value);
+  };
+
   const goTo = (next: number) => {
     if (next === index) {
-      setIsFlipped((value) => !value);
+      flip();
       return;
     }
     setCurrentIndex(next);
@@ -35,7 +45,7 @@ export function FlashcardDeck({ cards, title = 'Flashcards' }: { cards: Card[]; 
       <div className="ui-deck-progress" aria-hidden="true"><div style={{ width: `${((index + 1) / total) * 100}%` }} /></div>
 
       <div className="ui-deck-stage">
-        <FlipCard key={index} front={card.front} back={card.back} flipped={isFlipped} onFlip={() => setIsFlipped((value) => !value)} label={`Card ${index + 1} of ${total}`} />
+        <FlipCard key={index} front={card.front} back={card.back} flipped={isFlipped} onFlip={flip} label={`Card ${index + 1} of ${total}`} />
       </div>
 
       <div className="ui-deck-dots" role="group" aria-label="Jump to a card">
