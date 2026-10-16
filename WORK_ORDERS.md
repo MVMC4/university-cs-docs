@@ -1,6 +1,6 @@
 # Work orders
 
-This list records requested repository work, its verification target, and its current delivery state. Update it when a work order changes or is completed. Last updated 2026-10-16 (end of day).
+This list records requested repository work, its verification target, and its current delivery state. Update it when a work order changes or is completed. Last updated 2026-10-16 (end of day), before the merge of `feat/ui-material-theme`.
 
 Status words: **Complete** (verified against the acceptance check), **In progress**, **Open** (not started), **Blocked** (waiting on a decision or another order), **Reopened**.
 
@@ -15,6 +15,7 @@ Several agents and people may work in this repository at once. This section says
 | Progress, streaks, rewards and the dashboard | Claude Code session | `lib/progress/`, `components/progress/`, `content/progress/`, `content/docs/dashboard.mdx` | `feat/ui-material-theme` |
 | MGT202 Small Business Management notes | Claude Code session | `content/docs/sem3/mgt202/`, `content/flashcard-data/sem3/mgt202/`, `content/quiz-data/sem3/mgt202/` | `feat/ui-material-theme` |
 | Resources (slides by year, file names, past papers) | Claude Code session | `public/files/**`, every `resources.mdx` | `feat/ui-material-theme` |
+| Uniform layouts, teaching structure and sidebar (next priority, see below) | open | `content/docs/**/meta.json`, `lib/topic-pages.ts`, `lib/source.ts`, `lib/page-navigation.ts`, `components/layouts/`, `scripts/audit-content-standard.mjs` | `feat/uniform-layouts` (not started) |
 | Playgrounds (HTML, JavaScript, Python, SQL) and the Haskell runner | open | `components/interactive/code-*.tsx`, `lib/playground/`, `lib/haskell-simulator.ts`, `lib/haskell/`, `content/playground-data/` | none open |
 
 ### Rules for working alongside each other
@@ -27,6 +28,19 @@ Several agents and people may work in this repository at once. This section says
 - **No emojis in the interface or in page content.** Use plain labels or lucide icons.
 - **Git conventions.** Conventional Commit messages with a course or area scope, branches named `feat/<description>` or `docs/<description>`, one logical change per commit, and no `Co-Authored-By` or other attribution lines in commits or pull-request descriptions. Do not push or open a pull request unless asked.
 - **Update this file** when you start an area, change its paths, or finish it.
+
+## Next priority: uniform layouts, teaching structure and sidebar
+
+Requested on 2026-10-16 as the next high-priority work once the pull request for `feat/ui-material-theme` is merged. It sets the order for STD-07 to STD-13: the sidebar first, then the topic Overview layout, then the teaching structure, because each step depends on the one before. The rules are the ones in [docs/content-standard.md](docs/content-standard.md); this section only says what to do and in what order. Start it on a new branch, `feat/uniform-layouts`, from an up-to-date `main`.
+
+| ID | Work order | Acceptance check | Status |
+|---|---|---|---|
+| UNI-01 | Record how the sidebar differs today, course by course: depth, labels, order, separators, hidden pages, and extra entries such as playgrounds | A table in `docs/plans/` lists every difference from the standard shape (section 2.1), with the course and the file | Open |
+| UNI-02 | One sidebar layout for every course: Course Overview, numbered topics (Overview, Notes, Cheat sheet, Review, Practice, Resources), Course Resources. Remove separators, `_hidden_pages` and legacy or duplicate entries (CSI247 `linear-structures` and `arrays-and-arraylists`, the CSI243 playground, the MAT221 chapter separators, the unnumbered CSI323 topics); course extras move to `/docs/playgrounds`. This completes the structure part of STD-07 to STD-12 | `npm run audit:content-standard` reports zero structure findings for all 16 courses; every course sidebar has the same shape at 1280px and 375px; every moved or renamed page has a permanent redirect | Open |
+| UNI-03 | One topic Overview layout: opening paragraph, optional visual study map, what you will learn, prerequisites, and a table of the pages in the topic | Every topic `index.mdx` has the same sections in the same order, checked by the audit | Open |
+| UNI-04 | One teaching structure on every notes page (standard 2.2): title, objectives, sections, common mistakes, summary, check your understanding; one review page (flashcards, quiz, decoding) and one practice page. This completes the content part of STD-07 to STD-12 | Zero notes, review and practice findings in `npm run audit:content-standard` for all courses; retired components replaced | Open |
+| UNI-05 | Make the audit strict in CI so the layout cannot drift (STD-13) | `node scripts/audit-content-standard.mjs --strict` exits 0, and `npm run audit:content` runs it | Open |
+| UNI-06 | Verify in the browser: light and dark, 1280px and 375px, one topic from each course, including the mobile sidebar drawer | No layout or contrast faults; the check is recorded in the pull request | Open |
 
 ## Site standardisation
 
